@@ -5,11 +5,11 @@ public class PictureResponseQuestion extends Question {
     private String queryText;
     private String pictureLink;
     private int userScore;
-    private HashSet<String> correctAnswers;
+    private Set<String> correctAnswers;
     private boolean guessed;
 
 
-    public PictureResponseQuestion(String text, HashSet<String> answers, String link, int type) {
+    public PictureResponseQuestion(String text, Set<String> answers, String link, int type) {
         super(text,answers,type);
         this.pictureLink = link;
     }
