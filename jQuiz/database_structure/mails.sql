@@ -9,6 +9,7 @@ CREATE TABLE mails
     receiver_id INT,
     type INT,
     quiz_id INT,
+    text TEXT,
     FOREIGN KEY (sender_id) REFERENCES users(id),
     FOREIGN KEY (receiver_id) REFERENCES users(id),
     FOREIGN KEY (quiz_id) REFERENCES quizzes(id)

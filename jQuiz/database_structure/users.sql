@@ -9,5 +9,6 @@ CREATE TABLE users
     is_admin BOOL,
     created_at DATETIME,
     email VARCHAR(50),
-    pass VARCHAR(50)
+    pass VARCHAR(50),
+    image VARCHAR(100)
 );
