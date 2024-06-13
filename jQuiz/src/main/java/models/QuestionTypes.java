@@ -1,3 +1,5 @@
+package models;
+
 enum QuestionTypes {
     RESPONSE,
     FILL_BLANK,

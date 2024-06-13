@@ -1,4 +1,6 @@
-import java.util.HashSet;
+package models;
+
+import java.util.Set;
 
 public class PictureResponseQuestion extends Question {
     private int questionType;
@@ -9,7 +11,7 @@ public class PictureResponseQuestion extends Question {
     private boolean guessed;
 
 
-    public PictureResponseQuestion(String text, Set<String> answers, String link, int type) {
+    public PictureResponseQuestion(String text, Set<Answer> answers, String link, int type) {
         super(text,answers,type);
         this.pictureLink = link;
     }
@@ -18,5 +20,5 @@ public class PictureResponseQuestion extends Question {
     public int type() {return questionType;}
     public String getPictureLink() {return pictureLink;}
     public int getScore() {return userScore;}
-    public boolean guessAnswer(String ans) {super.guessAnswer(ans);}
+    public boolean guessAnswer(String ans) { return super.guessAnswer(ans); }
 }

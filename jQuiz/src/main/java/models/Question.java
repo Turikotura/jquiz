@@ -1,14 +1,17 @@
+package models;
+
 import java.util.HashSet;
+import java.util.Set;
 
 public class Question {
     private int questionType;
     private String queryText;
     private int userScore;
-    private Set<String> correctAnswers;
+    private Set<Answer> correctAnswers;
     private boolean guessed;
 
 
-    public Question(String text, Set<String> answers, int type) {
+    public Question(String text, Set<Answer> answers, int type) {
         this.queryText = text;
         this.correctAnswers = answers;
         this.userScore = 0;
@@ -28,5 +31,6 @@ public class Question {
                 return true;
             } else return false;
         }
+        return false;
     }
 }

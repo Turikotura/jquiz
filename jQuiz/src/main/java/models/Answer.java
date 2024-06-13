@@ -1,3 +1,5 @@
+package models;
+
 public class Answer {
     private String text;
     private boolean isCorrect;
