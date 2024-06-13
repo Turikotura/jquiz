@@ -1,6 +1,5 @@
 package models;
 
-import java.util.HashSet;
 import java.util.Set;
 
 public class Question {
@@ -23,7 +22,7 @@ public class Question {
     public int type() {return questionType;}
     public int getScore() {return userScore;}
 
-    public boolean guessAnswer(String ans) {
+    public boolean guessAnswer(Answer ans) {
         if(!guessed) {
             guessed = true;
             if(correctAnswers.contains(ans)) {

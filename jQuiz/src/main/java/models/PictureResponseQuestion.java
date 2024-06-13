@@ -20,5 +20,5 @@ public class PictureResponseQuestion extends Question {
     public int type() {return questionType;}
     public String getPictureLink() {return pictureLink;}
     public int getScore() {return userScore;}
-    public boolean guessAnswer(String ans) { return super.guessAnswer(ans); }
+    public boolean guessAnswer(Answer ans) { return super.guessAnswer(ans); }
 }

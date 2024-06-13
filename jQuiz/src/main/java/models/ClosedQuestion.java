@@ -1,6 +1,5 @@
 package models;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -24,5 +23,5 @@ public class ClosedQuestion extends Question {
     public int type() {return questionType;}
     public List<Answer> getAnswers() {return allAnswers;}
     public boolean isMultiAnswer() {return isMulti;}
-    public boolean guessAnswer(String ans) {super.guessAnswer(ans);}
+    public boolean guessAnswer(Answer ans) {return super.guessAnswer(ans);}
 }
