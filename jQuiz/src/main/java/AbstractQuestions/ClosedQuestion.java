@@ -4,12 +4,12 @@ public class ClosedQuestion extends Question {
     private int questionType;
     private String queryText;
     private int userScore;
-    private HashSet<String> correctAnswers;
-    private ArrayList<String> allAnswers;
+    private Set<String> correctAnswers;
+    private List<String> allAnswers;
     private boolean guessed;
 
 
-    public ClosedQuestion(String text, ArrayList<String> answers, HashSet<String> correctAnswers, int type) {
+    public ClosedQuestion(String text, List<String> answers, Set<String> correctAnswers, int type) {
         super(text,correctAnswers,type);
         this.correctAnswers = correctAnswersnswers;
     }

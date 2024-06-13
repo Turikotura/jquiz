@@ -4,11 +4,11 @@ public class Question {
     private int questionType;
     private String queryText;
     private int userScore;
-    private HashSet<String> correctAnswers;
+    private Set<String> correctAnswers;
     private boolean guessed;
 
 
-    public Question(String text, HashSet<String> answers, int type) {
+    public Question(String text, Set<String> answers, int type) {
         this.queryText = text;
         this.correctAnswers = answers;
         this.userScore = 0;
