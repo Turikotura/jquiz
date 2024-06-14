@@ -14,6 +14,7 @@ import java.util.Map;
 
 public abstract class Database<T> {
     public static final String USER_DB = "users";
+    public static final String QUIZ_DB = "quizzes";
     public static final String QUESTION_DB = "questions";
     public static final String ANSWER_DB = "answers";
     protected BasicDataSource dataSource;

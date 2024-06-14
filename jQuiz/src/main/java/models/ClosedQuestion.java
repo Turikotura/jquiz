@@ -13,7 +13,7 @@ public class ClosedQuestion extends Question {
     private boolean isMulti;
 
     public ClosedQuestion(String text, List<Answer> answers, Set<Answer> correctAnswers, int type, boolean isMulti) {
-        super(text,correctAnswers,type);
+        super(0,type,text,0,"",0, null);
         this.correctAnswers = correctAnswers;
         this.isMulti = isMulti;
     }
@@ -23,5 +23,4 @@ public class ClosedQuestion extends Question {
     public int type() {return questionType;}
     public List<Answer> getAnswers() {return allAnswers;}
     public boolean isMultiAnswer() {return isMulti;}
-    public boolean guessAnswer(Answer ans) {return super.guessAnswer(ans);}
 }

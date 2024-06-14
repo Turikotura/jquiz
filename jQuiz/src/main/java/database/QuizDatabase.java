@@ -8,6 +8,8 @@ import org.apache.commons.dbcp2.BasicDataSource;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class QuizDatabase extends Database<Quiz>{
@@ -47,8 +49,10 @@ public class QuizDatabase extends Database<Quiz>{
 
     @Override
     protected Quiz getItemFromResultSet(ResultSet rs) throws SQLException, ClassNotFoundException {
-        User author = userDB.getById(rs.getInt(AUTHOR_ID));
-        List<Integer> questionIds = questionDB.getQuestionIdsByQuizId(rs.getInt(ID));
+//        User author = userDB.getById(rs.getInt(AUTHOR_ID));
+        User author = new User(0,"", new Date(), null, null,null,null,null,null);
+        List<Integer> questionIds = new ArrayList<>();
+//        List<Integer> questionIds = questionDB.getQuestionIdsByQuizId(rs.getInt(ID));
         return new Quiz(
                 rs.getInt(ID),
                 rs.getString(TITLE),
