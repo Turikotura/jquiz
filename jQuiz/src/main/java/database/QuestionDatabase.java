@@ -48,8 +48,8 @@ public class QuestionDatabase extends Database<Question> {
         );
     }
 
-    public List<Integer> getQuestionIdsByQuiz(int quizId) throws SQLException, ClassNotFoundException {
-        String query = String.format("SELECT %s FROM questions WHERE %s = %d;", ID, QUIZ_ID, quizId);
+    public List<Integer> getQuestionIdsByQuizId(int quizId) throws SQLException, ClassNotFoundException {
+        String query = String.format("SELECT %s FROM %s WHERE %s = %d;", ID, this.databaseName, QUIZ_ID, quizId);
         PreparedStatement statement = this.getStatement(query);
         ResultSet rs = statement.executeQuery();
 

@@ -48,7 +48,7 @@ public class QuizDatabase extends Database<Quiz>{
     @Override
     protected Quiz getItemFromResultSet(ResultSet rs) throws SQLException, ClassNotFoundException {
         User author = userDB.getById(rs.getInt(AUTHOR_ID));
-        List<Integer> questionIds = QuestionDatabase.getQuestionIdsByQuiz(rs.getInt(ID));
+        List<Integer> questionIds = questionDB.getQuestionIdsByQuizId(rs.getInt(ID));
         return new Quiz(
                 rs.getInt(ID),
                 rs.getString(TITLE),
