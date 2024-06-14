@@ -1,5 +1,6 @@
 package database;
 
+import models.Achievement;
 import models.Mail;
 import models.MailTypes;
 import models.User;
@@ -10,6 +11,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+
+import static database.AchievementDatabase.ACQUIRE_DATE;
 
 public class UserDatabase extends Database<User>{
     public static final String ID = "ID";
@@ -24,8 +27,13 @@ public class UserDatabase extends Database<User>{
     public static final String TYPE = "type";
     public static final String QUIZ_ID = "quiz_id";
     public static final String TEXT = "text";
+    public static final String USER_ID = "user_id";
+    public static final String ACH_ID = "ach_id";
+
+    AchievementDatabase achievementDB;
     public UserDatabase(BasicDataSource dataSource, String databaseName) {
         super(dataSource, databaseName);
+        achievementDB = new AchievementDatabase(dataSource, Database.ACHIEVEMENT_DB);
     }
 
     @Override
@@ -77,5 +85,28 @@ public class UserDatabase extends Database<User>{
             mails.add(mail);
         }
         return mails;
+    }
+
+    public List<Achievement> getAchievementsByUserId(int userId) throws SQLException, ClassNotFoundException {
+        List<Achievement> userAchievements = new ArrayList<Achievement>();
+        ResultSet rsAchievements = getResultSet("SELECT * FROM " + Database.ACH_TO_USR_DB + " WHERE " + USER_ID + " = " + userId);
+        List<Achievement> achievements = achievementDB.getAll();
+        while (rsAchievements.next()){
+            int achId = rsAchievements.getInt(ACH_ID);
+            for(Achievement ach: achievements){
+                if(ach.getId() == achId){
+                    Achievement achievement = new Achievement(
+                        achId,
+                        ach.getName(),
+                        ach.getDescription(),
+                        ach.getImage(),
+                        rsAchievements.getDate(ACQUIRE_DATE)
+                    );
+                    userAchievements.add(achievement);
+                    break;
+                }
+            }
+        }
+        return userAchievements;
     }
 }

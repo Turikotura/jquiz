@@ -18,6 +18,8 @@ public abstract class Database<T> {
     public static final String QUESTION_DB = "questions";
     public static final String ANSWER_DB = "answers";
     public static final String MAILS_DB = "mails";
+    public static final String ACH_TO_USR_DB = "ach_to_usr";
+    public static final String ACHIEVEMENT_DB = "achievements";
     protected BasicDataSource dataSource;
     protected String databaseName;
 

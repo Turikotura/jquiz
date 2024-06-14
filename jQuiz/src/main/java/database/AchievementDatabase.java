@@ -12,6 +12,7 @@ public class AchievementDatabase extends Database<Achievement> {
     static final String NAME = "name";
     static final String DESCRIPTION = "description";
     static final String IMAGE = "image";
+    static final String ACQUIRE_DATE = "acquire_date";
 
     public AchievementDatabase(BasicDataSource dataSource, String databaseName) {
         super(dataSource, databaseName);
@@ -33,7 +34,8 @@ public class AchievementDatabase extends Database<Achievement> {
                 rs.getInt(ID),
                 rs.getString(NAME),
                 rs.getString(DESCRIPTION),
-                rs.getString(IMAGE)
+                rs.getString(IMAGE),
+                rs.getDate(ACQUIRE_DATE)
         );
     }
 }
