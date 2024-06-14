@@ -7,7 +7,7 @@ public class Quiz {
     private int id;
     private String title;
     private User author;
-    private Date created_at;
+    private Date createdAt;
     private int time;
     private String thumbnail;
     private boolean shouldMixUp;
@@ -22,7 +22,7 @@ public class Quiz {
             int id,
             String title,
             User author,
-            Date created_at,
+            Date createdAt,
             int time,
             String thumbnail,
             boolean shouldMixUp,
@@ -35,7 +35,7 @@ public class Quiz {
         this.id = id;
         this.title = title;
         this.author = author;
-        this.created_at = created_at;
+        this.createdAt = createdAt;
         this.time = time;
         this.thumbnail = thumbnail;
         this.shouldMixUp = shouldMixUp;
@@ -48,7 +48,7 @@ public class Quiz {
 
     public int getId() {return id;}
     public String getTitle() {return title;}
-    public Date getCreatedAt() {return created_at;}
+    public Date getCreatedAt() {return createdAt;}
     public int getMaxTime() {return time;}
     public String getDescription() {return description;}
     public String getThumbnail() {return thumbnail;}

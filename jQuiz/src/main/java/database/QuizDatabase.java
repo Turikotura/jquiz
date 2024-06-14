@@ -11,7 +11,6 @@ import java.sql.SQLException;
 import java.util.List;
 
 public class QuizDatabase extends Database<Quiz>{
-
     static final String ID = "id";
     static final String TITLE = "title";
     static final String AUTHOR_ID = "author_id";
@@ -24,8 +23,13 @@ public class QuizDatabase extends Database<Quiz>{
     static final String ALLOW_PRACTICE = "allow_practice";
     static final String DESCRIPTION = "description";
 
+    UserDatabase userDB;
+    QuestionDatabase questionDB;
+
     public QuizDatabase(BasicDataSource dataSource, String databaseName) {
         super(dataSource, databaseName);
+        userDB = new UserDatabase(this.dataSource, Database.USER_DB);
+        questionDB = new QuestionDatabase(this.dataSource, Database.QUESTION_DB);
     }
 
     @Override
@@ -43,7 +47,7 @@ public class QuizDatabase extends Database<Quiz>{
 
     @Override
     protected Quiz getItemFromResultSet(ResultSet rs) throws SQLException, ClassNotFoundException {
-        User author = new UserDatabase(this.dataSource, Database.USER_DB).getById(rs.getInt(AUTHOR_ID));
+        User author = userDB.getById(rs.getInt(AUTHOR_ID));
         List<Integer> questionIds = QuestionDatabase.getQuestionIdsByQuiz(rs.getInt(ID));
         return new Quiz(
                 rs.getInt(ID),
