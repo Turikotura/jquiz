@@ -17,7 +17,9 @@ public abstract class Database<T> {
     public static final String QUIZ_DB = "quizzes";
     public static final String QUESTION_DB = "questions";
     public static final String ANSWER_DB = "answers";
-    public static final String MAILS_DB = "mails";
+    public static final String MAIL_DB = "mails";
+    public static final String FRIEND_DB = "friends";
+    public static final String HISTORY_DB = "history";
     protected BasicDataSource dataSource;
     protected String databaseName;
 

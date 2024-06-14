@@ -4,23 +4,23 @@ import java.util.Date;
 
 public class History {
     private int id;
-    private User user;
-    private String quiz;
+    private int userId;
+    private int quizId;
     private int grade;
-    private Date completed_at;
-    private int writing_time;
-    public History(int id, User user, String quiz, int grade, Date completed_at, int writing_time){
+    private Date completedAt;
+    private int writingTime;
+    public History(int id, int userId, int quizId, int grade, Date completedAt, int writingTime){
         this.id = id;
-        this.user = user;
-        this.quiz = quiz;
+        this.userId = userId;
+        this.quizId = quizId;
         this.grade = grade;
-        this.completed_at = completed_at;
-        this.writing_time = writing_time;
+        this.completedAt = completedAt;
+        this.writingTime = writingTime;
     }
     public int getId() { return id; }
-    public User getUser() { return user; }
-    public String getQuiz() { return quiz; }
+    public int getUserId() { return userId; }
+    public int getQuizId() { return quizId; }
     public int getGrade() { return grade; }
-    public Date getCompleted_at() { return completed_at; }
-    public int getWriting_time() { return writing_time; }
+    public Date getCompletedAt() { return completedAt; }
+    public int getWritingTime() { return writingTime; }
 }

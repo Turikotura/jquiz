@@ -1,5 +1,6 @@
 package database;
 
+import models.History;
 import models.Mail;
 import models.MailTypes;
 import models.User;
@@ -10,8 +11,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class UserDatabase extends Database<User>{
+    // User Columns
     public static final String ID = "ID";
     public static final String USERNAME_COL = "username";
     public static final String IS_ADMIN_COL = "is_admin";
@@ -19,11 +22,19 @@ public class UserDatabase extends Database<User>{
     public static final String EMAIL_COL = "email";
     public static final String PASSWORD_COL = "pass";
     public static final String IMAGE_COL = "image";
+    // Mail Columns
     public static final String RECEIVER_ID = "receiver_id";
     public static final String SENDER_ID = "sender_id";
     public static final String TYPE = "type";
     public static final String QUIZ_ID = "quiz_id";
     public static final String TEXT = "text";
+    // History Columns
+    public static final String USER_ID_COL = "user_id";
+    public static final String QUIZ_ID_COL = "quiz_id";
+    public static final String GRADE_COL = "grade";
+    public static final String COMPLETED_AT_COL = "completed_at";
+    public static final String WRITING_TIME_COL = "writing_time";
+
     public UserDatabase(BasicDataSource dataSource, String databaseName) {
         super(dataSource, databaseName);
     }
@@ -39,9 +50,7 @@ public class UserDatabase extends Database<User>{
 
     @Override
     protected User getItemFromResultSet(ResultSet rs) throws SQLException, ClassNotFoundException {
-        int id = rs.getInt("id");
-
-        User res = new User(
+        return new User(
                 rs.getInt("id"),
                 rs.getString(USERNAME_COL),
                 rs.getDate(CREATED_AT_COL),
@@ -49,12 +58,11 @@ public class UserDatabase extends Database<User>{
                 rs.getString(PASSWORD_COL),
                 rs.getString(IMAGE_COL)
         );
-        return res;
     }
 
-    public List<Mail> getMailsByUserId(String userId, String sendOrReceive) throws SQLException, ClassNotFoundException {
+    public List<Mail> getMailsByUserId(int userId, String sendOrReceive) throws SQLException, ClassNotFoundException {
         List<Mail> mails = new ArrayList<Mail>();
-        ResultSet rsMails = getResultSet("SELECT * FROM " + Database.MAILS_DB + " WHERE " + (sendOrReceive == "SEND" ? SENDER_ID: RECEIVER_ID) + " = " + userId);
+        ResultSet rsMails = getResultSet("SELECT * FROM " + Database.MAIL_DB + " WHERE " + (Objects.equals(sendOrReceive, "SEND") ? SENDER_ID: RECEIVER_ID) + " = " + userId);
         while (rsMails.next()){
             Mail mail = new Mail(
                     rsMails.getInt(ID),
@@ -68,5 +76,41 @@ public class UserDatabase extends Database<User>{
             mails.add(mail);
         }
         return mails;
+    }
+
+    public List<User> getFriendsByUserId(int userId) throws SQLException, ClassNotFoundException {
+        List<User> users = new ArrayList<User>();
+        ResultSet rsUsers = getResultSet("SELECT * FROM " + Database.FRIEND_DB + " WHERE user1_id = " + userId);
+        while (rsUsers.next()){
+            User user = new User(
+                    rsUsers.getInt("id"),
+                    rsUsers.getString(USERNAME_COL),
+                    rsUsers.getDate(CREATED_AT_COL),
+                    rsUsers.getString(EMAIL_COL),
+                    rsUsers.getString(PASSWORD_COL),
+                    rsUsers.getString(IMAGE_COL)
+            );
+
+            users.add(user);
+        }
+        return users;
+    }
+
+    public List<History> getHistoryByUserId(int userId) throws SQLException, ClassNotFoundException {
+        List<History> histories = new ArrayList<History>();
+        ResultSet rsHistories = getResultSet("SELECT * FROM " + Database.HISTORY_DB + " WHERE user_id = " + userId);
+        while (rsHistories.next()){
+            History history = new History(
+                    rsHistories.getInt("id"),
+                    rsHistories.getInt(USER_ID_COL),
+                    rsHistories.getInt(QUIZ_ID_COL),
+                    rsHistories.getInt(GRADE_COL),
+                    rsHistories.getDate(COMPLETED_AT_COL),
+                    rsHistories.getInt(WRITING_TIME_COL)
+            );
+
+            histories.add(history);
+        }
+        return histories;
     }
 }
