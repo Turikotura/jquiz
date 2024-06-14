@@ -1,6 +1,7 @@
 package database;
 
 import models.History;
+import models.Achievement;
 import models.Mail;
 import models.MailTypes;
 import models.User;
@@ -12,6 +13,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+
+import static database.AchievementDatabase.ACQUIRE_DATE;
 
 public class UserDatabase extends Database<User>{
     // User Columns
@@ -34,9 +37,13 @@ public class UserDatabase extends Database<User>{
     public static final String GRADE_COL = "grade";
     public static final String COMPLETED_AT_COL = "completed_at";
     public static final String WRITING_TIME_COL = "writing_time";
+    public static final String USER_ID = "user_id";
+    public static final String ACH_ID = "ach_id";
 
+    AchievementDatabase achievementDB;
     public UserDatabase(BasicDataSource dataSource, String databaseName) {
         super(dataSource, databaseName);
+        achievementDB = new AchievementDatabase(dataSource, Database.ACHIEVEMENT_DB);
     }
 
     @Override
@@ -99,7 +106,7 @@ public class UserDatabase extends Database<User>{
     public List<History> getHistoryByUserId(int userId) throws SQLException, ClassNotFoundException {
         List<History> histories = new ArrayList<History>();
         ResultSet rsHistories = getResultSet("SELECT * FROM " + Database.HISTORY_DB + " WHERE user_id = " + userId);
-        while (rsHistories.next()){
+        while (rsHistories.next()) {
             History history = new History(
                     rsHistories.getInt("id"),
                     rsHistories.getInt(USER_ID_COL),
@@ -112,5 +119,27 @@ public class UserDatabase extends Database<User>{
             histories.add(history);
         }
         return histories;
+    }
+    public List<Achievement> getAchievementsByUserId(int userId) throws SQLException, ClassNotFoundException {
+        List<Achievement> userAchievements = new ArrayList<Achievement>();
+        ResultSet rsAchievements = getResultSet("SELECT * FROM " + Database.ACH_TO_USR_DB + " WHERE " + USER_ID + " = " + userId);
+        List<Achievement> achievements = achievementDB.getAll();
+        while (rsAchievements.next()){
+            int achId = rsAchievements.getInt(ACH_ID);
+            for(Achievement ach: achievements){
+                if(ach.getId() == achId){
+                    Achievement achievement = new Achievement(
+                        achId,
+                        ach.getName(),
+                        ach.getDescription(),
+                        ach.getImage(),
+                        rsAchievements.getDate(ACQUIRE_DATE)
+                    );
+                    userAchievements.add(achievement);
+                    break;
+                }
+            }
+        }
+        return userAchievements;
     }
 }
