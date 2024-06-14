@@ -1,7 +1,5 @@
 USE quizDB;
 
-DROP TABLE IF EXISTS answers;
-
 CREATE TABLE answers
 (
     id INT PRIMARY KEY AUTO_INCREMENT,

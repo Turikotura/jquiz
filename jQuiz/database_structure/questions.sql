@@ -1,7 +1,5 @@
 USE quizDB;
 
-DROP TABLE IF EXISTS questions;
-
 CREATE TABLE questions
 (
     id INT PRIMARY KEY AUTO_INCREMENT,

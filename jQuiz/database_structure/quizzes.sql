@@ -1,7 +1,5 @@
 USE quizDB;
 
-DROP TABLE IF EXISTS quizzes;
-
 CREATE TABLE quizzes
 (
     id INT PRIMARY KEY AUTO_INCREMENT,
@@ -17,3 +15,12 @@ CREATE TABLE quizzes
     description TEXT,
     FOREIGN KEY (author_id) REFERENCES users(id)
 );
+
+
+INSERT INTO quizzes (title, author_id, created_at, time, thumbnail, should_mix_up,
+                   show_all, auto_correct, allow_practice, description)
+           VALUES ('World Continent Quiz', 1, sysdate(), 60, 'tmpimg', true, true, true, true, 'World continent knowledge quiz');
+
+INSERT INTO quizzes (title, author_id, created_at, time, thumbnail, should_mix_up,
+                   show_all, auto_correct, allow_practice, description)
+VALUES ('US Presidents Quiz', 1, sysdate(), 120, 'tmpimg', true, true, true, true, 'US Presidents Quiz');

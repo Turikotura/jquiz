@@ -1,7 +1,5 @@
 USE quizDB;
 
-DROP TABLE IF EXISTS friends;
-
 CREATE TABLE friends
 (
     id INT PRIMARY KEY AUTO_INCREMENT,

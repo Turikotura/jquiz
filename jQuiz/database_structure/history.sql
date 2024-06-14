@@ -1,7 +1,5 @@
 USE quizDB;
 
-DROP TABLE IF EXISTS history;
-
 CREATE TABLE history
 (
     id INT PRIMARY KEY AUTO_INCREMENT,
