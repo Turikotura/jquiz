@@ -13,8 +13,8 @@ import java.util.List;
 import java.util.Map;
 
 public abstract class Database<T> {
-    private BasicDataSource dataSource;
-    private String databaseName;
+    protected BasicDataSource dataSource;
+    protected String databaseName;
 
     public Database(BasicDataSource dataSource, String databaseName){
         this.databaseName = databaseName;
@@ -43,12 +43,12 @@ public abstract class Database<T> {
     }
     public abstract boolean add(T toAdd);
     protected abstract T getItemFromResultSet(ResultSet rs);
-    private ResultSet getResultSet(String sqlQuery) throws ClassNotFoundException, SQLException {
+    protected ResultSet getResultSet(String sqlQuery) throws ClassNotFoundException, SQLException {
         PreparedStatement statement = getStatement(sqlQuery);
         statement.executeQuery();
         return statement.getResultSet();
     }
-    private PreparedStatement getStatement(String sqlQuery) throws ClassNotFoundException, SQLException {
+    protected PreparedStatement getStatement(String sqlQuery) throws ClassNotFoundException, SQLException {
         Class.forName("com.mysql.cj.jdbc.Driver");
         Connection con = dataSource.getConnection();
         return con.prepareStatement(sqlQuery);
