@@ -7,20 +7,18 @@ public class ClosedQuestion extends Question {
     private int questionType;
     private String queryText;
     private int userScore;
-    private Set<Answer> correctAnswers;
-    private List<Answer> allAnswers;
+    private List<Integer> answerIds;
     private boolean guessed;
     private boolean isMulti;
 
-    public ClosedQuestion(String text, List<Answer> answers, Set<Answer> correctAnswers, int type, boolean isMulti) {
-        super(0,type,text,0,"",0, null);
-        this.correctAnswers = correctAnswers;
+    public ClosedQuestion(String text, List<Integer> answerIds, int type, boolean isMulti) {
+        super(0,type,text,0,"",0, answerIds);
         this.isMulti = isMulti;
     }
 
     public String getQueryText() {return queryText;}
     public int getScore() {return userScore;}
     public int type() {return questionType;}
-    public List<Answer> getAnswers() {return allAnswers;}
+    public List<Integer> getAnswerIds() {return answerIds;}
     public boolean isMultiAnswer() {return isMulti;}
 }

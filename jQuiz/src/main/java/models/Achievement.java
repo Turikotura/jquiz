@@ -19,5 +19,5 @@ public class Achievement {
     public String getName() { return name; }
     public String getDescription() { return description; }
     public String getImage() { return image; }
-    public Date getAcquireDate() { return acquireDate };
+    public Date getAcquireDate() { return acquireDate; }
 }
