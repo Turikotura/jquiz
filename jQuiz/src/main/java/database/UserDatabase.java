@@ -33,22 +33,13 @@ public class UserDatabase extends Database<User>{
     protected User getItemFromResultSet(ResultSet rs) throws SQLException, ClassNotFoundException {
         int id = rs.getInt("id");
 
-        List<Integer> friendIds = new ArrayList<Integer>();
-        ResultSet rsFriends = getResultSet("SELECT * FROM friends WHERE user1_id = " + id);
-        while (rsFriends.next()){
-            friendIds.add(rsFriends.getInt("user2_id"));
-        }
-
         User res = new User(
                 rs.getInt("id"),
                 rs.getString(USERNAME_COL),
                 rs.getDate(CREATED_AT_COL),
                 rs.getString(EMAIL_COL),
                 rs.getString(PASSWORD_COL),
-                rs.getString(IMAGE_COL),
-                null,
-                null,
-                null
+                rs.getString(IMAGE_COL)
         );
         return res;
     }
