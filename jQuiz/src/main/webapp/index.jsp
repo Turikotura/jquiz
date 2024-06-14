@@ -1,37 +1,35 @@
-<%@ page import="java.util.ArrayList" %>
+<%@ page import="models.Quiz" %>
+<%@ page import="java.util.List" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quiz Website</title>
-
+    <title>Quiz List</title>
 </head>
 <body>
-<header>
-    <input type="text" placeholder="Search for quizzes...">
-    <a href="#" class="category">General Knowledge</a>
-    <a href="#" class="category">Science</a>
-    <a href="#" class="category">History</a>
-    <a href="#" class="category">Geography</a>
-    <a href="#" class="category">Sports</a>
-    <a href="#" class="category">Entertainment</a>
-    <a class="category" onclick="">Start Random Quiz</a>
-</header>
-<div class="content">
-    <%
-//        ArrayList<Quiz> quizzes = application.getAttribute("recent_quizzes");
-        ArrayList<String> quizzes = new ArrayList<String>();
-        quizzes.add("quiz1");
-        quizzes.add("quiz2");
-        quizzes.add("quiz3");
-        quizzes.add("quiz4");
-    %>
+<h1>Quiz List</h1>
+<div>
+    <ul>
+        <%
+            List<Quiz> quizzes = (List<Quiz>) request.getAttribute("quizzes");
+            if (quizzes != null) {
+                for (Quiz quiz : quizzes) {
+        %>
+        <li>
+            <strong>Title:</strong> <%= quiz.getTitle() %><br>
+            <strong>Author:</strong> <%= quiz.getAuthor().getUsername() %><br>
+            <strong>Created At:</strong> <%= quiz.getCreatedAt() %><br>
+            <strong>Description:</strong> <%= quiz.getDescription() %><br>
+        </li>
+        <%
+            }
+        } else {
+        %>
+        <li>No quizzes available.</li>
+        <%
+            }
+        %>
+    </ul>
 </div>
-<script>
-    function startRandomQuiz() {
-        alert('Starting a random quiz!');
-    }
-</script>
 </body>
 </html>
