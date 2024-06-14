@@ -1,35 +1,34 @@
 package models;
 
+import java.util.List;
 import java.util.Set;
 
 public class Question {
-    private int questionType;
-    private String queryText;
-    private int userScore;
-    private Set<Answer> correctAnswers;
+    private int id;
+    private int questionTypeId;
+    private String text;
+    int quizId;
+    String imageUrl;
+    private int score;
+    private List<Integer> answerIds;
     private boolean guessed;
 
 
-    public Question(String text, Set<Answer> answers, int type) {
-        this.queryText = text;
-        this.correctAnswers = answers;
-        this.userScore = 0;
-        this.guessed = false;
-        this.questionType = type;
+    public Question(int id, int questionTypeId, String text, int quizId, String imageUrl, int score, List<Integer> answerIds) {
+        this.id = id;
+        this.questionTypeId = questionTypeId;
+        this.text = text;
+        this.quizId = quizId;
+        this.imageUrl = imageUrl;
+        this.score = score;
+        this.answerIds = answerIds;
     }
 
-    public String getQueryText() {return queryText;}
-    public int type() {return questionType;}
-    public int getScore() {return userScore;}
-
-    public boolean guessAnswer(Answer ans) {
-        if(!guessed) {
-            guessed = true;
-            if(correctAnswers.contains(ans)) {
-                userScore = 1;
-                return true;
-            } else return false;
-        }
-        return false;
-    }
+    public int getId() {return id;}
+    public int getQuestionTypeId() {return questionTypeId;}
+    public String getText() {return text;}
+    public int getQuizId() {return quizId;}
+    public String getImageUrl() {return imageUrl;}
+    public int getScore() {return score;}
+    public List<Integer> getAnswerIds() {return answerIds;}
 }

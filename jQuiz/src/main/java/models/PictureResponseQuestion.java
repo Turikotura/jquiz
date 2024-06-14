@@ -12,7 +12,7 @@ public class PictureResponseQuestion extends Question {
 
 
     public PictureResponseQuestion(String text, Set<Answer> answers, String link, int type) {
-        super(text,answers,type);
+        super(0,type,text,0,"",0, null);
         this.pictureLink = link;
     }
 
@@ -20,5 +20,4 @@ public class PictureResponseQuestion extends Question {
     public int type() {return questionType;}
     public String getPictureLink() {return pictureLink;}
     public int getScore() {return userScore;}
-    public boolean guessAnswer(Answer ans) { return super.guessAnswer(ans); }
 }
