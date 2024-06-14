@@ -15,7 +15,7 @@ public class Quiz {
     private boolean autoCorrect;
     private boolean allowPractice;
     private String description;
-    private List<Question> questions;
+    private List<Integer> questionIds;
 
 
     public Quiz(
@@ -30,7 +30,7 @@ public class Quiz {
             boolean autoCorrect,
             boolean allowPractice,
             String description,
-            List<Question> questions
+            List<Integer> questionIds
     ) {
         this.id = id;
         this.title = title;
@@ -43,7 +43,7 @@ public class Quiz {
         this.autoCorrect = autoCorrect;
         this.allowPractice = allowPractice;
         this.description = description;
-        this.questions = questions;
+        this.questionIds = questionIds;
     }
 
     public int getId() {return id;}
@@ -57,5 +57,5 @@ public class Quiz {
     public boolean getAutoCorrect() {return autoCorrect;}
     public boolean getAllowPractice() {return allowPractice;}
     public User getAuthor() {return author;}
-    public List<Question> getQuestions() {return questions;}
+    public List<Integer> getQuestions() {return questionIds;}
 }

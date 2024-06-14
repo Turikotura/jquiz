@@ -44,7 +44,7 @@ public class QuizDatabase extends Database<Quiz>{
     @Override
     protected Quiz getItemFromResultSet(ResultSet rs) throws SQLException {
         User author = UserDatabase.getById(rs.getString(AUTHOR_ID));
-        List<Question> questions = QuestionDatabase.getQuestionsByQuiz(rs.getInt(ID));
+        List<Integer> questionIds = QuestionDatabase.getQuestionIdsByQuiz(rs.getInt(ID));
         return new Quiz(
                 rs.getInt(ID),
                 rs.getString(TITLE),
@@ -57,7 +57,7 @@ public class QuizDatabase extends Database<Quiz>{
                 rs.getBoolean(AUTO_CORRECT),
                 rs.getBoolean(ALLOW_PRACTICE),
                 rs.getString(DESCRIPTION),
-
+                questionIds
         );
     }
 }
