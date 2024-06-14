@@ -1,11 +1,11 @@
 package models;
 
-public class Achievements {
+public class Achievement {
     private int id;
     private String name;
     private String description;
     private String image;
-    public Achievements(int id, String name, String description, String image){
+    public Achievement(int id, String name, String description, String image){
         this.id = id;
         this.name = name;
         this.description = description;

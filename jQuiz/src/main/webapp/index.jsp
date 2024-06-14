@@ -17,5 +17,4 @@
     Connection conn = dataSource.getConnection();
     QuizDatabase quizDB = new QuizDatabase(dataSource, Database.QUIZ_DB);
     ArrayList<Quiz> quizzes = (ArrayList<Quiz>) quizDB.getAll();
-    System.out.println("NIGGA " + quizzes.size());
 %>
