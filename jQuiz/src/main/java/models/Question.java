@@ -3,10 +3,12 @@ package models;
 import java.util.Set;
 
 public class Question {
+    private int id;
     private int questionType;
     private String queryText;
+
     private int userScore;
-    private Set<Answer> correctAnswers;
+    private Set<Integer> correctAnswerIds;
     private boolean guessed;
 
 

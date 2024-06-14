@@ -3,22 +3,20 @@ package database;
 import models.User;
 import org.apache.commons.dbcp2.BasicDataSource;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
-public class UsersDatabase extends Database<User>{
+public class UserDatabase extends Database<User>{
     public static final String USERNAME_COL = "username";
     public static final String IS_ADMIN_COL = "is_admin";
     public static final String CREATED_AT_COL = "created_at";
     public static final String EMAIL_COL = "email";
     public static final String PASSWORD_COL = "pass";
     public static final String IMAGE_COL = "image";
-    public UsersDatabase(BasicDataSource dataSource, String databaseName) {
+    public UserDatabase(BasicDataSource dataSource, String databaseName) {
         super(dataSource, databaseName);
     }
 

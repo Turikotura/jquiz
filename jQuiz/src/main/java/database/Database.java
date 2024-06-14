@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 public abstract class Database<T> {
+    public static final String USER_DB = "users";
     protected BasicDataSource dataSource;
     protected String databaseName;
 

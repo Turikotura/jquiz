@@ -1,42 +1,61 @@
 package models;
 
+import java.util.Date;
 import java.util.List;
 
 public class Quiz {
     private int id;
-    private int maxTime;
     private String title;
-    private String description;
-    private String thumbnailLink;
-    private List<Question> questions;
+    private User author;
+    private Date created_at;
+    private int time;
+    private String thumbnail;
     private boolean shouldMixUp;
     private boolean showAll;
     private boolean autoCorrect;
     private boolean allowPractice;
-    private User author;
+    private String description;
+    private List<Integer> questionIds;
 
 
-    public Quiz(int id, int maxTime, String title, String description, String thumbnailLink, boolean shouldMixUp, boolean showAll, boolean autoCorrect, boolean allowPractice, User author) {
+    public Quiz(
+            int id,
+            String title,
+            User author,
+            Date created_at,
+            int time,
+            String thumbnail,
+            boolean shouldMixUp,
+            boolean showAll,
+            boolean autoCorrect,
+            boolean allowPractice,
+            String description,
+            List<Integer> questionIds
+    ) {
         this.id = id;
-        this.maxTime = maxTime;
         this.title = title;
-        this.description = description;
-        this.thumbnailLink = thumbnailLink;
+        this.author = author;
+        this.created_at = created_at;
+        this.time = time;
+        this.thumbnail = thumbnail;
         this.shouldMixUp = shouldMixUp;
         this.showAll = showAll;
         this.autoCorrect = autoCorrect;
         this.allowPractice = allowPractice;
-        this.author = author;
+        this.description = description;
+        this.questionIds = questionIds;
     }
 
     public int getId() {return id;}
-    public int getMaxTime() {return maxTime;}
     public String getTitle() {return title;}
-    public String getDesc() {return description;}
-    public String getThumbnail() {return thumbnailLink;}
-    public boolean shouldRandomize() {return shouldMixUp;}
-    public boolean loadAll() {return showAll;}
-    public boolean computerGrades() {return autoCorrect;}
-    public boolean practiceAllowed() {return allowPractice;}
+    public Date getCreatedAt() {return created_at;}
+    public int getMaxTime() {return time;}
+    public String getDescription() {return description;}
+    public String getThumbnail() {return thumbnail;}
+    public boolean getShouldMixUp() {return shouldMixUp;}
+    public boolean getShowAll() {return showAll;}
+    public boolean getAutoCorrect() {return autoCorrect;}
+    public boolean getAllowPractice() {return allowPractice;}
     public User getAuthor() {return author;}
+    public List<Integer> getQuestions() {return questionIds;}
 }
