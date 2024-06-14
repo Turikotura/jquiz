@@ -4,13 +4,48 @@ package database;
 
 import org.apache.commons.dbcp2.BasicDataSource;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public abstract class Database<T> {
     private BasicDataSource dataSource;
+    private String databaseName;
 
-    public abstract List<T> getAll();
-    public abstract T getById(int id);
-    public abstract boolean removeById(int id);
-    public abstract boolean setById(int id, T toChange);
+    public List<T> getAll() throws ClassNotFoundException, SQLException {
+        ResultSet rs = getResultSet("SELECT * FROM " + databaseName);
+        List<T> res = new ArrayList<T>();
+        while (rs.next()){
+            res.add(getItemFromResultSet(rs));
+        }
+        return res;
+    }
+    public T getById(int id) throws SQLException, ClassNotFoundException {
+        ResultSet rs = getResultSet("SELECT * FROM " + databaseName + " WHERE id = " + id);
+        return getItemFromResultSet(rs);
+    }
+    public boolean removeById(int id) throws SQLException, ClassNotFoundException {
+        PreparedStatement statement = getStatement("DELETE FROM " + databaseName + " WHERE id = " + id);
+        return statement.executeUpdate() > 0;
+    }
+    public boolean setFieldById(int id, String columnName, String value) throws SQLException, ClassNotFoundException {
+        PreparedStatement statement = getStatement("UPDATE " + databaseName + " SET " + columnName + " = " + value + " WHERE id = " + id);
+        return statement.executeUpdate() > 0;
+    }
+    public abstract boolean add(T toAdd);
+    protected abstract T getItemFromResultSet(ResultSet rs);
+    private ResultSet getResultSet(String sqlQuery) throws ClassNotFoundException, SQLException {
+        PreparedStatement statement = getStatement(sqlQuery);
+        statement.executeQuery();
+        return statement.getResultSet();
+    }
+    private PreparedStatement getStatement(String sqlQuery) throws ClassNotFoundException, SQLException {
+        Class.forName("com.mysql.cj.jdbc.Driver");
+        Connection con = dataSource.getConnection();
+        return con.prepareStatement(sqlQuery);
+    }
 }
