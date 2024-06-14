@@ -4,7 +4,7 @@ DROP TABLE IF EXISTS achToUser;
 
 CREATE TABLE achToUser
 (
-    id INT PRIMARY KEY,
+    id INT PRIMARY KEY AUTO_INCREMENT,
     user_id INT,
     ach_id INT,
     aquire_date DATETIME,

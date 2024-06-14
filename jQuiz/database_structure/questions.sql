@@ -4,7 +4,7 @@ DROP TABLE IF EXISTS questions;
 
 CREATE TABLE questions
 (
-    id INT PRIMARY KEY,
+    id INT PRIMARY KEY AUTO_INCREMENT,
     question_type_id INT,
     text TEXT,
     quiz_id INT,

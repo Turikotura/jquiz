@@ -39,7 +39,6 @@ public class UserDatabase extends Database<User>{
             friendIds.add(rsFriends.getInt("user2_id"));
         }
 
-
         User res = new User(
                 rs.getInt("id"),
                 rs.getString(USERNAME_COL),

@@ -4,7 +4,7 @@ DROP TABLE IF EXISTS quizzes;
 
 CREATE TABLE quizzes
 (
-    id INT PRIMARY KEY,
+    id INT PRIMARY KEY AUTO_INCREMENT,
     title VARCHAR(50),
     author_id INT,
     created_at DATETIME,

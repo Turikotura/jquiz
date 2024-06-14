@@ -4,7 +4,7 @@ DROP TABLE IF EXISTS history;
 
 CREATE TABLE history
 (
-    id INT PRIMARY KEY,
+    id INT PRIMARY KEY AUTO_INCREMENT,
     user_id INT,
     quiz_id INT,
     grade INT,

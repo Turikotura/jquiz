@@ -4,7 +4,7 @@ DROP TABLE IF EXISTS friends;
 
 CREATE TABLE friends
 (
-    id INT PRIMARY KEY,
+    id INT PRIMARY KEY AUTO_INCREMENT,
     user1_id INT,
     user2_id INT,
     FOREIGN KEY (user1_id) REFERENCES users(id),

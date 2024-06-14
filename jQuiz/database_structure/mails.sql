@@ -4,7 +4,7 @@ DROP TABLE IF EXISTS mails;
 
 CREATE TABLE mails
 (
-    id INT PRIMARY KEY,
+    id INT PRIMARY KEY AUTO_INCREMENT,
     sender_id INT,
     receiver_id INT,
     type INT,
