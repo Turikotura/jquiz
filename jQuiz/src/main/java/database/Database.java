@@ -16,6 +16,11 @@ public abstract class Database<T> {
     private BasicDataSource dataSource;
     private String databaseName;
 
+    public Database(BasicDataSource dataSource, String databaseName){
+        this.databaseName = databaseName;
+        this.dataSource = dataSource;
+    }
+
     public List<T> getAll() throws ClassNotFoundException, SQLException {
         ResultSet rs = getResultSet("SELECT * FROM " + databaseName);
         List<T> res = new ArrayList<T>();
