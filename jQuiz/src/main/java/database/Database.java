@@ -35,6 +35,7 @@ public abstract class Database<T> {
     }
     public T getById(int id) throws SQLException, ClassNotFoundException {
         ResultSet rs = getResultSet("SELECT * FROM " + databaseName + " WHERE id = " + id);
+        rs.next();
         return getItemFromResultSet(rs);
     }
     public boolean removeById(int id) throws SQLException, ClassNotFoundException {
