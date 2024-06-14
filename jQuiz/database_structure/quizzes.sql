@@ -10,10 +10,10 @@ CREATE TABLE quizzes
     created_at DATETIME,
     time INT,
     thumbnail VARCHAR(100),
-    shouldMixUp BIT,
-    showAll BIT,
-    autoCorrect BIT,
-    allowPractice BIT,
+    should_mix_up BIT,
+    show_all BIT,
+    auto_correct BIT,
+    allow_practice BIT,
     description TEXT,
     FOREIGN KEY (author_id) REFERENCES users(id)
 );

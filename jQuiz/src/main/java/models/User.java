@@ -12,11 +12,11 @@ public class User {
     private String email;
     private String password;
     private String image;
-    private List<User> friends;
-    private List<Mail> mails;
-    private List<Achievements> achievements;
+    private List<Integer> friendIds;
+    private List<Integer> mailIds;
+    private List<Integer> achievementIds;
     public User(int id, String username, Date created_at, String email, String password, String image,
-                List<User> friends, List<Mail> mails, List<Achievements> achievements){
+                List<Integer> friendIds, List<Integer> mailIds, List<Integer> achievementIds){
         this.id = id;
         this.username = username;
         this.created_at = created_at;
@@ -24,9 +24,9 @@ public class User {
         this.password = password;
         this.image = image;
 
-        this.friends = friends;
-        this.mails = mails;
-        this.achievements = achievements;
+        this.friendIds = friendIds;
+        this.mailIds = mailIds;
+        this.achievementIds = achievementIds;
     }
     public int getId() { return id; }
     public String getUsername() { return username; }
@@ -36,7 +36,7 @@ public class User {
     public String getPassword() { return password; }
     public String getImage() { return image; }
 
-    public List<User> getFriends() { return friends; }
-    public List<Mail> getMails() { return mails; }
-    public List<Achievements> getAchievements() { return achievements; }
+    public List<Integer> getFriendIds() { return friendIds; }
+    public List<Integer> getMailIds() { return mailIds; }
+    public List<Integer> getAchievementIds() { return achievementIds; }
 }

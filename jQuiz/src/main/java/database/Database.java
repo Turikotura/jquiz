@@ -41,8 +41,8 @@ public abstract class Database<T> {
         PreparedStatement statement = getStatement("UPDATE " + databaseName + " SET " + columnName + " = " + value + " WHERE id = " + id);
         return statement.executeUpdate() > 0;
     }
-    public abstract boolean add(T toAdd);
-    protected abstract T getItemFromResultSet(ResultSet rs);
+    public abstract boolean add(T toAdd) throws SQLException, ClassNotFoundException;
+    protected abstract T getItemFromResultSet(ResultSet rs) throws SQLException, ClassNotFoundException;
     protected ResultSet getResultSet(String sqlQuery) throws ClassNotFoundException, SQLException {
         PreparedStatement statement = getStatement(sqlQuery);
         statement.executeQuery();
