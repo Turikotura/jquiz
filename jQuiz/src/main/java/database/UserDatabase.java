@@ -31,14 +31,6 @@ public class UserDatabase extends Database<User>{
     public static final String TYPE = "type";
     public static final String QUIZ_ID = "quiz_id";
     public static final String TEXT = "text";
-    // History Columns
-    public static final String USER_ID_COL = "user_id";
-    public static final String QUIZ_ID_COL = "quiz_id";
-    public static final String GRADE_COL = "grade";
-    public static final String COMPLETED_AT_COL = "completed_at";
-    public static final String WRITING_TIME_COL = "writing_time";
-    public static final String USER_ID = "user_id";
-    public static final String ACH_ID = "ach_id";
 
     AchievementDatabase achievementDB;
     public UserDatabase(BasicDataSource dataSource, String databaseName) {
@@ -103,43 +95,20 @@ public class UserDatabase extends Database<User>{
         return users;
     }
 
-    public List<History> getHistoryByUserId(int userId) throws SQLException, ClassNotFoundException {
-        List<History> histories = new ArrayList<History>();
-        ResultSet rsHistories = getResultSet("SELECT * FROM " + Database.HISTORY_DB + " WHERE user_id = " + userId);
-        while (rsHistories.next()) {
-            History history = new History(
-                    rsHistories.getInt("id"),
-                    rsHistories.getInt(USER_ID_COL),
-                    rsHistories.getInt(QUIZ_ID_COL),
-                    rsHistories.getInt(GRADE_COL),
-                    rsHistories.getDate(COMPLETED_AT_COL),
-                    rsHistories.getInt(WRITING_TIME_COL)
-            );
-
-            histories.add(history);
+    public List<User> getHighestPerformers(int k, String fromLastDay) throws SQLException, ClassNotFoundException {
+        List<User> users = new ArrayList<>();
+        ResultSet rsUsers = getResultSet(
+                " SELECT u.id, u.username, u.is_admin, u.created_at, u.email, u.pass, u.image," +
+                " SUM(h.grade) AS sum_grade, SUM(h.writing_time) as sum_time" +
+                " FROM " + Database.USER_DB +" u" +
+                " LEFT JOIN " + Database.HISTORY_DB + " h ON u.id = h.user_id" +
+                        (fromLastDay.equals("lastday") ? " WHERE h.completed_at >= DATE_SUB(NOW(), INTERVAL 1 DAY)" : "") +
+                " GROUP BY u.id, u.username, u.is_admin, u.created_at, u.email, u.pass, u.image" +
+                " ORDER BY sum_grade DESC, sum_time ASC" +
+                " LIMIT " + k + ";");
+        while(rsUsers.next()){
+            users.add(getItemFromResultSet(rsUsers));
         }
-        return histories;
-    }
-    public List<Achievement> getAchievementsByUserId(int userId) throws SQLException, ClassNotFoundException {
-        List<Achievement> userAchievements = new ArrayList<Achievement>();
-        ResultSet rsAchievements = getResultSet("SELECT * FROM " + Database.ACH_TO_USR_DB + " WHERE " + USER_ID + " = " + userId);
-        List<Achievement> achievements = achievementDB.getAll();
-        while (rsAchievements.next()){
-            int achId = rsAchievements.getInt(ACH_ID);
-            for(Achievement ach: achievements){
-                if(ach.getId() == achId){
-                    Achievement achievement = new Achievement(
-                        achId,
-                        ach.getName(),
-                        ach.getDescription(),
-                        ach.getImage(),
-                        rsAchievements.getDate(ACQUIRE_DATE)
-                    );
-                    userAchievements.add(achievement);
-                    break;
-                }
-            }
-        }
-        return userAchievements;
+        return users;
     }
 }
