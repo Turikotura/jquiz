@@ -142,4 +142,9 @@ public class UserDatabase extends Database<User>{
         }
         return userAchievements;
     }
+
+    public boolean userExists(String username) throws SQLException, ClassNotFoundException {
+        ResultSet usersFound = getResultSet("SELECT * FROM " + Database.USER_DB + " WHERE " + USERNAME_COL + " = " + username);
+        return usersFound.isBeforeFirst();
+    }
 }

@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="11bfb6b0-0ab4-4275-9c08-73c2144412d4" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/jQuiz/src/main/java/database/UserDatabase.java" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/src/main/java/database/UserDatabase.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jQuiz/src/main/webapp/index.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/src/main/webapp/index.jsp" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ChangesViewManager">
+    <option name="groupingKeys">
+      <option value="directory" />
+    </option>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Jsp File" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="main" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 1
+}</component>
+  <component name="ProjectId" id="2hmjCtRh2vbdhf7LymukBSXbhqL" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Maven.jQuiz [tomcat7:run].executor": "Run",
+    "Notification.DisplayName-DoNotAsk-Vcs Important Messages": "VCS important messages",
+    "Notification.DoNotAsk-Vcs Important Messages": "true",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "git-widget-placeholder": "log-in",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "/home/giorgi/OOP/jmovies/jQuiz/src/main/java/AbstractQuestions",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Modules",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2",
+    "settings.editor.selected.configurable": "vcs.Git",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/jQuiz/src/main/java/AbstractQuestions" />
+    </key>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="jdk-1.8.0_392-corretto-1.8.0_392-4caba194b151-023f9ed7" />
+        <option value="jdk-22-openjdk-22-4caba194b151-6fbd92ee" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="11bfb6b0-0ab4-4275-9c08-73c2144412d4" name="Changes" comment="" />
+      <created>1718206024395</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1718206024395</updated>
+      <workItem from="1718206029943" duration="371000" />
+      <workItem from="1718206457969" duration="643000" />
+      <workItem from="1718264035067" duration="17000" />
+      <workItem from="1718264079561" duration="627000" />
+      <workItem from="1718264762549" duration="5567000" />
+      <workItem from="1718283385226" duration="3229000" />
+      <workItem from="1718288673012" duration="80000" />
+      <workItem from="1718288906572" duration="2500000" />
+      <workItem from="1718291436841" duration="2192000" />
+      <workItem from="1718308349678" duration="623000" />
+      <workItem from="1718439726440" duration="57000" />
+      <workItem from="1718441087098" duration="177000" />
+      <workItem from="1718441283229" duration="69000" />
+      <workItem from="1718441397802" duration="2749000" />
+    </task>
+    <task id="LOCAL-00001" summary="Objects for different question types added.">
+      <option name="closed" value="true" />
+      <created>1718275960098</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1718275960098</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Basic Answer Class, Question Types Changed">
+      <option name="closed" value="true" />
+      <created>1718286665473</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1718286665473</updated>
+    </task>
+    <task id="LOCAL-00003" summary=".gitignore and xml files added">
+      <option name="closed" value="true" />
+      <created>1718289182174</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1718289182174</updated>
+    </task>
+    <task id="LOCAL-00004" summary="Quiz class added, minor fixes">
+      <option name="closed" value="true" />
+      <created>1718293079936</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1718293079936</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Objects for different question types added." />
+    <MESSAGE value="Basic Answer Class, Question Types Changed" />
+    <MESSAGE value=".gitignore and xml files added" />
+    <MESSAGE value="Quiz class added, minor fixes" />
+    <option name="LAST_COMMIT_MESSAGE" value="Quiz class added, minor fixes" />
+  </component>
+</project>
