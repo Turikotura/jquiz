@@ -1,15 +1,12 @@
 package database;
 
-import models.Question;
 import models.Quiz;
-import models.User;
 import org.apache.commons.dbcp2.BasicDataSource;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class QuizDatabase extends Database<Quiz>{
@@ -33,7 +30,7 @@ public class QuizDatabase extends Database<Quiz>{
     public boolean add(Quiz quiz) throws SQLException, ClassNotFoundException {
         String query = String.format(
                 "INSERT INTO quizzes (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s) " +
-                        "VALUES ('%s', %d, '%s', %d, '%s', %b, %b, %b, %b, '%s');",
+                        "VALUES ('%s', %d, %s, %d, '%s', %b, %b, %b, %b, '%s');",
                 TITLE, AUTHOR_ID, CREATED_AT, TIME, THUMBNAIL, SHOULD_MIX_UP, SHOW_ALL, AUTO_CORRECT, ALLOW_PRACTICE, DESCRIPTION,
                 quiz.getTitle(), quiz.getAuthorId(), quiz.getCreatedAt().toString(), quiz.getMaxTime(), quiz.getThumbnail(),
                 quiz.getShouldMixUp(), quiz.getShowAll(), quiz.getAutoCorrect(), quiz.getAllowPractice(), quiz.getDescription());
@@ -59,5 +56,10 @@ public class QuizDatabase extends Database<Quiz>{
                 rs.getString(DESCRIPTION),
                 questionIds
         );
+    }
+    public List<Quiz> getQuizzesByAuthorId(int authorId) throws SQLException, ClassNotFoundException {
+        String query = String.format("SELECT * FROM %s WHERE %s = %d",
+                databaseName, AUTHOR_ID, authorId);
+        return queryToList(query);
     }
 }

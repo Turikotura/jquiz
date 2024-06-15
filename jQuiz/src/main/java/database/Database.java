@@ -63,4 +63,12 @@ public abstract class Database<T> {
         Connection con = dataSource.getConnection();
         return con.prepareStatement(sqlQuery);
     }
+    protected List<T> queryToList(String query) throws SQLException, ClassNotFoundException {
+        List<T> res = new ArrayList<>();
+        ResultSet rs = getResultSet(query);
+        while(rs.next()){
+            res.add(getItemFromResultSet(rs));
+        }
+        return res;
+    }
 }

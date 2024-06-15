@@ -24,3 +24,8 @@ where h.user_id = 3
 AND h.completed_at = (SELECT max(hi.completed_at)
                       FROM history hi
                       WHERE hi.user_id = 3)
+
+SELECT *
+FROM history
+ORDER BY completed_at DESC
+LIMIT 2;

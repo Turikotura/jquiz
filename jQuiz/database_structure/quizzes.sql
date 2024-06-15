@@ -24,3 +24,7 @@ INSERT INTO quizzes (title, author_id, created_at, time, thumbnail, should_mix_u
 INSERT INTO quizzes (title, author_id, created_at, time, thumbnail, should_mix_up,
                    show_all, auto_correct, allow_practice, description)
 VALUES ('US Presidents Quiz', 1, sysdate(), 120, 'tmpimg', true, true, true, true, 'US Presidents Quiz');
+
+SELECT *
+FROM quizzes
+ORDER BY (SELECT )
