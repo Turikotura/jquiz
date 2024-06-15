@@ -1,14 +1,12 @@
 <%@ page import="models.Quiz" %>
 <%@ page import="java.util.ArrayList" %>
-<%@ page import="database.QuizDatabase" %>
 <%@ page import="org.apache.commons.dbcp2.BasicDataSource" %>
 <%@ page import="java.sql.Connection" %>
-<%@ page import="database.Database" %>
-<%@ page import="database.UserDatabase" %>
 <%@ page import="models.User" %>
 <%@ page import="java.util.List" %>
-<%@ page import="database.HistoryDatabase" %>
 <%@ page import="models.History" %>
+<%@ page import="database.*" %>
+<%@ page import="models.Achievement" %>
 <html>
 <body>
 <h2>Hello World!</h2>
@@ -44,3 +42,13 @@
     History newestHistory = historydb.getLastHistoryByUserId(3);
 %>
 <p><%=newestHistory.getWritingTime()%></p>
+
+<%
+    AchievementDatabase achdb = new AchievementDatabase(dataSource, Database.ACHIEVEMENT_DB);
+    List<Achievement> achs = achdb.getAchievementsByUserId(1);
+    for(int i = 0; i < achs.size(); i++){
+%>
+    <p><%=achs.get(i).getName()%></p>
+<%
+    }
+%>

@@ -66,4 +66,9 @@ public class HistoryDatabase extends Database<History> {
                 databaseName, QUIZ_ID, quizId);
         return queryToList(query);
     }
+    public List<History> getLatestHistoriesByUserId(int userId, int k) throws SQLException, ClassNotFoundException {
+        String query = String.format("SELECT * FROM %s WHERE %s = %d ORDER BY %s DESC LIMIT %d",
+                databaseName, USER_ID, userId, COMPLETED_AT, k);
+        return queryToList(query);
+    }
 }

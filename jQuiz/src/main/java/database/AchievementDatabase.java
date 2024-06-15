@@ -46,28 +46,8 @@ public class AchievementDatabase extends Database<Achievement> {
         );
     }
     public List<Achievement> getAchievementsByUserId(int userId) throws SQLException, ClassNotFoundException {
-        // Needs better sql query
-        List<Achievement> userAchievements = new ArrayList<Achievement>();
-        String query = String.format("SELECT * FROM %s WHERE %s = %d",
-                Database.ACH_TO_USR_DB, USER_ID, userId);
-        ResultSet rsAchievements = getResultSet(query);
-        List<Achievement> achievements = getAll();
-        while (rsAchievements.next()){
-            int achId = rsAchievements.getInt(ACH_ID);
-            for(Achievement ach: achievements){
-                if(ach.getId() == achId){
-                    Achievement achievement = new Achievement(
-                            achId,
-                            ach.getName(),
-                            ach.getDescription(),
-                            ach.getImage(),
-                            rsAchievements.getDate(ACQUIRE_DATE)
-                    );
-                    userAchievements.add(achievement);
-                    break;
-                }
-            }
-        }
-        return userAchievements;
+        String query = String.format("SELECT a.%s, a.%s, a.%s, a.%s, au.%s, au.%s FROM %s a JOIN %s au ON a.%s = au.%s WHERE au.%s = %d;",
+                ID, NAME, DESCRIPTION, IMAGE, USER_ID, ACQUIRE_DATE, databaseName, Database.ACH_TO_USR_DB, ID, ACH_ID, USER_ID, userId);
+        return queryToList(query);
     }
 }

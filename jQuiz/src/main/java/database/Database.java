@@ -20,7 +20,7 @@ public abstract class Database<T> {
     public static final String MAIL_DB = "mails";
     public static final String FRIEND_DB = "friends";
     public static final String HISTORY_DB = "history";
-    public static final String ACH_TO_USR_DB = "ach_to_usr";
+    public static final String ACH_TO_USR_DB = "achToUser";
     public static final String ACHIEVEMENT_DB = "achievements";
     protected BasicDataSource dataSource;
     protected String databaseName;
