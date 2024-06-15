@@ -21,7 +21,12 @@
     dataSource.setPassword("");
     Connection conn = dataSource.getConnection();
     QuizDatabase quizDB = new QuizDatabase(dataSource, Database.QUIZ_DB);
-    ArrayList<Quiz> quizzes = (ArrayList<Quiz>) quizDB.getAll();
+    ArrayList<Quiz> quizzes = (ArrayList<Quiz>) quizDB.getPopularQuizzes(1);
+    for(int i = 0; i < quizzes.size(); i++){
+%>
+    <p><%=quizzes.get(i).getTitle()%></p>
+<%
+    }
 %>
 
 <%

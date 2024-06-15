@@ -62,4 +62,19 @@ public class QuizDatabase extends Database<Quiz>{
                 databaseName, AUTHOR_ID, authorId);
         return queryToList(query);
     }
+
+    public List<Quiz> getPopularQuizzes(int k) throws SQLException, ClassNotFoundException {
+        String query = String.format("SELECT q.%s, q.%s, q.%s, q.%s, q.%s, q.%s, q.%s, q.%s, q.%s, q.%s, q.%s, COUNT(h.%s) AS quiz_count FROM %s q LEFT JOIN %s h ON q.%s = h.%s GROUP BY q.%s, q.%s, q.%s, q.%s, q.%s, q.%s, q.%s, q.%s, q.%s, q.%s, q.%s ORDER BY quiz_count DESC LIMIT %d;",
+                ID, TITLE, AUTHOR_ID, CREATED_AT, TIME, THUMBNAIL, SHOULD_MIX_UP, SHOW_ALL, AUTO_CORRECT, ALLOW_PRACTICE, DESCRIPTION, HistoryDatabase.QUIZ_ID,
+                databaseName, Database.HISTORY_DB,
+                ID, HistoryDatabase.QUIZ_ID,
+                ID, TITLE, AUTHOR_ID, CREATED_AT, TIME, THUMBNAIL, SHOULD_MIX_UP, SHOW_ALL, AUTO_CORRECT, ALLOW_PRACTICE, DESCRIPTION,
+                k);
+        return queryToList(query);
+    }
+    public List<Quiz> getRecentlyCreatedQuizzes(int k) throws SQLException, ClassNotFoundException {
+        String query = String.format("SELECT * FROM %s ORDER BY %s DESC LIMIT %d",
+                databaseName, CREATED_AT, k);
+        return queryToList(query);
+    }
 }
