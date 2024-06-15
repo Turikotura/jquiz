@@ -20,7 +20,7 @@ public class HistoryDatabase extends Database<History> {
     }
     @Override
     public boolean add(History toAdd) throws SQLException, ClassNotFoundException {
-        String query = String.format("INSERT INTO %s ( %s, %s, %s, %s, %s ) VALUES ( %s, %b, %s, %s, %s, %s)", databaseName,
+        String query = String.format("INSERT INTO %s ( %s, %s, %s, %s, %s ) VALUES ( %d, %d, %d, %t, %d )", databaseName,
                 USER_ID_COL, QUIZ_ID_COL, GRADE_COL, COMPLETED_AT_COL, WRITING_TIME_COL,
                 toAdd.getUserId(), toAdd.getQuizId(), toAdd.getGrade(), toAdd.getCompletedAt(), toAdd.getWritingTime());
         PreparedStatement statement = getStatement(query);

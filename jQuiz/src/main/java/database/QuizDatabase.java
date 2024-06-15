@@ -25,13 +25,8 @@ public class QuizDatabase extends Database<Quiz>{
     static final String ALLOW_PRACTICE = "allow_practice";
     static final String DESCRIPTION = "description";
 
-    UserDatabase userDB;
-    QuestionDatabase questionDB;
-
     public QuizDatabase(BasicDataSource dataSource, String databaseName) {
         super(dataSource, databaseName);
-        userDB = new UserDatabase(this.dataSource, Database.USER_DB);
-        questionDB = new QuestionDatabase(this.dataSource, Database.QUESTION_DB);
     }
 
     @Override
@@ -40,7 +35,7 @@ public class QuizDatabase extends Database<Quiz>{
                 "INSERT INTO quizzes (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s) " +
                         "VALUES ('%s', %d, '%s', %d, '%s', %b, %b, %b, %b, '%s');",
                 TITLE, AUTHOR_ID, CREATED_AT, TIME, THUMBNAIL, SHOULD_MIX_UP, SHOW_ALL, AUTO_CORRECT, ALLOW_PRACTICE, DESCRIPTION,
-                quiz.getTitle(), quiz.getAuthor().getId(), quiz.getCreatedAt().toString(), quiz.getMaxTime(), quiz.getThumbnail(),
+                quiz.getTitle(), quiz.getAuthorId(), quiz.getCreatedAt().toString(), quiz.getMaxTime(), quiz.getThumbnail(),
                 quiz.getShouldMixUp(), quiz.getShowAll(), quiz.getAutoCorrect(), quiz.getAllowPractice(), quiz.getDescription());
         PreparedStatement statement = this.getStatement(query);
         int affectedRows = statement.executeUpdate();
@@ -49,14 +44,11 @@ public class QuizDatabase extends Database<Quiz>{
 
     @Override
     protected Quiz getItemFromResultSet(ResultSet rs) throws SQLException, ClassNotFoundException {
-        User author = userDB.getById(rs.getInt(AUTHOR_ID));
-//        User author = new User(0,"", new Date(), null, null,null,null,null,null);
         List<Integer> questionIds = new ArrayList<>();
-//        List<Integer> questionIds = questionDB.getQuestionIdsByQuizId(rs.getInt(ID));
         return new Quiz(
                 rs.getInt(ID),
                 rs.getString(TITLE),
-                author,
+                rs.getInt(AUTHOR_ID),
                 rs.getDate(CREATED_AT),
                 rs.getInt(TIME),
                 rs.getString(THUMBNAIL),

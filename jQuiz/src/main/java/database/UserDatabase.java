@@ -25,17 +25,9 @@ public class UserDatabase extends Database<User>{
     public static final String EMAIL_COL = "email";
     public static final String PASSWORD_COL = "pass";
     public static final String IMAGE_COL = "image";
-    // Mail Columns
-    public static final String RECEIVER_ID = "receiver_id";
-    public static final String SENDER_ID = "sender_id";
-    public static final String TYPE = "type";
-    public static final String QUIZ_ID = "quiz_id";
-    public static final String TEXT = "text";
 
-    AchievementDatabase achievementDB;
     public UserDatabase(BasicDataSource dataSource, String databaseName) {
         super(dataSource, databaseName);
-        achievementDB = new AchievementDatabase(dataSource, Database.ACHIEVEMENT_DB);
     }
 
     @Override
@@ -57,24 +49,6 @@ public class UserDatabase extends Database<User>{
                 rs.getString(PASSWORD_COL),
                 rs.getString(IMAGE_COL)
         );
-    }
-
-    public List<Mail> getMailsByUserId(int userId, String sendOrReceive) throws SQLException, ClassNotFoundException {
-        List<Mail> mails = new ArrayList<Mail>();
-        ResultSet rsMails = getResultSet("SELECT * FROM " + Database.MAIL_DB + " WHERE " + (Objects.equals(sendOrReceive, "SEND") ? SENDER_ID: RECEIVER_ID) + " = " + userId);
-        while (rsMails.next()){
-            Mail mail = new Mail(
-                    rsMails.getInt(ID),
-                    rsMails.getInt(SENDER_ID),
-                    rsMails.getInt(RECEIVER_ID),
-                    MailTypes.values()[rsMails.getInt(TYPE)],
-                    rsMails.getInt(QUIZ_ID),
-                    rsMails.getString(TEXT)
-                    );
-
-            mails.add(mail);
-        }
-        return mails;
     }
 
     public List<User> getFriendsByUserId(int userId) throws SQLException, ClassNotFoundException {
