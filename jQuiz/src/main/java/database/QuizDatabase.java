@@ -21,6 +21,8 @@ public class QuizDatabase extends Database<Quiz>{
     static final String AUTO_CORRECT = "auto_correct";
     static final String ALLOW_PRACTICE = "allow_practice";
     static final String DESCRIPTION = "description";
+    static final String TOTAL_PLAY_COUNT = "total_play_count";
+    static final String LAST_MONTH_PLAY_COUNT = "last_month_play_count";
 
     public QuizDatabase(BasicDataSource dataSource, String databaseName) {
         super(dataSource, databaseName);
@@ -54,7 +56,9 @@ public class QuizDatabase extends Database<Quiz>{
                 rs.getBoolean(AUTO_CORRECT),
                 rs.getBoolean(ALLOW_PRACTICE),
                 rs.getString(DESCRIPTION),
-                questionIds
+                questionIds,
+                rs.getInt(TOTAL_PLAY_COUNT),
+                rs.getInt(LAST_MONTH_PLAY_COUNT)
         );
     }
     public List<Quiz> getQuizzesByAuthorId(int authorId) throws SQLException, ClassNotFoundException {
@@ -63,13 +67,9 @@ public class QuizDatabase extends Database<Quiz>{
         return queryToList(query);
     }
 
-    public List<Quiz> getPopularQuizzes(int k) throws SQLException, ClassNotFoundException {
-        String query = String.format("SELECT q.%s, q.%s, q.%s, q.%s, q.%s, q.%s, q.%s, q.%s, q.%s, q.%s, q.%s, COUNT(h.%s) AS quiz_count FROM %s q LEFT JOIN %s h ON q.%s = h.%s GROUP BY q.%s, q.%s, q.%s, q.%s, q.%s, q.%s, q.%s, q.%s, q.%s, q.%s, q.%s ORDER BY quiz_count DESC LIMIT %d;",
-                ID, TITLE, AUTHOR_ID, CREATED_AT, TIME, THUMBNAIL, SHOULD_MIX_UP, SHOW_ALL, AUTO_CORRECT, ALLOW_PRACTICE, DESCRIPTION, HistoryDatabase.QUIZ_ID,
-                databaseName, Database.HISTORY_DB,
-                ID, HistoryDatabase.QUIZ_ID,
-                ID, TITLE, AUTHOR_ID, CREATED_AT, TIME, THUMBNAIL, SHOULD_MIX_UP, SHOW_ALL, AUTO_CORRECT, ALLOW_PRACTICE, DESCRIPTION,
-                k);
+    public List<Quiz> getPopularQuizzes(int k, String totalOrLastMonth) throws SQLException, ClassNotFoundException {
+        String query = String.format("SELECT * FROM %s ORDER BY " + (totalOrLastMonth == "LAST_MONTH" ? LAST_MONTH_PLAY_COUNT : TOTAL_PLAY_COUNT) + " DESC LIMIT %d;",
+                Database.QUIZ_DB,k);
         return queryToList(query);
     }
     public List<Quiz> getRecentlyCreatedQuizzes(int k) throws SQLException, ClassNotFoundException {

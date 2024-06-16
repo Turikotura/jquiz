@@ -2,12 +2,16 @@
  "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
  "http://java.sun.com/dtd/web-app_2_3.dtd" >
 
+
 <web-app>
   <display-name>Archetype Created Web Application</display-name>
-
   <listener>
     <listener-class>ContextListener</listener-class>
   </listener>
+  <servlet>
+    <servlet-name>FrontPageServlet</servlet-name>
+    <servlet-class>servlets.FrontPageServlet</servlet-class>
+  </servlet>
   <servlet>
     <servlet-name>Login</servlet-name>
     <servlet-class>LoginServlet</servlet-class>
@@ -16,6 +20,11 @@
     <servlet-name>Register</servlet-name>
     <servlet-class>RegisterServlet</servlet-class>
   </servlet>
+
+  <servlet-mapping>
+    <servlet-name>FrontPageServlet</servlet-name>
+    <url-pattern></url-pattern>
+  </servlet-mapping>
   <servlet-mapping>
     <servlet-name>Login</servlet-name>
     <url-pattern>/Login</url-pattern>

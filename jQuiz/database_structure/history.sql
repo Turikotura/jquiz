@@ -17,15 +17,3 @@ INSERT INTO history (user_id, quiz_id, grade, completed_at, writing_time) VALUES
 INSERT INTO history (user_id, quiz_id, grade, completed_at, writing_time) VALUES (3, 1, 10, sysdate(), 12);
 INSERT INTO history (user_id, quiz_id, grade, completed_at, writing_time) VALUES (2, 2, 20, sysdate(), 12);
 INSERT INTO history (user_id, quiz_id, grade, completed_at, writing_time) VALUES (1, 2, 20, sysdate(), 10);
-
-SELECT *
-FROM history h
-where h.user_id = 3
-AND h.completed_at = (SELECT max(hi.completed_at)
-                      FROM history hi
-                      WHERE hi.user_id = 3);
-
-SELECT *
-FROM history
-ORDER BY completed_at DESC
-LIMIT 2;

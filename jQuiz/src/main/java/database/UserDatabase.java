@@ -36,6 +36,7 @@ public class UserDatabase extends Database<User>{
 
     @Override
     protected User getItemFromResultSet(ResultSet rs) throws SQLException, ClassNotFoundException {
+        System.out.println(rs.getString(USERNAME));
         return new User(
                 rs.getInt(ID),
                 rs.getString(USERNAME),
@@ -67,7 +68,7 @@ public class UserDatabase extends Database<User>{
     }
 
     public User getByUsername(String username) throws SQLException, ClassNotFoundException {
-        ResultSet usersFound = getResultSet("SELECT * FROM " + Database.USER_DB + " WHERE " + USERNAME_COL + " = '" + username + "';");
+        ResultSet usersFound = getResultSet("SELECT * FROM " + Database.USER_DB + " WHERE " + USERNAME + " = '" + username + "';");
         if(usersFound.next()) return getItemFromResultSet(usersFound);
         return null;
     }
