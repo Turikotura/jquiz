@@ -13,6 +13,11 @@ public class ContextListener implements ServletContextListener {
         basicDataSource.setUrl("jdbc:mysql://" + DBInfo.SERVER + "/" + DBInfo.NAME);
         basicDataSource.setUsername(DBInfo.USERNAME);
         basicDataSource.setPassword(DBInfo.PASSWORD);
+        basicDataSource.setInitialSize(10);
+        basicDataSource.setMaxTotal(50);
+        basicDataSource.setMaxIdle(20);
+        basicDataSource.setMinIdle(5);
+        basicDataSource.setMaxWaitMillis(10000);
 
         UserDatabase userdb = new UserDatabase(basicDataSource, Database.USER_DB);
         QuizDatabase quizdb = new QuizDatabase(basicDataSource, Database.QUIZ_DB);

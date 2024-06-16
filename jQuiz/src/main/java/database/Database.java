@@ -14,13 +14,13 @@ import java.util.Map;
 
 public abstract class Database<T> {
     public static final String USER_DB = "users";
-    public static final String QUIZ_DB = "quizzes";
+    public static final String QUIZ_DB = "quizzes_view";
     public static final String QUESTION_DB = "questions";
     public static final String ANSWER_DB = "answers";
     public static final String MAIL_DB = "mails";
     public static final String FRIEND_DB = "friends";
     public static final String HISTORY_DB = "history";
-    public static final String ACH_TO_USR_DB = "ach_to_usr";
+    public static final String ACH_TO_USR_DB = "achToUser";
     public static final String ACHIEVEMENT_DB = "achievements";
     protected BasicDataSource dataSource;
     protected String databaseName;
@@ -62,5 +62,13 @@ public abstract class Database<T> {
         Class.forName("com.mysql.cj.jdbc.Driver");
         Connection con = dataSource.getConnection();
         return con.prepareStatement(sqlQuery);
+    }
+    protected List<T> queryToList(String query) throws SQLException, ClassNotFoundException {
+        List<T> res = new ArrayList<>();
+        ResultSet rs = getResultSet(query);
+        while(rs.next()){
+            res.add(getItemFromResultSet(rs));
+        }
+        return res;
     }
 }

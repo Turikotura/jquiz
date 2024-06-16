@@ -56,8 +56,15 @@ header {
     margin-left: auto;
 }
 
-.quiz-boxes {
+.quiz-list-wrapper {
     margin: 20px;
+}
+
+.quiz-list-wrapper h2 {
+    margin-bottom: 10px;
+}
+
+.quiz-boxes {
     display: flex;
     flex-wrap: wrap;
     gap: 20px;
@@ -92,7 +99,8 @@ header {
 
 .quiz-box-bot {
     width: 100%;
-    text-align: center;
+    display: flex;
+    justify-content: space-between;
     height: 20px;
     background-color: pink;
 }

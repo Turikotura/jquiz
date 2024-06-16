@@ -6,7 +6,7 @@ import java.util.List;
 public class Quiz {
     private int id;
     private String title;
-    private User author;
+    private int authorId;
     private Date createdAt;
     private int time;
     private String thumbnail;
@@ -16,12 +16,14 @@ public class Quiz {
     private boolean allowPractice;
     private String description;
     private List<Integer> questionIds;
+    private int totalPlayCount;
+    private int lastMonthPlayCount;
 
 
     public Quiz(
             int id,
             String title,
-            User author,
+            int authorId,
             Date createdAt,
             int time,
             String thumbnail,
@@ -30,11 +32,13 @@ public class Quiz {
             boolean autoCorrect,
             boolean allowPractice,
             String description,
-            List<Integer> questionIds
+            List<Integer> questionIds,
+            int totalPlayCount,
+            int lastMonthPlayCount
     ) {
         this.id = id;
         this.title = title;
-        this.author = author;
+        this.authorId = authorId;
         this.createdAt = createdAt;
         this.time = time;
         this.thumbnail = thumbnail;
@@ -44,6 +48,8 @@ public class Quiz {
         this.allowPractice = allowPractice;
         this.description = description;
         this.questionIds = questionIds;
+        this.totalPlayCount = totalPlayCount;
+        this.lastMonthPlayCount = lastMonthPlayCount;
     }
 
     public int getId() {return id;}
@@ -56,6 +62,8 @@ public class Quiz {
     public boolean getShowAll() {return showAll;}
     public boolean getAutoCorrect() {return autoCorrect;}
     public boolean getAllowPractice() {return allowPractice;}
-    public User getAuthor() {return author;}
+    public int getAuthorId() {return authorId;}
+    public int getTotalPlayCount() {return totalPlayCount;}
+    public int getLastMonthPlayCount() {return lastMonthPlayCount;}
     public List<Integer> getQuestions() {return questionIds;}
 }

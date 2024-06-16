@@ -20,6 +20,7 @@ public class FrontPageServlet extends HttpServlet {
 
     @Override
     public void init() throws ServletException {
+        System.out.println("HI");
         dataSource = new BasicDataSource();
         dataSource.setUrl("jdbc:mysql://localhost:3306/quizDB");
         dataSource.setUsername("root");
@@ -35,9 +36,14 @@ public class FrontPageServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
-            List<Quiz> quizzes = quizDB.getAll();
-            request.setAttribute("quizzes", quizzes);
+            List<Quiz> recentQuizzes = quizDB.getRecentlyCreatedQuizzes(5);
+            request.setAttribute("recentQuizzes", recentQuizzes);
+            List<Quiz> popularQuizzes = quizDB.getPopularQuizzes(5, "TOTAL");
+            request.setAttribute("popularQuizzes", popularQuizzes);
+            List<Quiz> lastMonthPopularQuizzes = quizDB.getPopularQuizzes(5, "LAST_MONTH");
+            request.setAttribute("lastMonthPopularQuizzes", lastMonthPopularQuizzes);
             request.getRequestDispatcher("index.jsp").forward(request, response);
+
         } catch (SQLException | ClassNotFoundException e) {
             throw new ServletException(e);
         }
