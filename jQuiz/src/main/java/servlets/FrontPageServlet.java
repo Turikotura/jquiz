@@ -20,20 +20,22 @@ public class FrontPageServlet extends HttpServlet {
 
     @Override
     public void init() throws ServletException {
-        System.out.println("HAIII");
         dataSource = new BasicDataSource();
         dataSource.setUrl("jdbc:mysql://localhost:3306/quizDB");
         dataSource.setUsername("root");
         dataSource.setPassword("");
+        dataSource.setInitialSize(10);
+        dataSource.setMaxTotal(50);
+        dataSource.setMaxIdle(20);
+        dataSource.setMinIdle(5);
+        dataSource.setMaxWaitMillis(10000);
         quizDB = new QuizDatabase(dataSource, Database.QUIZ_DB);
     }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
-            System.out.println("NUGGA");
             List<Quiz> quizzes = quizDB.getAll();
-            System.out.println(quizzes.size() + " NIGGA");
             request.setAttribute("quizzes", quizzes);
             request.getRequestDispatcher("index.jsp").forward(request, response);
         } catch (SQLException | ClassNotFoundException e) {
