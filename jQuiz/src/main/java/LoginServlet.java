@@ -13,7 +13,7 @@ public class LoginServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.setContentType("text/html");
         String userName = request.getParameter("user-name"), password = request.getParameter("password");
-
+        password = Security.getHash(password);
         try {
             User curUser = ((UserDatabase)request.getServletContext().getAttribute(Database.USER_DB)).getByUsername(userName);
             if(curUser == null) {

@@ -4,15 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="11bfb6b0-0ab4-4275-9c08-73c2144412d4" name="Changes" comment="Skeleton for Log in/Sign up">
-      <change afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
+    <list default="true" id="11bfb6b0-0ab4-4275-9c08-73c2144412d4" name="Changes" comment="Basic log in/sign up functionality">
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jQuiz/src/main/java/database/DBInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/src/main/java/database/DBInfo.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jQuiz/src/main/java/database/UserDatabase.java" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/src/main/java/database/UserDatabase.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jQuiz/src/main/java/models/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/src/main/java/models/User.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jQuiz/src/main/webapp/WEB-INF/web.xml" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/src/main/webapp/WEB-INF/web.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jQuiz/src/main/webapp/login.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/src/main/webapp/login.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jQuiz/src/main/webapp/register.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/src/main/webapp/register.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jQuiz/database_structure/achievements.sql" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/database_structure/achievements.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jQuiz/src/main/java/LoginServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/src/main/java/LoginServlet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jQuiz/src/main/java/RegisterServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/src/main/java/RegisterServlet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jQuiz/src/main/java/Security.java" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/src/main/java/Security.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jQuiz/src/main/java/database/AchievementDatabase.java" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/src/main/java/database/AchievementDatabase.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -216,7 +215,7 @@
       <workItem from="1718475218116" duration="1896000" />
       <workItem from="1718479632927" duration="1686000" />
       <workItem from="1718527743517" duration="899000" />
-      <workItem from="1718530910730" duration="3183000" />
+      <workItem from="1718530910730" duration="5427000" />
     </task>
     <task id="LOCAL-00001" summary="Objects for different question types added.">
       <option name="closed" value="true" />
@@ -258,7 +257,15 @@
       <option name="project" value="LOCAL" />
       <updated>1718448455482</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="Basic log in/sign up functionality">
+      <option name="closed" value="true" />
+      <created>1718534299041</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1718534299042</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -281,6 +288,7 @@
     <MESSAGE value=".gitignore and xml files added" />
     <MESSAGE value="Quiz class added, minor fixes" />
     <MESSAGE value="Skeleton for Log in/Sign up" />
-    <option name="LAST_COMMIT_MESSAGE" value="Skeleton for Log in/Sign up" />
+    <MESSAGE value="Basic log in/sign up functionality" />
+    <option name="LAST_COMMIT_MESSAGE" value="Basic log in/sign up functionality" />
   </component>
 </project>

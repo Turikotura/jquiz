@@ -2,7 +2,6 @@ import java.nio.charset.StandardCharsets;
 import java.security.*;
 
 public class Security {
-    public static final char[] CHARS = "ABCDEFGHIJKLMONPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789.,-!".toCharArray();
     public static String hexToString(byte[] bytes) {
         StringBuffer buff = new StringBuffer();
         for (int i=0; i<bytes.length; i++) {
@@ -21,20 +20,6 @@ public class Security {
             e.printStackTrace();
         }
         return "";
-    }
-    public static boolean isLegal(String password) {
-        for(int i = 0; i < password.length(); i++) {
-            boolean found = false;
-            for (char aChar : CHARS) {
-                if (password.charAt(i) == aChar) {
-                    found = true;
-                    break;
-                }
-            }
-
-            if(!found) return false;
-        }
-        return true;
     }
     public static boolean isStrong(String password) {
         return password.length() >= 8 && containsInRange(password,'A','Z') && containsInRange(password,'a','z') && containsInRange(password,'0','9');

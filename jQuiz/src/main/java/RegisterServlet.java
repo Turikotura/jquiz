@@ -27,16 +27,13 @@ public class RegisterServlet extends HttpServlet {
             } else if(!password1.equals(password2)) {
                 request.getServletContext().setAttribute("reg-message","Passwords don't match.");
                 response.sendRedirect("register.jsp");
-            } else if(!Security.isLegal(password1)) {
-                request.getServletContext().setAttribute("reg-message","Password contains illegal symbols.");
-                response.sendRedirect("register.jsp");
             } else if(!Security.isStrong(password1)) {
                 request.getServletContext().setAttribute("reg-message","Password is not strong enough.\n" +
                         "Password contain minimum of 8 symbols.\n" +
                         "Password must contain at least one uppercase letter, one lowercase letter and one digit.");
                 response.sendRedirect("register.jsp");
             } else {
-                User newUser = new User(User.NO_ID,userName,new Date(),email,password1,imageLink);
+                User newUser = new User(User.NO_ID,userName,new Date(),email,Security.getHash(password1),imageLink);
                 ((UserDatabase)request.getServletContext().getAttribute(Database.USER_DB)).add(newUser);
                 response.sendRedirect("index.jsp");
             }
