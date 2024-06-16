@@ -3,6 +3,7 @@ package database;
 import models.Answer;
 import org.apache.commons.dbcp2.BasicDataSource;
 
+import javax.persistence.Id;
 import javax.xml.crypto.Data;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -11,8 +12,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AnswerDatabase extends Database<Answer> {
-    static final String ID = "answer_id";
-    static final String TEXT = "answer_text";
+    // Answer Columns
+    static final String ID = "id";
+    static final String TEXT = "text";
     static final String IS_CORRECT = "is_correct";
     static final String QUESTION_ID = "question_id";
     static final String UNIQ_ID = "uniq_id";
@@ -24,9 +26,9 @@ public class AnswerDatabase extends Database<Answer> {
     @Override
     public boolean add(Answer answer) throws SQLException, ClassNotFoundException {
         String query = String.format(
-                "INSERT INTO answers (%s, %s, %s, %s, %s) VALUES (%d, '%s', %b, %d, %d);",
-                ID, TEXT, IS_CORRECT, QUESTION_ID, UNIQ_ID,
-                answer.getId(), answer.getText(), answer.getIsCorrect(), answer.getQuestionId(), answer.getUniquenessId());
+                "INSERT INTO answers (%s, %s, %s, %s) VALUES ('%s', %b, %d, %d);",
+                TEXT, IS_CORRECT, QUESTION_ID, UNIQ_ID,
+                answer.getText(), answer.getIsCorrect(), answer.getQuestionId(), answer.getUniquenessId());
         PreparedStatement statement = this.getStatement(query);
         int affectedRows = statement.executeUpdate();
         return affectedRows > 0;
@@ -53,5 +55,10 @@ public class AnswerDatabase extends Database<Answer> {
             answerIds.add(rs.getInt(ID));
         }
         return answerIds;
+    }
+    public List<Answer> getAnswersByQuestionId(int questionId) throws SQLException, ClassNotFoundException {
+        String query = String.format("SELECT * FROM %s WHERE %s = %d;",
+                databaseName, QUESTION_ID, questionId);
+        return queryToList(query);
     }
 }

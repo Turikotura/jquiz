@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class QuestionDatabase extends Database<Question> {
+    // Question Columns
     static final String ID = "id";
     static final String QUESTION_TYPE_ID = "question_type_id";
     static final String TEXT = "text";
@@ -26,7 +27,7 @@ public class QuestionDatabase extends Database<Question> {
     @Override
     public boolean add(Question question) throws SQLException, ClassNotFoundException {
         String query = String.format(
-                "INSERT INTO questions (%s, %s, %s, %s, %s, %s) VALUES (%d, %d, '%s', %d, '%s', %d);",
+                "INSERT INTO questions (%s, %s, %s, %s, %s ) VALUES (%d, '%s', %d, '%s', %d);",
                 QUESTION_TYPE_ID, TEXT, QUIZ_ID, IMAGE_URL, SCORE,
                 question.getQuestionTypeId(), question.getText(), question.getQuizId(), question.getImageUrl(), question.getScore());
         PreparedStatement statement = this.getStatement(query);
@@ -49,7 +50,8 @@ public class QuestionDatabase extends Database<Question> {
     }
 
     public List<Integer> getQuestionIdsByQuizId(int quizId) throws SQLException, ClassNotFoundException {
-        String query = String.format("SELECT %s FROM %s WHERE %s = %d;", ID, this.databaseName, QUIZ_ID, quizId);
+        String query = String.format("SELECT %s FROM %s WHERE %s = %d;", ID,
+                this.databaseName, QUIZ_ID, quizId);
         PreparedStatement statement = this.getStatement(query);
         ResultSet rs = statement.executeQuery();
 
@@ -58,5 +60,10 @@ public class QuestionDatabase extends Database<Question> {
             questionIds.add(rs.getInt(ID));
         }
         return questionIds;
+    }
+    public List<Question> getQuestionsByQuizId(int quizId) throws SQLException, ClassNotFoundException {
+        String query = String.format("SELECT * FROM %s WHERE %s = %d",
+                databaseName, QUIZ_ID, quizId);
+        return queryToList(query);
     }
 }

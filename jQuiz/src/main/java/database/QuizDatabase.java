@@ -1,15 +1,12 @@
 package database;
 
-import models.Question;
 import models.Quiz;
-import models.User;
 import org.apache.commons.dbcp2.BasicDataSource;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class QuizDatabase extends Database<Quiz>{
@@ -25,22 +22,17 @@ public class QuizDatabase extends Database<Quiz>{
     static final String ALLOW_PRACTICE = "allow_practice";
     static final String DESCRIPTION = "description";
 
-    UserDatabase userDB;
-    QuestionDatabase questionDB;
-
     public QuizDatabase(BasicDataSource dataSource, String databaseName) {
         super(dataSource, databaseName);
-        userDB = new UserDatabase(this.dataSource, Database.USER_DB);
-        questionDB = new QuestionDatabase(this.dataSource, Database.QUESTION_DB);
     }
 
     @Override
     public boolean add(Quiz quiz) throws SQLException, ClassNotFoundException {
         String query = String.format(
                 "INSERT INTO quizzes (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s) " +
-                        "VALUES ('%s', %d, '%s', %d, '%s', %b, %b, %b, %b, '%s');",
+                        "VALUES ('%s', %d, %s, %d, '%s', %b, %b, %b, %b, '%s');",
                 TITLE, AUTHOR_ID, CREATED_AT, TIME, THUMBNAIL, SHOULD_MIX_UP, SHOW_ALL, AUTO_CORRECT, ALLOW_PRACTICE, DESCRIPTION,
-                quiz.getTitle(), quiz.getAuthor().getId(), quiz.getCreatedAt().toString(), quiz.getMaxTime(), quiz.getThumbnail(),
+                quiz.getTitle(), quiz.getAuthorId(), quiz.getCreatedAt().toString(), quiz.getMaxTime(), quiz.getThumbnail(),
                 quiz.getShouldMixUp(), quiz.getShowAll(), quiz.getAutoCorrect(), quiz.getAllowPractice(), quiz.getDescription());
         PreparedStatement statement = this.getStatement(query);
         int affectedRows = statement.executeUpdate();
@@ -49,14 +41,11 @@ public class QuizDatabase extends Database<Quiz>{
 
     @Override
     protected Quiz getItemFromResultSet(ResultSet rs) throws SQLException, ClassNotFoundException {
-        User author = userDB.getById(rs.getInt(AUTHOR_ID));
-//        User author = new User(0,"", new Date(), null, null,null,null,null,null);
         List<Integer> questionIds = new ArrayList<>();
-//        List<Integer> questionIds = questionDB.getQuestionIdsByQuizId(rs.getInt(ID));
         return new Quiz(
                 rs.getInt(ID),
                 rs.getString(TITLE),
-                author,
+                rs.getInt(AUTHOR_ID),
                 rs.getDate(CREATED_AT),
                 rs.getInt(TIME),
                 rs.getString(THUMBNAIL),
@@ -67,5 +56,25 @@ public class QuizDatabase extends Database<Quiz>{
                 rs.getString(DESCRIPTION),
                 questionIds
         );
+    }
+    public List<Quiz> getQuizzesByAuthorId(int authorId) throws SQLException, ClassNotFoundException {
+        String query = String.format("SELECT * FROM %s WHERE %s = %d",
+                databaseName, AUTHOR_ID, authorId);
+        return queryToList(query);
+    }
+
+    public List<Quiz> getPopularQuizzes(int k) throws SQLException, ClassNotFoundException {
+        String query = String.format("SELECT q.%s, q.%s, q.%s, q.%s, q.%s, q.%s, q.%s, q.%s, q.%s, q.%s, q.%s, COUNT(h.%s) AS quiz_count FROM %s q LEFT JOIN %s h ON q.%s = h.%s GROUP BY q.%s, q.%s, q.%s, q.%s, q.%s, q.%s, q.%s, q.%s, q.%s, q.%s, q.%s ORDER BY quiz_count DESC LIMIT %d;",
+                ID, TITLE, AUTHOR_ID, CREATED_AT, TIME, THUMBNAIL, SHOULD_MIX_UP, SHOW_ALL, AUTO_CORRECT, ALLOW_PRACTICE, DESCRIPTION, HistoryDatabase.QUIZ_ID,
+                databaseName, Database.HISTORY_DB,
+                ID, HistoryDatabase.QUIZ_ID,
+                ID, TITLE, AUTHOR_ID, CREATED_AT, TIME, THUMBNAIL, SHOULD_MIX_UP, SHOW_ALL, AUTO_CORRECT, ALLOW_PRACTICE, DESCRIPTION,
+                k);
+        return queryToList(query);
+    }
+    public List<Quiz> getRecentlyCreatedQuizzes(int k) throws SQLException, ClassNotFoundException {
+        String query = String.format("SELECT * FROM %s ORDER BY %s DESC LIMIT %d",
+                databaseName, CREATED_AT, k);
+        return queryToList(query);
     }
 }
