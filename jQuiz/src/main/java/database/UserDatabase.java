@@ -65,4 +65,10 @@ public class UserDatabase extends Database<User>{
                 k);
         return queryToList(query);
     }
+
+    public User getByUsername(String username) throws SQLException, ClassNotFoundException {
+        ResultSet usersFound = getResultSet("SELECT * FROM " + Database.USER_DB + " WHERE " + USERNAME_COL + " = '" + username + "';");
+        if(usersFound.next()) return getItemFromResultSet(usersFound);
+        return null;
+    }
 }
