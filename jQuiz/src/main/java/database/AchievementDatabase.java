@@ -27,8 +27,7 @@ public class AchievementDatabase extends Database<Achievement> {
 
     @Override
     public boolean add(Achievement achievement) throws SQLException, ClassNotFoundException {
-        String query = String.format(
-                "INSERT INTO achievements (%s, %s, %s) VALUES ('%s', '%s', '%s')",
+        String query = String.format("INSERT INTO achievements (%s, %s, %s) VALUES ('%s', '%s', '%s')",
                 NAME, DESCRIPTION, IMAGE, achievement.getName(), achievement.getDescription(), achievement.getImage());
         PreparedStatement statement = this.getStatement(query);
         int affectedRows = statement.executeUpdate();
