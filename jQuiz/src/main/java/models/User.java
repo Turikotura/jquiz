@@ -12,6 +12,7 @@ public class User {
     private String email;
     private String password;
     private String image;
+    public static final int NO_ID = -1;
     public User(int id, String username, Date created_at, String email, String password, String image){
         this.id = id;
         this.username = username;

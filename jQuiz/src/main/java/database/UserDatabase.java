@@ -48,9 +48,9 @@ public class UserDatabase extends Database<User>{
 
     @Override
     public boolean add(User toAdd) throws SQLException, ClassNotFoundException {
-        String query = String.format("INSERT INTO %s ( %s, %s, %s, %s, %s, %s ) VALUES ( %s, %b, %s, %s, %s, %s)", databaseName,
+        String query = String.format("INSERT INTO %s ( %s, %s, %s, %s, %s, %s ) VALUES ('%s', %b, %s, '%s', '%s', '%s')", databaseName,
                 USERNAME_COL, IS_ADMIN_COL, CREATED_AT_COL, EMAIL_COL, PASSWORD_COL, IMAGE_COL,
-                toAdd.getUsername(), toAdd.isAdmin(), toAdd.getCreated_at(), toAdd.getEmail(), toAdd.getPassword(), toAdd.getImage());
+                toAdd.getUsername(), toAdd.isAdmin(), "sysdate()", toAdd.getEmail(), toAdd.getPassword(), toAdd.getImage());
         PreparedStatement statement = getStatement(query);
         return statement.executeUpdate() > 0;
     }
@@ -143,8 +143,9 @@ public class UserDatabase extends Database<User>{
         return userAchievements;
     }
 
-    public boolean userExists(String username) throws SQLException, ClassNotFoundException {
-        ResultSet usersFound = getResultSet("SELECT * FROM " + Database.USER_DB + " WHERE " + USERNAME_COL + " = " + username);
-        return usersFound.isBeforeFirst();
+    public User getByUsername(String username) throws SQLException, ClassNotFoundException {
+        ResultSet usersFound = getResultSet("SELECT * FROM " + Database.USER_DB + " WHERE " + USERNAME_COL + " = '" + username + "';");
+        if(usersFound.next()) return getItemFromResultSet(usersFound);
+        return null;
     }
 }

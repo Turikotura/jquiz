@@ -7,6 +7,10 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
+<%
+String message = "";
+if(request.getServletContext().getAttribute("reg-message") != null) message = ((String) request.getServletContext().getAttribute("reg-message"));
+%>
 <head>
     <title>Register</title>
 </head>
@@ -26,7 +30,7 @@
     <p></p>
     <label>
         Password:
-        <input type="password" name="password">
+        <input type="password" name="password1">
     </label>
     <p></p>
     <label>
@@ -35,10 +39,10 @@
     </label>
     <p></p>
     <label>
-        Link to your profile photo:(Not required)
+        Link to your profile photo (Not required):
         <input type="input" name="profile-pic">
     </label>
-    <p></p>
+    <p><%=message%></p>
     <input class="login" type="submit" value="Create">
 </form>
 <span>Already have an account? <a href="login.jsp">Log in</a></span>

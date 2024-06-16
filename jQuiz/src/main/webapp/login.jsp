@@ -7,6 +7,10 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
+<%
+    String message = "";
+    if(request.getServletContext().getAttribute("log-message") != null) message = ((String) request.getServletContext().getAttribute("log-message"));
+%>
 <head>
     <title>Log In</title>
 </head>
@@ -18,8 +22,8 @@
     <input type="input" name="user-name">
     <p></p>
     <label>Password:</label>
-    <input type="input" name="password">
-    <p></p>
+    <input type="password" name="password">
+    <p><%=message%></p>
     <input class="login" type="submit" value="Login">
 </form>
 <span>New around here? <a href="register.jsp">Create new account</a></span>
