@@ -29,7 +29,7 @@ public class UserDatabase extends Database<User>{
     public boolean add(User toAdd) throws SQLException, ClassNotFoundException {
         String query = String.format("INSERT INTO %s ( %s, %s, %s, %s, %s, %s ) VALUES ( '%s', %b, %s, '%s', '%s', '%s')", databaseName,
                 USERNAME, IS_ADMIN, CREATED_AT, EMAIL, PASSWORD, IMAGE,
-                toAdd.getUsername(), toAdd.isAdmin(), toAdd.getCreated_at(), toAdd.getEmail(), toAdd.getPassword(), toAdd.getImage());
+                toAdd.getUsername(), toAdd.isAdmin(), "sysdate()", toAdd.getEmail(), toAdd.getPassword(), toAdd.getImage());
         PreparedStatement statement = getStatement(query);
         return statement.executeUpdate() > 0;
     }

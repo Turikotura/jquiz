@@ -24,7 +24,7 @@
     <label>Password:</label>
     <input type="password" name="password">
     <p><%=message%></p>
-    <input class="login" type="submit" value="Login">
+    <input type="submit" value="Log in">
 </form>
 <span>New around here? <a href="register.jsp">Create new account</a></span>
 </body>

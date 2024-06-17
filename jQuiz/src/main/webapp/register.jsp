@@ -43,7 +43,7 @@ if(request.getServletContext().getAttribute("reg-message") != null) message = ((
         <input type="input" name="profile-pic">
     </label>
     <p><%=message%></p>
-    <input class="login" type="submit" value="Create">
+    <input type="submit" value="Create">
 </form>
 <span>Already have an account? <a href="login.jsp">Log in</a></span>
 </body>

@@ -1,5 +1,6 @@
 package servlets;
 
+import database.DBInfo;
 import database.Database;
 import database.QuizDatabase;
 import models.Quiz;
@@ -23,8 +24,8 @@ public class FrontPageServlet extends HttpServlet {
         System.out.println("HI");
         dataSource = new BasicDataSource();
         dataSource.setUrl("jdbc:mysql://localhost:3306/quizDB");
-        dataSource.setUsername("root");
-        dataSource.setPassword("");
+        dataSource.setUsername(DBInfo.USERNAME);
+        dataSource.setPassword(DBInfo.PASSWORD);
         dataSource.setInitialSize(10);
         dataSource.setMaxTotal(50);
         dataSource.setMaxIdle(20);
