@@ -72,4 +72,9 @@ public class UserDatabase extends Database<User>{
         if(usersFound.next()) return getItemFromResultSet(usersFound);
         return null;
     }
+    public User getById(int id) throws SQLException, ClassNotFoundException {
+        ResultSet usersFound = getResultSet("SELECT * FROM " + Database.USER_DB + " WHERE " + ID + " = '" + id + "';");
+        if(usersFound.next()) return getItemFromResultSet(usersFound);
+        return null;
+    }
 }
