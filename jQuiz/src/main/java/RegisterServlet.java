@@ -25,7 +25,7 @@ public class RegisterServlet extends HttpServlet {
             if(curUser != null) {
                 request.getServletContext().setAttribute("reg-message","User named " + userName + " already exists.");
                 response.sendRedirect("register.jsp");
-            } else if(curUser != null){
+            } else if(curUserByEmail != null){
                 request.getServletContext().setAttribute("reg-message","User with email " + email + " already exists.");
                 response.sendRedirect("register.jsp");
             } else if(!password1.equals(password2)) {
