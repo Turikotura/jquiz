@@ -72,4 +72,10 @@ public class UserDatabase extends Database<User>{
         if(usersFound.next()) return getItemFromResultSet(usersFound);
         return null;
     }
+
+    public User getByEmail(String email) throws SQLException, ClassNotFoundException {
+        ResultSet emailsFound = getResultSet("SELECT * FROM " + Database.USER_DB + " WHERE " + EMAIL + " = '" + email + "';");
+        if(emailsFound.next()) return getItemFromResultSet(emailsFound);
+        return null;
+    }
 }
