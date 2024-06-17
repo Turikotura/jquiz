@@ -21,4 +21,5 @@ public class Answer {
     public int getQuestionId() {return questionId;}
     public int getUniquenessId() {return uniquenessId;}
     public boolean equals(Answer other) {return this.questionId == other.questionId && this.uniquenessId == other.getUniquenessId();}
+    public boolean equals(String other){return this.text.equals(other);}
 }

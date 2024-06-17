@@ -1,6 +1,6 @@
 package models;
 
-enum QuestionTypes {
+public enum QuestionTypes {
     RESPONSE,
     FILL_BLANK,
     MULTIPLE_CHOICE,
