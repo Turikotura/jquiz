@@ -11,8 +11,6 @@ public class Question {
     String imageUrl;
     private int score;
     private List<Integer> answerIds;
-    private boolean guessed;
-
 
     public Question(int id, QuestionTypes questionType, String text, int quizId, String imageUrl, int score, List<Integer> answerIds) {
         this.id = id;

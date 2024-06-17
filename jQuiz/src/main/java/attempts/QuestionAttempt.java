@@ -10,20 +10,19 @@ import java.util.List;
 import java.util.Set;
 
 public class QuestionAttempt {
-    private int id;
-    private QuestionTypes questionType;
-    private String text;
-    String imageUrl;
+    private Question question;
     private List<String> writtenAnswers;
     private List<Answer> answers;
     private int correctAnswersAmount;
     private int maxScore;
 
+    /**
+     * Constructor for QuestionAttempt
+     * @param question - question object
+     * @param answers - answer list
+     */
     public QuestionAttempt(Question question, List<Answer> answers){
-        this.id = question.getId();
-        this.questionType = question.getQuestionType();
-        this.text = question.getText();
-        this.imageUrl = question.getImageUrl();
+        this.question = question;
         this.writtenAnswers = new ArrayList<>();
         this.answers = answers;
         this.maxScore = question.getScore();
@@ -32,15 +31,21 @@ public class QuestionAttempt {
         correctAnswersAmount = corAns.size();
     }
 
-    public int getId() {return id;}
-    public QuestionTypes getQuestionType() {return questionType;}
-    public String getText() {return text;}
-    public String getImageUrl() {return imageUrl;}
+    public Question getQuestion() {return question;}
     public List<String> getWrittenAnswers() {return writtenAnswers;}
     public List<Answer> getAnswers() {return answers;}
     public int getMaxScore() {return maxScore;}
 
+    /**
+     * Sets the answers written by user
+     * @param answers - answers written by user
+     */
     public void setWrittenAnswers(List<String> answers) {writtenAnswers = answers;}
+
+    /**
+     * Get score of question given the answers
+     * @return the score of the question
+     */
     public int evaluateAnswers(){
         Set<Answer> corAns = new HashSet<>();
         for(String wrAns : writtenAnswers){
