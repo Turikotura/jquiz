@@ -7,8 +7,8 @@ public class Question {
     private int id;
     private int questionTypeId;
     private String text;
-    int quizId;
-    String imageUrl;
+    private int quizId;
+    private String imageUrl;
     private int score;
     private List<Integer> answerIds;
     private boolean guessed;
