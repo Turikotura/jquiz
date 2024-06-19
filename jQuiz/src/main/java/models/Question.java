@@ -5,18 +5,16 @@ import java.util.Set;
 
 public class Question {
     private int id;
-    private int questionTypeId;
+    private QuestionTypes questionType;
     private String text;
     int quizId;
     String imageUrl;
     private int score;
     private List<Integer> answerIds;
-    private boolean guessed;
 
-
-    public Question(int id, int questionTypeId, String text, int quizId, String imageUrl, int score, List<Integer> answerIds) {
+    public Question(int id, QuestionTypes questionType, String text, int quizId, String imageUrl, int score, List<Integer> answerIds) {
         this.id = id;
-        this.questionTypeId = questionTypeId;
+        this.questionType = questionType;
         this.text = text;
         this.quizId = quizId;
         this.imageUrl = imageUrl;
@@ -25,7 +23,7 @@ public class Question {
     }
 
     public int getId() {return id;}
-    public int getQuestionTypeId() {return questionTypeId;}
+    public QuestionTypes getQuestionType() {return questionType;}
     public String getText() {return text;}
     public int getQuizId() {return quizId;}
     public String getImageUrl() {return imageUrl;}
