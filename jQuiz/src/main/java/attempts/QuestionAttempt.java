@@ -2,7 +2,6 @@ package attempts;
 
 import models.Answer;
 import models.Question;
-import models.QuestionTypes;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -33,8 +32,8 @@ public class QuestionAttempt {
 
     public Question getQuestion() {return question;}
     public List<String> getWrittenAnswers() {return writtenAnswers;}
-    public List<Answer> getAnswers() {return answers;}
     public int getMaxScore() {return maxScore;}
+    public int getCorrectAnswersAmount() {return correctAnswersAmount;}
 
     /**
      * Sets the answers written by user

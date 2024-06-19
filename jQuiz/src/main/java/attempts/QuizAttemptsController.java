@@ -63,4 +63,13 @@ public class QuizAttemptsController {
     public List<Integer> getAttemptIds(){
         return new ArrayList<>(quizAttempts.keySet());
     }
+
+    /**
+     * Get quiz attempt of the given id
+     * @param id - the id of the quiz attempt
+     * @return quiz attempt object
+     */
+    public QuizAttempt getQuizAttemptById(int id){
+        return quizAttempts.get(id);
+    }
 }

@@ -12,7 +12,7 @@ public class QuizAttempt {
     private int authorId;
     private int time;
     private Date startTime;
-    private String thumbnail;
+    private byte[] thumbnail;
     private boolean showAll;
     private boolean autoCorrect;
     private boolean allowPractice;
@@ -53,7 +53,7 @@ public class QuizAttempt {
     public int getAuthorId() {return authorId;}
     public int getTime() {return time;}
     public Date getStartTime() {return startTime;}
-    public String getThumbnail() {return thumbnail;}
+    public byte[] getThumbnail() {return thumbnail;}
     public boolean getShowAll() {return showAll;}
     public boolean getAutoCorrect() {return autoCorrect;}
     public boolean getAllowPractice() {return allowPractice;}
