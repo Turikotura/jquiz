@@ -33,6 +33,36 @@
     <link href="index.css" rel="stylesheet" type="text/css">
 </head>
 <body>
+<div class="main">
+    <header>
+        <div class="logo">
+            <img src="logo.png" alt="Website Logo">
+        </div>
+        <nav class="main-nav">
+            <ul>
+                <li><a href="">Home</a></li>
+                <li><a href="#">Users</a></li>
+                <li><a href="#">Achievements</a></li>
+                <li><a href="#">Categories</a></li>
+            </ul>
+        </nav>
+        <nav class="auth-nav">
+            <%if(request.getSession().getAttribute("curUser") == null) { %>
+            <ul>
+                <li><a href="login.jsp">Login</a></li>
+                <li><a href="register.jsp">Register</a></li>
+            </ul>
+            <%} else { %>
+            <ul>
+                <li><a href="#"><%=(String)request.getSession().getAttribute("curUser")%></a></li>
+                <li><form action="Login" method="get">
+                    <input type="submit" value="Log out">
+                </form></li>
+            </ul>
+            <%}%>
+
+        </nav>
+    </header>
     <h1><%=curQuiz.getTitle()%></h1>
     <h3><%="Author: " + author.getUsername()%></h3>
     <h3><%="Created at: " + curQuiz.getCreatedAt().toString()%></h3>
@@ -73,5 +103,6 @@
             } %>
         </div>
     </div>
+</div>
 </body>
 </html>

@@ -4,9 +4,17 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="11bfb6b0-0ab4-4275-9c08-73c2144412d4" name="Changes" comment="Quiz info page added.">
+    <list default="true" id="11bfb6b0-0ab4-4275-9c08-73c2144412d4" name="Changes" comment="Quiz info page updated">
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/a186986e-7e9d-4650-9ad0-5d280f91b85a.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/a186986e-7e9d-4650-9ad0-5d280f91b85a.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jQuiz/src/main/java/models/Question.java" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/src/main/java/models/Question.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jQuiz/database_structure/answers.sql" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/database_structure/answers.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jQuiz/database_structure/questions.sql" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/database_structure/questions.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jQuiz/database_structure/quizzes.sql" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/database_structure/quizzes.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jQuiz/src/main/java/database/UserDatabase.java" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/src/main/java/database/UserDatabase.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jQuiz/src/main/java/models/QuestionTypes.java" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/src/main/java/models/QuestionTypes.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jQuiz/src/main/webapp/index.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/src/main/webapp/index.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jQuiz/src/main/webapp/playQuiz.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/src/main/webapp/playQuiz.jsp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/jQuiz/src/main/webapp/quizInfo.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/src/main/webapp/quizInfo.jsp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -96,7 +104,8 @@
     &quot;RunConfigurationTargetLRU&quot;: [
       &quot;379a209f-0ac5-4e5d-a751-c04ff50e8739&quot;,
       &quot;743bbeab-bc87-49bd-aac1-4b266adef87a&quot;,
-      &quot;57124589-df65-47f3-9eaf-06675d879e76&quot;
+      &quot;57124589-df65-47f3-9eaf-06675d879e76&quot;,
+      &quot;a186986e-7e9d-4650-9ad0-5d280f91b85a&quot;
     ]
   }
 }</component>
@@ -111,7 +120,7 @@
       <command value="mvn tomcat7:run" />
     </option>
   </component>
-  <component name="RunManager" selected="Database Script.achievements.sql">
+  <component name="RunManager">
     <configuration name="achToUser.sql" type="DatabaseScript" editBeforeRun="true" nameIsGenerated="true">
       <script-file value="$PROJECT_DIR$/jQuiz/database_structure/achToUser.sql" />
       <script-mode>FILE</script-mode>
@@ -127,7 +136,7 @@
     <configuration name="answers.sql" type="DatabaseScript" editBeforeRun="true" nameIsGenerated="true">
       <script-file value="$PROJECT_DIR$/jQuiz/database_structure/answers.sql" />
       <script-mode>FILE</script-mode>
-      <data-source id="57124589-df65-47f3-9eaf-06675d879e76" />
+      <data-source id="a186986e-7e9d-4650-9ad0-5d280f91b85a" />
       <method v="2" />
     </configuration>
     <configuration name="create_database.sql" type="DatabaseScript" editBeforeRun="true" nameIsGenerated="true">
@@ -163,13 +172,13 @@
     <configuration name="questions.sql" type="DatabaseScript" editBeforeRun="true" nameIsGenerated="true">
       <script-file value="$PROJECT_DIR$/jQuiz/database_structure/questions.sql" />
       <script-mode>FILE</script-mode>
-      <data-source id="57124589-df65-47f3-9eaf-06675d879e76" />
+      <data-source id="a186986e-7e9d-4650-9ad0-5d280f91b85a" />
       <method v="2" />
     </configuration>
     <configuration name="quizzes.sql" type="DatabaseScript" editBeforeRun="true" nameIsGenerated="true">
       <script-file value="$PROJECT_DIR$/jQuiz/database_structure/quizzes.sql" />
       <script-mode>FILE</script-mode>
-      <data-source id="57124589-df65-47f3-9eaf-06675d879e76" />
+      <data-source id="a186986e-7e9d-4650-9ad0-5d280f91b85a" />
       <method v="2" />
     </configuration>
     <configuration name="quizzes_view.sql" type="DatabaseScript" editBeforeRun="true" nameIsGenerated="true">
@@ -222,7 +231,9 @@
       <workItem from="1718632574132" duration="1016000" />
       <workItem from="1718633724565" duration="4968000" />
       <workItem from="1718646606439" duration="4256000" />
-      <workItem from="1718690342488" duration="4100000" />
+      <workItem from="1718690342488" duration="6718000" />
+      <workItem from="1718737345995" duration="3240000" />
+      <workItem from="1718792020175" duration="3962000" />
     </task>
     <task id="LOCAL-00001" summary="Objects for different question types added.">
       <option name="closed" value="true" />
@@ -288,7 +299,15 @@
       <option name="project" value="LOCAL" />
       <updated>1718650735941</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="Quiz info page updated">
+      <option name="closed" value="true" />
+      <created>1718694617022</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1718694617022</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -314,6 +333,7 @@
     <MESSAGE value="Basic log in/sign up functionality" />
     <MESSAGE value="Log in/Log out GUI on main page added." />
     <MESSAGE value="Quiz info page added." />
-    <option name="LAST_COMMIT_MESSAGE" value="Quiz info page added." />
+    <MESSAGE value="Quiz info page updated" />
+    <option name="LAST_COMMIT_MESSAGE" value="Quiz info page updated" />
   </component>
 </project>
