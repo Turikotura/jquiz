@@ -6,6 +6,7 @@ import org.apache.commons.dbcp2.BasicDataSource;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,7 +38,7 @@ public class QuizDatabase extends Database<Quiz>{
         PreparedStatement statement = this.getStatement(query);
         statement.setString(1, quiz.getTitle());
         statement.setInt(2, quiz.getAuthorId());
-        statement.setTimestamp(3, new java.sql.Timestamp(quiz.getCreatedAt().getTime()));
+        statement.setTimestamp(3, new Timestamp(System.currentTimeMillis()));
         statement.setInt(4, quiz.getMaxTime());
         statement.setBytes(5, quiz.getThumbnail());
         statement.setBoolean(6, quiz.getShouldMixUp());
