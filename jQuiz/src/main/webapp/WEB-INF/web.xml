@@ -14,11 +14,15 @@
   </servlet>
   <servlet>
     <servlet-name>Login</servlet-name>
-    <servlet-class>LoginServlet</servlet-class>
+    <servlet-class>servlets.LoginServlet</servlet-class>
   </servlet>
   <servlet>
     <servlet-name>Register</servlet-name>
-    <servlet-class>RegisterServlet</servlet-class>
+    <servlet-class>servlets.RegisterServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>CreateQuiz</servlet-name>
+    <servlet-class>servlets.CreateQuizServlet</servlet-class>
   </servlet>
 
   <servlet-mapping>
@@ -32,5 +36,9 @@
   <servlet-mapping>
     <servlet-name>Register</servlet-name>
     <url-pattern>/Register</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>CreateQuiz</servlet-name>
+    <url-pattern>/CreateQuiz</url-pattern>
   </servlet-mapping>
 </web-app>

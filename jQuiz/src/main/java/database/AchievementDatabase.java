@@ -26,12 +26,21 @@ public class AchievementDatabase extends Database<Achievement> {
     }
 
     @Override
-    public boolean add(Achievement achievement) throws SQLException, ClassNotFoundException {
+    public int add(Achievement achievement) throws SQLException, ClassNotFoundException {
         String query = String.format("INSERT INTO achievements (%s, %s, %s) VALUES ('%s', '%s', '%s')",
                 NAME, DESCRIPTION, IMAGE, achievement.getName(), achievement.getDescription(), achievement.getImage());
         PreparedStatement statement = this.getStatement(query);
         int affectedRows = statement.executeUpdate();
-        return affectedRows > 0;
+        if(affectedRows == 0){
+            throw new SQLException("Creating row failed");
+        }
+        try(ResultSet keys = statement.getGeneratedKeys()){
+            if(keys.next()){
+                return keys.getInt(1);
+            }else{
+                throw new SQLException("Creating row failed");
+            }
+        }
     }
 
     @Override

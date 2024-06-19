@@ -29,16 +29,34 @@ public class QuizDatabase extends Database<Quiz>{
     }
 
     @Override
-    public boolean add(Quiz quiz) throws SQLException, ClassNotFoundException {
+    public int add(Quiz quiz) throws SQLException, ClassNotFoundException {
         String query = String.format(
                 "INSERT INTO quizzes (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s) " +
-                        "VALUES ('%s', %d, %s, %d, '%s', %b, %b, %b, %b, '%s');",
-                TITLE, AUTHOR_ID, CREATED_AT, TIME, THUMBNAIL, SHOULD_MIX_UP, SHOW_ALL, AUTO_CORRECT, ALLOW_PRACTICE, DESCRIPTION,
-                quiz.getTitle(), quiz.getAuthorId(), quiz.getCreatedAt().toString(), quiz.getMaxTime(), quiz.getThumbnail(),
-                quiz.getShouldMixUp(), quiz.getShowAll(), quiz.getAutoCorrect(), quiz.getAllowPractice(), quiz.getDescription());
+                        "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);",
+                TITLE, AUTHOR_ID, CREATED_AT, TIME, THUMBNAIL, SHOULD_MIX_UP, SHOW_ALL, AUTO_CORRECT, ALLOW_PRACTICE, DESCRIPTION);
         PreparedStatement statement = this.getStatement(query);
+        statement.setString(1, quiz.getTitle());
+        statement.setInt(2, quiz.getAuthorId());
+        statement.setTimestamp(3, new java.sql.Timestamp(quiz.getCreatedAt().getTime()));
+        statement.setInt(4, quiz.getMaxTime());
+        statement.setBytes(5, quiz.getThumbnail());
+        statement.setBoolean(6, quiz.getShouldMixUp());
+        statement.setBoolean(7, quiz.getShowAll());
+        statement.setBoolean(8, quiz.getAutoCorrect());
+        statement.setBoolean(9, quiz.getAllowPractice());
+        statement.setString(10, quiz.getDescription());
+
         int affectedRows = statement.executeUpdate();
-        return affectedRows > 0;
+        if(affectedRows == 0){
+            throw new SQLException("Creating row failed");
+        }
+        try(ResultSet keys = statement.getGeneratedKeys()){
+            if(keys.next()){
+                return keys.getInt(1);
+            }else{
+                throw new SQLException("Creating row failed");
+            }
+        }
     }
 
     @Override
@@ -50,7 +68,7 @@ public class QuizDatabase extends Database<Quiz>{
                 rs.getInt(AUTHOR_ID),
                 rs.getDate(CREATED_AT),
                 rs.getInt(TIME),
-                rs.getString(THUMBNAIL),
+                rs.getBytes(THUMBNAIL),
                 rs.getBoolean(SHOULD_MIX_UP),
                 rs.getBoolean(SHOW_ALL),
                 rs.getBoolean(AUTO_CORRECT),

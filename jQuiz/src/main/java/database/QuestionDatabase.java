@@ -1,6 +1,7 @@
 package database;
 
 import models.Question;
+import models.QuestionTypes;
 import org.apache.commons.dbcp2.BasicDataSource;
 
 import java.sql.PreparedStatement;
@@ -25,14 +26,23 @@ public class QuestionDatabase extends Database<Question> {
     }
 
     @Override
-    public boolean add(Question question) throws SQLException, ClassNotFoundException {
+    public int add(Question question) throws SQLException, ClassNotFoundException {
         String query = String.format(
                 "INSERT INTO questions (%s, %s, %s, %s, %s ) VALUES (%d, '%s', %d, '%s', %d);",
                 QUESTION_TYPE_ID, TEXT, QUIZ_ID, IMAGE_URL, SCORE,
-                question.getQuestionTypeId(), question.getText(), question.getQuizId(), question.getImageUrl(), question.getScore());
+                question.getQuestionType().ordinal(), question.getText(), question.getQuizId(), question.getImageUrl(), question.getScore());
         PreparedStatement statement = this.getStatement(query);
         int affectedRows = statement.executeUpdate();
-        return affectedRows > 0;
+        if(affectedRows == 0){
+            throw new SQLException("Creating row failed");
+        }
+        try(ResultSet keys = statement.getGeneratedKeys()){
+            if(keys.next()){
+                return keys.getInt(1);
+            }else{
+                throw new SQLException("Creating row failed");
+            }
+        }
     }
 
     @Override
@@ -40,7 +50,7 @@ public class QuestionDatabase extends Database<Question> {
         List<Integer> answerIds = answerDB.getAnswerIdsByQuestionId(rs.getInt(ID));
         return new Question(
                 rs.getInt(ID),
-                rs.getInt(QUESTION_TYPE_ID),
+                QuestionTypes.values()[rs.getInt(QUESTION_TYPE_ID)],
                 rs.getString(TEXT),
                 rs.getInt(QUIZ_ID),
                 rs.getString(IMAGE_URL),

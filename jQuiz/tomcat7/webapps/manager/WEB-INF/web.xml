@@ -118,7 +118,7 @@
     <servlet-name>HTMLManager</servlet-name>
   </filter-mapping>
 
-  <!-- Define a Security Constraint on this Application -->
+  <!-- Define a servlets.Security Constraint on this Application -->
   <!-- NOTE:  None of these roles are present in the default users file -->
   <security-constraint>
     <web-resource-collection>
@@ -166,7 +166,7 @@
     <realm-name>Tomcat Manager Application</realm-name>
   </login-config>
 
-  <!-- Security roles referenced by this web application -->
+  <!-- servlets.Security roles referenced by this web application -->
   <security-role>
     <description>
       The role that is required to access the HTML Manager pages

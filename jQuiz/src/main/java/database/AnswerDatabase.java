@@ -24,14 +24,23 @@ public class AnswerDatabase extends Database<Answer> {
     }
 
     @Override
-    public boolean add(Answer answer) throws SQLException, ClassNotFoundException {
+    public int add(Answer answer) throws SQLException, ClassNotFoundException {
         String query = String.format(
                 "INSERT INTO answers (%s, %s, %s, %s) VALUES ('%s', %b, %d, %d);",
                 TEXT, IS_CORRECT, QUESTION_ID, UNIQ_ID,
                 answer.getText(), answer.getIsCorrect(), answer.getQuestionId(), answer.getUniquenessId());
         PreparedStatement statement = this.getStatement(query);
         int affectedRows = statement.executeUpdate();
-        return affectedRows > 0;
+        if(affectedRows == 0){
+            throw new SQLException("Creating row failed");
+        }
+        try(ResultSet keys = statement.getGeneratedKeys()){
+            if(keys.next()){
+                return keys.getInt(1);
+            }else{
+                throw new SQLException("Creating row failed");
+            }
+        }
     }
 
     @Override
