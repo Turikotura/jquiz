@@ -1,3 +1,5 @@
+package servlets;
+
 import database.*;
 import models.User;
 
@@ -21,8 +23,12 @@ public class RegisterServlet extends HttpServlet {
 
         try {
             User curUser = ((UserDatabase)request.getServletContext().getAttribute(Database.USER_DB)).getByUsername(userName);
+            User curUserByEmail = ((UserDatabase)request.getServletContext().getAttribute(Database.USER_DB)).getByEmail(email);
             if(curUser != null) {
                 request.getServletContext().setAttribute("reg-message","User named " + userName + " already exists.");
+                response.sendRedirect("register.jsp");
+            } else if(curUserByEmail != null){
+                request.getServletContext().setAttribute("reg-message","User with email " + email + " already exists.");
                 response.sendRedirect("register.jsp");
             } else if(!password1.equals(password2)) {
                 request.getServletContext().setAttribute("reg-message","Passwords don't match.");
@@ -33,7 +39,7 @@ public class RegisterServlet extends HttpServlet {
                         "Password must contain at least one uppercase letter, one lowercase letter and one digit.");
                 response.sendRedirect("register.jsp");
             } else {
-                User newUser = new User(User.NO_ID,userName,new Date(),email,Security.getHash(password1),imageLink);
+                User newUser = new User(User.NO_ID,userName,new Date(),email, Security.getHash(password1),imageLink);
                 ((UserDatabase)request.getServletContext().getAttribute(Database.USER_DB)).add(newUser);
                 request.getSession().setAttribute("curUser",userName);
                 response.sendRedirect("");

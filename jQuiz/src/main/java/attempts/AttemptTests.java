@@ -48,7 +48,7 @@ public class AttemptTests extends TestCase {
     private List<QuestionAttempt> createQuestionAttempts(int quizId, int n){
         List<QuestionAttempt> res = new ArrayList<>();
         for(int i = 0; i < n; i++){
-            Question q = new Question(questions.size(), QuestionTypes.RESPONSE, String.format("question %d",i),quizId,String.format("Image url %d",i),(i+1)*5,null);
+            Question q = new Question(questions.size(), QuestionTypes.RESPONSE, String.format("question %d",i),quizId,null,(i+1)*5,null);
             QuestionAttempt qa = new QuestionAttempt(q, createAnswers(quizId, i, 3));
             res.add(qa);
             questions.add(qa);

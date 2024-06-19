@@ -20,12 +20,22 @@ public class HistoryDatabase extends Database<History> {
         super(dataSource,databaseName);
     }
     @Override
-    public boolean add(History toAdd) throws SQLException, ClassNotFoundException {
+    public int add(History toAdd) throws SQLException, ClassNotFoundException {
         String query = String.format("INSERT INTO %s ( %s, %s, %s, %s, %s ) VALUES ( %d, %d, %d, %s, %d )", databaseName,
                 USER_ID, QUIZ_ID, GRADE, COMPLETED_AT, WRITING_TIME,
                 toAdd.getUserId(), toAdd.getQuizId(), toAdd.getGrade(), toAdd.getCompletedAt(), toAdd.getWritingTime());
         PreparedStatement statement = getStatement(query);
-        return statement.executeUpdate() > 0;
+        int affectedRows = statement.executeUpdate();
+        if(affectedRows == 0){
+            throw new SQLException("Creating row failed");
+        }
+        try(ResultSet keys = statement.getGeneratedKeys()){
+            if(keys.next()){
+                return keys.getInt(1);
+            }else{
+                throw new SQLException("Creating row failed");
+            }
+        }
     }
 
     @Override

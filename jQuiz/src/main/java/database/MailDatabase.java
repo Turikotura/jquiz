@@ -24,12 +24,22 @@ public class MailDatabase extends Database<Mail> {
         super(dataSource, databaseName);
     }
     @Override
-    public boolean add(Mail toAdd) throws SQLException, ClassNotFoundException {
+    public int add(Mail toAdd) throws SQLException, ClassNotFoundException {
         String query = String.format("INSERT INTO %s ( %s, %s, %s, %s, %s, %s ) VALUES ( %d, %d, %d, %d, '%s', %s)", databaseName,
                 RECEIVER_ID, SENDER_ID, TYPE, QUIZ_ID, TEXT, TIME_SENT,
                 toAdd.getReceiverId(), toAdd.getSenderId(), toAdd.getType().ordinal(), toAdd.getQuizId(), toAdd.getText(), toAdd.getTimeSent());
         PreparedStatement statement = getStatement(query);
-        return statement.executeUpdate() > 0;
+        int affectedRows = statement.executeUpdate();
+        if(affectedRows == 0){
+            throw new SQLException("Creating row failed");
+        }
+        try(ResultSet keys = statement.getGeneratedKeys()){
+            if(keys.next()){
+                return keys.getInt(1);
+            }else{
+                throw new SQLException("Creating row failed");
+            }
+        }
     }
 
     @Override

@@ -6,6 +6,7 @@ import org.apache.commons.dbcp2.BasicDataSource;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.List;
 
 public class UserDatabase extends Database<User>{
@@ -26,12 +27,27 @@ public class UserDatabase extends Database<User>{
     }
 
     @Override
-    public boolean add(User toAdd) throws SQLException, ClassNotFoundException {
-        String query = String.format("INSERT INTO %s ( %s, %s, %s, %s, %s, %s ) VALUES ( '%s', %b, %s, '%s', '%s', '%s')", databaseName,
-                USERNAME, IS_ADMIN, CREATED_AT, EMAIL, PASSWORD, IMAGE,
-                toAdd.getUsername(), toAdd.isAdmin(), "sysdate()", toAdd.getEmail(), toAdd.getPassword(), toAdd.getImage());
+    public int add(User toAdd) throws SQLException, ClassNotFoundException {
+        String query = String.format("INSERT INTO %s ( %s, %s, %s, %s, %s, %s ) VALUES ( ?, ?, ?, ?, ?, ?)",
+                databaseName, USERNAME, IS_ADMIN, CREATED_AT, EMAIL, PASSWORD, IMAGE);
         PreparedStatement statement = getStatement(query);
-        return statement.executeUpdate() > 0;
+        statement.setString(1, toAdd.getUsername());
+        statement.setBoolean(2, toAdd.isAdmin());
+        statement.setTimestamp(3, new Timestamp(System.currentTimeMillis()));
+        statement.setString(4, toAdd.getEmail());
+        statement.setString(5, toAdd.getPassword());
+        statement.setString(6, toAdd.getImage());
+        int affectedRows = statement.executeUpdate();
+        if(affectedRows == 0){
+            throw new SQLException("Creating row failed");
+        }
+        try(ResultSet keys = statement.getGeneratedKeys()){
+            if(keys.next()){
+                return keys.getInt(1);
+            }else{
+                throw new SQLException("Creating row failed");
+            }
+        }
     }
 
     @Override
@@ -79,6 +95,12 @@ public class UserDatabase extends Database<User>{
                 Database.USER_DB,ID,id);
         ResultSet usersFound = getResultSet(query);
         if(usersFound.next()) return getItemFromResultSet(usersFound);
+        return null;
+    }
+
+    public User getByEmail(String email) throws SQLException, ClassNotFoundException {
+        ResultSet emailsFound = getResultSet("SELECT * FROM " + Database.USER_DB + " WHERE " + EMAIL + " = '" + email + "';");
+        if(emailsFound.next()) return getItemFromResultSet(emailsFound);
         return null;
     }
 }

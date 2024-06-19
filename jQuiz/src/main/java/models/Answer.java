@@ -25,4 +25,8 @@ public class Answer {
     @Override
     public int hashCode(){return this.questionId ^ this.uniquenessId;}
     public boolean equals(String other) {return this.text.equals(other);}
+
+    public void setQuestionId(int questionId) {
+        this.questionId = questionId;
+    }
 }

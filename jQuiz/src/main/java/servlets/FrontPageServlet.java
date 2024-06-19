@@ -20,23 +20,9 @@ public class FrontPageServlet extends HttpServlet {
     private QuizDatabase quizDB;
 
     @Override
-    public void init() throws ServletException {
-        System.out.println("HI");
-        dataSource = new BasicDataSource();
-        dataSource.setUrl("jdbc:mysql://localhost:3306/quizDB");
-        dataSource.setUsername(DBInfo.USERNAME);
-        dataSource.setPassword(DBInfo.PASSWORD);
-        dataSource.setInitialSize(10);
-        dataSource.setMaxTotal(50);
-        dataSource.setMaxIdle(20);
-        dataSource.setMinIdle(5);
-        dataSource.setMaxWaitMillis(10000);
-        quizDB = new QuizDatabase(dataSource, Database.QUIZ_DB);
-    }
-
-    @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
+            QuizDatabase quizDB = (QuizDatabase) getServletContext().getAttribute(Database.QUIZ_DB);
             List<Quiz> recentQuizzes = quizDB.getRecentlyCreatedQuizzes(5);
             request.setAttribute("recentQuizzes", recentQuizzes);
             List<Quiz> popularQuizzes = quizDB.getPopularQuizzes(5, "TOTAL");

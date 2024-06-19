@@ -19,9 +19,10 @@
         <nav class="main-nav">
             <ul>
                 <li><a href="">Home</a></li>
-                <li><a href="#">Users</a></li>
-                <li><a href="#">Achievements</a></li>
-                <li><a href="#">Categories</a></li>
+                <li><a href="/users.jsp">Users</a></li>
+                <li><a href="/achievements.jsp">Achievements</a></li>
+                <li><a href="/categories.jsp">Categories</a></li>
+                <li><a href="/createquiz.jsp">Create quiz</a></li>
             </ul>
         </nav>
         <nav class="auth-nav">

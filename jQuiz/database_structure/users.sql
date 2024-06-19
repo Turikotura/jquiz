@@ -3,10 +3,10 @@ USE quizDB;
 CREATE TABLE users
 (
     id INT PRIMARY KEY AUTO_INCREMENT,
-    username VARCHAR(50),
+    username VARCHAR(50) UNIQUE,
     is_admin BOOL,
     created_at DATETIME,
-    email VARCHAR(50),
+    email VARCHAR(50) UNIQUE,
     pass VARCHAR(50),
     image VARCHAR(100)
 );

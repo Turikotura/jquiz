@@ -12,7 +12,7 @@ public class ClosedQuestion extends Question {
     private boolean isMulti;
 
     public ClosedQuestion(String text, List<Integer> answerIds, QuestionTypes type, boolean isMulti) {
-        super(0,type,text,0,"",0, answerIds);
+        super(0,type,text,0,null,0, answerIds);
         this.isMulti = isMulti;
     }
 

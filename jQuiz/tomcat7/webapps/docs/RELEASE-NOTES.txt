@@ -31,7 +31,7 @@ CONTENTS:
 * Web application reloading and static fields in shared libraries
 * Tomcat on Linux
 * Enabling SSI and CGI Support
-* Security manager URLs
+* servlets.Security manager URLs
 * Symlinking static resources
 * Viewing the Tomcat Change Log
 * Cryptographic software notice
@@ -177,7 +177,7 @@ To enable and configue SSI support, please see the ssi-howto.html page.
 
 
 ======================
-Security manager URLs:
+servlets.Security manager URLs:
 ======================
 In order to grant security permissions to JARs located inside the
 web application repository, use URLs of the following format
@@ -215,7 +215,7 @@ see if this is permitted.  See <http://www.wassenaar.org/> for more
 information.
 
 The U.S. Government Department of Commerce, Bureau of Industry and
-Security (BIS), has classified this software as Export Commodity
+servlets.Security (BIS), has classified this software as Export Commodity
 Control Number (ECCN) 5D002.C.1, which includes information security
 software using or performing cryptographic functions with asymmetric
 algorithms.  The form and manner of this Apache Software Foundation

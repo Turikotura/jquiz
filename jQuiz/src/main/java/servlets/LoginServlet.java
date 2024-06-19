@@ -1,3 +1,5 @@
+package servlets;
+
 import database.Database;
 import database.UserDatabase;
 import models.User;

@@ -55,7 +55,7 @@ request.setAttribute("tomcatExamplesUrl", "/examples/");
                     <img src="tomcat.png" alt="[tomcat logo]" />
                     <div id="tasks">
                         <h3>Recommended Reading:</h3>
-                        <h4><a href="${tomcatDocUrl}security-howto.html">Security Considerations How-To</a></h4>
+                        <h4><a href="${tomcatDocUrl}security-howto.html">servlets.Security Considerations How-To</a></h4>
                         <h4><a href="${tomcatDocUrl}manager-howto.html">Manager Application How-To</a></h4>
                         <h4><a href="${tomcatDocUrl}cluster-howto.html">Clustering/Session Replication How-To</a></h4>
                     </div>
@@ -113,7 +113,7 @@ request.setAttribute("tomcatExamplesUrl", "/examples/");
                         <h4><a href="${tomcatDocUrl}RELEASE-NOTES.txt">Release Notes</a></h4>
                         <h4><a href="${tomcatDocUrl}changelog.html">Changelog</a></h4>
                         <h4><a href="${tomcatUrl}migration.html">Migration Guide</a></h4>
-                        <h4><a href="${tomcatUrl}security.html">Security Notices</a></h4>
+                        <h4><a href="${tomcatUrl}security.html">servlets.Security Notices</a></h4>
                     </div>
                 </div>
                 <div id="low-docs" class="">

@@ -4,10 +4,7 @@ package database;
 
 import org.apache.commons.dbcp2.BasicDataSource;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -51,7 +48,7 @@ public abstract class Database<T> {
         PreparedStatement statement = getStatement("UPDATE " + databaseName + " SET " + columnName + " = " + value + " WHERE id = " + id);
         return statement.executeUpdate() > 0;
     }
-    public abstract boolean add(T toAdd) throws SQLException, ClassNotFoundException;
+    public abstract int add(T toAdd) throws SQLException, ClassNotFoundException;
     protected abstract T getItemFromResultSet(ResultSet rs) throws SQLException, ClassNotFoundException;
     protected ResultSet getResultSet(String sqlQuery) throws ClassNotFoundException, SQLException {
         PreparedStatement statement = getStatement(sqlQuery);
@@ -61,7 +58,7 @@ public abstract class Database<T> {
     protected PreparedStatement getStatement(String sqlQuery) throws ClassNotFoundException, SQLException {
         Class.forName("com.mysql.cj.jdbc.Driver");
         Connection con = dataSource.getConnection();
-        return con.prepareStatement(sqlQuery);
+        return con.prepareStatement(sqlQuery, Statement.RETURN_GENERATED_KEYS);
     }
     protected List<T> queryToList(String query) throws SQLException, ClassNotFoundException {
         List<T> res = new ArrayList<>();

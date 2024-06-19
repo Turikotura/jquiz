@@ -8,16 +8,16 @@ public class Question {
     private QuestionTypes questionType;
     private String text;
     private int quizId;
-    private String imageUrl;
+    private byte[] image;
     private int score;
     private List<Integer> answerIds;
 
-    public Question(int id, QuestionTypes questionType, String text, int quizId, String imageUrl, int score, List<Integer> answerIds) {
+    public Question(int id, QuestionTypes questionType, String text, int quizId, byte[] image, int score, List<Integer> answerIds) {
         this.id = id;
         this.questionType = questionType;
         this.text = text;
         this.quizId = quizId;
-        this.imageUrl = imageUrl;
+        this.image = image;
         this.score = score;
         this.answerIds = answerIds;
     }
@@ -26,7 +26,7 @@ public class Question {
     public QuestionTypes getQuestionType() {return questionType;}
     public String getText() {return text;}
     public int getQuizId() {return quizId;}
-    public String getImageUrl() {return imageUrl;}
+    public byte[] getImage() {return image;}
     public int getScore() {return score;}
     public List<Integer> getAnswerIds() {return answerIds;}
 }
