@@ -15,26 +15,9 @@ import java.sql.SQLException;
 import java.util.List;
 
 public class FrontPageServlet extends HttpServlet {
-    private BasicDataSource dataSource;
-    private QuizDatabase quizDB;
-
-    @Override
-    public void init() throws ServletException {
-        System.out.println("HI");
-        dataSource = new BasicDataSource();
-        dataSource.setUrl("jdbc:mysql://localhost:3306/quizDB");
-        dataSource.setUsername("root");
-        dataSource.setPassword("");
-        dataSource.setInitialSize(10);
-        dataSource.setMaxTotal(50);
-        dataSource.setMaxIdle(20);
-        dataSource.setMinIdle(5);
-        dataSource.setMaxWaitMillis(10000);
-        quizDB = new QuizDatabase(dataSource, Database.QUIZ_DB);
-    }
-
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        QuizDatabase quizDB = (QuizDatabase) request.getServletContext().getAttribute(Database.QUIZ_DB);
         try {
             List<Quiz> recentQuizzes = quizDB.getRecentlyCreatedQuizzes(5);
             request.setAttribute("recentQuizzes", recentQuizzes);
@@ -46,15 +29,6 @@ public class FrontPageServlet extends HttpServlet {
 
         } catch (SQLException | ClassNotFoundException e) {
             throw new ServletException(e);
-        }
-    }
-
-    @Override
-    public void destroy() {
-        try {
-            dataSource.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
     }
 }
