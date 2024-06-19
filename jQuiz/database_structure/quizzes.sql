@@ -15,7 +15,6 @@ CREATE TABLE quizzes
     description TEXT,
     FOREIGN KEY (author_id) REFERENCES users(id)
 );
-
 INSERT INTO quizzes (title, author_id, created_at, time, thumbnail, should_mix_up, show_all, auto_correct, allow_practice, description)
 VALUES
     ('US Presidents Quiz', 1, '2024-06-16 13:30:17', 120, 'tmpimg1', true, true, true, true, 'A quiz about US Presidents'),
