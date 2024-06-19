@@ -7,12 +7,10 @@ public class Question {
     private int id;
     private QuestionTypes questionType;
     private String text;
-    int quizId;
-    String imageUrl;
+    private int quizId;
+    private String imageUrl;
     private int score;
     private List<Integer> answerIds;
-    private boolean guessed;
-
 
     public Question(int id, QuestionTypes questionType, String text, int quizId, String imageUrl, int score, List<Integer> answerIds) {
         this.id = id;

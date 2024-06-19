@@ -13,7 +13,7 @@ import java.util.List;
 public class QuestionDatabase extends Database<Question> {
     // Question Columns
     static final String ID = "id";
-    static final String QUESTION_TYPE_ID = "question_type_id";
+    static final String QUESTION_TYPE = "question_type";
     static final String TEXT = "text";
     static final String QUIZ_ID = "quiz_id";
     static final String IMAGE_URL = "image_url";
@@ -29,7 +29,7 @@ public class QuestionDatabase extends Database<Question> {
     public int add(Question question) throws SQLException, ClassNotFoundException {
         String query = String.format(
                 "INSERT INTO questions (%s, %s, %s, %s, %s ) VALUES (%d, '%s', %d, '%s', %d);",
-                QUESTION_TYPE_ID, TEXT, QUIZ_ID, IMAGE_URL, SCORE,
+                QUESTION_TYPE, TEXT, QUIZ_ID, IMAGE_URL, SCORE,
                 question.getQuestionType().ordinal(), question.getText(), question.getQuizId(), question.getImageUrl(), question.getScore());
         PreparedStatement statement = this.getStatement(query);
         int affectedRows = statement.executeUpdate();
@@ -50,7 +50,7 @@ public class QuestionDatabase extends Database<Question> {
         List<Integer> answerIds = answerDB.getAnswerIdsByQuestionId(rs.getInt(ID));
         return new Question(
                 rs.getInt(ID),
-                QuestionTypes.values()[rs.getInt(QUESTION_TYPE_ID)],
+                QuestionTypes.values()[rs.getInt(QUESTION_TYPE)],
                 rs.getString(TEXT),
                 rs.getInt(QUIZ_ID),
                 rs.getString(IMAGE_URL),

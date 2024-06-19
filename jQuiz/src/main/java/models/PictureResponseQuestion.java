@@ -3,7 +3,7 @@ package models;
 import java.util.Set;
 
 public class PictureResponseQuestion extends Question {
-    private int questionType;
+    private QuestionTypes questionType;
     private String queryText;
     private String pictureLink;
     private int userScore;
@@ -17,7 +17,7 @@ public class PictureResponseQuestion extends Question {
     }
 
     public String getQueryText() {return queryText;}
-    public int type() {return questionType;}
+    public QuestionTypes type() {return questionType;}
     public String getPictureLink() {return pictureLink;}
     public int getScore() {return userScore;}
 }

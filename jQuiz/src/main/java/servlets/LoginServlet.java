@@ -22,7 +22,8 @@ public class LoginServlet extends HttpServlet {
                 request.getServletContext().setAttribute("log-message","User named " + userName + " doesn't exist.");
                 response.sendRedirect("login.jsp");
             } else if(password.equals(curUser.getPassword())) {
-                response.sendRedirect("index.jsp");
+                request.getSession().setAttribute("curUser",userName);
+                response.sendRedirect("");
             } else {
                 request.getServletContext().setAttribute("log-message","Password incorrect.");
                 response.sendRedirect("login.jsp");
@@ -30,5 +31,12 @@ public class LoginServlet extends HttpServlet {
         } catch (SQLException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        response.setContentType("text/html");
+        request.getSession().removeAttribute("curUser");
+        response.sendRedirect("");
     }
 }

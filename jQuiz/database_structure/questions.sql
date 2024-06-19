@@ -12,6 +12,16 @@ CREATE TABLE questions
 );
 
 INSERT INTO questions (question_type_id, text, quiz_id, image_url, score)
-    VALUES (1, 'Name US presidents', 2, NULL, 1);
+    VALUES (0,'Name the first US president',1,NULL,1);
 INSERT INTO questions (question_type_id, text, quiz_id, image_url, score)
-    VALUES (2, 'Name world continents', 2, NULL, 1);
+VALUES (0,'Name the president who wrote the declaration of independence',1,NULL,1);
+INSERT INTO questions (question_type_id, text, quiz_id, image_url, score)
+VALUES (4,'Who was the president during the US civil war?',1,NULL,1);
+
+INSERT INTO questions (question_type_id, text, quiz_id, image_url, score)
+VALUES (5,'Select all the presidents who were elected in the 21st century.',1,NULL,1);
+
+# INSERT INTO questions (question_type_id, text, quiz_id, image_url, score)
+#     VALUES (1, 'Name US presidents', 2, NULL, 1);
+# INSERT INTO questions (question_type_id, text, quiz_id, image_url, score)
+#     VALUES (2, 'Name world continents', 2, NULL, 1);

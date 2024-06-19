@@ -2,8 +2,9 @@ package models;
 
 public enum QuestionTypes {
     RESPONSE,
+    LIST_ANSWERS,
     FILL_BLANK,
-    MULTIPLE_CHOICE,
     PIC_RESPONSE,
-    MULTI_ANS_MULTI_CHOICE
+    MULTIPLE_CHOICE,
+    MULTI_ANS_MULTI_CHOICE,
 }

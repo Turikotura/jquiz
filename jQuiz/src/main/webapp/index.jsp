@@ -2,11 +2,8 @@
 <%@ page import="java.util.List" %>
 <%@ page import="database.UserDatabase" %>
 <%@ page import="models.User" %>
+<%@ page import="database.Database" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-
-<%
-    System.out.println("Starting JSP processing...");
-%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -29,10 +26,20 @@
             </ul>
         </nav>
         <nav class="auth-nav">
+            <%if(request.getSession().getAttribute("curUser") == null) { %>
             <ul>
                 <li><a href="login.jsp">Login</a></li>
                 <li><a href="register.jsp">Register</a></li>
             </ul>
+            <%} else { %>
+            <ul>
+                <li><a href="#"><%=(String)request.getSession().getAttribute("curUser")%></a></li>
+                <li><form action="Login" method="get">
+                    <input type="submit" value="Log out">
+                </form></li>
+            </ul>
+            <%}%>
+
         </nav>
     </header>
 
@@ -41,7 +48,7 @@
         <div class="quiz-boxes">
             <%
                 try {
-                    UserDatabase userDB = (UserDatabase) application.getAttribute("users");
+                    UserDatabase userDB = (UserDatabase) application.getAttribute(Database.USER_DB);
                     List<Quiz> recentQuizzes = (List<Quiz>) request.getAttribute("recentQuizzes");
                     List<Quiz> popularQuizzes = (List<Quiz>) request.getAttribute("popularQuizzes");
                     List<Quiz> lastMonthPopularQuizzes = (List<Quiz>) request.getAttribute("lastMonthPopularQuizzes");
@@ -57,7 +64,7 @@
                         User author = userDB.getById(quiz.getAuthorId());
             %>
             <div class="quiz-box">
-                <a href="#">
+                <a href="quizInfo.jsp?quizId=<%=quiz.getId()%>">
                     <div class="quiz-box-top">
                         <p class="quiz-box-name"><%= quiz.getTitle() %></p>
                     </div>
@@ -81,7 +88,7 @@
                         User author = userDB.getById(quiz.getAuthorId());
                 %>
                 <div class="quiz-box">
-                    <a href="#">
+                    <a href="quizInfo.jsp?quizId=<%=quiz.getId()%>">
                         <div class="quiz-box-top">
                             <p class="quiz-box-name"><%= quiz.getTitle() %></p>
                         </div>
@@ -104,7 +111,7 @@
                     User author = userDB.getById(quiz.getAuthorId());
             %>
             <div class="quiz-box">
-                <a href="#">
+                <a href="quizInfo.jsp?quizId=<%=quiz.getId()%>">
                     <div class="quiz-box-top">
                         <p class="quiz-box-name"><%= quiz.getTitle() %></p>
                     </div>

@@ -85,6 +85,12 @@ public class QuizDatabase extends Database<Quiz>{
                 databaseName, AUTHOR_ID, authorId);
         return queryToList(query);
     }
+    
+    public Quiz getQuizById(int quizId) throws SQLException, ClassNotFoundException {
+        String query = String.format("SELECT * FROM %s WHERE %s = %d",
+                databaseName,ID,quizId);
+        return queryToList(query).get(0);
+    }
 
     public List<Quiz> getPopularQuizzes(int k, String totalOrLastMonth) throws SQLException, ClassNotFoundException {
         String query = String.format("SELECT * FROM %s ORDER BY " + (totalOrLastMonth == "LAST_MONTH" ? LAST_MONTH_PLAY_COUNT : TOTAL_PLAY_COUNT) + " DESC LIMIT %d;",

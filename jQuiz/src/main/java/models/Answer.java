@@ -1,7 +1,7 @@
 package models;
 
 public class Answer {
-    int id;
+    private int id;
     private String text;
     private boolean isCorrect;
     private int questionId;
@@ -20,5 +20,9 @@ public class Answer {
     public boolean getIsCorrect() {return this.isCorrect;}
     public int getQuestionId() {return questionId;}
     public int getUniquenessId() {return uniquenessId;}
-    public boolean equals(Answer other) {return this.questionId == other.questionId && this.uniquenessId == other.getUniquenessId();}
+    @Override
+    public boolean equals(Object other) {return this.questionId == ((Answer)other).getQuestionId() && this.uniquenessId == ((Answer)other).getUniquenessId();}
+    @Override
+    public int hashCode(){return this.questionId ^ this.uniquenessId;}
+    public boolean equals(String other) {return this.text.equals(other);}
 }

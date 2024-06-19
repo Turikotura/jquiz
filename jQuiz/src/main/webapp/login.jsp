@@ -6,6 +6,7 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<!DOCTYPE html>
 <html>
 <%
     String message = "";
@@ -18,13 +19,17 @@
 <h1>Please log in.</h1>
 <p>Enter your username and password:</p>
 <form action="Login" method="post">
-    <label>Username:</label>
-    <input type="input" name="user-name">
+    <label>
+        Username:
+        <input type="input" name="user-name">
+    </label>
     <p></p>
-    <label>Password:</label>
-    <input type="password" name="password">
+    <label>
+        Password:
+        <input type="password" name="password">
+    </label>
     <p><%=message%></p>
-    <input class="login" type="submit" value="Login">
+    <input type="submit" value="Log in">
 </form>
 <span>New around here? <a href="register.jsp">Create new account</a></span>
 </body>

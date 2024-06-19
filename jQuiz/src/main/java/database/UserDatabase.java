@@ -84,7 +84,16 @@ public class UserDatabase extends Database<User>{
     }
 
     public User getByUsername(String username) throws SQLException, ClassNotFoundException {
-        ResultSet usersFound = getResultSet("SELECT * FROM " + Database.USER_DB + " WHERE " + USERNAME + " = '" + username + "';");
+        String query = String.format("SELECT * FROM %s WHERE %s = '%s';",
+                Database.USER_DB,USERNAME,username);
+        ResultSet usersFound = getResultSet(query);
+        if(usersFound.next()) return getItemFromResultSet(usersFound);
+        return null;
+    }
+    public User getById(int id) throws SQLException, ClassNotFoundException {
+        String query = String.format("SELECT * FROM %s WHERE %s = %d;",
+                Database.USER_DB,ID,id);
+        ResultSet usersFound = getResultSet(query);
         if(usersFound.next()) return getItemFromResultSet(usersFound);
         return null;
     }
