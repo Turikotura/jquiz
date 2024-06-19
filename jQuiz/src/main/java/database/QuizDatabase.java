@@ -50,7 +50,7 @@ public class QuizDatabase extends Database<Quiz>{
                 rs.getInt(AUTHOR_ID),
                 rs.getDate(CREATED_AT),
                 rs.getInt(TIME),
-                rs.getString(THUMBNAIL),
+                rs.getBytes(THUMBNAIL),
                 rs.getBoolean(SHOULD_MIX_UP),
                 rs.getBoolean(SHOW_ALL),
                 rs.getBoolean(AUTO_CORRECT),

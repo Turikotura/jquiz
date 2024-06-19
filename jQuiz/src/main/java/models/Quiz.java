@@ -9,7 +9,7 @@ public class Quiz {
     private int authorId;
     private Date createdAt;
     private int time;
-    private String thumbnail;
+    private byte[] thumbnail;
     private boolean shouldMixUp;
     private boolean showAll;
     private boolean autoCorrect;
@@ -26,7 +26,7 @@ public class Quiz {
             int authorId,
             Date createdAt,
             int time,
-            String thumbnail,
+            byte[] thumbnail,
             boolean shouldMixUp,
             boolean showAll,
             boolean autoCorrect,
@@ -57,7 +57,7 @@ public class Quiz {
     public Date getCreatedAt() {return createdAt;}
     public int getMaxTime() {return time;}
     public String getDescription() {return description;}
-    public String getThumbnail() {return thumbnail;}
+    public byte[] getThumbnail() {return thumbnail;}
     public boolean getShouldMixUp() {return shouldMixUp;}
     public boolean getShowAll() {return showAll;}
     public boolean getAutoCorrect() {return autoCorrect;}
