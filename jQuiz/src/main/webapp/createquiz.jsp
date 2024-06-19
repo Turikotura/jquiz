@@ -133,7 +133,7 @@
     <label for="allowPractice">Allow Practice Mode</label><br><br>
 
     <label for="thumbnail">Thumbnail Image:</label><br>
-    <input type="file" id="thumbnail" name="thumbnail"><br><br>
+    <input type="file" id="thumbnail" name="thumbnail" accept="image/*"><br><br>
 
     <label for="questionType">Select Question Type:</label>
     <select id="questionType">
@@ -168,6 +168,16 @@
     <input type="text" name="answer"><br><br>
 </div>
 
+<div id="pictureResponseQuestionForm" style="display: none;">
+    <input type="hidden" name="questionTypeIdentifier" value="pictureResponse">
+    <label>Question:</label><br>
+    <input type="text" name="question"><br><br>
+    <input type="file" name="picture" accept="image/*"><br><br>
+
+    <label>Answer:</label><br>
+    <input type="text" name="answer">
+</div>
+
 <div id="multipleChoiceQuestionForm" style="display: none;">
     <input type="hidden" name="questionTypeIdentifier" value="multipleChoice">
     <label>Question:</label><br>
@@ -176,7 +186,7 @@
     <label>Answers:</label><br>
     <div id="answer_container">
         <input type="text" name="answer_1">
-        <input type="radio" name="correct" checked>
+        <input type="radio" name="correct" value="1" checked>
     </div>
     <button type="button" onclick="addChoice()">Add Choice</button><br><br>
     <button type="button" onclick="deleteLastChoice()">Delete Last Answer</button><br><br>

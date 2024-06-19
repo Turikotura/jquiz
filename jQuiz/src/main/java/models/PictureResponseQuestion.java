@@ -12,7 +12,7 @@ public class PictureResponseQuestion extends Question {
 
 
     public PictureResponseQuestion(String text, Set<Answer> answers, String link, QuestionTypes type) {
-        super(0,type,text,0,"",0, null);
+        super(0,type,text,0,null,0, null);
         this.pictureLink = link;
     }
 

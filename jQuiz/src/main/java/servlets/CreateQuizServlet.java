@@ -68,34 +68,68 @@ public class CreateQuizServlet extends HttpServlet {
             System.out.println(questionType);
 
             String questionText = request.getParameter(questionIndex + "_question");
-            List<String> answers = new ArrayList<>();
+            List<Answer> answers = new ArrayList<>();
             QuestionTypes questionTypeEnum = null;
             Set<String> correctAnswers = new HashSet<>();
             String ansText;
+            String[] sameAnswers;
+            byte[] picture = null;
 
             switch (questionType) {
                 case "response":
                     questionTypeEnum = QuestionTypes.RESPONSE;
                     ansText = request.getParameter(questionIndex + "_answer");
-                    answers.add(ansText);
-                    correctAnswers.add(ansText);
+                    sameAnswers = ansText.split("/");
+                    for(String singleAnswer: sameAnswers){
+                        Answer answer = new Answer(-1,singleAnswer,true,-1,1);
+                        answers.add(answer);
+                    }
                     break;
                 case "fillBlank":
                     questionTypeEnum = QuestionTypes.FILL_BLANK;
                     ansText = request.getParameter(questionIndex + "_answer");
-                    answers.add(ansText);
-                    correctAnswers.add(ansText);
+                    sameAnswers = ansText.split("/");
+                    for(String singleAnswer: sameAnswers){
+                        Answer answer = new Answer(-1,singleAnswer,true,-1,1);
+                        answers.add(answer);
+                    }
+                    break;
+                case "pictureResponse":
+                    questionTypeEnum = QuestionTypes.PIC_RESPONSE;
+                    ansText = request.getParameter(questionIndex + "_answer");
+                    sameAnswers = ansText.split("/");
+                    for(String singleAnswer: sameAnswers){
+                        Answer answer = new Answer(-1,singleAnswer,true,-1,1);
+                        answers.add(answer);
+                    }
+                    Part picturePart = request.getPart(questionIndex + "_picture");
+                    if (picturePart != null) {
+                        System.out.println("WTFFFFFF");
+                        try (InputStream inputStream = picturePart.getInputStream();
+                             ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
+                            byte[] buffer = new byte[1024];
+                            int bytesRead;
+                            while ((bytesRead = inputStream.read(buffer)) != -1) {
+                                outputStream.write(buffer, 0, bytesRead);
+                            }
+                            picture = outputStream.toByteArray();
+                        }
+                    }
                     break;
                 case "multipleChoice":
                     questionTypeEnum = QuestionTypes.MULTIPLE_CHOICE;
+                    System.out.println(request.getParameter(questionIndex + "_correct"));
                     int correctChoice = Integer.parseInt(request.getParameter(questionIndex + "_correct"));
                     int answerIndex = 1;
                     while(true){
                         ansText = request.getParameter(questionIndex + "_answer_" + answerIndex);
+
                         if(ansText != null){
-                            answers.add(ansText);
-                            if(answerIndex == correctChoice){
-                                correctAnswers.add(ansText);
+                            sameAnswers = ansText.split("/");
+                            boolean isCorrect = answerIndex == correctChoice;
+                            for(String singleAnswer: sameAnswers){
+                                Answer answer = new Answer(-1,singleAnswer,isCorrect,-1,answerIndex);
+                                answers.add(answer);
                             }
                             answerIndex++;
                         }else{
@@ -109,20 +143,21 @@ public class CreateQuizServlet extends HttpServlet {
                     while(true){
                         ansText = request.getParameter(questionIndex + "_answer_" + multiAnswerIndex);
                         if(ansText != null){
-                            answers.add(ansText);
-                            if(request.getParameter(questionIndex + "_correct_" + multiAnswerIndex)!=null){
-                                correctAnswers.add(ansText);
+                            sameAnswers = ansText.split("/");
+                            boolean isCorrect = request.getParameter(questionIndex + "_correct_" + multiAnswerIndex)!=null;
+                            for(String singleAnswer: sameAnswers){
+                                Answer answer = new Answer(-1,singleAnswer,isCorrect,-1,multiAnswerIndex);
+                                answers.add(answer);
                             }
                             multiAnswerIndex++;
                         }else{
                             break;
                         }
                     }
-
                 default:
                     break;
             }
-            Question newQuestion = new Question(1, questionTypeEnum, questionText, quizId, null, 1, new ArrayList<>());
+            Question newQuestion = new Question(1, questionTypeEnum, questionText, quizId, picture, 1, new ArrayList<>());
             QuestionDatabase questionDB = (QuestionDatabase) getServletContext().getAttribute(Database.QUESTION_DB);
             int questionId = -1;
             try {
@@ -134,9 +169,8 @@ public class CreateQuizServlet extends HttpServlet {
             }
 
             AnswerDatabase answerDB = (AnswerDatabase) getServletContext().getAttribute(Database.ANSWER_DB);
-            for(String answerText: answers){
-                boolean isCorrect = correctAnswers.contains(answerText);
-                Answer answer = new Answer(0,answerText,isCorrect,questionId,0);
+            for(Answer answer: answers){
+                answer.setQuestionId(questionId);
                 try {
                     answerDB.add(answer);
                 } catch (SQLException e) {
