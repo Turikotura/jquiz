@@ -37,6 +37,7 @@
 <head>
     <title><%=quizAttempt.getTitle()%></title>
     <link href="index.css" rel="stylesheet" type="text/css">
+    <link href="style/playQuiz.css" rel="stylesheet" type="text/css">
 </head>
 <body>
 <header>
@@ -45,7 +46,7 @@
     </div>
     <nav class="main-nav">
         <ul>
-            <li><a href="/index.jsp">Home</a></li>
+            <li><a href="">Home</a></li>
             <li><a href="/users.jsp">Users</a></li>
             <li><a href="/achievements.jsp">Achievements</a></li>
             <li><a href="/categories.jsp">Categories</a></li>
@@ -70,35 +71,62 @@
     </nav>
 </header>
 
-<p><%=attemptId%></p>
-<h><%=quizAttempt.getTitle()%></h>
-
-<form action="PlayQuiz" method="post">
-    <input name="userId" type="hidden" value="<%=userId%>">
-    <input name="quizAttemptId" type="hidden" value="<%=attemptId%>">
-<%
-    for(int i = 0; i < quizAttempt.getQuestions().size(); i++){
-        QuestionAttempt questionAttempt = quizAttempt.getQuestions().get(i);
-%>
-
-
-
-    <p><%=questionAttempt.getQuestion().getId()%></p>
-    <p><%=questionAttempt.getQuestion().getText()%></p>
-
+<main>
+    <img src="<%=quizAttempt.getThumbnail()%>">
+    <h1><%=quizAttempt.getTitle()%></h1>
+    <h3><%=quizAttempt.getStartTime()%></h3>
     <%
-        for(int j = 0; j < questionAttempt.getCorrectAnswersAmount(); j++){
+        int first = quizAttempt.getTime()/3600;
+        int second = (quizAttempt.getTime()%3600)/60;
+        int third = quizAttempt.getTime()%60;
+
+        String firstStr = String.format("%" + 2 + "s",Integer.toString(first)).replace(' ','0');
+        String secondStr = String.format("%" + 2 + "s",Integer.toString(second)).replace(' ','0');
+        String thirdStr = String.format("%" + 2 + "s",Integer.toString(third)).replace(' ','0');
     %>
-        <input name="<%=i%>-<%=j%>" type="text">
+    <h3><%=firstStr%>:<%=secondStr%>:<%=thirdStr%></h3>
+    <h4>Max Score : <%=quizAttempt.getMaxScore()%> pts</h4>
+    <hr>
+
+    <form action="PlayQuiz" method="post">
+        <input name="userId" type="hidden" value="<%=userId%>">
+        <input name="quizAttemptId" type="hidden" value="<%=attemptId%>">
+    <%
+        for(int i = 0; i < quizAttempt.getQuestions().size(); i++){
+            QuestionAttempt questionAttempt = quizAttempt.getQuestions().get(i);
+    %>
+
+        <div class="question-box">
+
+            <%
+                if(questionAttempt.getQuestion().getQuestionType() == QuestionTypes.PIC_RESPONSE){
+            %>
+            <img src="<%=questionAttempt.getQuestion().getImage()%>">
+            <%
+                }
+            %>
+            <p style="float: left;"><%=questionAttempt.getQuestion().getText()%></p>
+            <p style="float: right"><%=questionAttempt.getMaxScore()%> pts</p>
+            <br>
+            <br>
+            <hr>
+            <br>
+
+            <%
+                for(int j = 0; j < questionAttempt.getCorrectAnswersAmount(); j++){
+            %>
+            <input name="<%=i%>-<%=j%>" type="text">
+            <%
+                }
+            %>
+        </div>
     <%
         }
     %>
-<%
-    }
-%>
-    <br>
-    <input type="submit" value="Submit">
-</form>
+        <br>
+        <input id="quiz-submit-button" type="submit" value="Submit">
+    </form>
+</main>
 
 </body>
 </html>
