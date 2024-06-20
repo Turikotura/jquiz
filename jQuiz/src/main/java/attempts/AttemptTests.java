@@ -58,7 +58,7 @@ public class AttemptTests extends TestCase {
     private List<QuizAttempt> createQuizAttempts(int n){
         List<QuizAttempt> res = new ArrayList<>();
         for(int i = 0; i < n; i++){
-            Quiz q = new Quiz(quizzes.size(),String.format("quiz %d",i),0,(new Date()),(i+1),null,false,false,false,false,String.format("Description for quiz %d",i),null,0,0);
+            Quiz q = new Quiz(quizzes.size(),String.format("quiz %d",i),0,(new Date()),(i+1),null,(i == 2),false,false,false,String.format("Description for quiz %d",i),null,0,0);
             quizzes.add(q);
             List<QuestionAttempt> qas = createQuestionAttempts(i,3);
             questionLists.add(qas);
@@ -301,22 +301,22 @@ public class AttemptTests extends TestCase {
         qa = qac.getQuizAttemptById(id3);
 
         // Finishing new quiz
-        question1Ans.clear();
-        question1Ans.add("answer 24");
-        question2Ans.clear();
-        question2Ans.add("answer 27");
-        question3Ans.clear();
-        question3Ans.add("random answer");
-
-        qa.getQuestions().get(0).setWrittenAnswers(question1Ans);
-        qa.getQuestions().get(1).setWrittenAnswers(question2Ans);
-        qa.getQuestions().get(2).setWrittenAnswers(question3Ans);
-
         qh = qac.finishQuiz(id3);
 
-        assertEquals(5 + 10 + 0, qh.getGrade());
         assertEquals(quizzes.get(2).getId(), qh.getQuizId());
         ids = qac.getAttemptIds();
         assertEquals(new HashSet<>(Arrays.asList(id2)), new HashSet<>(ids));
+
+        // Check shuffled
+        int i = 0;
+        int newId = qac.attemptQuiz(quizzes.get(2),questionLists.get(2));
+        qa = qac.getQuizAttemptById(newId);
+        while (i < 100 && qa.getQuestions().get(0).getQuestion().getText().equals("question 6")){
+            qac.finishQuiz(newId);
+            newId = qac.attemptQuiz(quizzes.get(2),questionLists.get(2));
+            qa = qac.getQuizAttemptById(newId);
+            i++;
+        }
+        assertFalse(qa.getQuestions().get(0).getQuestion().getText().equals("question 6"));
     }
 }

@@ -32,6 +32,7 @@ public class QuestionAttempt {
 
     public Question getQuestion() {return question;}
     public List<String> getWrittenAnswers() {return writtenAnswers;}
+    public List<Answer> getAnswers() {return answers;}
     public int getMaxScore() {return maxScore;}
     public int getCorrectAnswersAmount() {return correctAnswersAmount;}
 

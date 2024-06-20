@@ -38,6 +38,9 @@ public class QuizAttemptsController {
      * @return the id of the quiz attempt
      */
     public int attemptQuiz(Quiz quiz, List<QuestionAttempt> questions){
+        if(quiz.getShouldMixUp()){
+            Collections.shuffle(questions);
+        }
         QuizAttempt qa = new QuizAttempt(++lastId, quiz, questions);
         quizAttempts.put(lastId, qa);
         return lastId;
