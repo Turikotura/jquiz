@@ -33,6 +33,10 @@
     <servlet-name>QuizInfo</servlet-name>
     <servlet-class>servlets.QuizInfoServlet</servlet-class>
   </servlet>
+  <servlet>
+    <servlet-name>PlayQuiz</servlet-name>
+    <servlet-class>servlets.PlayQuizServlet</servlet-class>
+  </servlet>
 
   <servlet-mapping>
     <servlet-name>FrontPageServlet</servlet-name>
@@ -53,5 +57,9 @@
   <servlet-mapping>
     <servlet-name>QuizInfo</servlet-name>
     <url-pattern>/QuizInfo</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>PlayQuiz</servlet-name>
+    <url-pattern>/PlayQuiz</url-pattern>
   </servlet-mapping>
 </web-app>

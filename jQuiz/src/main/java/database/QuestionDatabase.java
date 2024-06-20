@@ -17,7 +17,7 @@ public class QuestionDatabase extends Database<Question> {
     static final String QUESTION_TYPE = "question_type";
     static final String TEXT = "text";
     static final String QUIZ_ID = "quiz_id";
-    static final String IMAGE_URL = "image_url";
+    static final String IMAGE_URL = "image";
     static final String SCORE = "score";
     AnswerDatabase answerDB;
 

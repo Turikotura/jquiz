@@ -30,12 +30,14 @@ public class ContextListener implements ServletContextListener {
         QuestionDatabase questiondb = new QuestionDatabase(basicDataSource, Database.QUESTION_DB);
         AnswerDatabase answerdb = new AnswerDatabase(basicDataSource, Database.ANSWER_DB);
         AchievementDatabase achievementdb = new AchievementDatabase(basicDataSource, Database.ACHIEVEMENT_DB);
+        HistoryDatabase historydb = new HistoryDatabase(basicDataSource, Database.HISTORY_DB);
 
         servletContextEvent.getServletContext().setAttribute(Database.USER_DB, userdb);
         servletContextEvent.getServletContext().setAttribute(Database.QUIZ_DB, quizdb);
         servletContextEvent.getServletContext().setAttribute(Database.QUESTION_DB, questiondb);
         servletContextEvent.getServletContext().setAttribute(Database.ANSWER_DB, answerdb);
         servletContextEvent.getServletContext().setAttribute(Database.ACHIEVEMENT_DB, achievementdb);
+        servletContextEvent.getServletContext().setAttribute(Database.HISTORY_DB, historydb);
     }
 
     @Override

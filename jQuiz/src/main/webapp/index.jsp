@@ -18,7 +18,7 @@
         </div>
         <nav class="main-nav">
             <ul>
-                <li><a href="">Home</a></li>
+                <li><a href="/index.jsp">Home</a></li>
                 <li><a href="/users.jsp">Users</a></li>
                 <li><a href="/achievements.jsp">Achievements</a></li>
                 <li><a href="/categories.jsp">Categories</a></li>

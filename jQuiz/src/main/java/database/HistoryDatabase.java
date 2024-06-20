@@ -22,19 +22,27 @@ public class HistoryDatabase extends Database<History> {
     }
     @Override
     public int add(History toAdd) throws SQLException, ClassNotFoundException {
-        String query = String.format("INSERT INTO %s ( %s, %s, %s, %s, %s ) VALUES ( %d, %d, %d, %s, %d )", databaseName,
-                USER_ID, QUIZ_ID, GRADE, COMPLETED_AT, WRITING_TIME,
-                toAdd.getUserId(), toAdd.getQuizId(), toAdd.getGrade(), toAdd.getCompletedAt(), toAdd.getWritingTime());
+        String query = String.format(
+                "INSERT INTO %s ( %s, %s, %s, %s, %s ) " +
+                        "VALUES ( ?, ?, ?, ?, ? );", databaseName,
+                USER_ID, QUIZ_ID, GRADE, COMPLETED_AT, WRITING_TIME);
         Connection con = getConnection();
         PreparedStatement statement = getStatement(query,con);
+        statement.setInt(1,toAdd.getUserId());
+        statement.setInt(2,toAdd.getQuizId());
+        statement.setInt(3,toAdd.getGrade());
+        statement.setDate(4, new java.sql.Date(toAdd.getCompletedAt().getTime()));
+        statement.setInt(5, toAdd.getWritingTime());
+
         int affectedRows = statement.executeUpdate();
         if(affectedRows == 0){
             throw new SQLException("Creating row failed");
         }
         try(ResultSet keys = statement.getGeneratedKeys()){
             if(keys.next()){
+                int res = keys.getInt(1);
                 con.close();
-                return keys.getInt(1);
+                return res;
             }else{
                 throw new SQLException("Creating row failed");
             }
