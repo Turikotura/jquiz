@@ -28,7 +28,7 @@ public class QuizInfoServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws ServletException, IOException {
-        String username = httpServletRequest.getParameter("curUser");
+        String username = (String) httpServletRequest.getSession().getAttribute("curUser");
         if(username == null){
             httpServletResponse.sendRedirect("login.jsp");
             return;
@@ -85,6 +85,6 @@ public class QuizInfoServlet extends HttpServlet {
         int attemptId = qac.attemptQuiz(quiz,practice,questionAttemptList);
 
         httpServletRequest.setAttribute("attemptId",attemptId);
-        httpServletResponse.sendRedirect("playQuiz.jsp");
+        httpServletResponse.sendRedirect("playQuiz.jsp?attemptId="+attemptId);
     }
 }

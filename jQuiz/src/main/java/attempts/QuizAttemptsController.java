@@ -29,6 +29,7 @@ public class QuizAttemptsController {
     public QuizAttemptsController(int userId){
         quizAttempts = new HashMap<>();
         lastId = -1;
+        this.userId = userId;
     }
 
     /**

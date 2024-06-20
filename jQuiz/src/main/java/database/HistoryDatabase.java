@@ -28,12 +28,12 @@ public class HistoryDatabase extends Database<History> {
         Connection con = getConnection();
         PreparedStatement statement = getStatement(query,con);
         int affectedRows = statement.executeUpdate();
-        con.close();
         if(affectedRows == 0){
             throw new SQLException("Creating row failed");
         }
         try(ResultSet keys = statement.getGeneratedKeys()){
             if(keys.next()){
+                con.close();
                 return keys.getInt(1);
             }else{
                 throw new SQLException("Creating row failed");

@@ -36,12 +36,12 @@ public class UserDatabase extends Database<User>{
         statement.setString(5, toAdd.getPassword());
         statement.setString(6, toAdd.getImage());
         int affectedRows = statement.executeUpdate();
-        con.close();
         if(affectedRows == 0){
             throw new SQLException("Creating row failed");
         }
         try(ResultSet keys = statement.getGeneratedKeys()){
             if(keys.next()){
+                con.close();
                 return keys.getInt(1);
             }else{
                 throw new SQLException("Creating row failed");
