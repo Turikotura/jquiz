@@ -1,12 +1,18 @@
+package listeners;
+
 import database.*;
 import models.Achievement;
 import org.apache.commons.dbcp2.BasicDataSource;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
+import javax.servlet.http.HttpServletRequest;
 import javax.xml.crypto.Data;
 
 public class ContextListener implements ServletContextListener {
+    public static <T> T getDatabase(String databaseName, HttpServletRequest req){
+        return (T)req.getServletContext().getAttribute(databaseName);
+    }
     @Override
     public void contextInitialized(ServletContextEvent servletContextEvent) {
         BasicDataSource basicDataSource = new BasicDataSource();

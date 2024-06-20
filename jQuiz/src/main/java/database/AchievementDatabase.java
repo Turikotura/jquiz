@@ -4,6 +4,7 @@ import models.Achievement;
 import org.apache.commons.dbcp2.BasicDataSource;
 
 import javax.xml.crypto.Data;
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -29,8 +30,10 @@ public class AchievementDatabase extends Database<Achievement> {
     public int add(Achievement achievement) throws SQLException, ClassNotFoundException {
         String query = String.format("INSERT INTO achievements (%s, %s, %s) VALUES ('%s', '%s', '%s')",
                 NAME, DESCRIPTION, IMAGE, achievement.getName(), achievement.getDescription(), achievement.getImage());
-        PreparedStatement statement = this.getStatement(query);
+        Connection con = getConnection();
+        PreparedStatement statement = this.getStatement(query,con);
         int affectedRows = statement.executeUpdate();
+        con.close();
         if(affectedRows == 0){
             throw new SQLException("Creating row failed");
         }
@@ -56,6 +59,6 @@ public class AchievementDatabase extends Database<Achievement> {
     public List<Achievement> getAchievementsByUserId(int userId) throws SQLException, ClassNotFoundException {
         String query = String.format("SELECT a.%s, a.%s, a.%s, a.%s, au.%s, au.%s FROM %s a JOIN %s au ON a.%s = au.%s WHERE au.%s = %d;",
                 ID, NAME, DESCRIPTION, IMAGE, USER_ID, ACQUIRE_DATE, databaseName, Database.ACH_TO_USR_DB, ID, ACH_ID, USER_ID, userId);
-        return queryToList(query);
+        return queryToList(query,getConnection());
     }
 }

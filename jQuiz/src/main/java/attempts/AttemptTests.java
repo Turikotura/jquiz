@@ -62,7 +62,7 @@ public class AttemptTests extends TestCase {
             quizzes.add(q);
             List<QuestionAttempt> qas = createQuestionAttempts(i,3);
             questionLists.add(qas);
-            QuizAttempt qa = new QuizAttempt(i,q,qas);
+            QuizAttempt qa = new QuizAttempt(i,q,true,qas);
             res.add(qa);
             quizzAttempts.add(qa);
         }
@@ -212,7 +212,7 @@ public class AttemptTests extends TestCase {
         assertEquals(quizzes.get(0).getThumbnail(), quizzAttempts.get(0).getThumbnail());
         assertEquals(quizzes.get(0).getShowAll(), quizzAttempts.get(0).getShowAll());
         assertEquals(quizzes.get(0).getAutoCorrect(), quizzAttempts.get(0).getAutoCorrect());
-        assertEquals(quizzes.get(0).getAllowPractice(), quizzAttempts.get(0).getAllowPractice());
+        assertTrue(quizzAttempts.get(0).getIsPractice());
         assertEquals(quizzes.get(0).getDescription(), quizzAttempts.get(0).getDescription());
         assertEquals(0, quizzAttempts.get(0).getOnQuestionIndex());
         quizzAttempts.get(0).setOnQuestionIndex(2);
@@ -256,9 +256,12 @@ public class AttemptTests extends TestCase {
         assertEquals(0, quizzAttempts.get(1).evaluateQuiz());
     }
     public void testQuizAttemptController(){
+        // Basic tests
+        assertEquals(0, qac.getUserId());
+
         // Attempting quiz
-        int id1 = qac.attemptQuiz(quizzes.get(0), questionLists.get(0));
-        int id2 =  qac.attemptQuiz(quizzes.get(1), questionLists.get(1));
+        int id1 = qac.attemptQuiz(quizzes.get(0), false, questionLists.get(0));
+        int id2 =  qac.attemptQuiz(quizzes.get(1), false, questionLists.get(1));
 
         List<Integer> ids = qac.getAttemptIds();
         assertEquals(new HashSet<>(Arrays.asList(id1,id2)), new HashSet<>(ids));
@@ -294,7 +297,7 @@ public class AttemptTests extends TestCase {
         assertEquals(new HashSet<>(Arrays.asList(id2)), new HashSet<>(ids));
 
         // Attempting new quiz
-        int id3 = qac.attemptQuiz(quizzes.get(2),questionLists.get(2));
+        int id3 = qac.attemptQuiz(quizzes.get(2),false,questionLists.get(2));
         ids = qac.getAttemptIds();
         assertEquals(new HashSet<>(Arrays.asList(id3,id2)), new HashSet<>(ids));
 
@@ -309,11 +312,11 @@ public class AttemptTests extends TestCase {
 
         // Check shuffled
         int i = 0;
-        int newId = qac.attemptQuiz(quizzes.get(2),questionLists.get(2));
+        int newId = qac.attemptQuiz(quizzes.get(2),false,questionLists.get(2));
         qa = qac.getQuizAttemptById(newId);
         while (i < 100 && qa.getQuestions().get(0).getQuestion().getText().equals("question 6")){
             qac.finishQuiz(newId);
-            newId = qac.attemptQuiz(quizzes.get(2),questionLists.get(2));
+            newId = qac.attemptQuiz(quizzes.get(2),false,questionLists.get(2));
             qa = qac.getQuizAttemptById(newId);
             i++;
         }

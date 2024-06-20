@@ -4,6 +4,7 @@ import models.Mail;
 import models.MailTypes;
 import org.apache.commons.dbcp2.BasicDataSource;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -28,8 +29,10 @@ public class MailDatabase extends Database<Mail> {
         String query = String.format("INSERT INTO %s ( %s, %s, %s, %s, %s, %s ) VALUES ( %d, %d, %d, %d, '%s', %s)", databaseName,
                 RECEIVER_ID, SENDER_ID, TYPE, QUIZ_ID, TEXT, TIME_SENT,
                 toAdd.getReceiverId(), toAdd.getSenderId(), toAdd.getType().ordinal(), toAdd.getQuizId(), toAdd.getText(), toAdd.getTimeSent());
-        PreparedStatement statement = getStatement(query);
+        Connection con = getConnection();
+        PreparedStatement statement = getStatement(query,con);
         int affectedRows = statement.executeUpdate();
+        con.close();
         if(affectedRows == 0){
             throw new SQLException("Creating row failed");
         }
@@ -57,6 +60,6 @@ public class MailDatabase extends Database<Mail> {
     public List<Mail> getMailsByUserId(int userId, String sendOrReceive) throws SQLException, ClassNotFoundException {
         String query = String.format("SELECT * FROM %s WHERE %s = %d",
                 databaseName, (Objects.equals(sendOrReceive, "SEND") ? SENDER_ID : RECEIVER_ID), userId);
-        return queryToList(query);
+        return queryToList(query,getConnection());
     }
 }

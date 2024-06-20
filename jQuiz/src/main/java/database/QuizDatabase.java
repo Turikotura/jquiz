@@ -3,10 +3,7 @@ package database;
 import models.Quiz;
 import org.apache.commons.dbcp2.BasicDataSource;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Timestamp;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,7 +32,8 @@ public class QuizDatabase extends Database<Quiz>{
                 "INSERT INTO quizzes (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s) " +
                         "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);",
                 TITLE, AUTHOR_ID, CREATED_AT, TIME, THUMBNAIL, SHOULD_MIX_UP, SHOW_ALL, AUTO_CORRECT, ALLOW_PRACTICE, DESCRIPTION);
-        PreparedStatement statement = this.getStatement(query);
+        Connection con = getConnection();
+        PreparedStatement statement = this.getStatement(query,con);
         statement.setString(1, quiz.getTitle());
         statement.setInt(2, quiz.getAuthorId());
         statement.setTimestamp(3, new Timestamp(System.currentTimeMillis()));
@@ -48,6 +46,7 @@ public class QuizDatabase extends Database<Quiz>{
         statement.setString(10, quiz.getDescription());
 
         int affectedRows = statement.executeUpdate();
+        con.close();
         if(affectedRows == 0){
             throw new SQLException("Creating row failed");
         }
@@ -83,23 +82,23 @@ public class QuizDatabase extends Database<Quiz>{
     public List<Quiz> getQuizzesByAuthorId(int authorId) throws SQLException, ClassNotFoundException {
         String query = String.format("SELECT * FROM %s WHERE %s = %d",
                 databaseName, AUTHOR_ID, authorId);
-        return queryToList(query);
+        return queryToList(query,getConnection());
     }
     
     public Quiz getQuizById(int quizId) throws SQLException, ClassNotFoundException {
         String query = String.format("SELECT * FROM %s WHERE %s = %d",
                 databaseName,ID,quizId);
-        return queryToList(query).get(0);
+        return queryToList(query,getConnection()).get(0);
     }
 
     public List<Quiz> getPopularQuizzes(int k, String totalOrLastMonth) throws SQLException, ClassNotFoundException {
         String query = String.format("SELECT * FROM %s ORDER BY " + (totalOrLastMonth == "LAST_MONTH" ? LAST_MONTH_PLAY_COUNT : TOTAL_PLAY_COUNT) + " DESC LIMIT %d;",
                 Database.QUIZ_DB,k);
-        return queryToList(query);
+        return queryToList(query,getConnection());
     }
     public List<Quiz> getRecentlyCreatedQuizzes(int k) throws SQLException, ClassNotFoundException {
         String query = String.format("SELECT * FROM %s ORDER BY %s DESC LIMIT %d",
                 databaseName, CREATED_AT, k);
-        return queryToList(query);
+        return queryToList(query,getConnection());
     }
 }

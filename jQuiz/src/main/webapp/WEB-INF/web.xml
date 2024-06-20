@@ -7,10 +7,10 @@
   <display-name>Archetype Created Web Application</display-name>
 
   <listener>
-    <listener-class>ContextListener</listener-class>
+    <listener-class>listeners.ContextListener</listener-class>
   </listener>
   <listener>
-    <listener-class>SessionListener</listener-class>
+    <listener-class>listeners.SessionListener</listener-class>
   </listener>
 
   <servlet>
@@ -29,6 +29,10 @@
     <servlet-name>CreateQuiz</servlet-name>
     <servlet-class>servlets.CreateQuizServlet</servlet-class>
   </servlet>
+  <servlet>
+    <servlet-name>QuizInfo</servlet-name>
+    <servlet-class>servlets.QuizInfoServlet</servlet-class>
+  </servlet>
 
   <servlet-mapping>
     <servlet-name>FrontPageServlet</servlet-name>
@@ -45,5 +49,9 @@
   <servlet-mapping>
     <servlet-name>CreateQuiz</servlet-name>
     <url-pattern>/CreateQuiz</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>QuizInfo</servlet-name>
+    <url-pattern>/QuizInfo</url-pattern>
   </servlet-mapping>
 </web-app>

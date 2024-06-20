@@ -69,9 +69,17 @@
     <h3><%="Time Limit: " + curQuiz.getMaxTime() + " minutes"%></h3>
     <p><%=curQuiz.getDescription()%></p>
     <% if(curQuiz.getAllowPractice()) { %>
-        <a href = "playQuiz.jsp?practice=true&quizId=<%=curQuiz.getId()%>"><button type="button">Practice</button></a>
+    <form action="QuizInfo" method="post">
+        <input name="practice" type="hidden" value="true">
+        <input name="quizId" type="hidden" value="<%=curQuiz.getId()%>">
+        <input type="submit" value="Practice">
+    </form>
     <% } %>
-    <a href = "playQuiz.jsp?practice=false&quizId=<%=curQuiz.getId()%>"><button type="button">Start Quiz</button></a>
+    <form action="QuizInfo" method="post">
+        <input name="practice" type="hidden" value="false">
+        <input name="quizId" type="hidden" value="<%=curQuiz.getId()%>">
+        <input type="submit" value="Start Quiz">
+    </form>
 
     <div class="quiz-list-wrapper">
         <h2>Quizzes by the same author:</h2>

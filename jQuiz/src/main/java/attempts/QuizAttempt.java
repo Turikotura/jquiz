@@ -15,7 +15,7 @@ public class QuizAttempt {
     private byte[] thumbnail;
     private boolean showAll;
     private boolean autoCorrect;
-    private boolean allowPractice;
+    private boolean isPractice;
     private String description;
     private int maxScore;
     private List<QuestionAttempt> questions;
@@ -27,7 +27,7 @@ public class QuizAttempt {
      * @param quiz - quiz information
      * @param questions - quiz questions
      */
-    public QuizAttempt(int id, Quiz quiz, List<QuestionAttempt> questions){
+    public QuizAttempt(int id, Quiz quiz, boolean isPractice, List<QuestionAttempt> questions){
         this.id = id;
         this.quizId = quiz.getId();
         this.title = quiz.getTitle();
@@ -37,7 +37,7 @@ public class QuizAttempt {
         this.thumbnail = quiz.getThumbnail();
         this.showAll = quiz.getShowAll();
         this.autoCorrect = quiz.getAutoCorrect();
-        this.allowPractice = quiz.getAllowPractice();
+        this.isPractice = isPractice;
         this.description = quiz.getDescription();
         this.onQuestionIndex = 0;
 
@@ -56,7 +56,7 @@ public class QuizAttempt {
     public byte[] getThumbnail() {return thumbnail;}
     public boolean getShowAll() {return showAll;}
     public boolean getAutoCorrect() {return autoCorrect;}
-    public boolean getAllowPractice() {return allowPractice;}
+    public boolean getIsPractice() {return isPractice;}
     public String getDescription() {return description;}
     public int getOnQuestionIndex() {return onQuestionIndex;}
     public List<QuestionAttempt> getQuestions() {return questions;}

@@ -129,9 +129,9 @@ public final class ContextListener
     private void log(String message) {
 
         if (context != null)
-            context.log("ContextListener: " + message);
+            context.log("listeners.ContextListener: " + message);
         else
-            System.out.println("ContextListener: " + message);
+            System.out.println("listeners.ContextListener: " + message);
 
     }
 

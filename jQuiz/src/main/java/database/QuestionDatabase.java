@@ -4,6 +4,7 @@ import models.Question;
 import models.QuestionTypes;
 import org.apache.commons.dbcp2.BasicDataSource;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -28,13 +29,15 @@ public class QuestionDatabase extends Database<Question> {
     @Override
     public int add(Question question) throws SQLException, ClassNotFoundException {
         String query = "INSERT INTO questions (QUESTION_TYPE, TEXT, QUIZ_ID, IMAGE, SCORE) VALUES (?, ?, ?, ?, ?)";
-        PreparedStatement statement = this.getStatement(query);
+        Connection con = getConnection();
+        PreparedStatement statement = this.getStatement(query,con);
         statement.setInt(1, question.getQuestionType().ordinal());
         statement.setString(2, question.getText());
         statement.setInt(3, question.getQuizId());
         statement.setBytes(4, question.getImage());
         statement.setInt(5, question.getScore());
         int affectedRows = statement.executeUpdate();
+        con.close();
         if(affectedRows == 0){
             throw new SQLException("Creating row failed");
         }
@@ -64,18 +67,20 @@ public class QuestionDatabase extends Database<Question> {
     public List<Integer> getQuestionIdsByQuizId(int quizId) throws SQLException, ClassNotFoundException {
         String query = String.format("SELECT %s FROM %s WHERE %s = %d;", ID,
                 this.databaseName, QUIZ_ID, quizId);
-        PreparedStatement statement = this.getStatement(query);
+        Connection con = getConnection();
+        PreparedStatement statement = this.getStatement(query,con);
         ResultSet rs = statement.executeQuery();
 
         List<Integer> questionIds = new ArrayList<>();
         while (rs.next()) {
             questionIds.add(rs.getInt(ID));
         }
+        con.close();
         return questionIds;
     }
     public List<Question> getQuestionsByQuizId(int quizId) throws SQLException, ClassNotFoundException {
         String query = String.format("SELECT * FROM %s WHERE %s = %d",
                 databaseName, QUIZ_ID, quizId);
-        return queryToList(query);
+        return queryToList(query,getConnection());
     }
 }

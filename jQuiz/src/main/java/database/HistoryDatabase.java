@@ -3,6 +3,7 @@ package database;
 import models.History;
 import org.apache.commons.dbcp2.BasicDataSource;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -24,8 +25,10 @@ public class HistoryDatabase extends Database<History> {
         String query = String.format("INSERT INTO %s ( %s, %s, %s, %s, %s ) VALUES ( %d, %d, %d, %s, %d )", databaseName,
                 USER_ID, QUIZ_ID, GRADE, COMPLETED_AT, WRITING_TIME,
                 toAdd.getUserId(), toAdd.getQuizId(), toAdd.getGrade(), toAdd.getCompletedAt(), toAdd.getWritingTime());
-        PreparedStatement statement = getStatement(query);
+        Connection con = getConnection();
+        PreparedStatement statement = getStatement(query,con);
         int affectedRows = statement.executeUpdate();
+        con.close();
         if(affectedRows == 0){
             throw new SQLException("Creating row failed");
         }
@@ -52,33 +55,33 @@ public class HistoryDatabase extends Database<History> {
     public List<History> getHistoryByUserId(int userId) throws SQLException, ClassNotFoundException {
         String query = String.format("SELECT * FROM %s WHERE %s = %d",
                 databaseName, USER_ID, userId);
-        return queryToList(query);
+        return queryToList(query,getConnection());
     }
     public History getLastHistoryByUserId(int userId) throws SQLException, ClassNotFoundException {
         String query = String.format("SELECT * FROM %s h WHERE h.%s = %d AND h.%s = (SELECT max(hi.%s) FROM %s hi WHERE hi.%s = %d)",
                 databaseName, USER_ID, userId, COMPLETED_AT, COMPLETED_AT, databaseName, USER_ID, userId);
-        ResultSet rsHistories = getResultSet(query);
+        ResultSet rsHistories = getResultSet(query,getConnection());
         rsHistories.next();
         return getItemFromResultSet(rsHistories);
     }
     public List<History> getHistoryByUserAndQuizId(int userId, int quizId) throws SQLException, ClassNotFoundException {
         String query = String.format("SELECT * FROM %s WHERE %s = %d AND %s = %d",
                 databaseName, USER_ID, userId, QUIZ_ID, quizId);
-        return queryToList(query);
+        return queryToList(query,getConnection());
     }
     public List<History> getLatestHistories(int k) throws SQLException, ClassNotFoundException {
         String query = String.format("SELECT * FROM %s ORDER BY %s DESC LIMIT %d",
                 databaseName, COMPLETED_AT, k);
-        return queryToList(query);
+        return queryToList(query,getConnection());
     }
     public List<History> getHistoryByQuizId(int quizId) throws SQLException, ClassNotFoundException {
         String query = String.format("SELECT * FROM %s WHERE %s = %d",
                 databaseName, QUIZ_ID, quizId);
-        return queryToList(query);
+        return queryToList(query,getConnection());
     }
     public List<History> getLatestHistoriesByUserId(int userId, int k) throws SQLException, ClassNotFoundException {
         String query = String.format("SELECT * FROM %s WHERE %s = %d ORDER BY %s DESC LIMIT %d",
                 databaseName, USER_ID, userId, COMPLETED_AT, k);
-        return queryToList(query);
+        return queryToList(query,getConnection());
     }
 }
