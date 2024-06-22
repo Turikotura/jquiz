@@ -34,6 +34,9 @@
     QuizAttemptsController qac = getQuizAttemptsController(userId,request);
     QuizAttempt quizAttempt = qac.getQuizAttemptById(attemptId);
 %>
+<%
+    if(quizAttempt != null){
+%>
 <head>
     <title><%=quizAttempt.getTitle()%></title>
     <link href="index.css" rel="stylesheet" type="text/css">
@@ -72,9 +75,6 @@
 </header>
 
 <main>
-    <%
-        if(quizAttempt != null){
-    %>
     <img src="<%=quizAttempt.getThumbnail()%>">
     <h1><%=quizAttempt.getTitle()%></h1>
     <h3><%=quizAttempt.getStartTime()%></h3>
@@ -162,13 +162,6 @@
         <br>
         <input id="quiz-submit-button" type="submit" value="Submit">
     </form>
-    <%
-        }else{
-    %>
-    <p>Couldn't find quiz attempt</p>
-    <%
-        }
-    %>
 </main>
 
 <script>
@@ -197,6 +190,12 @@
         }
     }
 </script>
-
+<%
+    }else{
+%>
+<p>no quiz attempt</p>
+<%
+    }
+%>
 </body>
 </html>
