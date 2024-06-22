@@ -38,8 +38,9 @@ public class AchievementDatabase extends Database<Achievement> {
         }
         try(ResultSet keys = statement.getGeneratedKeys()){
             if(keys.next()){
+                int res = keys.getInt(1);
                 con.close();
-                return keys.getInt(1);
+                return res;
             }else{
                 throw new SQLException("Creating row failed");
             }
