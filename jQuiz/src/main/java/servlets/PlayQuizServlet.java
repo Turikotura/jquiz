@@ -6,6 +6,7 @@ import attempts.QuizAttemptsController;
 import database.HistoryDatabase;
 import models.History;
 import models.Question;
+import models.QuestionTypes;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -36,9 +37,20 @@ public class PlayQuizServlet extends HttpServlet {
         for(int i = 0; i < quizAttempt.getQuestions().size(); i++){
             QuestionAttempt questionAttempt = quizAttempt.getQuestions().get(i);
             List<String> answers = new ArrayList<>();
-            for(int j = 0; j < questionAttempt.getCorrectAnswersAmount(); j++){
-                String answer = httpServletRequest.getParameter(String.format("%d-%d",i,j));
-                answers.add(answer);
+            if(questionAttempt.getQuestion().getQuestionType() == QuestionTypes.MULTIPLE_CHOICE){
+                answers.add(httpServletRequest.getParameter(String.format("%d",i)));
+            }else if(questionAttempt.getQuestion().getQuestionType() == QuestionTypes.MULTI_ANS_MULTI_CHOICE){
+                String[] ansPars = httpServletRequest.getParameterValues(String.format("%d",i));
+                if(ansPars != null){
+                    for(int j = 0; j < ansPars.length; j++){
+                        answers.add(ansPars[j]);
+                    }
+                }
+            }else{
+                for(int j = 0; j < questionAttempt.getCorrectAnswersAmount(); j++){
+                    String answer = httpServletRequest.getParameter(String.format("%d-%d",i,j));
+                    answers.add(answer);
+                }
             }
             quizAttempt.getQuestions().get(i).setWrittenAnswers(answers);
         }
@@ -55,6 +67,7 @@ public class PlayQuizServlet extends HttpServlet {
             throw new RuntimeException(e);
         }
 
-        httpServletResponse.sendRedirect("quizInfo.jsp?quizId="+quizAttempt.getQuizId());
+        //httpServletResponse.sendRedirect("quizInfo.jsp?quizId="+quizAttempt.getQuizId());
+        httpServletResponse.sendRedirect("quizResult.jsp?userId="+userId+"&quizId="+quizAttempt.getQuizId());
     }
 }

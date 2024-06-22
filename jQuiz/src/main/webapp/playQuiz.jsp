@@ -72,6 +72,9 @@
 </header>
 
 <main>
+    <%
+        if(quizAttempt != null){
+    %>
     <img src="<%=quizAttempt.getThumbnail()%>">
     <h1><%=quizAttempt.getTitle()%></h1>
     <h3><%=quizAttempt.getStartTime()%></h3>
@@ -88,15 +91,29 @@
     <h4>Max Score : <%=quizAttempt.getMaxScore()%> pts</h4>
     <hr>
 
+    <div id="question-list">
+        <%
+            for(int i = 0; i < quizAttempt.getQuestions().size(); i++){
+        %>
+            <button onclick="scrollToDiv(<%=i%>)"><%=i%></button>
+        <%
+            }
+        %>
+    </div>
+
     <form action="PlayQuiz" method="post">
         <input name="userId" type="hidden" value="<%=userId%>">
         <input name="quizAttemptId" type="hidden" value="<%=attemptId%>">
     <%
         for(int i = 0; i < quizAttempt.getQuestions().size(); i++){
             QuestionAttempt questionAttempt = quizAttempt.getQuestions().get(i);
+            String active = "";
+            if(quizAttempt.getShowAll() || i == quizAttempt.getOnQuestionIndex()){
+                active = "active";
+            }
     %>
 
-        <div class="question-box">
+        <div id="<%=i%>" class="question-box <%=active%>">
 
             <%
                 if(questionAttempt.getQuestion().getQuestionType() == QuestionTypes.PIC_RESPONSE){
@@ -112,11 +129,30 @@
             <hr>
             <br>
 
+
             <%
-                for(int j = 0; j < questionAttempt.getCorrectAnswersAmount(); j++){
+                if(questionAttempt.getQuestion().getQuestionType() == QuestionTypes.MULTIPLE_CHOICE){
+                    for(int j = 0; j < questionAttempt.getAnswers().size(); j++){
+            %>
+            <input name="<%=i%>" id="<%=i%>-<%=j%>" type="radio" value="<%=questionAttempt.getAnswers().get(j).getText()%>">
+            <label for="<%=i%>-<%=j%>"> <%=questionAttempt.getAnswers().get(j).getText()%></label><br>
+            <%
+                    }
+                }
+                else if(questionAttempt.getQuestion().getQuestionType() == QuestionTypes.MULTI_ANS_MULTI_CHOICE){
+                    for(int j = 0; j < questionAttempt.getAnswers().size(); j++){
+            %>
+            <input name="<%=i%>" id="<%=i%>-<%=j%>" type="checkbox" value="<%=questionAttempt.getAnswers().get(j).getText()%>">
+            <label for="<%=i%>-<%=j%>"> <%=questionAttempt.getAnswers().get(j).getText()%></label><br>
+            <%
+                    }
+                }
+                else{
+                    for(int j = 0; j < questionAttempt.getCorrectAnswersAmount(); j++){
             %>
             <input name="<%=i%>-<%=j%>" type="text">
             <%
+                    }
                 }
             %>
         </div>
@@ -126,7 +162,41 @@
         <br>
         <input id="quiz-submit-button" type="submit" value="Submit">
     </form>
+    <%
+        }else{
+    %>
+    <p>Couldn't find quiz attempt</p>
+    <%
+        }
+    %>
 </main>
+
+<script>
+    function scrollToDiv(sectionId) {
+        <%
+            if(!quizAttempt.getShowAll()) {
+        %>
+        // Hide all divs
+        var divs = document.querySelectorAll('.question-box');
+        divs.forEach(function(div) {
+            div.classList.remove('active');
+        });
+
+        // Show the selected div
+        var selectedDiv = document.getElementById(sectionId);
+        if (selectedDiv) {
+            selectedDiv.classList.add('active');
+        }
+        <%
+            }
+        %>
+
+        var element = document.getElementById(sectionId);
+        if (element) {
+            element.scrollIntoView({ behavior: 'smooth' });
+        }
+    }
+</script>
 
 </body>
 </html>

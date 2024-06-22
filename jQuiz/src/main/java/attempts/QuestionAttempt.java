@@ -2,11 +2,9 @@ package attempts;
 
 import models.Answer;
 import models.Question;
+import models.QuestionTypes;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class QuestionAttempt {
     private Question question;
@@ -24,9 +22,15 @@ public class QuestionAttempt {
         this.question = question;
         this.writtenAnswers = new ArrayList<>();
         this.answers = answers;
+        Collections.shuffle(this.answers);
         this.maxScore = question.getScore();
 
-        Set<Answer> corAns = new HashSet<>(answers);
+        Set<Answer> corAns = new HashSet<>();
+        for(Answer answer : this.answers){
+            if(answer.getIsCorrect()){
+                corAns.add(answer);
+            }
+        }
         correctAnswersAmount = corAns.size();
     }
 
@@ -48,13 +52,23 @@ public class QuestionAttempt {
      */
     public int evaluateAnswers(){
         Set<Answer> corAns = new HashSet<>();
+        int wrongAnswers = 0;
         for(String wrAns : writtenAnswers){
+            boolean isRight = false;
             for(Answer ans : answers){
                 if(ans.equals(wrAns) && ans.getIsCorrect()){
                     corAns.add(ans);
+                    isRight = true;
                 }
             }
+            if(!isRight){
+                wrongAnswers++;
+            }
         }
-        return maxScore * corAns.size() / correctAnswersAmount;
+        int correctAnswers = corAns.size();
+        if(question.getQuestionType() == QuestionTypes.MULTI_ANS_MULTI_CHOICE){
+            correctAnswers = Math.max(0, correctAnswers-wrongAnswers);
+        }
+        return maxScore * correctAnswers / correctAnswersAmount;
     }
 }

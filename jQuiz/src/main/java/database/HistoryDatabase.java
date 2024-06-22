@@ -31,7 +31,7 @@ public class HistoryDatabase extends Database<History> {
         statement.setInt(1,toAdd.getUserId());
         statement.setInt(2,toAdd.getQuizId());
         statement.setInt(3,toAdd.getGrade());
-        statement.setDate(4, new java.sql.Date(toAdd.getCompletedAt().getTime()));
+        statement.setTimestamp(4, new java.sql.Timestamp(toAdd.getCompletedAt().getTime()));
         statement.setInt(5, toAdd.getWritingTime());
 
         int affectedRows = statement.executeUpdate();
@@ -68,6 +68,13 @@ public class HistoryDatabase extends Database<History> {
     public History getLastHistoryByUserId(int userId) throws SQLException, ClassNotFoundException {
         String query = String.format("SELECT * FROM %s h WHERE h.%s = %d AND h.%s = (SELECT max(hi.%s) FROM %s hi WHERE hi.%s = %d)",
                 databaseName, USER_ID, userId, COMPLETED_AT, COMPLETED_AT, databaseName, USER_ID, userId);
+        ResultSet rsHistories = getResultSet(query,getConnection());
+        rsHistories.next();
+        return getItemFromResultSet(rsHistories);
+    }
+    public History getLastHistoryByUserAndQuizId(int userId, int quizId) throws SQLException, ClassNotFoundException {
+        String query = String.format("SELECT * FROM %s h WHERE h.%s = %d AND h.%s = %d AND h.%s = (SELECT max(hi.%s) FROM %s hi WHERE hi.%s = %d AND hi.%s = %d)",
+                databaseName, USER_ID, userId, QUIZ_ID, quizId, COMPLETED_AT, COMPLETED_AT, databaseName, USER_ID, userId, QUIZ_ID, quizId);
         ResultSet rsHistories = getResultSet(query,getConnection());
         rsHistories.next();
         return getItemFromResultSet(rsHistories);
