@@ -55,7 +55,7 @@ public class QuizInfoServlet extends HttpServlet {
 
         Quiz quiz;
         try {
-            quiz = quizdb.getQuizById(quizId);
+            quiz = quizdb.getById(quizId);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } catch (ClassNotFoundException e) {

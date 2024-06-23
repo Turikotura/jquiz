@@ -82,6 +82,6 @@ public class QuestionDatabase extends Database<Question> {
     public List<Question> getQuestionsByQuizId(int quizId) throws SQLException, ClassNotFoundException {
         String query = String.format("SELECT * FROM %s WHERE %s = %d",
                 databaseName, QUIZ_ID, quizId);
-        return queryToList(query,getConnection());
+        return queryToList(query);
     }
 }

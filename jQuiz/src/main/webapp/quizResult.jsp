@@ -38,7 +38,7 @@
     List<History> friendHistories = new ArrayList<History>();
     try {
         lastHistory = historydb.getLastHistoryByUserAndQuizId(userId, quizId);
-        quiz = quizdb.getQuizById(lastHistory.getQuizId());
+        quiz = quizdb.getById(lastHistory.getQuizId());
         questionList = questiondb.getQuestionsByQuizId(quiz.getId());
         for (Question question : questionList) {
             totalScore += question.getScore();

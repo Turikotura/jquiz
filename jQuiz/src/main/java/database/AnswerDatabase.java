@@ -74,6 +74,6 @@ public class AnswerDatabase extends Database<Answer> {
     public List<Answer> getAnswersByQuestionId(int questionId) throws SQLException, ClassNotFoundException {
         String query = String.format("SELECT * FROM %s WHERE %s = %d;",
                 databaseName, QUESTION_ID, questionId);
-        return queryToList(query,getConnection());
+        return queryToList(query);
     }
 }

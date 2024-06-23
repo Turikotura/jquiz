@@ -29,15 +29,12 @@ public abstract class Database<T> {
     }
 
     public List<T> getAll() throws ClassNotFoundException, SQLException {
-        return queryToList("SELECT * FROM " + databaseName, getConnection());
+        return queryToList("SELECT * FROM " + databaseName);
     }
     public T getById(int id) throws SQLException, ClassNotFoundException {
-        Connection con = getConnection();
-        ResultSet rs = getResultSet("SELECT * FROM " + databaseName + " WHERE id = " + id,con);
-        rs.next();
-        T res = getItemFromResultSet(rs);
-        con.close();
-        return res;
+        String query = String.format("SELECT * FROM %s WHERE id = %d;",
+                databaseName, id);
+        return queryToElement(query);
     }
     public boolean removeById(int id) throws SQLException, ClassNotFoundException {
         Connection con = getConnection();
@@ -68,12 +65,22 @@ public abstract class Database<T> {
         Connection con = dataSource.getConnection();
         return con;
     }
-    protected List<T> queryToList(String query, Connection con) throws SQLException, ClassNotFoundException {
+    protected List<T> queryToList(String query) throws SQLException, ClassNotFoundException {
         List<T> res = new ArrayList<>();
+        Connection con = getConnection();
         ResultSet rs = getResultSet(query, con);
         while(rs.next()){
             res.add(getItemFromResultSet(rs));
         }
+        con.close();
+        return res;
+    }
+    protected T queryToElement(String query) throws SQLException, ClassNotFoundException {
+        T res = null;
+        Connection con = getConnection();
+        ResultSet rs = getResultSet(query,con);
+        rs.next();
+        res = getItemFromResultSet(rs);
         con.close();
         return res;
     }

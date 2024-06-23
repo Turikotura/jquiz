@@ -60,6 +60,6 @@ public class AchievementDatabase extends Database<Achievement> {
     public List<Achievement> getAchievementsByUserId(int userId) throws SQLException, ClassNotFoundException {
         String query = String.format("SELECT a.%s, a.%s, a.%s, a.%s, au.%s, au.%s FROM %s a JOIN %s au ON a.%s = au.%s WHERE au.%s = %d;",
                 ID, NAME, DESCRIPTION, IMAGE, USER_ID, ACQUIRE_DATE, databaseName, Database.ACH_TO_USR_DB, ID, ACH_ID, USER_ID, userId);
-        return queryToList(query,getConnection());
+        return queryToList(query);
     }
 }

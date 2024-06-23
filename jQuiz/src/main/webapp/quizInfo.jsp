@@ -20,7 +20,7 @@
     Quiz curQuiz = null;
     User author = null;
     try {
-        curQuiz = quizDB.getQuizById(quizId);
+        curQuiz = quizDB.getById(quizId);
         author = userDB.getById(curQuiz.getAuthorId());
     } catch (SQLException e) {
         throw new RuntimeException(e);

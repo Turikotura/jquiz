@@ -66,7 +66,7 @@ public class UserDatabase extends Database<User>{
     public List<User> getFriendsByUserId(int userId) throws SQLException, ClassNotFoundException {
         String query = String.format("SELECT * FROM %s WHERE %s = %d",
                 Database.FRIEND_DB, USER1_ID, userId);
-        return queryToList(query,getConnection());
+        return queryToList(query);
     }
 
     public List<User> getHighestPerformers(int k, String fromLastDay) throws SQLException, ClassNotFoundException {
@@ -80,36 +80,18 @@ public class UserDatabase extends Database<User>{
                 queryAddition,
                 ID, USERNAME, IS_ADMIN, CREATED_AT, EMAIL, PASSWORD, IMAGE,
                 k);
-        return queryToList(query,getConnection());
+        return queryToList(query);
     }
 
     public User getByUsername(String username) throws SQLException, ClassNotFoundException {
         String query = String.format("SELECT * FROM %s WHERE %s = '%s';",
                 Database.USER_DB,USERNAME,username);
-        Connection con = getConnection();
-        ResultSet usersFound = getResultSet(query,con);
-        User res = null;
-        if(usersFound.next()) res = getItemFromResultSet(usersFound);
-        con.close();
-        return res;
-    }
-    public User getById(int id) throws SQLException, ClassNotFoundException {
-        String query = String.format("SELECT * FROM %s WHERE %s = %d;",
-                Database.USER_DB,ID,id);
-        Connection con = getConnection();
-        ResultSet usersFound = getResultSet(query,con);
-        User res = null;
-        if(usersFound.next()) res = getItemFromResultSet(usersFound);
-        con.close();
-        return res;
+        return queryToElement(query);
     }
 
     public User getByEmail(String email) throws SQLException, ClassNotFoundException {
-        Connection con = getConnection();
-        ResultSet usersFound = getResultSet("SELECT * FROM " + Database.USER_DB + " WHERE " + EMAIL + " = '" + email + "';",con);
-        User res = null;
-        if(usersFound.next()) res = getItemFromResultSet(usersFound);
-        con.close();
-        return res;
+        String query = String.format("SELECT * FROM %s WHERE %s = '%s';",
+                databaseName, EMAIL, email);
+        return queryToElement(query);
     }
 }
