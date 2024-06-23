@@ -3,10 +3,7 @@ package database;
 import models.User;
 import org.apache.commons.dbcp2.BasicDataSource;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Timestamp;
+import java.sql.*;
 import java.util.List;
 
 public class UserDatabase extends Database<User>{
@@ -30,7 +27,8 @@ public class UserDatabase extends Database<User>{
     public int add(User toAdd) throws SQLException, ClassNotFoundException {
         String query = String.format("INSERT INTO %s ( %s, %s, %s, %s, %s, %s ) VALUES ( ?, ?, ?, ?, ?, ?)",
                 databaseName, USERNAME, IS_ADMIN, CREATED_AT, EMAIL, PASSWORD, IMAGE);
-        PreparedStatement statement = getStatement(query);
+        Connection con = getConnection();
+        PreparedStatement statement = getStatement(query,con);
         statement.setString(1, toAdd.getUsername());
         statement.setBoolean(2, toAdd.isAdmin());
         statement.setTimestamp(3, new Timestamp(System.currentTimeMillis()));
@@ -43,7 +41,9 @@ public class UserDatabase extends Database<User>{
         }
         try(ResultSet keys = statement.getGeneratedKeys()){
             if(keys.next()){
-                return keys.getInt(1);
+                int res = keys.getInt(1);
+                con.close();
+                return res;
             }else{
                 throw new SQLException("Creating row failed");
             }
@@ -86,21 +86,12 @@ public class UserDatabase extends Database<User>{
     public User getByUsername(String username) throws SQLException, ClassNotFoundException {
         String query = String.format("SELECT * FROM %s WHERE %s = '%s';",
                 Database.USER_DB,USERNAME,username);
-        ResultSet usersFound = getResultSet(query);
-        if(usersFound.next()) return getItemFromResultSet(usersFound);
-        return null;
-    }
-    public User getById(int id) throws SQLException, ClassNotFoundException {
-        String query = String.format("SELECT * FROM %s WHERE %s = %d;",
-                Database.USER_DB,ID,id);
-        ResultSet usersFound = getResultSet(query);
-        if(usersFound.next()) return getItemFromResultSet(usersFound);
-        return null;
+        return queryToElement(query);
     }
 
     public User getByEmail(String email) throws SQLException, ClassNotFoundException {
-        ResultSet emailsFound = getResultSet("SELECT * FROM " + Database.USER_DB + " WHERE " + EMAIL + " = '" + email + "';");
-        if(emailsFound.next()) return getItemFromResultSet(emailsFound);
-        return null;
+        String query = String.format("SELECT * FROM %s WHERE %s = '%s';",
+                databaseName, EMAIL, email);
+        return queryToElement(query);
     }
 }

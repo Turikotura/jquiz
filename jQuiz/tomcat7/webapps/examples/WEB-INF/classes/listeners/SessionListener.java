@@ -151,9 +151,9 @@ public final class SessionListener implements ServletContextListener,
     private void log(String message) {
 
         if (context != null)
-            context.log("SessionListener: " + message);
+            context.log("listeners.SessionListener: " + message);
         else
-            System.out.println("SessionListener: " + message);
+            System.out.println("listeners.SessionListener: " + message);
 
     }
 

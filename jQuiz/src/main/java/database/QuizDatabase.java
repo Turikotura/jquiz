@@ -3,10 +3,7 @@ package database;
 import models.Quiz;
 import org.apache.commons.dbcp2.BasicDataSource;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Timestamp;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,7 +32,8 @@ public class QuizDatabase extends Database<Quiz>{
                 "INSERT INTO quizzes (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s) " +
                         "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);",
                 TITLE, AUTHOR_ID, CREATED_AT, TIME, THUMBNAIL, SHOULD_MIX_UP, SHOW_ALL, AUTO_CORRECT, ALLOW_PRACTICE, DESCRIPTION);
-        PreparedStatement statement = this.getStatement(query);
+        Connection con = getConnection();
+        PreparedStatement statement = this.getStatement(query,con);
         statement.setString(1, quiz.getTitle());
         statement.setInt(2, quiz.getAuthorId());
         statement.setTimestamp(3, new Timestamp(System.currentTimeMillis()));
@@ -53,7 +51,9 @@ public class QuizDatabase extends Database<Quiz>{
         }
         try(ResultSet keys = statement.getGeneratedKeys()){
             if(keys.next()){
-                return keys.getInt(1);
+                int res = keys.getInt(1);
+                con.close();
+                return res;
             }else{
                 throw new SQLException("Creating row failed");
             }
@@ -89,7 +89,7 @@ public class QuizDatabase extends Database<Quiz>{
     public Quiz getQuizById(int quizId) throws SQLException, ClassNotFoundException {
         String query = String.format("SELECT * FROM %s WHERE %s = %d",
                 databaseName,ID,quizId);
-        return queryToList(query).get(0);
+        return queryToElement(query);
     }
 
     public List<Quiz> getPopularQuizzes(int k, String totalOrLastMonth) throws SQLException, ClassNotFoundException {

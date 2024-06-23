@@ -4,6 +4,7 @@ package database;
 
 import org.apache.commons.dbcp2.BasicDataSource;
 
+import javax.persistence.Tuple;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,44 +29,59 @@ public abstract class Database<T> {
     }
 
     public List<T> getAll() throws ClassNotFoundException, SQLException {
-        ResultSet rs = getResultSet("SELECT * FROM " + databaseName);
-        List<T> res = new ArrayList<T>();
-        while (rs.next()){
-            res.add(getItemFromResultSet(rs));
-        }
-        return res;
+        return queryToList("SELECT * FROM " + databaseName);
     }
     public T getById(int id) throws SQLException, ClassNotFoundException {
-        ResultSet rs = getResultSet("SELECT * FROM " + databaseName + " WHERE id = " + id);
-        rs.next();
-        return getItemFromResultSet(rs);
+        String query = String.format("SELECT * FROM %s WHERE id = %d;",
+                databaseName, id);
+        return queryToElement(query);
     }
     public boolean removeById(int id) throws SQLException, ClassNotFoundException {
-        PreparedStatement statement = getStatement("DELETE FROM " + databaseName + " WHERE id = " + id);
-        return statement.executeUpdate() > 0;
+        Connection con = getConnection();
+        PreparedStatement statement = getStatement("DELETE FROM " + databaseName + " WHERE id = " + id,con);
+        boolean res = statement.executeUpdate() > 0;
+        con.close();
+        return res;
     }
     public boolean setFieldById(int id, String columnName, String value) throws SQLException, ClassNotFoundException {
-        PreparedStatement statement = getStatement("UPDATE " + databaseName + " SET " + columnName + " = " + value + " WHERE id = " + id);
-        return statement.executeUpdate() > 0;
+        Connection con = getConnection();
+        PreparedStatement statement = getStatement("UPDATE " + databaseName + " SET " + columnName + " = " + value + " WHERE id = " + id, con);
+        boolean res = statement.executeUpdate() > 0;
+        con.close();
+        return res;
     }
     public abstract int add(T toAdd) throws SQLException, ClassNotFoundException;
     protected abstract T getItemFromResultSet(ResultSet rs) throws SQLException, ClassNotFoundException;
-    protected ResultSet getResultSet(String sqlQuery) throws ClassNotFoundException, SQLException {
-        PreparedStatement statement = getStatement(sqlQuery);
+    protected ResultSet getResultSet(String sqlQuery, Connection con) throws ClassNotFoundException, SQLException {
+        PreparedStatement statement = getStatement(sqlQuery, con);
         statement.executeQuery();
         return statement.getResultSet();
     }
-    protected PreparedStatement getStatement(String sqlQuery) throws ClassNotFoundException, SQLException {
+    protected  PreparedStatement getStatement(String sqlQuery, Connection con) throws ClassNotFoundException, SQLException {
+        return con.prepareStatement(sqlQuery, Statement.RETURN_GENERATED_KEYS);
+    }
+    protected Connection getConnection() throws ClassNotFoundException, SQLException {
         Class.forName("com.mysql.cj.jdbc.Driver");
         Connection con = dataSource.getConnection();
-        return con.prepareStatement(sqlQuery, Statement.RETURN_GENERATED_KEYS);
+        return con;
     }
     protected List<T> queryToList(String query) throws SQLException, ClassNotFoundException {
         List<T> res = new ArrayList<>();
-        ResultSet rs = getResultSet(query);
+        Connection con = getConnection();
+        ResultSet rs = getResultSet(query, con);
         while(rs.next()){
             res.add(getItemFromResultSet(rs));
         }
+        con.close();
+        return res;
+    }
+    protected T queryToElement(String query) throws SQLException, ClassNotFoundException {
+        T res = null;
+        Connection con = getConnection();
+        ResultSet rs = getResultSet(query,con);
+        rs.next();
+        res = getItemFromResultSet(rs);
+        con.close();
         return res;
     }
 }

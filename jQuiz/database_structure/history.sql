@@ -17,3 +17,11 @@ INSERT INTO history (user_id, quiz_id, grade, completed_at, writing_time) VALUES
 INSERT INTO history (user_id, quiz_id, grade, completed_at, writing_time) VALUES (3, 1, 10, sysdate(), 12);
 INSERT INTO history (user_id, quiz_id, grade, completed_at, writing_time) VALUES (2, 2, 20, sysdate(), 12);
 INSERT INTO history (user_id, quiz_id, grade, completed_at, writing_time) VALUES (1, 2, 20, sysdate(), 10);
+
+Select *
+from history h
+where h.quiz_id = 1
+and h.grade = (Select max(hi.grade)
+               from history hi
+               where hi.quiz_id = 1)
+order by writing_time

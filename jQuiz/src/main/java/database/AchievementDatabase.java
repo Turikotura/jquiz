@@ -4,6 +4,7 @@ import models.Achievement;
 import org.apache.commons.dbcp2.BasicDataSource;
 
 import javax.xml.crypto.Data;
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -29,14 +30,17 @@ public class AchievementDatabase extends Database<Achievement> {
     public int add(Achievement achievement) throws SQLException, ClassNotFoundException {
         String query = String.format("INSERT INTO achievements (%s, %s, %s) VALUES ('%s', '%s', '%s')",
                 NAME, DESCRIPTION, IMAGE, achievement.getName(), achievement.getDescription(), achievement.getImage());
-        PreparedStatement statement = this.getStatement(query);
+        Connection con = getConnection();
+        PreparedStatement statement = this.getStatement(query,con);
         int affectedRows = statement.executeUpdate();
         if(affectedRows == 0){
             throw new SQLException("Creating row failed");
         }
         try(ResultSet keys = statement.getGeneratedKeys()){
             if(keys.next()){
-                return keys.getInt(1);
+                int res = keys.getInt(1);
+                con.close();
+                return res;
             }else{
                 throw new SQLException("Creating row failed");
             }

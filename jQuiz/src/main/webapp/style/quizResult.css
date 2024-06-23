@@ -1,0 +1,41 @@
+main {
+    width: 70%;
+    background-color: red;
+    margin: 0 auto;
+    padding: 20px;
+    height: fit-content;
+    text-align: center;
+}
+
+main a {
+    text-decoration: none;
+    font-size: 20px;
+    background-color: #d47f00;
+    border: 5px solid #d47f00;
+    border-radius: 5px;
+    color: white;
+    margin-bottom: 20px;
+}
+main a:hover {
+    background-color: #643d00;
+    border-color: #643d00;
+}
+
+.scroll-container {
+    width: 100%; /* Full width of the viewport */
+    overflow-x: auto; /* Enable horizontal scrolling */
+    white-space: nowrap; /* Prevent boxes from wrapping */
+    padding: 10px 0; /* Optional padding for better spacing */
+}
+
+.box {
+    display: inline-block;
+    width: 250px; /* Adjust width as needed */
+    margin: 10px;
+    background-color: #643d00;
+    border: 1px solid #643d00;
+    border-radius: 5px;
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+    padding: 10px;
+}

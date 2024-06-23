@@ -5,6 +5,7 @@ import org.apache.commons.dbcp2.BasicDataSource;
 
 import javax.persistence.Id;
 import javax.xml.crypto.Data;
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -29,14 +30,17 @@ public class AnswerDatabase extends Database<Answer> {
                 "INSERT INTO answers (%s, %s, %s, %s) VALUES ('%s', %b, %d, %d);",
                 TEXT, IS_CORRECT, QUESTION_ID, UNIQ_ID,
                 answer.getText(), answer.getIsCorrect(), answer.getQuestionId(), answer.getUniquenessId());
-        PreparedStatement statement = this.getStatement(query);
+        Connection con = getConnection();
+        PreparedStatement statement = this.getStatement(query,con);
         int affectedRows = statement.executeUpdate();
         if(affectedRows == 0){
             throw new SQLException("Creating row failed");
         }
         try(ResultSet keys = statement.getGeneratedKeys()){
             if(keys.next()){
-                return keys.getInt(1);
+                int res = keys.getInt(1);
+                con.close();
+                return res;
             }else{
                 throw new SQLException("Creating row failed");
             }
@@ -56,13 +60,15 @@ public class AnswerDatabase extends Database<Answer> {
 
     public List<Integer> getAnswerIdsByQuestionId(int questionId) throws SQLException, ClassNotFoundException {
         String query = String.format("SELECT %s FROM %s WHERE %s = %d;", ID, this.databaseName, QUESTION_ID, questionId);
-        PreparedStatement statement = this.getStatement(query);
+        Connection con = getConnection();
+        PreparedStatement statement = this.getStatement(query,con);
         ResultSet rs = statement.executeQuery();
 
         List<Integer> answerIds = new ArrayList<>();
         while (rs.next()) {
             answerIds.add(rs.getInt(ID));
         }
+        con.close();
         return answerIds;
     }
     public List<Answer> getAnswersByQuestionId(int questionId) throws SQLException, ClassNotFoundException {

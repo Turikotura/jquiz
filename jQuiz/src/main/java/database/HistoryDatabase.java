@@ -3,6 +3,7 @@ package database;
 import models.History;
 import org.apache.commons.dbcp2.BasicDataSource;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -21,17 +22,27 @@ public class HistoryDatabase extends Database<History> {
     }
     @Override
     public int add(History toAdd) throws SQLException, ClassNotFoundException {
-        String query = String.format("INSERT INTO %s ( %s, %s, %s, %s, %s ) VALUES ( %d, %d, %d, %s, %d )", databaseName,
-                USER_ID, QUIZ_ID, GRADE, COMPLETED_AT, WRITING_TIME,
-                toAdd.getUserId(), toAdd.getQuizId(), toAdd.getGrade(), toAdd.getCompletedAt(), toAdd.getWritingTime());
-        PreparedStatement statement = getStatement(query);
+        String query = String.format(
+                "INSERT INTO %s ( %s, %s, %s, %s, %s ) " +
+                        "VALUES ( ?, ?, ?, ?, ? );", databaseName,
+                USER_ID, QUIZ_ID, GRADE, COMPLETED_AT, WRITING_TIME);
+        Connection con = getConnection();
+        PreparedStatement statement = getStatement(query,con);
+        statement.setInt(1,toAdd.getUserId());
+        statement.setInt(2,toAdd.getQuizId());
+        statement.setInt(3,toAdd.getGrade());
+        statement.setTimestamp(4, new java.sql.Timestamp(toAdd.getCompletedAt().getTime()));
+        statement.setInt(5, toAdd.getWritingTime());
+
         int affectedRows = statement.executeUpdate();
         if(affectedRows == 0){
             throw new SQLException("Creating row failed");
         }
         try(ResultSet keys = statement.getGeneratedKeys()){
             if(keys.next()){
-                return keys.getInt(1);
+                int res = keys.getInt(1);
+                con.close();
+                return res;
             }else{
                 throw new SQLException("Creating row failed");
             }
@@ -57,9 +68,12 @@ public class HistoryDatabase extends Database<History> {
     public History getLastHistoryByUserId(int userId) throws SQLException, ClassNotFoundException {
         String query = String.format("SELECT * FROM %s h WHERE h.%s = %d AND h.%s = (SELECT max(hi.%s) FROM %s hi WHERE hi.%s = %d)",
                 databaseName, USER_ID, userId, COMPLETED_AT, COMPLETED_AT, databaseName, USER_ID, userId);
-        ResultSet rsHistories = getResultSet(query);
-        rsHistories.next();
-        return getItemFromResultSet(rsHistories);
+        return queryToElement(query);
+    }
+    public History getLastHistoryByUserAndQuizId(int userId, int quizId) throws SQLException, ClassNotFoundException {
+        String query = String.format("SELECT * FROM %s h WHERE h.%s = %d AND h.%s = %d AND h.%s = (SELECT max(hi.%s) FROM %s hi WHERE hi.%s = %d AND hi.%s = %d)",
+                databaseName, USER_ID, userId, QUIZ_ID, quizId, COMPLETED_AT, COMPLETED_AT, databaseName, USER_ID, userId, QUIZ_ID, quizId );
+        return queryToElement(query);
     }
     public List<History> getHistoryByUserAndQuizId(int userId, int quizId) throws SQLException, ClassNotFoundException {
         String query = String.format("SELECT * FROM %s WHERE %s = %d AND %s = %d",
@@ -80,5 +94,13 @@ public class HistoryDatabase extends Database<History> {
         String query = String.format("SELECT * FROM %s WHERE %s = %d ORDER BY %s DESC LIMIT %d",
                 databaseName, USER_ID, userId, COMPLETED_AT, k);
         return queryToList(query);
+    }
+    public History getBestScoreHistoryByQuizId(int quizId) throws SQLException, ClassNotFoundException {
+        String query = String.format(
+                "Select * from %s h where h.%s = %d " +
+                "and h.%s = (Select max(hi.%s) from %s hi where hi.%s = %d) " +
+                "order by %s",
+                databaseName, QUIZ_ID, quizId, GRADE, GRADE, databaseName, QUIZ_ID, quizId, WRITING_TIME);
+        return queryToElement(query);
     }
 }

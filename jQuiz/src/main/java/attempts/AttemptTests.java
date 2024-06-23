@@ -58,11 +58,11 @@ public class AttemptTests extends TestCase {
     private List<QuizAttempt> createQuizAttempts(int n){
         List<QuizAttempt> res = new ArrayList<>();
         for(int i = 0; i < n; i++){
-            Quiz q = new Quiz(quizzes.size(),String.format("quiz %d",i),0,(new Date()),(i+1),null,false,false,false,false,String.format("Description for quiz %d",i),null,0,0);
+            Quiz q = new Quiz(quizzes.size(),String.format("quiz %d",i),0,(new Date()),(i+1),null,(i == 2),false,false,false,String.format("Description for quiz %d",i),null,0,0);
             quizzes.add(q);
             List<QuestionAttempt> qas = createQuestionAttempts(i,3);
             questionLists.add(qas);
-            QuizAttempt qa = new QuizAttempt(i,q,qas);
+            QuizAttempt qa = new QuizAttempt(i,q,true,qas);
             res.add(qa);
             quizzAttempts.add(qa);
         }
@@ -212,7 +212,7 @@ public class AttemptTests extends TestCase {
         assertEquals(quizzes.get(0).getThumbnail(), quizzAttempts.get(0).getThumbnail());
         assertEquals(quizzes.get(0).getShowAll(), quizzAttempts.get(0).getShowAll());
         assertEquals(quizzes.get(0).getAutoCorrect(), quizzAttempts.get(0).getAutoCorrect());
-        assertEquals(quizzes.get(0).getAllowPractice(), quizzAttempts.get(0).getAllowPractice());
+        assertTrue(quizzAttempts.get(0).getIsPractice());
         assertEquals(quizzes.get(0).getDescription(), quizzAttempts.get(0).getDescription());
         assertEquals(0, quizzAttempts.get(0).getOnQuestionIndex());
         quizzAttempts.get(0).setOnQuestionIndex(2);
@@ -256,9 +256,12 @@ public class AttemptTests extends TestCase {
         assertEquals(0, quizzAttempts.get(1).evaluateQuiz());
     }
     public void testQuizAttemptController(){
+        // Basic tests
+        assertEquals(0, qac.getUserId());
+
         // Attempting quiz
-        int id1 = qac.attemptQuiz(quizzes.get(0), questionLists.get(0));
-        int id2 =  qac.attemptQuiz(quizzes.get(1), questionLists.get(1));
+        int id1 = qac.attemptQuiz(quizzes.get(0), false, questionLists.get(0));
+        int id2 =  qac.attemptQuiz(quizzes.get(1), false, questionLists.get(1));
 
         List<Integer> ids = qac.getAttemptIds();
         assertEquals(new HashSet<>(Arrays.asList(id1,id2)), new HashSet<>(ids));
@@ -294,29 +297,29 @@ public class AttemptTests extends TestCase {
         assertEquals(new HashSet<>(Arrays.asList(id2)), new HashSet<>(ids));
 
         // Attempting new quiz
-        int id3 = qac.attemptQuiz(quizzes.get(2),questionLists.get(2));
+        int id3 = qac.attemptQuiz(quizzes.get(2),false,questionLists.get(2));
         ids = qac.getAttemptIds();
         assertEquals(new HashSet<>(Arrays.asList(id3,id2)), new HashSet<>(ids));
 
         qa = qac.getQuizAttemptById(id3);
 
         // Finishing new quiz
-        question1Ans.clear();
-        question1Ans.add("answer 24");
-        question2Ans.clear();
-        question2Ans.add("answer 27");
-        question3Ans.clear();
-        question3Ans.add("random answer");
-
-        qa.getQuestions().get(0).setWrittenAnswers(question1Ans);
-        qa.getQuestions().get(1).setWrittenAnswers(question2Ans);
-        qa.getQuestions().get(2).setWrittenAnswers(question3Ans);
-
         qh = qac.finishQuiz(id3);
 
-        assertEquals(5 + 10 + 0, qh.getGrade());
         assertEquals(quizzes.get(2).getId(), qh.getQuizId());
         ids = qac.getAttemptIds();
         assertEquals(new HashSet<>(Arrays.asList(id2)), new HashSet<>(ids));
+
+        // Check shuffled
+        int i = 0;
+        int newId = qac.attemptQuiz(quizzes.get(2),false,questionLists.get(2));
+        qa = qac.getQuizAttemptById(newId);
+        while (i < 100 && qa.getQuestions().get(0).getQuestion().getText().equals("question 6")){
+            qac.finishQuiz(newId);
+            newId = qac.attemptQuiz(quizzes.get(2),false,questionLists.get(2));
+            qa = qac.getQuizAttemptById(newId);
+            i++;
+        }
+        assertFalse(qa.getQuestions().get(0).getQuestion().getText().equals("question 6"));
     }
 }

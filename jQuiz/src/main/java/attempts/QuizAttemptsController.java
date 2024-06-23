@@ -29,6 +29,7 @@ public class QuizAttemptsController {
     public QuizAttemptsController(int userId){
         quizAttempts = new HashMap<>();
         lastId = -1;
+        this.userId = userId;
     }
 
     /**
@@ -37,8 +38,11 @@ public class QuizAttemptsController {
      * @param questions - the quiz questions
      * @return the id of the quiz attempt
      */
-    public int attemptQuiz(Quiz quiz, List<QuestionAttempt> questions){
-        QuizAttempt qa = new QuizAttempt(++lastId, quiz, questions);
+    public int attemptQuiz(Quiz quiz, boolean practice, List<QuestionAttempt> questions){
+        if(quiz.getShouldMixUp()){
+            Collections.shuffle(questions);
+        }
+        QuizAttempt qa = new QuizAttempt(++lastId, quiz, practice, questions);
         quizAttempts.put(lastId, qa);
         return lastId;
     }
@@ -72,4 +76,10 @@ public class QuizAttemptsController {
     public QuizAttempt getQuizAttemptById(int id){
         return quizAttempts.get(id);
     }
+
+    /**
+     * Get current user id
+     * @return current user id
+     */
+    public int getUserId() {return userId;}
 }
