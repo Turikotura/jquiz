@@ -74,7 +74,7 @@ public class HistoryDatabase extends Database<History> {
     }
     public History getLastHistoryByUserAndQuizId(int userId, int quizId) throws SQLException, ClassNotFoundException {
         String query = String.format("SELECT * FROM %s h WHERE h.%s = %d AND h.%s = %d AND h.%s = (SELECT max(hi.%s) FROM %s hi WHERE hi.%s = %d AND hi.%s = %d)",
-                databaseName, USER_ID, userId, QUIZ_ID, quizId, COMPLETED_AT, COMPLETED_AT, databaseName, USER_ID, userId, QUIZ_ID, quizId);
+                databaseName, USER_ID, userId, QUIZ_ID, quizId, COMPLETED_AT, COMPLETED_AT, databaseName, USER_ID, userId, QUIZ_ID, quizId );
         ResultSet rsHistories = getResultSet(query,getConnection());
         rsHistories.next();
         return getItemFromResultSet(rsHistories);
@@ -98,5 +98,15 @@ public class HistoryDatabase extends Database<History> {
         String query = String.format("SELECT * FROM %s WHERE %s = %d ORDER BY %s DESC LIMIT %d",
                 databaseName, USER_ID, userId, COMPLETED_AT, k);
         return queryToList(query,getConnection());
+    }
+    public History getBestScoreHistoryByQuizId(int quizId) throws SQLException, ClassNotFoundException {
+        String query = String.format(
+                "Select * from %s h where h.%s = %d " +
+                "and h.%s = (Select max(hi.%s) from %s hi where hi.%s = %d) " +
+                "order by %s",
+                databaseName, QUIZ_ID, quizId, GRADE, GRADE, databaseName, QUIZ_ID, quizId, WRITING_TIME);
+        ResultSet rsHistories = getResultSet(query,getConnection());
+        rsHistories.next();
+        return getItemFromResultSet(rsHistories);
     }
 }

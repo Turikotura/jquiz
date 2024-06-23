@@ -38,7 +38,7 @@
     if(quizAttempt != null){
 %>
 <head>
-    <title><%=quizAttempt.getTitle()%></title>
+    <title>Play quiz</title>
     <link href="index.css" rel="stylesheet" type="text/css">
     <link href="style/playQuiz.css" rel="stylesheet" type="text/css">
 </head>

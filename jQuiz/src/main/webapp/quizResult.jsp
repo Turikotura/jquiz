@@ -1,15 +1,13 @@
 <%@ page import="models.History" %>
-<%@ page import="database.HistoryDatabase" %>
 <%@ page import="static listeners.ContextListener.getDatabase" %>
 <%@ page import="javax.xml.crypto.Data" %>
-<%@ page import="database.Database" %>
 <%@ page import="java.sql.SQLException" %>
-<%@ page import="database.QuizDatabase" %>
 <%@ page import="models.Quiz" %>
 <%@ page import="models.Question" %>
 <%@ page import="java.util.List" %>
-<%@ page import="database.QuestionDatabase" %>
-<%@ page import="java.util.ArrayList" %><%--
+<%@ page import="java.util.ArrayList" %>
+<%@ page import="database.*" %>
+<%@ page import="models.User" %><%--
   Created by IntelliJ IDEA.
   User: Dachi
   Date: 22.06.2024
@@ -20,40 +18,47 @@
 <html>
 <%
     HistoryDatabase historydb = getDatabase(Database.HISTORY_DB,request);
+    QuizDatabase quizdb = getDatabase(Database.QUIZ_DB,request);
+    QuestionDatabase questiondb = getDatabase(Database.QUESTION_DB,request);
+    UserDatabase userdb = getDatabase(Database.USER_DB,request);
+
     int userId = Integer.parseInt(request.getParameter("userId"));
     int quizId = Integer.parseInt(request.getParameter("quizId"));
+
     History lastHistory = null;
-    try {
-        lastHistory = historydb.getLastHistoryByUserAndQuizId(userId,quizId);
-    } catch (SQLException e) {
-        throw new RuntimeException(e);
-    } catch (ClassNotFoundException e) {
-        throw new RuntimeException(e);
-    }
-
-    QuizDatabase quizdb = getDatabase(Database.QUIZ_DB,request);
     Quiz quiz = null;
-    try {
-        quiz = quizdb.getQuizById(lastHistory.getQuizId());
-    } catch (SQLException e) {
-        throw new RuntimeException(e);
-    } catch (ClassNotFoundException e) {
-        throw new RuntimeException(e);
-    }
-
-    QuestionDatabase questiondb = getDatabase(Database.QUESTION_DB,request);
+    User user = null;
     List<Question> questionList = new ArrayList<Question>();
-    try {
-        questionList = questiondb.getQuestionsByQuizId(quiz.getId());
-    } catch (SQLException e) {
-        throw new RuntimeException(e);
-    } catch (ClassNotFoundException e) {
-        throw new RuntimeException(e);
-    }
-
     int totalScore = 0;
-    for(Question question : questionList){
-        totalScore += question.getScore();
+
+    String bestHistoryName = "";
+    History bestHistory = null;
+    List<History> prevAttempts = new ArrayList<History>();
+    List<String> friendNames = new ArrayList<String>();
+    List<History> friendHistories = new ArrayList<History>();
+    try {
+        lastHistory = historydb.getLastHistoryByUserAndQuizId(userId, quizId);
+        quiz = quizdb.getQuizById(lastHistory.getQuizId());
+        questionList = questiondb.getQuestionsByQuizId(quiz.getId());
+        for (Question question : questionList) {
+            totalScore += question.getScore();
+        }
+
+        // others results
+
+        bestHistory = historydb.getBestScoreHistoryByQuizId(quizId);
+        bestHistoryName = userdb.getById(bestHistory.getId()).getUsername();
+        prevAttempts = historydb.getHistoryByUserAndQuizId(userId, quizId);
+        List<User> friends = new ArrayList<User>();
+        friends = userdb.getFriendsByUserId(userId);
+        for(User friend : friends){
+            friendNames.add(friend.getUsername());
+            friendHistories.add(historydb.getLastHistoryByUserAndQuizId(friend.getId(),quiz.getId()));
+        }
+    }catch (SQLException e){
+        System.out.println("SQL ex");
+    }catch (ClassNotFoundException e){
+        System.out.println("Class not found ex");
     }
 %>
 <head>
@@ -97,11 +102,56 @@
 <main>
 
     <h2><%=lastHistory.getGrade()%> / <%=totalScore%></h2>
-    <h3><%=lastHistory.getWritingTime()%> seconds</h3>
+    <h2><%=lastHistory.getWritingTime()%> Seconds</h2>
 
     <br>
     <br>
-    <strong><a href="/">return</a></strong>
+    <strong><a href="/">Return</a></strong>
+
+    <br><br><br>
+    <h2>Previous Attempts</h2>
+    <hr>
+    <div class="scroll-container">
+        <%
+            for(int i = 0; i < prevAttempts.size(); i++){
+        %>
+        <div class="box">
+            <h3><%=prevAttempts.get(i).getGrade()%> / <%=totalScore%></h3>
+            <h3><%=prevAttempts.get(i).getWritingTime()%> Seconds</h3>
+            <h4><%=prevAttempts.get(i).getCompletedAt()%></h4>
+        </div>
+        <%
+            }
+        %>
+    </div>
+
+    <br>
+    <h2>Top Score</h2>
+    <hr>
+    <div class="box">
+        <h2><%=bestHistoryName%></h2>
+        <h3><%=bestHistory.getGrade()%> / <%=totalScore%></h3>
+        <h3><%=bestHistory.getWritingTime()%> Seconds</h3>
+        <h4><%=bestHistory.getCompletedAt()%></h4>
+    </div>
+
+    <br>
+    <h2>Friends</h2>
+    <hr>
+    <div class="scroll-container">
+        <%
+            for(int i = 0; i < friendHistories.size(); i++){
+        %>
+        <div class="box">
+            <h2><%=friendNames.get(i)%></h2>
+            <h3><%=friendHistories.get(i).getGrade()%> / <%=totalScore%></h3>
+            <h3><%=friendHistories.get(i).getWritingTime()%> Seconds</h3>
+            <h4><%=friendHistories.get(i).getCompletedAt()%></h4>
+        </div>
+        <%
+            }
+        %>
+    </div>
 
 </main>
 
