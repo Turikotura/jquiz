@@ -31,6 +31,7 @@ public class ContextListener implements ServletContextListener {
         AnswerDatabase answerdb = new AnswerDatabase(basicDataSource, Database.ANSWER_DB);
         AchievementDatabase achievementdb = new AchievementDatabase(basicDataSource, Database.ACHIEVEMENT_DB);
         HistoryDatabase historydb = new HistoryDatabase(basicDataSource, Database.HISTORY_DB);
+        MailDatabase maildb = new MailDatabase(basicDataSource, Database.MAIL_DB);
 
         servletContextEvent.getServletContext().setAttribute(Database.USER_DB, userdb);
         servletContextEvent.getServletContext().setAttribute(Database.QUIZ_DB, quizdb);
@@ -38,6 +39,7 @@ public class ContextListener implements ServletContextListener {
         servletContextEvent.getServletContext().setAttribute(Database.ANSWER_DB, answerdb);
         servletContextEvent.getServletContext().setAttribute(Database.ACHIEVEMENT_DB, achievementdb);
         servletContextEvent.getServletContext().setAttribute(Database.HISTORY_DB, historydb);
+        servletContextEvent.getServletContext().setAttribute(Database.MAIL_DB, maildb);
     }
 
     @Override

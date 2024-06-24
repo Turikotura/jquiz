@@ -3,10 +3,38 @@
 <%@ page import="database.UserDatabase" %>
 <%@ page import="models.User" %>
 <%@ page import="database.Database" %>
+<%@ page import="java.util.Date" %>
+<%@ page import="java.util.ArrayList" %>
+<%@ page import="models.Mail" %>
+<%@ page import="database.MailDatabase" %>
+<%@ page import="static listeners.ContextListener.getDatabase" %>
+<%@ page import="java.sql.SQLException" %>
+<%@ page import="models.MailTypes" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html>
 <head>
+    <%
+        MailDatabase maildb = getDatabase(Database.MAIL_DB,request);
+        UserDatabase userdb = getDatabase(Database.USER_DB,request);
+
+        String username = (String) request.getSession().getAttribute("curUser");
+        User curUser = null;
+        List<Mail> mails = new ArrayList<Mail>();
+
+        if(username != null){
+            try {
+                curUser = userdb.getByUsername(username);
+                if(curUser != null){
+                    mails = maildb.getMailsByUserId(curUser.getId(),"RECEIVE");
+                }
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            } catch (ClassNotFoundException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    %>
     <title>Quiz List</title>
     <link href="index.css" rel="stylesheet" type="text/css">
 </head>
@@ -25,6 +53,9 @@
                 <li><a href="/createquiz.jsp">Create quiz</a></li>
             </ul>
         </nav>
+        <nav class="mail-nav">
+            <button onclick="togglePanel()">Show Messages</button>
+        </nav>
         <nav class="auth-nav">
             <%if(request.getSession().getAttribute("curUser") == null) { %>
             <ul>
@@ -42,6 +73,40 @@
 
         </nav>
     </header>
+
+    <div id="mail-panel">
+        <%
+            for(Mail mail : mails){
+        %>
+        <div class="message-box">
+            <form id="mail-form-<%=mail.getId()%>" method="post" action="MailPanel">
+            <p class="message-date"><%=mail.getTimeSent()%></p>
+            <h3 class="message-text"><%=mail.getText()%></h3>
+            <h4 class="message-author">From: <%=mail.getSenderId()%></h4>
+
+            <%
+                if(mail.getType() == MailTypes.CHALLENGE){
+            %>
+            <p>Best Score: //TODO</p>
+            <a href="quizInfo.jsp?quizId=<%=mail.getQuizId()%>">Accept</a>
+            <%
+                }else if(mail.getType() == MailTypes.FRIEND_REQUEST){
+            %>
+                <input type="hidden" name="to" value="<%=curUser.getId()%>">
+                <input type="hidden" name="from" value="<%=mail.getSenderId()%>">
+                <input type="submit" value="accept">
+            <%
+                }
+            %>
+            </form>
+        </div>
+        <%
+            }
+        %>
+        <div class="message-box">Message 2</div>
+        <div class="message-box">Message 3</div>
+        <!-- Add more message boxes here -->
+    </div>
 
     <div class="quiz-list-wrapper">
         <h2>Recently added quizzes</h2>
@@ -134,5 +199,56 @@
         }
     %>
 </div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script> <!-- jQuery for AJAX -->
+<script>
+    function togglePanel() {
+        <%
+        if(request.getSession().getAttribute("curUser") == null){
+        %>
+        window.location.href = "login.jsp";
+        <%
+        }else{
+        %>
+        var panel = document.getElementById("mail-panel");
+        panel.style.display = (panel.style.display === "block") ? "none" : "block";
+        <%
+        }
+        %>
+    }
+
+    $(document).ready(function() {
+        // Function to handle form submission
+        function submitForm(formId) {
+            $('#' + formId).submit(function (event) {
+                // Prevent default form submission
+                event.preventDefault();
+
+                // Serialize form data
+                var formData = $('#' + formId).serialize();
+
+                // Send AJAX request
+                $.ajax({
+                    type: 'POST',
+                    url: '/MailPanel', // Replace with your servlet URL
+                    data: formData,
+                    success: function (response) {
+                        // Optionally, you can update the current page content based on the response
+                    },
+                    error: function () {
+                    }
+                });
+            });
+        }
+
+        <%
+        for(Mail mail : mails){
+        %>
+        submitForm('mail-form-<%=mail.getId()%>');
+        <%
+        }
+        %>
+    });
+</script>
 </body>
 </html>
