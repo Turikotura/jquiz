@@ -7,43 +7,46 @@
 <%@ page import="database.HistoryDatabase" %>
 <%@ page import="java.util.*" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+
+<%
+    MailDatabase maildb = getDatabase(Database.MAIL_DB,request);
+    UserDatabase userdb = getDatabase(Database.USER_DB,request);
+    HistoryDatabase historydb = getDatabase(Database.HISTORY_DB,request);
+
+    String username = (String) request.getSession().getAttribute("curUser");
+    User curUser = null;
+    List<Mail> mails = new ArrayList<Mail>();
+    List<String> senderNames = new ArrayList<String>();
+    Map<Integer,Integer> maxGrades = new HashMap<Integer,Integer>();
+
+    if(username != null){
+        try {
+            curUser = userdb.getByUsername(username);
+            if(curUser != null){
+                mails = maildb.getMailsByUserId(curUser.getId(),"RECEIVE");
+            }
+            for(Mail mail : mails){
+                senderNames.add(userdb.getById(mail.getSenderId()).getUsername());
+                if(mail.getType() == MailTypes.CHALLENGE){
+                    History history = historydb.getBestHistoryByUserAndQuizId(mail.getSenderId(),mail.getQuizId());
+                    int grade = (history == null) ? 0 : history.getGrade();
+                    maxGrades.put(mail.getId(),grade);
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
+%>
+
 <!DOCTYPE html>
 <html>
 <head>
-    <%
-        MailDatabase maildb = getDatabase(Database.MAIL_DB,request);
-        UserDatabase userdb = getDatabase(Database.USER_DB,request);
-        HistoryDatabase historydb = getDatabase(Database.HISTORY_DB,request);
-
-        String username = (String) request.getSession().getAttribute("curUser");
-        User curUser = null;
-        List<Mail> mails = new ArrayList<Mail>();
-        List<String> senderNames = new ArrayList<String>();
-        Map<Integer,Integer> maxGrades = new HashMap<Integer,Integer>();
-
-        if(username != null){
-            try {
-                curUser = userdb.getByUsername(username);
-                if(curUser != null){
-                    mails = maildb.getMailsByUserId(curUser.getId(),"RECEIVE");
-                }
-                for(Mail mail : mails){
-                    senderNames.add(userdb.getById(mail.getSenderId()).getUsername());
-                    if(mail.getType() == MailTypes.CHALLENGE){
-                        History history = historydb.getBestHistoryByUserAndQuizId(mail.getSenderId(),mail.getQuizId());
-                        int grade = (history == null) ? 0 : history.getGrade();
-                        maxGrades.put(mail.getId(),grade);
-                    }
-                }
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            } catch (ClassNotFoundException e) {
-                throw new RuntimeException(e);
-            }
-        }
-    %>
     <title>Quiz List</title>
-    <link href="index.css" rel="stylesheet" type="text/css">
+    <link href="style/general.css" rel="stylesheet" type="text/css">
+    <link href="style/index.css" rel="stylesheet" type="text/css">
 </head>
 <body>
 <div class="main">
@@ -81,6 +84,7 @@
         </nav>
     </header>
 
+<%--MAIL--%>
     <div id="mail-panel">
         <%
             if(request.getSession().getAttribute("curUser") == null){
@@ -129,6 +133,7 @@
             }
         %>
     </div>
+<%----%>
 
     <div class="quiz-list-wrapper">
         <h2>Recently added quizzes</h2>

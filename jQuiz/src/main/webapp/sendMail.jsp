@@ -18,7 +18,7 @@
 <html>
 <head>
     <title>Title</title>
-    <link href="index.css" rel="stylesheet" type="text/css">
+    <link href="style/general.css" rel="stylesheet" type="text/css">
     <link href="style/sendMail.css" rel="stylesheet" type="text/css">
 </head>
 <body>

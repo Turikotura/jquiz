@@ -1,3 +1,5 @@
+/*general*/
+
 * {
     margin: 0;
     padding: 0;
@@ -14,6 +16,8 @@ body {
     margin: 0 auto;
     min-height: 100vh;
 }
+
+/*header*/
 
 header {
     display: flex;
@@ -55,6 +59,8 @@ header {
 .auth-nav {
     margin-left: auto;
 }
+
+/*quiz boxes*/
 
 .quiz-list-wrapper {
     margin: 20px;

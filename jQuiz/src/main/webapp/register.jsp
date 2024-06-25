@@ -14,6 +14,7 @@ if(request.getServletContext().getAttribute("reg-message") != null) message = ((
 %>
 <head>
     <title>Register</title>
+    <link href="style/general.css" rel="stylesheet" type="text/css">
 </head>
 <body>
 <h1>Create New Account</h1>
