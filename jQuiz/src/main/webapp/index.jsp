@@ -9,6 +9,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%
+    // Mail variables
     MailDatabase maildb = getDatabase(Database.MAIL_DB,request);
     UserDatabase userdb = getDatabase(Database.USER_DB,request);
     HistoryDatabase historydb = getDatabase(Database.HISTORY_DB,request);
@@ -23,11 +24,14 @@
         try {
             curUser = userdb.getByUsername(username);
             if(curUser != null){
+                // Get mails received by user
                 mails = maildb.getMailsByUserId(curUser.getId(),"RECEIVE");
             }
             for(Mail mail : mails){
+                // Get names of senders
                 senderNames.add(userdb.getById(mail.getSenderId()).getUsername());
                 if(mail.getType() == MailTypes.CHALLENGE){
+                    // Get max grade of senders for challenges
                     History history = historydb.getBestHistoryByUserAndQuizId(mail.getSenderId(),mail.getQuizId());
                     int grade = (history == null) ? 0 : history.getGrade();
                     maxGrades.put(mail.getId(),grade);
@@ -88,11 +92,13 @@
     <div id="mail-panel">
         <%
             if(request.getSession().getAttribute("curUser") == null){
+            // loads if there is no login
         %>
         <h3>Log in first</h3>
         <%
             }else{
         %>
+        <%--button to send mails--%>
         <a href="sendMail.jsp">Send Mail</a>
         <%
             }
@@ -107,6 +113,7 @@
                     active = "active-message";
                 }
         %>
+        <%--mail info--%>
         <form id="mail-form-<%=mail.getId()%>" method="post" action="MailPanel">
             <input type="hidden" name="mailId" value="<%=mail.getId()%>">
             <div class="message-box <%=active%>">
@@ -116,11 +123,13 @@
 
             <%
                 if(mail.getType() == MailTypes.CHALLENGE){
+                // Display challenge visual
             %>
                 <p>Best Score: <%=maxGrades.get(mail.getId())%> pts</p>
                 <a href="quizInfo.jsp?quizId=<%=mail.getQuizId()%>">Accept</a>
             <%
                 }else if(mail.getType() == MailTypes.FRIEND_REQUEST){
+                // Display friend request visual
             %>
                 <input type="submit" value="accept" class="friend-acpt-submit">
                 <input type="submit" value="reject" class="friend-rjct-submit">

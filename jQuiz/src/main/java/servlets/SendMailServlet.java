@@ -31,6 +31,7 @@ public class SendMailServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws ServletException, IOException {
+        // Get parameters
         String senderName = (String) httpServletRequest.getSession().getAttribute("curUser");
         String receiverName = httpServletRequest.getParameter("receiver");
         MailTypes mailType = MailTypes.values()[Integer.parseInt(httpServletRequest.getParameter("mail-type"))];
@@ -40,6 +41,7 @@ public class SendMailServlet extends HttpServlet {
             quizName = httpServletRequest.getParameter("quiz-name");
         }
 
+        // Get dbs
         UserDatabase userdb = getDatabase(Database.USER_DB,httpServletRequest);
         QuizDatabase quizdb = getDatabase(Database.QUIZ_DB,httpServletRequest);
         MailDatabase maildb = getDatabase(Database.MAIL_DB,httpServletRequest);
@@ -49,6 +51,7 @@ public class SendMailServlet extends HttpServlet {
 
             User receiver = userdb.getByUsername(receiverName);
             if(receiver == null){
+                // If receiver name is invalid
                 String message = "User " + receiverName + " was not found";
                 httpServletResponse.sendRedirect("sendMail.jsp?error-log="+ URLEncoder.encode(message,"UTF-8"));
                 return;
@@ -57,11 +60,13 @@ public class SendMailServlet extends HttpServlet {
             if(mailType == MailTypes.CHALLENGE){
                 quiz = quizdb.getQuizByTitle(quizName);
                 if(quiz == null){
+                    // If challenge type and invalid quiz name
                     String message = "Quiz " + quizName + " was not found";
                     httpServletResponse.sendRedirect("sendMail.jsp?error-log="+ URLEncoder.encode(message,"UTF-8"));
                     return;
                 }
             }
+            // Send mail
             int quizId = (quiz == null) ? -1 : quiz.getId();
             maildb.add(new Mail(-1,sender.getId(),receiver.getId(),mailType,quizId,text,(new Date()),false));
             httpServletResponse.sendRedirect("");
