@@ -75,7 +75,17 @@
     </header>
 
     <div id="mail-panel">
-        <a href="">Send Mail</a>
+        <%
+            if(request.getSession().getAttribute("curUser") == null){
+        %>
+        <h3>Log in first</h3>
+        <%
+            }else{
+        %>
+        <a href="sendMail.jsp">Send Mail</a>
+        <%
+            }
+        %>
         <%
             for(Mail mail : mails){
                 String active = "";

@@ -41,6 +41,10 @@
     <servlet-name>MailPanel</servlet-name>
     <servlet-class>servlets.MailPanelServlet</servlet-class>
   </servlet>
+  <servlet>
+    <servlet-name>SendMail</servlet-name>
+    <servlet-class>servlets.SendMailServlet</servlet-class>
+  </servlet>
 
   <servlet-mapping>
     <servlet-name>FrontPageServlet</servlet-name>
@@ -69,5 +73,9 @@
   <servlet-mapping>
     <servlet-name>MailPanel</servlet-name>
     <url-pattern>/MailPanel</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>SendMail</servlet-name>
+    <url-pattern>/SendMail</url-pattern>
   </servlet-mapping>
 </web-app>
