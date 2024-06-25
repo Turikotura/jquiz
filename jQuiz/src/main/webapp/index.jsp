@@ -75,6 +75,7 @@
     </header>
 
     <div id="mail-panel">
+        <a href="">Send Mail</a>
         <%
             for(Mail mail : mails){
                 String active = "";
@@ -97,7 +98,8 @@
             <%
                 }else if(mail.getType() == MailTypes.FRIEND_REQUEST){
             %>
-                <input type="submit" value="accept">
+                <input type="submit" value="accept" class="friend-acpt-submit">
+                <input type="submit" value="reject" class="friend-rjct-submit">
             <%
                 }
             %>
@@ -106,9 +108,6 @@
         <%
             }
         %>
-        <div class="message-box">Message 2</div>
-        <div class="message-box">Message 3</div>
-        <!-- Add more message boxes here -->
     </div>
 
     <div class="quiz-list-wrapper">
@@ -203,62 +202,6 @@
 </div>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script> <!-- jQuery for AJAX -->
-<script>
-    // Function to handle form submission
-    function submitForm(formId) {
-        $('#' + formId).submit(function (event) {
-            // Prevent default form submission
-            event.preventDefault();
-
-            // Serialize form data
-            var formData = $('#' + formId).serialize();
-
-            // Send AJAX request
-            $.ajax({
-                type: 'POST',
-                url: '/MailPanel', // Replace with your servlet URL
-                data: formData,
-                success: function (response) {
-                    // Optionally, you can update the current page content based on the response
-                },
-                error: function () {
-                }
-            });
-        });
-    }
-
-    document.addEventListener("DOMContentLoaded", function() {
-        var messageBoxes = document.querySelectorAll(".message-box");
-
-        messageBoxes.forEach(function (div) {
-            div.addEventListener("click", function () {
-                var form = div.parentElement;
-                if (form) {
-                    var hiddenInput = document.createElement('input');
-                    hiddenInput.type = 'hidden';
-                    hiddenInput.name = 'submittedBy';
-                    hiddenInput.value = 'div';
-                    form.appendChild(hiddenInput);
-                    div.classList.remove("active-message");
-                    submitForm(form.id);
-                }
-            });
-        });
-    });
-    function togglePanel() {
-        <%
-        if(request.getSession().getAttribute("curUser") == null){
-        %>
-        window.location.href = "login.jsp";
-        <%
-        }else{
-        %>
-        var panel = document.getElementById("mail-panel");
-        panel.style.display = (panel.style.display === "block") ? "none" : "block";
-        <%
-        }
-        %>
-    }
-</script>
+<script src="script/mailPanel.js"></script>
 </body>
 </html>

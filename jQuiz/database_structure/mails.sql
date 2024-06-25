@@ -11,6 +11,8 @@ CREATE TABLE mails
     time_sent DATETIME,
     seen BIT,
     FOREIGN KEY (sender_id) REFERENCES users(id),
-    FOREIGN KEY (receiver_id) REFERENCES users(id),
-    FOREIGN KEY (quiz_id) REFERENCES quizzes(id)
+    FOREIGN KEY (receiver_id) REFERENCES users(id)
 );
+
+ALTER TABLE mails
+DROP CONSTRAINT mails_ibfk_3

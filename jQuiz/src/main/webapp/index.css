@@ -126,8 +126,8 @@ header {
     border: 1px solid #ccc;
     padding: 10px;
     margin-bottom: 10px;
+    word-break: break-all;
 }
-
 .active-message {
     background-color: #643d00;
 }
