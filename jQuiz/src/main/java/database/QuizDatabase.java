@@ -102,4 +102,9 @@ public class QuizDatabase extends Database<Quiz>{
                 databaseName, CREATED_AT, k);
         return queryToList(query);
     }
+    public Quiz getQuizByTitle(String title) throws SQLException, ClassNotFoundException {
+        String query = String.format("SELECT * FROM %s WHERE %s = '%s'",
+                databaseName, TITLE, title);
+        return queryToElement(query);
+    }
 }

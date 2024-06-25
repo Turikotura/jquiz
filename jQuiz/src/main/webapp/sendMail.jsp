@@ -79,7 +79,13 @@
 
     <button type="submit">Submit</button>
 </form>
-<p id="error-text"></p>
+<%
+    if(request.getParameter("error-log") != null){
+%>
+<p id="error-text"><%=request.getParameter("error-log")%></p>
+<%
+    }
+%>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script>

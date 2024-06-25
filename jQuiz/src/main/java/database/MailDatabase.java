@@ -4,10 +4,7 @@ import models.Mail;
 import models.MailTypes;
 import org.apache.commons.dbcp2.BasicDataSource;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -27,11 +24,20 @@ public class MailDatabase extends Database<Mail> {
     }
     @Override
     public int add(Mail toAdd) throws SQLException, ClassNotFoundException {
-        String query = String.format("INSERT INTO %s ( %s, %s, %s, %s, %s, %s, %s ) VALUES ( %d, %d, %d, %d, '%s', %s, %b)", databaseName,
-                RECEIVER_ID, SENDER_ID, TYPE, QUIZ_ID, TEXT, TIME_SENT, SEEN,
-                toAdd.getReceiverId(), toAdd.getSenderId(), toAdd.getType().ordinal(), toAdd.getQuizId(), toAdd.getText(), toAdd.getTimeSent(), toAdd.getSeen());
+        String query = String.format(
+                "INSERT INTO %s ( %s, %s, %s, %s, %s, %s, %s )" +
+                        " VALUES ( ?, ?, ?, ?, ?, ?, ?)", databaseName,
+                RECEIVER_ID, SENDER_ID, TYPE, QUIZ_ID, TEXT, TIME_SENT, SEEN);
         Connection con = getConnection();
         PreparedStatement statement = getStatement(query,con);
+        statement.setInt(1, toAdd.getReceiverId());
+        statement.setInt(2, toAdd.getSenderId());
+        statement.setInt(3, toAdd.getType().ordinal());
+        statement.setInt(4, toAdd.getQuizId());
+        statement.setString(5, toAdd.getText());
+        statement.setTimestamp(6, new Timestamp(System.currentTimeMillis()));
+        statement.setBoolean(7, false);
+
         int affectedRows = statement.executeUpdate();
         if(affectedRows == 0){
             throw new SQLException("Creating row failed");

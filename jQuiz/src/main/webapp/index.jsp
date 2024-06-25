@@ -1,15 +1,11 @@
-<%@ page import="models.Quiz" %>
-<%@ page import="java.util.List" %>
 <%@ page import="database.UserDatabase" %>
-<%@ page import="models.User" %>
 <%@ page import="database.Database" %>
-<%@ page import="java.util.Date" %>
-<%@ page import="java.util.ArrayList" %>
-<%@ page import="models.Mail" %>
 <%@ page import="database.MailDatabase" %>
 <%@ page import="static listeners.ContextListener.getDatabase" %>
 <%@ page import="java.sql.SQLException" %>
-<%@ page import="models.MailTypes" %>
+<%@ page import="models.*" %>
+<%@ page import="database.HistoryDatabase" %>
+<%@ page import="java.util.*" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html>
@@ -17,16 +13,27 @@
     <%
         MailDatabase maildb = getDatabase(Database.MAIL_DB,request);
         UserDatabase userdb = getDatabase(Database.USER_DB,request);
+        HistoryDatabase historydb = getDatabase(Database.HISTORY_DB,request);
 
         String username = (String) request.getSession().getAttribute("curUser");
         User curUser = null;
         List<Mail> mails = new ArrayList<Mail>();
+        List<String> senderNames = new ArrayList<String>();
+        Map<Integer,Integer> maxGrades = new HashMap<Integer,Integer>();
 
         if(username != null){
             try {
                 curUser = userdb.getByUsername(username);
                 if(curUser != null){
                     mails = maildb.getMailsByUserId(curUser.getId(),"RECEIVE");
+                }
+                for(Mail mail : mails){
+                    senderNames.add(userdb.getById(mail.getSenderId()).getUsername());
+                    if(mail.getType() == MailTypes.CHALLENGE){
+                        History history = historydb.getBestHistoryByUserAndQuizId(mail.getSenderId(),mail.getQuizId());
+                        int grade = (history == null) ? 0 : history.getGrade();
+                        maxGrades.put(mail.getId(),grade);
+                    }
                 }
             } catch (SQLException e) {
                 throw new RuntimeException(e);
@@ -87,7 +94,10 @@
             }
         %>
         <%
-            for(Mail mail : mails){
+            for(int i = 0; i < mails.size(); i++){
+                Mail mail = mails.get(i);
+                String senderName = senderNames.get(i);
+
                 String active = "";
                 if(!mail.getSeen()){
                     active = "active-message";
@@ -98,12 +108,12 @@
             <div class="message-box <%=active%>">
                 <p class="message-date"><%=mail.getTimeSent()%></p>
                 <h3 class="message-text"><%=mail.getText()%></h3>
-                <h4 class="message-author">From: <%=mail.getSenderId()%></h4>
+                <h4 class="message-author">From: <%=senderName%></h4>
 
             <%
                 if(mail.getType() == MailTypes.CHALLENGE){
             %>
-                <p>Best Score: //TODO</p>
+                <p>Best Score: <%=maxGrades.get(mail.getId())%> pts</p>
                 <a href="quizInfo.jsp?quizId=<%=mail.getQuizId()%>">Accept</a>
             <%
                 }else if(mail.getType() == MailTypes.FRIEND_REQUEST){

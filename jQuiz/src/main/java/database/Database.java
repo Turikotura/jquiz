@@ -79,8 +79,9 @@ public abstract class Database<T> {
         T res = null;
         Connection con = getConnection();
         ResultSet rs = getResultSet(query,con);
-        rs.next();
-        res = getItemFromResultSet(rs);
+        if(rs.next()){
+            res = getItemFromResultSet(rs);
+        }
         con.close();
         return res;
     }

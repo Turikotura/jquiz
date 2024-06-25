@@ -24,4 +24,11 @@ where h.quiz_id = 1
 and h.grade = (Select max(hi.grade)
                from history hi
                where hi.quiz_id = 1)
-order by writing_time
+order by writing_time;
+
+SELECT *
+FROM history
+WHERE user_id = 3   -- Replace with the actual userId value
+  AND quiz_id = 1   -- Replace with the actual quizId value
+ORDER BY grade DESC, writing_time
+LIMIT 1;
