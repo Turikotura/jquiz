@@ -9,6 +9,7 @@ CREATE TABLE mails
     quiz_id INT,
     text TEXT,
     time_sent DATETIME,
+    seen BIT,
     FOREIGN KEY (sender_id) REFERENCES users(id),
     FOREIGN KEY (receiver_id) REFERENCES users(id),
     FOREIGN KEY (quiz_id) REFERENCES quizzes(id)

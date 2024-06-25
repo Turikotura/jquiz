@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.Objects;
 
 import static listeners.ContextListener.getDatabase;
 
@@ -20,20 +21,7 @@ public class MailPanelServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws ServletException, IOException {
-        int toId = Integer.parseInt(httpServletRequest.getParameter("to"));
-        int fromId = Integer.parseInt(httpServletRequest.getParameter("from"));
-
-        UserDatabase userdb = getDatabase(Database.USER_DB,httpServletRequest);
-
-        try {
-            if(!userdb.checkAreFriends(fromId,toId)){
-                userdb.addFriend(fromId,toId);
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
-
+        System.out.println("!!!!!!!!!!!!!!" + httpServletRequest.getParameter("submittedBy"));
+        System.out.println("!!!!!!!!!!!!!!");
     }
 }

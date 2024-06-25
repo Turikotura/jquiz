@@ -21,14 +21,15 @@ public class MailDatabase extends Database<Mail> {
     public static final String QUIZ_ID = "quiz_id";
     public static final String TEXT = "text";
     public static final String TIME_SENT = "time_sent";
+    public static final String SEEN = "seen";
     public MailDatabase(BasicDataSource dataSource, String databaseName) {
         super(dataSource, databaseName);
     }
     @Override
     public int add(Mail toAdd) throws SQLException, ClassNotFoundException {
-        String query = String.format("INSERT INTO %s ( %s, %s, %s, %s, %s, %s ) VALUES ( %d, %d, %d, %d, '%s', %s)", databaseName,
-                RECEIVER_ID, SENDER_ID, TYPE, QUIZ_ID, TEXT, TIME_SENT,
-                toAdd.getReceiverId(), toAdd.getSenderId(), toAdd.getType().ordinal(), toAdd.getQuizId(), toAdd.getText(), toAdd.getTimeSent());
+        String query = String.format("INSERT INTO %s ( %s, %s, %s, %s, %s, %s, %s ) VALUES ( %d, %d, %d, %d, '%s', %s, %b)", databaseName,
+                RECEIVER_ID, SENDER_ID, TYPE, QUIZ_ID, TEXT, TIME_SENT, SEEN,
+                toAdd.getReceiverId(), toAdd.getSenderId(), toAdd.getType().ordinal(), toAdd.getQuizId(), toAdd.getText(), toAdd.getTimeSent(), toAdd.getSeen());
         Connection con = getConnection();
         PreparedStatement statement = getStatement(query,con);
         int affectedRows = statement.executeUpdate();
@@ -55,7 +56,8 @@ public class MailDatabase extends Database<Mail> {
                 MailTypes.values()[rs.getInt(TYPE)],
                 rs.getInt(QUIZ_ID),
                 rs.getString(TEXT),
-                rs.getDate(TIME_SENT)
+                rs.getDate(TIME_SENT),
+                rs.getBoolean(SEEN)
         );
     }
     public List<Mail> getMailsByUserId(int userId, String sendOrReceive) throws SQLException, ClassNotFoundException {

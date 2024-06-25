@@ -127,3 +127,7 @@ header {
     padding: 10px;
     margin-bottom: 10px;
 }
+
+.active-message {
+    background-color: #643d00;
+}

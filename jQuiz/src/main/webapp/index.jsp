@@ -77,29 +77,32 @@
     <div id="mail-panel">
         <%
             for(Mail mail : mails){
+                String active = "";
+                if(!mail.getSeen()){
+                    active = "active-message";
+                }
         %>
-        <div class="message-box">
-            <form id="mail-form-<%=mail.getId()%>" method="post" action="MailPanel">
-            <p class="message-date"><%=mail.getTimeSent()%></p>
-            <h3 class="message-text"><%=mail.getText()%></h3>
-            <h4 class="message-author">From: <%=mail.getSenderId()%></h4>
+        <form id="mail-form-<%=mail.getId()%>" method="post" action="MailPanel">
+            <input type="hidden" name="mailId" value="<%=mail.getId()%>">
+            <div class="message-box <%=active%>">
+                <p class="message-date"><%=mail.getTimeSent()%></p>
+                <h3 class="message-text"><%=mail.getText()%></h3>
+                <h4 class="message-author">From: <%=mail.getSenderId()%></h4>
 
             <%
                 if(mail.getType() == MailTypes.CHALLENGE){
             %>
-            <p>Best Score: //TODO</p>
-            <a href="quizInfo.jsp?quizId=<%=mail.getQuizId()%>">Accept</a>
+                <p>Best Score: //TODO</p>
+                <a href="quizInfo.jsp?quizId=<%=mail.getQuizId()%>">Accept</a>
             <%
                 }else if(mail.getType() == MailTypes.FRIEND_REQUEST){
             %>
-                <input type="hidden" name="to" value="<%=curUser.getId()%>">
-                <input type="hidden" name="from" value="<%=mail.getSenderId()%>">
                 <input type="submit" value="accept">
             <%
                 }
             %>
-            </form>
-        </div>
+            </div>
+        </form>
         <%
             }
         %>
@@ -124,7 +127,6 @@
                     if (recentQuizzes == null || popularQuizzes == null) {
                         throw new Exception("Quizzes not found in request.");
                     }
-
                     for (Quiz quiz : recentQuizzes) {
                         User author = userDB.getById(quiz.getAuthorId());
             %>
@@ -202,6 +204,47 @@
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script> <!-- jQuery for AJAX -->
 <script>
+    // Function to handle form submission
+    function submitForm(formId) {
+        $('#' + formId).submit(function (event) {
+            // Prevent default form submission
+            event.preventDefault();
+
+            // Serialize form data
+            var formData = $('#' + formId).serialize();
+
+            // Send AJAX request
+            $.ajax({
+                type: 'POST',
+                url: '/MailPanel', // Replace with your servlet URL
+                data: formData,
+                success: function (response) {
+                    // Optionally, you can update the current page content based on the response
+                },
+                error: function () {
+                }
+            });
+        });
+    }
+
+    document.addEventListener("DOMContentLoaded", function() {
+        var messageBoxes = document.querySelectorAll(".message-box");
+
+        messageBoxes.forEach(function (div) {
+            div.addEventListener("click", function () {
+                var form = div.parentElement;
+                if (form) {
+                    var hiddenInput = document.createElement('input');
+                    hiddenInput.type = 'hidden';
+                    hiddenInput.name = 'submittedBy';
+                    hiddenInput.value = 'div';
+                    form.appendChild(hiddenInput);
+                    div.classList.remove("active-message");
+                    submitForm(form.id);
+                }
+            });
+        });
+    });
     function togglePanel() {
         <%
         if(request.getSession().getAttribute("curUser") == null){
@@ -216,39 +259,6 @@
         }
         %>
     }
-
-    $(document).ready(function() {
-        // Function to handle form submission
-        function submitForm(formId) {
-            $('#' + formId).submit(function (event) {
-                // Prevent default form submission
-                event.preventDefault();
-
-                // Serialize form data
-                var formData = $('#' + formId).serialize();
-
-                // Send AJAX request
-                $.ajax({
-                    type: 'POST',
-                    url: '/MailPanel', // Replace with your servlet URL
-                    data: formData,
-                    success: function (response) {
-                        // Optionally, you can update the current page content based on the response
-                    },
-                    error: function () {
-                    }
-                });
-            });
-        }
-
-        <%
-        for(Mail mail : mails){
-        %>
-        submitForm('mail-form-<%=mail.getId()%>');
-        <%
-        }
-        %>
-    });
 </script>
 </body>
 </html>
