@@ -103,4 +103,11 @@ public class HistoryDatabase extends Database<History> {
                 databaseName, QUIZ_ID, quizId, GRADE, GRADE, databaseName, QUIZ_ID, quizId, WRITING_TIME);
         return queryToElement(query);
     }
+
+    public History getBestHistoryByUserAndQuizId(int userId, int quizId) throws SQLException, ClassNotFoundException {
+        String query = String.format(
+                "SELECT * FROM %s WHERE %s = %d AND %s = %d ORDER BY %s DESC, %s LIMIT 1;",
+                databaseName, USER_ID, userId, QUIZ_ID, quizId, GRADE, WRITING_TIME);
+        return queryToElement(query);
+    }
 }

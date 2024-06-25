@@ -4,10 +4,7 @@ import models.Mail;
 import models.MailTypes;
 import org.apache.commons.dbcp2.BasicDataSource;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -21,16 +18,26 @@ public class MailDatabase extends Database<Mail> {
     public static final String QUIZ_ID = "quiz_id";
     public static final String TEXT = "text";
     public static final String TIME_SENT = "time_sent";
+    public static final String SEEN = "seen";
     public MailDatabase(BasicDataSource dataSource, String databaseName) {
         super(dataSource, databaseName);
     }
     @Override
     public int add(Mail toAdd) throws SQLException, ClassNotFoundException {
-        String query = String.format("INSERT INTO %s ( %s, %s, %s, %s, %s, %s ) VALUES ( %d, %d, %d, %d, '%s', %s)", databaseName,
-                RECEIVER_ID, SENDER_ID, TYPE, QUIZ_ID, TEXT, TIME_SENT,
-                toAdd.getReceiverId(), toAdd.getSenderId(), toAdd.getType().ordinal(), toAdd.getQuizId(), toAdd.getText(), toAdd.getTimeSent());
+        String query = String.format(
+                "INSERT INTO %s ( %s, %s, %s, %s, %s, %s, %s )" +
+                        " VALUES ( ?, ?, ?, ?, ?, ?, ?)", databaseName,
+                RECEIVER_ID, SENDER_ID, TYPE, QUIZ_ID, TEXT, TIME_SENT, SEEN);
         Connection con = getConnection();
         PreparedStatement statement = getStatement(query,con);
+        statement.setInt(1, toAdd.getReceiverId());
+        statement.setInt(2, toAdd.getSenderId());
+        statement.setInt(3, toAdd.getType().ordinal());
+        statement.setInt(4, toAdd.getQuizId());
+        statement.setString(5, toAdd.getText());
+        statement.setTimestamp(6, new Timestamp(System.currentTimeMillis()));
+        statement.setBoolean(7, false);
+
         int affectedRows = statement.executeUpdate();
         if(affectedRows == 0){
             throw new SQLException("Creating row failed");
@@ -55,7 +62,8 @@ public class MailDatabase extends Database<Mail> {
                 MailTypes.values()[rs.getInt(TYPE)],
                 rs.getInt(QUIZ_ID),
                 rs.getString(TEXT),
-                rs.getDate(TIME_SENT)
+                rs.getDate(TIME_SENT),
+                rs.getBoolean(SEEN)
         );
     }
     public List<Mail> getMailsByUserId(int userId, String sendOrReceive) throws SQLException, ClassNotFoundException {

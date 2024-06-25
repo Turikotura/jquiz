@@ -2,6 +2,7 @@
 <html>
 <head>
     <title>Create Quiz</title>
+    <link href="style/general.css" rel="stylesheet" type="text/css">
     <script>
         let questionCount = 1;
 

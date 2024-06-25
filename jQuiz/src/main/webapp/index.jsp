@@ -1,14 +1,56 @@
-<%@ page import="models.Quiz" %>
-<%@ page import="java.util.List" %>
 <%@ page import="database.UserDatabase" %>
-<%@ page import="models.User" %>
 <%@ page import="database.Database" %>
+<%@ page import="database.MailDatabase" %>
+<%@ page import="static listeners.ContextListener.getDatabase" %>
+<%@ page import="java.sql.SQLException" %>
+<%@ page import="models.*" %>
+<%@ page import="database.HistoryDatabase" %>
+<%@ page import="java.util.*" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+
+<%
+    // Mail variables
+    MailDatabase maildb = getDatabase(Database.MAIL_DB,request);
+    UserDatabase userdb = getDatabase(Database.USER_DB,request);
+    HistoryDatabase historydb = getDatabase(Database.HISTORY_DB,request);
+
+    String username = (String) request.getSession().getAttribute("curUser");
+    User curUser = null;
+    List<Mail> mails = new ArrayList<Mail>();
+    List<String> senderNames = new ArrayList<String>();
+    Map<Integer,Integer> maxGrades = new HashMap<Integer,Integer>();
+
+    if(username != null){
+        try {
+            curUser = userdb.getByUsername(username);
+            if(curUser != null){
+                // Get mails received by user
+                mails = maildb.getMailsByUserId(curUser.getId(),"RECEIVE");
+            }
+            for(Mail mail : mails){
+                // Get names of senders
+                senderNames.add(userdb.getById(mail.getSenderId()).getUsername());
+                if(mail.getType() == MailTypes.CHALLENGE){
+                    // Get max grade of senders for challenges
+                    History history = historydb.getBestHistoryByUserAndQuizId(mail.getSenderId(),mail.getQuizId());
+                    int grade = (history == null) ? 0 : history.getGrade();
+                    maxGrades.put(mail.getId(),grade);
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
+%>
+
 <!DOCTYPE html>
 <html>
 <head>
     <title>Quiz List</title>
-    <link href="index.css" rel="stylesheet" type="text/css">
+    <link href="style/general.css" rel="stylesheet" type="text/css">
+    <link href="style/index.css" rel="stylesheet" type="text/css">
 </head>
 <body>
 <div class="main">
@@ -24,6 +66,9 @@
                 <li><a href="/categories.jsp">Categories</a></li>
                 <li><a href="/createquiz.jsp">Create quiz</a></li>
             </ul>
+        </nav>
+        <nav class="mail-nav">
+            <button onclick="togglePanel()">Show Messages</button>
         </nav>
         <nav class="auth-nav">
             <%if(request.getSession().getAttribute("curUser") == null) { %>
@@ -43,6 +88,62 @@
         </nav>
     </header>
 
+<%--MAIL--%>
+    <div id="mail-panel">
+        <%
+            if(request.getSession().getAttribute("curUser") == null){
+            // loads if there is no login
+        %>
+        <h3>Log in first</h3>
+        <%
+            }else{
+        %>
+        <%--button to send mails--%>
+        <a href="sendMail.jsp">Send Mail</a>
+        <%
+            }
+        %>
+        <%
+            for(int i = 0; i < mails.size(); i++){
+                Mail mail = mails.get(i);
+                String senderName = senderNames.get(i);
+
+                String active = "";
+                if(!mail.getSeen()){
+                    active = "active-message";
+                }
+        %>
+        <%--mail info--%>
+        <form id="mail-form-<%=mail.getId()%>" method="post" action="MailPanel">
+            <input type="hidden" name="mailId" value="<%=mail.getId()%>">
+            <div class="message-box <%=active%>">
+                <p class="message-date"><%=mail.getTimeSent()%></p>
+                <h3 class="message-text"><%=mail.getText()%></h3>
+                <h4 class="message-author">From: <%=senderName%></h4>
+
+            <%
+                if(mail.getType() == MailTypes.CHALLENGE){
+                // Display challenge visual
+            %>
+                <p>Best Score: <%=maxGrades.get(mail.getId())%> pts</p>
+                <a href="quizInfo.jsp?quizId=<%=mail.getQuizId()%>">Accept</a>
+            <%
+                }else if(mail.getType() == MailTypes.FRIEND_REQUEST){
+                // Display friend request visual
+            %>
+                <input type="submit" value="accept" class="friend-acpt-submit">
+                <input type="submit" value="reject" class="friend-rjct-submit">
+            <%
+                }
+            %>
+            </div>
+        </form>
+        <%
+            }
+        %>
+    </div>
+<%----%>
+
     <div class="quiz-list-wrapper">
         <h2>Recently added quizzes</h2>
         <div class="quiz-boxes">
@@ -59,7 +160,6 @@
                     if (recentQuizzes == null || popularQuizzes == null) {
                         throw new Exception("Quizzes not found in request.");
                     }
-
                     for (Quiz quiz : recentQuizzes) {
                         User author = userDB.getById(quiz.getAuthorId());
             %>
@@ -134,5 +234,8 @@
         }
     %>
 </div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script> <!-- jQuery for AJAX -->
+<script src="script/mailPanel.js"></script>
 </body>
 </html>

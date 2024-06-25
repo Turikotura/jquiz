@@ -3,6 +3,7 @@ package database;
 import models.User;
 import org.apache.commons.dbcp2.BasicDataSource;
 
+import javax.xml.crypto.Data;
 import java.sql.*;
 import java.util.List;
 
@@ -93,5 +94,33 @@ public class UserDatabase extends Database<User>{
         String query = String.format("SELECT * FROM %s WHERE %s = '%s';",
                 databaseName, EMAIL, email);
         return queryToElement(query);
+    }
+
+    public boolean addFriend(int from, int to) throws SQLException, ClassNotFoundException {
+        String first = String.format("INSERT INTO %s ( %s, %s ) VALUES ( ?, ? )",
+                Database.FRIEND_DB, USER1_ID, USER2_ID);
+        String second = String.format("INSERT INTO %s ( %s, %s ) VALUES ( ?, ? )",
+                Database.FRIEND_DB, USER1_ID, USER2_ID);
+        Connection con = getConnection();
+        PreparedStatement firstStatement = getStatement(first,con);
+        PreparedStatement secondStatement = getStatement(second,con);
+
+        firstStatement.setInt(1,from);
+        firstStatement.setInt(2,to);
+        secondStatement.setInt(1,to);
+        secondStatement.setInt(2,from);
+
+        boolean res = firstStatement.executeUpdate() > 0 && secondStatement.executeUpdate() > 0;
+        con.close();
+        return res;
+    }
+    public boolean checkAreFriends(int from, int to) throws SQLException, ClassNotFoundException {
+        String query = String.format("SELECT * FROM %s WHERE %s = %d AND %s = %d",
+                Database.FRIEND_DB, USER1_ID, from, USER2_ID, to);
+        Connection con = getConnection();
+        ResultSet rs = getResultSet(query, con);
+        boolean res = rs.next();
+        con.close();
+        return res;
     }
 }

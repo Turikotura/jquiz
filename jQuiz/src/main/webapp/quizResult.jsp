@@ -15,7 +15,7 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<html>
+
 <%
     HistoryDatabase historydb = getDatabase(Database.HISTORY_DB,request);
     QuizDatabase quizdb = getDatabase(Database.QUIZ_DB,request);
@@ -61,10 +61,12 @@
         System.out.println("Class not found ex");
     }
 %>
+
+<html>
 <head>
     <title>Title</title>
 
-    <link href="index.css" rel="stylesheet" type="text/css">
+    <link href="style/general.css" rel="stylesheet" type="text/css">
     <link href="style/quizResult.css" rel="stylesheet" type="text/css">
 </head>
 <body>

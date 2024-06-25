@@ -14,6 +14,7 @@
 %>
 <head>
     <title>Log In</title>
+    <link href="style/general.css" rel="stylesheet" type="text/css">
 </head>
 <body>
 <h1>Please log in.</h1>
