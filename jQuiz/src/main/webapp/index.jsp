@@ -1,23 +1,24 @@
-<%@ page import="database.UserDatabase" %>
-<%@ page import="database.Database" %>
-<%@ page import="database.MailDatabase" %>
 <%@ page import="static listeners.ContextListener.getDatabase" %>
 <%@ page import="java.sql.SQLException" %>
 <%@ page import="models.*" %>
-<%@ page import="database.HistoryDatabase" %>
 <%@ page import="java.util.*" %>
+<%@ page import="database.*" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%
-    // Mail variables
     MailDatabase maildb = getDatabase(Database.MAIL_DB,request);
     UserDatabase userdb = getDatabase(Database.USER_DB,request);
     HistoryDatabase historydb = getDatabase(Database.HISTORY_DB,request);
+    QuizDatabase quizdb = getDatabase(Database.QUIZ_DB,request);
 
+    // Mail variables
     User curUser = (User)request.getSession().getAttribute("curUser");
     List<Mail> mails = new ArrayList<Mail>();
     List<String> senderNames = new ArrayList<String>();
     Map<Integer,Integer> maxGrades = new HashMap<Integer,Integer>();
+    // History variables
+    List<History> histories = new ArrayList<History>();
+    Map<Integer,String> historyQuizNames = new HashMap<Integer,String>();
 
     if(curUser != null){
         try {
@@ -32,6 +33,12 @@
                     int grade = (history == null) ? 0 : history.getGrade();
                     maxGrades.put(mail.getId(),grade);
                 }
+            }
+
+            // Get history for panel
+            histories = historydb.getHistoryByUserId(curUser.getId());
+            for(History history : histories){
+                historyQuizNames.put(history.getId(),quizdb.getById(history.getQuizId()).getTitle());
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -61,6 +68,7 @@
                 <li><a href="/achievements.jsp">Achievements</a></li>
                 <li><a href="/categories.jsp">Categories</a></li>
                 <li><a href="/createquiz.jsp">Create quiz</a></li>
+                <li><a href="/historySummary.jsp">History</a></li>
             </ul>
         </nav>
         <nav class="mail-nav">
@@ -222,6 +230,19 @@
             %>
         </div>
     </div>
+
+    <section id="history-panel">
+        <%
+            for(History history : histories){
+        %>
+        <div class="history-card">
+            <h4 class="history-grade"><%=history.getGrade()%> Pts</h4>
+            <a class="history-quiz" href="quizInfo.jsp?quizId=<%=history.getQuizId()%>"><%=historyQuizNames.get(history.getId())%></a>
+        </div>
+        <%
+            }
+        %>
+    </section>
 
     <%
         } catch (Exception e) {

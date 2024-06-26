@@ -55,7 +55,7 @@ public class QuizAttemptsController {
     public History finishQuiz(int qaId){
         QuizAttempt qa = quizAttempts.get(qaId);
         Date done = new Date();
-        History h = new History(-1,userId,qa.getQuizId(),qa.evaluateQuiz(),done,(int)(done.getTime()-qa.getStartTime().getTime())/1000);
+        History h = new History(-1,userId,qa.getQuizId(),qa.evaluateQuiz(),done,(int)(done.getTime()-qa.getStartTime().getTime()),qa.getIsPractice());
         quizAttempts.remove(qaId);
         return h;
     }

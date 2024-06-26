@@ -17,15 +17,16 @@ public class HistoryDatabase extends Database<History> {
     public static final String GRADE = "grade";
     public static final String COMPLETED_AT = "completed_at";
     public static final String WRITING_TIME = "writing_time";
+    public static final String IS_PRACTICE = "is_practice";
     public HistoryDatabase(BasicDataSource dataSource, String databaseName){
         super(dataSource,databaseName);
     }
     @Override
     public int add(History toAdd) throws SQLException, ClassNotFoundException {
         String query = String.format(
-                "INSERT INTO %s ( %s, %s, %s, %s, %s ) " +
-                        "VALUES ( ?, ?, ?, ?, ? );", databaseName,
-                USER_ID, QUIZ_ID, GRADE, COMPLETED_AT, WRITING_TIME);
+                "INSERT INTO %s ( %s, %s, %s, %s, %s, %s ) " +
+                        "VALUES ( ?, ?, ?, ?, ?, ? );", databaseName,
+                USER_ID, QUIZ_ID, GRADE, COMPLETED_AT, WRITING_TIME, IS_PRACTICE);
         Connection con = getConnection();
         PreparedStatement statement = getStatement(query,con);
         statement.setInt(1,toAdd.getUserId());
@@ -33,6 +34,7 @@ public class HistoryDatabase extends Database<History> {
         statement.setInt(3,toAdd.getGrade());
         statement.setTimestamp(4, new java.sql.Timestamp(toAdd.getCompletedAt().getTime()));
         statement.setInt(5, toAdd.getWritingTime());
+        statement.setBoolean(6,toAdd.getIsPractice());
 
         int affectedRows = statement.executeUpdate();
         if(affectedRows == 0){
@@ -57,7 +59,8 @@ public class HistoryDatabase extends Database<History> {
                 rs.getInt(QUIZ_ID),
                 rs.getInt(GRADE),
                 rs.getDate(COMPLETED_AT),
-                rs.getInt(WRITING_TIME)
+                rs.getInt(WRITING_TIME),
+                rs.getBoolean(IS_PRACTICE)
         );
     }
     public List<History> getHistoryByUserId(int userId) throws SQLException, ClassNotFoundException {

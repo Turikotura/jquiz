@@ -47,7 +47,7 @@
         // others results
 
         bestHistory = historydb.getBestScoreHistoryByQuizId(quizId);
-        bestHistoryName = userdb.getById(bestHistory.getId()).getUsername();
+        bestHistoryName = userdb.getById(bestHistory.getUserId()).getUsername();
         prevAttempts = historydb.getHistoryByUserAndQuizId(userId, quizId);
         List<User> friends = new ArrayList<User>();
         friends = userdb.getFriendsByUserId(userId);
@@ -119,7 +119,7 @@
         %>
         <div class="box">
             <h3><%=prevAttempts.get(i).getGrade()%> / <%=totalScore%></h3>
-            <h3><%=prevAttempts.get(i).getWritingTime()%> Seconds</h3>
+            <h3><%=(double) prevAttempts.get(i).getWritingTime() / 1000%> Seconds</h3>
             <h4><%=prevAttempts.get(i).getCompletedAt()%></h4>
         </div>
         <%
