@@ -1,0 +1,49 @@
+#history-panel {
+    position: fixed;
+    top: 50%; /* Position at 50% from the top */
+    right: 20px; /* Adjust as needed */
+    transform: translateY(-50%); /* Center vertically */
+    width: 10%; /* Adjust width as needed */
+    background-color: #f0f0f0;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 1000; /* Ensure it's above other content */
+    overflow-y: auto; /* Enable scrolling if content exceeds height */
+    height: 70%;
+}
+
+.history-card {
+    text-align: center;
+    background-color: #fff;
+    margin-bottom: 15px;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.history-grade {
+    font-size: 1.2rem;
+    margin-top: 0;
+}
+
+.history-quiz {
+    display: block;
+    margin-top: 10px;
+    padding: 8px 15px;
+    background-color: #007bff;
+    color: #fff;
+    text-decoration: none;
+    border: 1px solid #007bff;
+    border-radius: 5px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.history-quiz:hover {
+    background-color: #0056b3;
+}
+
+.history-quiz:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.5);
+}

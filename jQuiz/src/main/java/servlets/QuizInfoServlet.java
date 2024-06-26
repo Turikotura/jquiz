@@ -29,26 +29,16 @@ public class QuizInfoServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws ServletException, IOException {
-        String username = ((User)httpServletRequest.getSession().getAttribute("curUser")).getUsername();
-        if(username == null){
+        User user = (User)httpServletRequest.getSession().getAttribute("curUser");
+        if(user == null){
             httpServletResponse.sendRedirect("login.jsp");
             return;
-        }
-
-        UserDatabase userdb = getDatabase(Database.USER_DB,httpServletRequest);
-        int userId;
-        try {
-            userId = userdb.getByUsername(username).getId();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
         }
 
         boolean practice = httpServletRequest.getParameter("practice").equals("true");
         int quizId = Integer.parseInt(httpServletRequest.getParameter("quizId"));
 
-        QuizAttemptsController qac = getQuizAttemptsController(userId,httpServletRequest);
+        QuizAttemptsController qac = getQuizAttemptsController(user.getId(), httpServletRequest);
 
         QuizDatabase quizdb = getDatabase(Database.QUIZ_DB,httpServletRequest);
         QuestionDatabase questiondb = getDatabase(Database.QUESTION_DB,httpServletRequest);
