@@ -16,6 +16,8 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%
+    User curUser = (User) request.getSession().getAttribute("curUser");
+
     int attemptId = Integer.parseInt(request.getParameter("attemptId"));
 
     UserDatabase userdb = getDatabase(Database.USER_DB,request);
@@ -36,31 +38,32 @@
     <link href="style/playQuiz.css" rel="stylesheet" type="text/css">
 </head>
 <body>
+
 <header>
     <div class="logo">
         <img src="logo.png" alt="Website Logo">
     </div>
     <nav class="main-nav">
         <ul>
-            <li><a href="">Home</a></li>
+            <li><a href="/">Home</a></li>
             <li><a href="/users.jsp">Users</a></li>
             <li><a href="/achievements.jsp">Achievements</a></li>
             <li><a href="/categories.jsp">Categories</a></li>
             <li><a href="/createquiz.jsp">Create quiz</a></li>
+            <li><a href="/historySummary.jsp">History</a></li>
         </ul>
     </nav>
     <nav class="auth-nav">
-        <%if(request.getSession().getAttribute("curUser") == null) { %>
+        <%if(curUser == null) { %>
         <ul>
             <li><a href="login.jsp">Login</a></li>
             <li><a href="register.jsp">Register</a></li>
         </ul>
         <%} else { %>
         <ul>
-            <li><a href="#"><%=((User)request.getSession().getAttribute("curUser")).getUsername()%></a></li>
-            <li><form action="Login" method="get">
-                <input type="submit" value="Log out">
-            </form></li>
+            <li><a href="#"><%=curUser.getUsername()%></a></li>
+            <li><a onclick="submitLogOut()">Log out</a></li>
+            <form id="log-out-form" style="display: none" action="Login" method="get"></form>
         </ul>
         <%}%>
 
