@@ -22,8 +22,6 @@ public class Register {
         else if(curUserByEmail != null) return EMAIL_EXISTS;
         else if(!password1.equals(password2)) return DIFF_PASSWORDS;
         else if(!Security.isStrong(password1)) return WEAK_PASSWORD;
-        User newUser = new User(User.NO_ID,userName,new Date(),email, Security.getHash(password1),imageLink);
-        db.add(newUser);
         return SUCCESS;
     }
 }

@@ -39,7 +39,9 @@ public class RegisterServlet extends HttpServlet {
                         "Password must contain at least one uppercase letter, one lowercase letter and one digit.");
                 response.sendRedirect("register.jsp");
             } else {
-                request.getSession().setAttribute("curUser",new User(User.NO_ID,userName,new Date(),email, Security.getHash(password1),imageLink));
+                User newUser = new User(User.NO_ID,userName,new Date(),email, Security.getHash(password1),imageLink);
+                ((UserDatabase)request.getServletContext().getAttribute(Database.USER_DB)).add(newUser);
+                request.getSession().setAttribute("curUser",newUser);
                 response.sendRedirect("");
             }
         } catch (SQLException | ClassNotFoundException e) {
