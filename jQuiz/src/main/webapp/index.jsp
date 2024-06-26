@@ -14,19 +14,15 @@
     UserDatabase userdb = getDatabase(Database.USER_DB,request);
     HistoryDatabase historydb = getDatabase(Database.HISTORY_DB,request);
 
-    String username = (String) request.getSession().getAttribute("curUser");
-    User curUser = null;
+    User curUser = (User) request.getSession().getAttribute("curUser");
     List<Mail> mails = new ArrayList<Mail>();
     List<String> senderNames = new ArrayList<String>();
     Map<Integer,Integer> maxGrades = new HashMap<Integer,Integer>();
 
-    if(username != null){
+    if(curUser != null){
         try {
-            curUser = userdb.getByUsername(username);
-            if(curUser != null){
-                // Get mails received by user
-                mails = maildb.getMailsByUserId(curUser.getId(),"RECEIVE");
-            }
+            // Get mails received by user
+            mails = maildb.getMailsByUserId(curUser.getId(),"RECEIVE");
             for(Mail mail : mails){
                 // Get names of senders
                 senderNames.add(userdb.getById(mail.getSenderId()).getUsername());
@@ -78,7 +74,7 @@
             </ul>
             <%} else { %>
             <ul>
-                <li><a href="#"><%=(String)request.getSession().getAttribute("curUser")%></a></li>
+                <li><a href="#"><%=((User)request.getSession().getAttribute("curUser")).getUsername()%></a></li>
                 <li><form action="Login" method="get">
                     <input type="submit" value="Log out">
                 </form></li>

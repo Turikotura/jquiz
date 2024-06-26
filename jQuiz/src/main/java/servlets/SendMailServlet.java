@@ -32,7 +32,7 @@ public class SendMailServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws ServletException, IOException {
         // Get parameters
-        String senderName = (String) httpServletRequest.getSession().getAttribute("curUser");
+        String senderName = ((User) httpServletRequest.getSession().getAttribute("curUser")).getUsername();
         String receiverName = httpServletRequest.getParameter("receiver");
         MailTypes mailType = MailTypes.values()[Integer.parseInt(httpServletRequest.getParameter("mail-type"))];
         String text = httpServletRequest.getParameter("text");

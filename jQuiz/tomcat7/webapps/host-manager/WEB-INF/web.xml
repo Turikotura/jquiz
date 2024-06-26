@@ -84,7 +84,7 @@
     <url-pattern>/html/*</url-pattern>
   </servlet-mapping>
 
-  <!-- Define a servlets.Security Constraint on this Application -->
+  <!-- Define a accounts.Security Constraint on this Application -->
   <security-constraint>
     <web-resource-collection>
       <web-resource-name>HostManager commands</web-resource-name>
@@ -112,7 +112,7 @@
     <realm-name>Tomcat Host Manager Application</realm-name>
   </login-config>
 
-  <!-- servlets.Security roles referenced by this web application -->
+  <!-- accounts.Security roles referenced by this web application -->
   <security-role>
     <description>
       The role that is required to log in to the Host Manager Application HTML

@@ -47,7 +47,7 @@
         // others results
 
         bestHistory = historydb.getBestScoreHistoryByQuizId(quizId);
-        bestHistoryName = userdb.getById(bestHistory.getId()).getUsername();
+        bestHistoryName = userdb.getById(bestHistory.getUserId()).getUsername();
         prevAttempts = historydb.getHistoryByUserAndQuizId(userId, quizId);
         List<User> friends = new ArrayList<User>();
         friends = userdb.getFriendsByUserId(userId);
@@ -56,9 +56,9 @@
             friendHistories.add(historydb.getLastHistoryByUserAndQuizId(friend.getId(),quiz.getId()));
         }
     }catch (SQLException e){
-        System.out.println("SQL ex");
+//        System.out.println("SQL ex");
     }catch (ClassNotFoundException e){
-        System.out.println("Class not found ex");
+//        System.out.println("Class not found ex");
     }
 %>
 
@@ -91,7 +91,7 @@
         </ul>
         <%} else { %>
         <ul>
-            <li><a href="#"><%=(String)request.getSession().getAttribute("curUser")%></a></li>
+            <li><a href="#"><%=((User)request.getSession().getAttribute("curUser")).getUsername()%></a></li>
             <li><form action="Login" method="get">
                 <input type="submit" value="Log out">
             </form></li>

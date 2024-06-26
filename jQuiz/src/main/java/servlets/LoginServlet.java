@@ -1,5 +1,7 @@
 package servlets;
 
+import accounts.Security;
+import accounts.Login;
 import database.Database;
 import database.UserDatabase;
 import models.User;
@@ -15,18 +17,17 @@ public class LoginServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.setContentType("text/html");
         String userName = request.getParameter("user-name"), password = request.getParameter("password");
-        password = Security.getHash(password);
         try {
-            User curUser = ((UserDatabase)request.getServletContext().getAttribute(Database.USER_DB)).getByUsername(userName);
-            if(curUser == null) {
+            int result = Login.login(userName,password,(UserDatabase) request.getServletContext().getAttribute(Database.USER_DB));
+            if(result == Login.NO_USER) {
                 request.getServletContext().setAttribute("log-message","User named " + userName + " doesn't exist.");
                 response.sendRedirect("login.jsp");
-            } else if(password.equals(curUser.getPassword())) {
-                request.getSession().setAttribute("curUser",userName);
-                response.sendRedirect("");
-            } else {
+            } else if(result == Login.WRONG_PASSWORD) {
                 request.getServletContext().setAttribute("log-message","Password incorrect.");
                 response.sendRedirect("login.jsp");
+            } else {
+                request.getSession().setAttribute("curUser",((UserDatabase) request.getServletContext().getAttribute(Database.USER_DB)).getByUsername(userName));
+                response.sendRedirect("");
             }
         } catch (SQLException | ClassNotFoundException e) {
             throw new RuntimeException(e);

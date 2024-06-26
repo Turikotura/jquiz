@@ -1,15 +1,12 @@
 <%@ page import="java.sql.SQLException" %>
-<%@ page import="models.Quiz" %>
-<%@ page import="models.Question" %>
-<%@ page import="models.QuestionTypes" %>
 <%@ page import="java.util.List" %>
-<%@ page import="models.Answer" %>
 <%@ page import="attempts.QuizAttempt" %>
 <%@ page import="attempts.QuizAttemptsController" %>
 <%@ page import="static listeners.SessionListener.getQuizAttemptsController" %>
 <%@ page import="database.*" %>
 <%@ page import="static listeners.ContextListener.getDatabase" %>
-<%@ page import="attempts.QuestionAttempt" %><%--
+<%@ page import="attempts.QuestionAttempt" %>
+<%@ page import="models.*" %><%--
   Created by IntelliJ IDEA.
   User: giorgi
   Date: 6/18/24
@@ -23,13 +20,7 @@
 
     UserDatabase userdb = getDatabase(Database.USER_DB,request);
     int userId = -1;
-    try {
-        userId = userdb.getByUsername((String) request.getSession().getAttribute("curUser")).getId();
-    } catch (SQLException e) {
-        throw new RuntimeException(e);
-    } catch (ClassNotFoundException e) {
-        throw new RuntimeException(e);
-    }
+    userId = ((User) request.getSession().getAttribute("curUser")).getId();
 
     QuizAttemptsController qac = getQuizAttemptsController(userId,request);
     QuizAttempt quizAttempt = qac.getQuizAttemptById(attemptId);
@@ -66,7 +57,7 @@
         </ul>
         <%} else { %>
         <ul>
-            <li><a href="#"><%=(String)request.getSession().getAttribute("curUser")%></a></li>
+            <li><a href="#"><%=((User)request.getSession().getAttribute("curUser")).getUsername()%></a></li>
             <li><form action="Login" method="get">
                 <input type="submit" value="Log out">
             </form></li>

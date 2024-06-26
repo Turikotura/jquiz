@@ -4,18 +4,83 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="11bfb6b0-0ab4-4275-9c08-73c2144412d4" name="Changes" comment="Quiz info page updated">
+    <list default="true" id="11bfb6b0-0ab4-4275-9c08-73c2144412d4" name="Changes" comment="Log in/Sign up moved to separate classes.">
+      <change afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/jQuiz/src/main/java/accounts/Login.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/jQuiz/src/main/java/accounts/Register.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/dataSources/a186986e-7e9d-4650-9ad0-5d280f91b85a.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/a186986e-7e9d-4650-9ad0-5d280f91b85a.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jQuiz/database_structure/answers.sql" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/database_structure/answers.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jQuiz/database_structure/questions.sql" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/database_structure/questions.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jQuiz/database_structure/quizzes.sql" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/database_structure/quizzes.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jQuiz/src/main/java/database/UserDatabase.java" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/src/main/java/database/UserDatabase.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jQuiz/src/main/java/models/QuestionTypes.java" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/src/main/java/models/QuestionTypes.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jQuiz/database_structure/run.sh" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/database_structure/run.sh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jQuiz/src/main/java/database/DBInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/src/main/java/database/DBInfo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jQuiz/src/main/java/servlets/LoginServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/src/main/java/servlets/LoginServlet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jQuiz/src/main/java/servlets/QuizInfoServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/src/main/java/servlets/QuizInfoServlet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jQuiz/src/main/java/servlets/RegisterServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/src/main/java/servlets/RegisterServlet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jQuiz/src/main/java/servlets/Security.java" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/src/main/java/accounts/Security.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jQuiz/src/main/java/servlets/SendMailServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/src/main/java/servlets/SendMailServlet.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/jQuiz/src/main/webapp/index.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/src/main/webapp/index.jsp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/jQuiz/src/main/webapp/playQuiz.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/src/main/webapp/playQuiz.jsp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/jQuiz/src/main/webapp/quizInfo.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/src/main/webapp/quizInfo.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jQuiz/src/main/webapp/quizResult.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/src/main/webapp/quizResult.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jQuiz/src/main/webapp/sendMail.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/src/main/webapp/sendMail.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jQuiz/tomcat7/RELEASE-NOTES" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/tomcat7/RELEASE-NOTES" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jQuiz/tomcat7/bin/catalina.bat" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/tomcat7/bin/catalina.bat" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jQuiz/tomcat7/conf/catalina.policy" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/tomcat7/conf/catalina.policy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jQuiz/tomcat7/conf/server.xml" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/tomcat7/conf/server.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jQuiz/tomcat7/conf/web.xml" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/tomcat7/conf/web.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jQuiz/tomcat7/webapps/ROOT/RELEASE-NOTES.txt" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/tomcat7/webapps/ROOT/RELEASE-NOTES.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jQuiz/tomcat7/webapps/ROOT/index.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/tomcat7/webapps/ROOT/index.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jQuiz/tomcat7/webapps/docs/RELEASE-NOTES.txt" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/tomcat7/webapps/docs/RELEASE-NOTES.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jQuiz/tomcat7/webapps/docs/aio.html" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/tomcat7/webapps/docs/aio.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jQuiz/tomcat7/webapps/docs/apr.html" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/tomcat7/webapps/docs/apr.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jQuiz/tomcat7/webapps/docs/balancer-howto.html" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/tomcat7/webapps/docs/balancer-howto.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jQuiz/tomcat7/webapps/docs/building.html" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/tomcat7/webapps/docs/building.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jQuiz/tomcat7/webapps/docs/cgi-howto.html" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/tomcat7/webapps/docs/cgi-howto.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jQuiz/tomcat7/webapps/docs/changelog.html" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/tomcat7/webapps/docs/changelog.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jQuiz/tomcat7/webapps/docs/class-loader-howto.html" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/tomcat7/webapps/docs/class-loader-howto.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jQuiz/tomcat7/webapps/docs/cluster-howto.html" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/tomcat7/webapps/docs/cluster-howto.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jQuiz/tomcat7/webapps/docs/comments.html" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/tomcat7/webapps/docs/comments.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jQuiz/tomcat7/webapps/docs/config/cluster.html" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/tomcat7/webapps/docs/config/cluster.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jQuiz/tomcat7/webapps/docs/config/filter.html" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/tomcat7/webapps/docs/config/filter.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jQuiz/tomcat7/webapps/docs/config/host.html" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/tomcat7/webapps/docs/config/host.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jQuiz/tomcat7/webapps/docs/config/listeners.html" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/tomcat7/webapps/docs/config/listeners.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jQuiz/tomcat7/webapps/docs/config/realm.html" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/tomcat7/webapps/docs/config/realm.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jQuiz/tomcat7/webapps/docs/config/systemprops.html" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/tomcat7/webapps/docs/config/systemprops.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jQuiz/tomcat7/webapps/docs/connectors.html" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/tomcat7/webapps/docs/connectors.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jQuiz/tomcat7/webapps/docs/default-servlet.html" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/tomcat7/webapps/docs/default-servlet.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jQuiz/tomcat7/webapps/docs/deployer-howto.html" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/tomcat7/webapps/docs/deployer-howto.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jQuiz/tomcat7/webapps/docs/developers.html" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/tomcat7/webapps/docs/developers.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jQuiz/tomcat7/webapps/docs/extras.html" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/tomcat7/webapps/docs/extras.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jQuiz/tomcat7/webapps/docs/host-manager-howto.html" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/tomcat7/webapps/docs/host-manager-howto.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jQuiz/tomcat7/webapps/docs/html-host-manager-howto.html" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/tomcat7/webapps/docs/html-host-manager-howto.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jQuiz/tomcat7/webapps/docs/html-manager-howto.html" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/tomcat7/webapps/docs/html-manager-howto.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jQuiz/tomcat7/webapps/docs/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/tomcat7/webapps/docs/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jQuiz/tomcat7/webapps/docs/introduction.html" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/tomcat7/webapps/docs/introduction.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jQuiz/tomcat7/webapps/docs/jasper-howto.html" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/tomcat7/webapps/docs/jasper-howto.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jQuiz/tomcat7/webapps/docs/jdbc-pool.html" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/tomcat7/webapps/docs/jdbc-pool.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jQuiz/tomcat7/webapps/docs/jndi-datasource-examples-howto.html" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/tomcat7/webapps/docs/jndi-datasource-examples-howto.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jQuiz/tomcat7/webapps/docs/jndi-resources-howto.html" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/tomcat7/webapps/docs/jndi-resources-howto.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jQuiz/tomcat7/webapps/docs/logging.html" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/tomcat7/webapps/docs/logging.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jQuiz/tomcat7/webapps/docs/manager-howto.html" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/tomcat7/webapps/docs/manager-howto.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jQuiz/tomcat7/webapps/docs/maven-jars.html" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/tomcat7/webapps/docs/maven-jars.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jQuiz/tomcat7/webapps/docs/mbeans-descriptors-howto.html" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/tomcat7/webapps/docs/mbeans-descriptors-howto.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jQuiz/tomcat7/webapps/docs/monitoring.html" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/tomcat7/webapps/docs/monitoring.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jQuiz/tomcat7/webapps/docs/proxy-howto.html" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/tomcat7/webapps/docs/proxy-howto.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jQuiz/tomcat7/webapps/docs/realm-howto.html" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/tomcat7/webapps/docs/realm-howto.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jQuiz/tomcat7/webapps/docs/security-howto.html" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/tomcat7/webapps/docs/security-howto.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jQuiz/tomcat7/webapps/docs/security-manager-howto.html" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/tomcat7/webapps/docs/security-manager-howto.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jQuiz/tomcat7/webapps/docs/setup.html" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/tomcat7/webapps/docs/setup.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jQuiz/tomcat7/webapps/docs/ssi-howto.html" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/tomcat7/webapps/docs/ssi-howto.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jQuiz/tomcat7/webapps/docs/ssl-howto.html" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/tomcat7/webapps/docs/ssl-howto.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jQuiz/tomcat7/webapps/docs/virtual-hosting-howto.html" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/tomcat7/webapps/docs/virtual-hosting-howto.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jQuiz/tomcat7/webapps/docs/web-socket-howto.html" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/tomcat7/webapps/docs/web-socket-howto.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jQuiz/tomcat7/webapps/docs/windows-auth-howto.html" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/tomcat7/webapps/docs/windows-auth-howto.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jQuiz/tomcat7/webapps/docs/windows-service-howto.html" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/tomcat7/webapps/docs/windows-service-howto.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jQuiz/tomcat7/webapps/examples/WEB-INF/classes/util/CookieFilter.java" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/tomcat7/webapps/examples/WEB-INF/classes/util/CookieFilter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jQuiz/tomcat7/webapps/examples/WEB-INF/web.xml" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/tomcat7/webapps/examples/WEB-INF/web.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jQuiz/tomcat7/webapps/host-manager/WEB-INF/web.xml" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/tomcat7/webapps/host-manager/WEB-INF/web.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jQuiz/tomcat7/webapps/manager/WEB-INF/web.xml" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/tomcat7/webapps/manager/WEB-INF/web.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -30,8 +95,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Class" />
         <option value="Jsp File" />
+        <option value="Class" />
       </list>
     </option>
   </component>
@@ -57,58 +122,58 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Database Script.achToUser.sql.executor&quot;: &quot;Run&quot;,
-    &quot;Database Script.achievements.sql.executor&quot;: &quot;Run&quot;,
-    &quot;Database Script.answers.sql.executor&quot;: &quot;Run&quot;,
-    &quot;Database Script.create_database.sql.executor&quot;: &quot;Run&quot;,
-    &quot;Database Script.friends.sql.executor&quot;: &quot;Run&quot;,
-    &quot;Database Script.history.sql.executor&quot;: &quot;Run&quot;,
-    &quot;Database Script.mails.sql.executor&quot;: &quot;Run&quot;,
-    &quot;Database Script.question_types.sql.executor&quot;: &quot;Run&quot;,
-    &quot;Database Script.questions.sql.executor&quot;: &quot;Run&quot;,
-    &quot;Database Script.quizzes.sql.executor&quot;: &quot;Run&quot;,
-    &quot;Database Script.quizzes_view.sql.executor&quot;: &quot;Run&quot;,
-    &quot;Database Script.users.sql.executor&quot;: &quot;Run&quot;,
-    &quot;Downloaded.Files.Path.Enabled&quot;: &quot;false&quot;,
-    &quot;Maven.jQuiz [clean].executor&quot;: &quot;Run&quot;,
-    &quot;Maven.jQuiz [tomcat7:run].executor&quot;: &quot;Run&quot;,
-    &quot;Notification.DisplayName-DoNotAsk-Vcs Important Messages&quot;: &quot;VCS important messages&quot;,
-    &quot;Notification.DoNotAsk-Vcs Important Messages&quot;: &quot;true&quot;,
-    &quot;Repository.Attach.Annotations&quot;: &quot;false&quot;,
-    &quot;Repository.Attach.JavaDocs&quot;: &quot;false&quot;,
-    &quot;Repository.Attach.Sources&quot;: &quot;false&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;Shell Script.run.sh.executor&quot;: &quot;Run&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;play-quiz&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/home/giorgi/OOP/jmovies/jQuiz/src/main/java/AbstractQuestions&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Libraries&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.1150748&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;vcs.Git&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Database Script.achToUser.sql.executor": "Run",
+    "Database Script.achievements.sql.executor": "Run",
+    "Database Script.answers.sql.executor": "Run",
+    "Database Script.create_database.sql.executor": "Run",
+    "Database Script.friends.sql.executor": "Run",
+    "Database Script.history.sql.executor": "Run",
+    "Database Script.mails.sql.executor": "Run",
+    "Database Script.question_types.sql.executor": "Run",
+    "Database Script.questions.sql.executor": "Run",
+    "Database Script.quizzes.sql.executor": "Run",
+    "Database Script.quizzes_view.sql.executor": "Run",
+    "Database Script.users.sql.executor": "Run",
+    "Downloaded.Files.Path.Enabled": "false",
+    "Maven.jQuiz [clean].executor": "Run",
+    "Maven.jQuiz [tomcat7:run].executor": "Run",
+    "Notification.DisplayName-DoNotAsk-Vcs Important Messages": "VCS important messages",
+    "Notification.DoNotAsk-Vcs Important Messages": "true",
+    "Repository.Attach.Annotations": "false",
+    "Repository.Attach.JavaDocs": "false",
+    "Repository.Attach.Sources": "false",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "Shell Script.run.sh.executor": "Run",
+    "git-widget-placeholder": "profile",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "/home/giorgi/OOP/jmovies/jQuiz/src/main/java/AbstractQuestions",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Libraries",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.1150748",
+    "settings.editor.selected.configurable": "vcs.Git",
+    "vue.rearranger.settings.migration": "true"
   },
-  &quot;keyToStringList&quot;: {
-    &quot;DatabaseDriversLRU&quot;: [
-      &quot;mysql&quot;
+  "keyToStringList": {
+    "DatabaseDriversLRU": [
+      "mysql"
     ],
-    &quot;RunConfigurationTargetLRU&quot;: [
-      &quot;379a209f-0ac5-4e5d-a751-c04ff50e8739&quot;,
-      &quot;743bbeab-bc87-49bd-aac1-4b266adef87a&quot;,
-      &quot;57124589-df65-47f3-9eaf-06675d879e76&quot;,
-      &quot;a186986e-7e9d-4650-9ad0-5d280f91b85a&quot;
+    "RunConfigurationTargetLRU": [
+      "379a209f-0ac5-4e5d-a751-c04ff50e8739",
+      "743bbeab-bc87-49bd-aac1-4b266adef87a",
+      "57124589-df65-47f3-9eaf-06675d879e76",
+      "a186986e-7e9d-4650-9ad0-5d280f91b85a"
     ]
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/jQuiz/src/main/java/AbstractQuestions" />
@@ -120,7 +185,7 @@
       <command value="mvn tomcat7:run" />
     </option>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Database Script.achievements.sql">
     <configuration name="achToUser.sql" type="DatabaseScript" editBeforeRun="true" nameIsGenerated="true">
       <script-file value="$PROJECT_DIR$/jQuiz/database_structure/achToUser.sql" />
       <script-mode>FILE</script-mode>
@@ -334,6 +399,7 @@
     <MESSAGE value="Log in/Log out GUI on main page added." />
     <MESSAGE value="Quiz info page added." />
     <MESSAGE value="Quiz info page updated" />
-    <option name="LAST_COMMIT_MESSAGE" value="Quiz info page updated" />
+    <MESSAGE value="Log in/Sign up moved to separate classes." />
+    <option name="LAST_COMMIT_MESSAGE" value="Log in/Sign up moved to separate classes." />
   </component>
 </project>
