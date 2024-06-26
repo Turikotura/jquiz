@@ -54,7 +54,7 @@
             </ul>
             <%} else { %>
             <ul>
-                <li><a href="#"><%=(String)request.getSession().getAttribute("curUser")%></a></li>
+                <li><a href="#"><%=((User)request.getSession().getAttribute("curUser")).getUsername()%></a></li>
                 <li><form action="Login" method="get">
                     <input type="submit" value="Log out">
                 </form></li>

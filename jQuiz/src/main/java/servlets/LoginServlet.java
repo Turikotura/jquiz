@@ -22,7 +22,7 @@ public class LoginServlet extends HttpServlet {
                 request.getServletContext().setAttribute("log-message","User named " + userName + " doesn't exist.");
                 response.sendRedirect("login.jsp");
             } else if(password.equals(curUser.getPassword())) {
-                request.getSession().setAttribute("curUser",userName);
+                request.getSession().setAttribute("curUser",curUser);
                 response.sendRedirect("");
             } else {
                 request.getServletContext().setAttribute("log-message","Password incorrect.");

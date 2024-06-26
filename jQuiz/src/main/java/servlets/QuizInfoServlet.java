@@ -7,6 +7,7 @@ import listeners.*;
 import models.Answer;
 import models.Question;
 import models.Quiz;
+import models.User;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -28,7 +29,7 @@ public class QuizInfoServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws ServletException, IOException {
-        String username = (String) httpServletRequest.getSession().getAttribute("curUser");
+        String username = ((User)httpServletRequest.getSession().getAttribute("curUser")).getUsername();
         if(username == null){
             httpServletResponse.sendRedirect("login.jsp");
             return;
