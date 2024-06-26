@@ -4,7 +4,9 @@
 <%@ page import="java.sql.SQLException" %>
 <%@ page import="database.UserDatabase" %>
 <%@ page import="models.User" %>
-<%@ page import="java.util.List" %><%--
+<%@ page import="java.util.List" %>
+<%@ page import="models.History" %>
+<%@ page import="database.HistoryDatabase" %><%--
   Created by IntelliJ IDEA.
   User: giorgi
   Date: 6/17/24
@@ -17,6 +19,7 @@
 <% int quizId = Integer.parseInt(request.getParameter("quizId"));
     QuizDatabase quizDB = (QuizDatabase) application.getAttribute(Database.QUIZ_DB);
     UserDatabase userDB = (UserDatabase) application.getAttribute(Database.USER_DB);
+    HistoryDatabase hisroryDB = (HistoryDatabase) application.getAttribute(Database.HISTORY_DB);
     Quiz curQuiz = null;
     User author = null;
     try {
@@ -81,6 +84,45 @@
         <input type="submit" value="Start Quiz">
     </form>
 
+    <h3>Hall of fame</h3>
+    <% try {
+        List<History> topOfAllTime = hisroryDB.getTopPerformersByQuizId(curQuiz.getId(),10);
+        if(topOfAllTime.isEmpty()) { %>
+            <p>No one has taken this quiz yet. Be the first!</p>
+        <% } else { %>
+            <ol>
+                <% for(History curTry : topOfAllTime) {
+                    User topScorer = userDB.getById(curTry.getUserId());%>
+                <li><a href="#"><%=topScorer.getUsername() %></a> <%=": " + curTry.getGrade() + " in " + curTry.getWritingTime() + "min"%></li>
+                <% } %>
+            </ol>
+        <% }
+    } catch (SQLException e) {
+        throw new RuntimeException(e);
+    } catch (ClassNotFoundException e) {
+        throw new RuntimeException(e);
+    } %>
+
+
+    <h3>Top performers of the last day</h3>
+    <% try {
+        List<History> topOfAllTime = hisroryDB.getTopInLastDayByQuizId(curQuiz.getId(),10);
+        if(topOfAllTime.isEmpty()) { %>
+            <p>No one has taken this quiz int the last day. Be the first!</p>
+        <% } else { %>
+            <ol>
+                <% for(History curTry : topOfAllTime) {
+                    User topScorer = userDB.getById(curTry.getUserId());%>
+                <li><a href="#"><%=topScorer.getUsername() %></a> <%=": " + curTry.getGrade() + " in " + curTry.getWritingTime() + "min"%></li>
+                <% } %>
+            </ol>
+        <% }
+    } catch (SQLException e) {
+        throw new RuntimeException(e);
+    } catch (ClassNotFoundException e) {
+        throw new RuntimeException(e);
+    } %>
+
     <div class="quiz-list-wrapper">
         <h2>Quizzes by the same author:</h2>
         <div class="quiz-boxes">
@@ -92,6 +134,7 @@
 
                     for (Quiz quiz : quizzesBySameAuthor) {
                         User curAuthor = userDB.getById(quiz.getAuthorId());
+                        if(quiz.getId() == curQuiz.getId()) continue;
             %>
             <div class="quiz-box">
                 <a href="quizInfo.jsp?quizId=<%=quiz.getId()%>">

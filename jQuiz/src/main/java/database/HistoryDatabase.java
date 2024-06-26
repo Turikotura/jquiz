@@ -110,4 +110,18 @@ public class HistoryDatabase extends Database<History> {
                 databaseName, USER_ID, userId, QUIZ_ID, quizId, GRADE, WRITING_TIME);
         return queryToElement(query);
     }
+
+    public List<History> getTopPerformersByQuizId(int quizId, int k) throws SQLException, ClassNotFoundException {
+        String query = String.format(
+                "SELECT * FROM %s WHERE %s = %d ORDER BY %s DESC, %s LIMIT %d;",
+                databaseName, QUIZ_ID, quizId, GRADE, WRITING_TIME, k);
+        return queryToList(query);
+    }
+
+    public List<History> getTopInLastDayByQuizId(int quizId, int k) throws SQLException, ClassNotFoundException {
+        String query = String.format(
+                "SELECT * FROM %s WHERE %s = %d AND %s >= NOW() - INTERVAL 1 DAY ORDER BY %s DESC, %s LIMIT %d;",
+                databaseName, QUIZ_ID, quizId, "completed_at", GRADE, WRITING_TIME, k);
+        return queryToList(query);
+    }
 }
