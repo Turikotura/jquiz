@@ -4,9 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="11bfb6b0-0ab4-4275-9c08-73c2144412d4" name="Changes" comment="Log in/Sign up moved to separate classes.">
+    <list default="true" id="11bfb6b0-0ab4-4275-9c08-73c2144412d4" name="Changes" comment="Basic profile page added.">
+      <change beforePath="$PROJECT_DIR$/.idea/webContexts.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/webContexts.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jQuiz/src/main/java/servlets/CreateQuizServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/src/main/java/servlets/CreateQuizServlet.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -21,8 +21,9 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Jsp File" />
         <option value="Class" />
+        <option value="Jsp File" />
+        <option value="CSS File" />
       </list>
     </option>
   </component>
@@ -48,58 +49,60 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Database Script.achToUser.sql.executor": "Run",
-    "Database Script.achievements.sql.executor": "Run",
-    "Database Script.answers.sql.executor": "Run",
-    "Database Script.create_database.sql.executor": "Run",
-    "Database Script.friends.sql.executor": "Run",
-    "Database Script.history.sql.executor": "Run",
-    "Database Script.mails.sql.executor": "Run",
-    "Database Script.question_types.sql.executor": "Run",
-    "Database Script.questions.sql.executor": "Run",
-    "Database Script.quizzes.sql.executor": "Run",
-    "Database Script.quizzes_view.sql.executor": "Run",
-    "Database Script.users.sql.executor": "Run",
-    "Downloaded.Files.Path.Enabled": "false",
-    "Maven.jQuiz [clean].executor": "Run",
-    "Maven.jQuiz [tomcat7:run].executor": "Run",
-    "Notification.DisplayName-DoNotAsk-Vcs Important Messages": "VCS important messages",
-    "Notification.DoNotAsk-Vcs Important Messages": "true",
-    "Repository.Attach.Annotations": "false",
-    "Repository.Attach.JavaDocs": "false",
-    "Repository.Attach.Sources": "false",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "Shell Script.run.sh.executor": "Run",
-    "git-widget-placeholder": "profile",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "/home/giorgi/OOP/jmovies/jQuiz/src/main/java/AbstractQuestions",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "Libraries",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.1150748",
-    "settings.editor.selected.configurable": "vcs.Git",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Database Script.achToUser.sql.executor&quot;: &quot;Run&quot;,
+    &quot;Database Script.achievements.sql.executor&quot;: &quot;Run&quot;,
+    &quot;Database Script.answers.sql.executor&quot;: &quot;Run&quot;,
+    &quot;Database Script.create_database.sql.executor&quot;: &quot;Run&quot;,
+    &quot;Database Script.friends.sql.executor&quot;: &quot;Run&quot;,
+    &quot;Database Script.history.sql.executor&quot;: &quot;Run&quot;,
+    &quot;Database Script.mails.sql.executor&quot;: &quot;Run&quot;,
+    &quot;Database Script.question_types.sql.executor&quot;: &quot;Run&quot;,
+    &quot;Database Script.questions.sql.executor&quot;: &quot;Run&quot;,
+    &quot;Database Script.quizzes.sql.executor&quot;: &quot;Run&quot;,
+    &quot;Database Script.quizzes_view.sql.executor&quot;: &quot;Run&quot;,
+    &quot;Database Script.users.sql.executor&quot;: &quot;Run&quot;,
+    &quot;Downloaded.Files.Path.Enabled&quot;: &quot;false&quot;,
+    &quot;JUnit.AccountTests.executor&quot;: &quot;Run&quot;,
+    &quot;Maven.jQuiz [clean].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.jQuiz [tomcat7:run].executor&quot;: &quot;Run&quot;,
+    &quot;Notification.DisplayName-DoNotAsk-Vcs Important Messages&quot;: &quot;VCS important messages&quot;,
+    &quot;Notification.DoNotAsk-Vcs Important Messages&quot;: &quot;true&quot;,
+    &quot;Repository.Attach.Annotations&quot;: &quot;false&quot;,
+    &quot;Repository.Attach.JavaDocs&quot;: &quot;false&quot;,
+    &quot;Repository.Attach.Sources&quot;: &quot;false&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;Shell Script.run.sh.executor&quot;: &quot;Run&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;profile&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/home/giorgi/OOP/jmovies/jQuiz/src/main/java/AbstractQuestions&quot;,
+    &quot;list.type.of.created.stylesheet&quot;: &quot;CSS&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Libraries&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.1150748&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;vcs.Git&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   },
-  "keyToStringList": {
-    "DatabaseDriversLRU": [
-      "mysql"
+  &quot;keyToStringList&quot;: {
+    &quot;DatabaseDriversLRU&quot;: [
+      &quot;mysql&quot;
     ],
-    "RunConfigurationTargetLRU": [
-      "379a209f-0ac5-4e5d-a751-c04ff50e8739",
-      "743bbeab-bc87-49bd-aac1-4b266adef87a",
-      "57124589-df65-47f3-9eaf-06675d879e76",
-      "a186986e-7e9d-4650-9ad0-5d280f91b85a"
+    &quot;RunConfigurationTargetLRU&quot;: [
+      &quot;379a209f-0ac5-4e5d-a751-c04ff50e8739&quot;,
+      &quot;743bbeab-bc87-49bd-aac1-4b266adef87a&quot;,
+      &quot;57124589-df65-47f3-9eaf-06675d879e76&quot;,
+      &quot;a186986e-7e9d-4650-9ad0-5d280f91b85a&quot;
     ]
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/jQuiz/src/main/java/AbstractQuestions" />
@@ -225,6 +228,7 @@
       <workItem from="1718690342488" duration="6718000" />
       <workItem from="1718737345995" duration="3240000" />
       <workItem from="1718792020175" duration="3962000" />
+      <workItem from="1719473517374" duration="13545000" />
     </task>
     <task id="LOCAL-00001" summary="Objects for different question types added.">
       <option name="closed" value="true" />
@@ -306,7 +310,47 @@
       <option name="project" value="LOCAL" />
       <updated>1719397176213</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="Quiz creating now shows correct author.">
+      <option name="closed" value="true" />
+      <created>1719408155243</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1719408155243</updated>
+    </task>
+    <task id="LOCAL-00012" summary="Added tests for logging in/signing up.">
+      <option name="closed" value="true" />
+      <created>1719411955662</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1719411955662</updated>
+    </task>
+    <task id="LOCAL-00013" summary="Added leaderboards to quizInfo page.">
+      <option name="closed" value="true" />
+      <created>1719426440700</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1719426440700</updated>
+    </task>
+    <task id="LOCAL-00014" summary="quizInfo page finalized.">
+      <option name="closed" value="true" />
+      <created>1719487973713</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1719487973713</updated>
+    </task>
+    <task id="LOCAL-00015" summary="Basic profile page added.">
+      <option name="closed" value="true" />
+      <created>1719518085475</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1719518085475</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -334,6 +378,11 @@
     <MESSAGE value="Quiz info page added." />
     <MESSAGE value="Quiz info page updated" />
     <MESSAGE value="Log in/Sign up moved to separate classes." />
-    <option name="LAST_COMMIT_MESSAGE" value="Log in/Sign up moved to separate classes." />
+    <MESSAGE value="Quiz creating now shows correct author." />
+    <MESSAGE value="Added tests for logging in/signing up." />
+    <MESSAGE value="Added leaderboards to quizInfo page." />
+    <MESSAGE value="quizInfo page finalized." />
+    <MESSAGE value="Basic profile page added." />
+    <option name="LAST_COMMIT_MESSAGE" value="Basic profile page added." />
   </component>
 </project>
