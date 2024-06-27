@@ -2,7 +2,7 @@ package database;
 
 public class DBInfo {
     public static final String USERNAME = "root";
-    public static final String PASSWORD = "67F20404d";
+    public static final String PASSWORD = "";
     public static final String SERVER= "localhost:3306"; // "127.0.0.1:3306"
     public static final String NAME= "quizDB";
 }
