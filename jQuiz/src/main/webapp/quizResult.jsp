@@ -29,7 +29,6 @@
 
     History lastHistory = null;
     Quiz quiz = null;
-    User user = null;
     List<Question> questionList = new ArrayList<Question>();
     int totalScore = 0;
 
