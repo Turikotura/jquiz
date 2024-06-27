@@ -72,9 +72,10 @@
                 <li><a href="login.jsp">Login</a></li>
                 <li><a href="register.jsp">Register</a></li>
             </ul>
-            <%} else { %>
+            <%} else {
+                String loggedInAs = ((User)request.getSession().getAttribute("curUser")).getUsername();%>
             <ul>
-                <li><a href="#"><%=((User)request.getSession().getAttribute("curUser")).getUsername()%></a></li>
+                <li><a href="profile.jsp?username=<%=loggedInAs%>"><%=loggedInAs%></a></li>
                 <li><form action="Login" method="get">
                     <input type="submit" value="Log out">
                 </form></li>
@@ -166,7 +167,7 @@
                     </div>
                     <div class="quiz-box-bot">
                         <p><%= quiz.getTotalPlayCount()%></p>
-                        <p><%= author.getUsername()%></p>
+                        <p><a href="profile.jsp?username=<%= author.getUsername()%>"><%= author.getUsername()%></a></p>
                     </div>
                 </a>
             </div>
@@ -190,7 +191,7 @@
                         </div>
                         <div class="quiz-box-bot">
                             <p><%= quiz.getTotalPlayCount()%></p>
-                            <p><%= author.getUsername()%></p>
+                            <p><a href="profile.jsp?username=<%= author.getUsername()%>"><%= author.getUsername()%></a></p>
                         </div>
                     </a>
                 </div>
@@ -213,7 +214,7 @@
                     </div>
                     <div class="quiz-box-bot">
                         <p><%= quiz.getTotalPlayCount()%></p>
-                        <p><%= author.getUsername()%></p>
+                        <p><a href="profile.jsp?username=<%= author.getUsername()%>"><%= author.getUsername()%></a></p>
                     </div>
                 </a>
             </div>

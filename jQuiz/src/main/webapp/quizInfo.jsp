@@ -69,11 +69,15 @@
         </div>
         <nav class="main-nav">
             <ul>
-                <li><a href="">Home</a></li>
-                <li><a href="#">Users</a></li>
-                <li><a href="#">Achievements</a></li>
-                <li><a href="#">Categories</a></li>
+                <li><a href="index.jsp">Home</a></li>
+                <li><a href="/users.jsp">Users</a></li>
+                <li><a href="/achievements.jsp">Achievements</a></li>
+                <li><a href="/categories.jsp">Categories</a></li>
+                <li><a href="/createquiz.jsp">Create quiz</a></li>
             </ul>
+        </nav>
+        <nav class="mail-nav">
+            <button onclick="togglePanel()">Show Messages</button>
         </nav>
         <nav class="auth-nav">
             <%if(request.getSession().getAttribute("curUser") == null) { %>
@@ -81,15 +85,15 @@
                 <li><a href="login.jsp">Login</a></li>
                 <li><a href="register.jsp">Register</a></li>
             </ul>
-            <%} else { %>
+            <%} else {
+                String loggedInAs = ((User)request.getSession().getAttribute("curUser")).getUsername();%>
             <ul>
-                <li><a href="#"><%=((User)request.getSession().getAttribute("curUser")).getUsername()%></a></li>
+                <li><a href="profile.jsp?username=<%=loggedInAs%>"><%=loggedInAs%></a></li>
                 <li><form action="Login" method="get">
                     <input type="submit" value="Log out">
                 </form></li>
             </ul>
             <%}%>
-
         </nav>
     </header>
     <main>
@@ -165,8 +169,9 @@
         <% } else { %>
             <ol>
                 <% for(History curTry : topOfAllTime) {
-                    User topScorer = userDB.getById(curTry.getUserId());%>
-                <li><a href="#"><%=topScorer.getUsername()%></a> <%=": " + curTry.getGrade() + " in " + curTry.getWritingTime() + "sec"%></li>
+                    User topScorer = userDB.getById(curTry.getUserId());
+                    String scorerName = topScorer.getUsername();%>
+                <li><a href="profile.jsp?username=<%=scorerName%>"><%=scorerName%></a> <%=": " + curTry.getGrade() + " in " + curTry.getWritingTime() + "sec"%></li>
                 <% } %>
             </ol>
         <% }
@@ -185,8 +190,9 @@
         <% } else { %>
             <ol>
                 <% for(History curTry : topOfLastDay) {
-                    User topScorer = userDB.getById(curTry.getUserId());%>
-                <li><a href="#"><%=topScorer.getUsername()%></a> <%=": " + curTry.getGrade() + " in " + curTry.getWritingTime() + "sec"%></li>
+                    User topScorer = userDB.getById(curTry.getUserId());
+                    String scorerName = topScorer.getUsername();%>
+                <li><a href="profile.jsp?username=<%=scorerName%>"><%=scorerName%></a><%=": " + curTry.getGrade() + " in " + curTry.getWritingTime() + "sec"%></li>
                 <% } %>
             </ol>
         <% }
@@ -204,8 +210,9 @@
         <% } else { %>
             <ol>
                 <% for(History curTry : recentAttempts) {
-                    User topScorer = userDB.getById(curTry.getUserId());%>
-                <li><a href="#"><%=topScorer.getUsername()%></a> <%=": " + curTry.getGrade() + " at " + curTry.getCompletedAt().toString()%></li>
+                    User topScorer = userDB.getById(curTry.getUserId());
+                    String scorerName = topScorer.getUsername();%>
+                <li><a href="profile.jsp?username=<%=scorerName%>"><%=scorerName%></a> <%=": " + curTry.getGrade() + " at " + curTry.getCompletedAt().toString()%></li>
                 <% } %>
             </ol>
     <% }
@@ -235,7 +242,7 @@
                     </div>
                     <div class="quiz-box-bot">
                         <p><%= quiz.getTotalPlayCount()%></p>
-                        <p><%= curAuthor.getUsername()%></p>
+                        <p><a href="profile.jsp?username=<%= author.getUsername()%>"><%= author.getUsername()%></a></p>
                     </div>
                 </a>
             </div>
