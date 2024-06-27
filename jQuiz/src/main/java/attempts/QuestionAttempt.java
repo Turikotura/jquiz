@@ -69,6 +69,7 @@ public class QuestionAttempt {
         }
         Set<Answer> corAns = new HashSet<>();
         int wrongAnswers = 0;
+
         for(String wrAns : writtenAnswers){
             boolean isRight = false;
             for(Answer ans : answers){
@@ -81,6 +82,7 @@ public class QuestionAttempt {
                 wrongAnswers++;
             }
         }
+
         int correctAnswers = corAns.size();
         if(question.getQuestionType() == QuestionTypes.MULTI_ANS_MULTI_CHOICE){
             correctAnswers = Math.max(0, correctAnswers-wrongAnswers);

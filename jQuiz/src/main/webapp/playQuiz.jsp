@@ -109,8 +109,12 @@
     <div id="question-results">
         <%
             for(int i = 0; i < quizAttempt.getQuestions().size(); i++) {
+                String toWrite = "Nan";
+                if(quizAttempt.getQuestions().get(i).getWasGraded()){
+                    toWrite = quizAttempt.getQuestions().get(i).evaluateAnswers() + " / " + quizAttempt.getQuestions().get(i).getMaxScore();
+                }
         %>
-        <p id="q-res-<%=i%>">not submitted</p>
+        <p id="q-res-<%=i%>"><%=toWrite%></p>
         <%
             }
         %>
@@ -126,9 +130,10 @@
             if(quizAttempt.getShowAll() || i == quizAttempt.getOnQuestionIndex()){
                 active = "active";
             }
-            String eval = "false";
-            if(quizAttempt.getAutoCorrect()){
-                eval = "true";
+
+            String disabled = "";
+            if(quizAttempt.getQuestions().get(i).getWasGraded()){
+                disabled = "disabled";
             }
     %>
     <div id="<%=i%>" class="question-box <%=active%>">
@@ -136,7 +141,6 @@
             <input name="userId" type="hidden" value="<%=userId%>">
             <input name="quizAttemptId" type="hidden" value="<%=attemptId%>">
             <input name="questionInd" type="hidden" value="<%=i%>">
-            <input name="eval" type="hidden" value="<%=eval%>">
             <%
                 if(questionAttempt.getQuestion().getQuestionType() == QuestionTypes.PIC_RESPONSE){
             %>
@@ -155,24 +159,38 @@
             <%
                 if(questionAttempt.getQuestion().getQuestionType() == QuestionTypes.MULTIPLE_CHOICE){
                     for(int j = 0; j < questionAttempt.getAnswers().size(); j++){
+                        String checked = "";
+                        if(!questionAttempt.getWrittenAnswers().isEmpty() && questionAttempt.getAnswers().get(j).equals(questionAttempt.getWrittenAnswers().get(0))){
+                            checked = "checked";
+                        }
             %>
-            <input name="<%=i%>" id="<%=i%>-<%=j%>" type="radio" value="<%=questionAttempt.getAnswers().get(j).getText()%>">
+            <input <%=disabled%> <%=checked%> name="<%=i%>" id="<%=i%>-<%=j%>" type="radio" value="<%=questionAttempt.getAnswers().get(j).getText()%>">
             <label for="<%=i%>-<%=j%>"> <%=questionAttempt.getAnswers().get(j).getText()%></label><br>
             <%
                     }
                 }
                 else if(questionAttempt.getQuestion().getQuestionType() == QuestionTypes.MULTI_ANS_MULTI_CHOICE){
                     for(int j = 0; j < questionAttempt.getAnswers().size(); j++){
+                        String checked = "";
+                        for(String wAns : questionAttempt.getWrittenAnswers()){
+                            if(questionAttempt.getAnswers().get(j).equals(wAns)){
+                                checked = "checked";
+                            }
+                        }
             %>
-            <input name="<%=i%>" id="<%=i%>-<%=j%>" type="checkbox" value="<%=questionAttempt.getAnswers().get(j).getText()%>">
+            <input <%=disabled%> <%=checked%> name="<%=i%>" id="<%=i%>-<%=j%>" type="checkbox" value="<%=questionAttempt.getAnswers().get(j).getText()%>">
             <label for="<%=i%>-<%=j%>"> <%=questionAttempt.getAnswers().get(j).getText()%></label><br>
             <%
                     }
                 }
                 else{
                     for(int j = 0; j < questionAttempt.getCorrectAnswersAmount(); j++){
+                        String val = "";
+                        if(!questionAttempt.getWrittenAnswers().isEmpty()){
+                            val = questionAttempt.getWrittenAnswers().get(j);
+                        }
             %>
-            <input name="<%=i%>-<%=j%>" type="text">
+            <input <%=disabled%> name="<%=i%>-<%=j%>" type="text" value="<%=val%>">
             <%
                     }
                 }
@@ -181,7 +199,7 @@
             <%
                 if(!quizAttempt.getShowAll() || quizAttempt.getAutoCorrect()) {
             %>
-            <input type="submit" class="send-question" onclick="submitQuestion(<%=i+1%>)" value="Submit">
+            <input <%=disabled%> type="submit" class="send-question" onclick="submitQuestion(<%=i+1%>)" value="Submit">
             <%
                 }
             %>
@@ -194,48 +212,31 @@
     <form id="finish-form" action="PlayQuiz" method="post">
         <input name="userId" type="hidden" value="<%=userId%>">
         <input name="quizAttemptId" type="hidden" value="<%=attemptId%>">
+        <input name="finishQuiz" type="hidden" value="true">
         <input id="quiz-submit-button" type="submit" value="Finish">
     </form>
 </main>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script> <!-- jQuery for AJAX -->
 <script>
-    function updateQuestionResults() {
+    function updateSingleQuestionResult(resp){
         <%
-        quizAttempt = qac.getQuizAttemptById(attemptId);
-        for(int i = 0; i < quizAttempt.getQuestions().size(); i++){
+        if(quizAttempt.getAutoCorrect()) {
         %>
-            var gradeElem = document.getElementById("q-res-<%=i%>");
-            console.log(<%=quizAttempt.getQuestions().get(i).getWasGraded()%>);
-            if(<%=quizAttempt.getQuestions().get(i).getWasGraded()%>){
-                console.log("here");
-                gradeElem.innerHTML = "<%=quizAttempt.getQuestions().get(i).evaluateAnswers()%> / <%=quizAttempt.getQuestions().get(i).getMaxScore()%>";
-            }else{
-                console.log("wrong");
-                gradeElem.innerHTML = "Not yet submitted";
+        var elem = document.getElementById("q-res-"+resp.qInd);
+        elem.innerHTML = resp.grade + " / " + resp.maxGrade;
+
+        var form = document.getElementById(resp.qInd).querySelector('form');
+        if (form) {
+            // Find the submit button with class 'send-question'
+            var inps = form.querySelectorAll('input');
+            for(var i = 0; i < inps.length; i++){
+                inps[i].disabled = true;
             }
+        }
         <%
         }
         %>
-    }
-    updateQuestionResults();
-
-    function ajaxCall(form,formData){
-        $.ajax({
-            url: form.attr('action'),
-            type: form.attr('method'),
-            data: formData,
-            success: function(response) {
-                console.log('Ajax request successful');
-                console.log(response);
-                // Optionally, update UI or handle response
-                updateQuestionResults();
-            },
-            error: function(xhr, status, error) {
-                console.error('Ajax request failed');
-                console.error(error);
-            }
-        });
     }
 
     function scrollToDiv(sectionId) {
@@ -246,19 +247,17 @@
     }
 
     function submitQuestion(sectionId){
-        if(sectionId == <%=quizAttempt.getQuestions().size()%>){
+        if(sectionId == <%=quizAttempt.getQuestions().size()%> && <%=!quizAttempt.getShowAll()%>){
             submitQuiz();
             return;
         }
 
         if(<%=!quizAttempt.getShowAll()%>){
-            // Hide all divs
             var divs = document.querySelectorAll('.question-box');
             divs.forEach(function(div) {
                 div.classList.remove('active');
             });
 
-            // Show the selected div
             var selectedDiv = document.getElementById(sectionId);
             if (selectedDiv) {
                 selectedDiv.classList.add('active');
@@ -279,8 +278,51 @@
 
             var form = $(this).closest('form');
             var formData = form.serializeArray();
+            <%
+            if(quizAttempt.getAutoCorrect()){
+            %>
+            formData.push({ name: 'eval', value: 'true' });
+            <%
+            }
+            %>
 
-            ajaxCall(form,formData);
+            $.ajax({
+                url: form.attr('action'),
+                type: form.attr('method'),
+                data: formData,
+                success: function(response) {
+                    console.log('Ajax request successful');
+                    //console.log(response);
+                    // Optionally, update UI or handle response
+                    updateSingleQuestionResult(response);
+                },
+                error: function(xhr, status, error) {
+                    console.error('Ajax request failed');
+                    console.error(error);
+                }
+            });
+        });
+
+        // Ajax request on clicking the div with class 'clickableDiv'
+        $('.question-box').on('input', function(e) {
+            e.preventDefault();
+
+            var form = $(this).closest('form');
+            var formData = form.serializeArray();
+
+            $.ajax({
+                url: form.attr('action'),
+                type: form.attr('method'),
+                data: formData,
+                success: function(response) {
+                    console.log('Ajax request successful');
+                    //console.log(response);
+                },
+                error: function(xhr, status, error) {
+                    console.error('Ajax request failed');
+                    console.error(error);
+                }
+            });
         });
     });
 </script>
