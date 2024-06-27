@@ -53,7 +53,7 @@
     </div>
     <nav class="main-nav">
         <ul>
-            <li><a href="/index.jsp">Home</a></li>
+            <li><a href="/">Home</a></li>
             <li><a href="/users.jsp">Users</a></li>
             <li><a href="/achievements.jsp">Achievements</a></li>
             <li><a href="/categories.jsp">Categories</a></li>
@@ -62,10 +62,12 @@
         </ul>
     </nav>
     <nav class="mail-nav">
-        <button onclick="togglePanel()">Show Messages</button>
+        <ul>
+            <li><a onclick="togglePanel()">Show Messages</a></li>
+        </ul>
     </nav>
     <nav class="auth-nav">
-        <%if(request.getSession().getAttribute("curUser") == null) { %>
+        <%if(curUser == null) { %>
         <ul>
             <li><a href="login.jsp">Login</a></li>
             <li><a href="register.jsp">Register</a></li>
@@ -73,9 +75,8 @@
         <%} else { %>
         <ul>
             <li><a href="#"><%=curUser.getUsername()%></a></li>
-            <li><form action="Login" method="get">
-                <input type="submit" value="Log out">
-            </form></li>
+            <li><a onclick="submitLogOut()">Log out</a></li>
+            <form id="log-out-form" style="display: none" action="Login" method="get"></form>
         </ul>
         <%}%>
 
@@ -106,6 +107,8 @@
         }
     %>
 </main>
+
+<script src="script/general.js"></script>
 
 </body>
 </html>
