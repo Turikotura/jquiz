@@ -24,9 +24,10 @@
             <li><a href="login.jsp">Login</a></li>
             <li><a href="register.jsp">Register</a></li>
         </ul>
-        <% } else { %>
+        <% } else {
+            String loggedInAs = ((User)request.getSession().getAttribute("curUser")).getUsername();%>
         <ul>
-            <li><a href="#"><%= curUser.getUsername() %></a></li>
+            <li><a href="profile.jsp?username=<%=loggedInAs%>"><%=loggedInAs%></a></li>
             <li><a onclick="submitLogOut()">Log out</a></li>
             <form id="log-out-form" style="display: none" action="Login" method="get"></form>
         </ul>
