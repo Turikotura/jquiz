@@ -46,6 +46,7 @@ public class QuestionAttempt {
     public List<Answer> getAnswers() {return answers;}
     public int getMaxScore() {return maxScore;}
     public int getCorrectAnswersAmount() {return correctAnswersAmount;}
+    public boolean getWasGraded() {return wasGraded;}
 
     /**
      * Sets the answers written by user

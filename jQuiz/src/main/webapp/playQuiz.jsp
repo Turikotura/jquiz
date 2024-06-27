@@ -87,6 +87,9 @@
     <h4>Max Score : <%=quizAttempt.getMaxScore()%> pts</h4>
     <hr>
 
+    <%
+        if(quizAttempt.getShowAll()) {
+    %>
     <div id="question-list">
         <%
             for(int i = 0; i < quizAttempt.getQuestions().size(); i++){
@@ -96,10 +99,26 @@
             }
         %>
     </div>
+    <%
+        }
+    %>
 
-    <form action="PlayQuiz" method="post">
-        <input name="userId" type="hidden" value="<%=userId%>">
-        <input name="quizAttemptId" type="hidden" value="<%=attemptId%>">
+    <%
+        if(quizAttempt.getAutoCorrect()) {
+    %>
+    <div id="question-results">
+        <%
+            for(int i = 0; i < quizAttempt.getQuestions().size(); i++) {
+        %>
+        <p id="q-res-<%=i%>">not submitted</p>
+        <%
+            }
+        %>
+    </div>
+    <%
+        }
+    %>
+
     <%
         for(int i = 0; i < quizAttempt.getQuestions().size(); i++){
             QuestionAttempt questionAttempt = quizAttempt.getQuestions().get(i);
@@ -107,10 +126,17 @@
             if(quizAttempt.getShowAll() || i == quizAttempt.getOnQuestionIndex()){
                 active = "active";
             }
+            String eval = "false";
+            if(quizAttempt.getAutoCorrect()){
+                eval = "true";
+            }
     %>
-
-        <div id="<%=i%>" class="question-box <%=active%>">
-
+    <div id="<%=i%>" class="question-box <%=active%>">
+        <form action="PlayQuiz" method="post">
+            <input name="userId" type="hidden" value="<%=userId%>">
+            <input name="quizAttemptId" type="hidden" value="<%=attemptId%>">
+            <input name="questionInd" type="hidden" value="<%=i%>">
+            <input name="eval" type="hidden" value="<%=eval%>">
             <%
                 if(questionAttempt.getQuestion().getQuestionType() == QuestionTypes.PIC_RESPONSE){
             %>
@@ -151,40 +177,112 @@
                     }
                 }
             %>
-        </div>
+
+            <%
+                if(!quizAttempt.getShowAll() || quizAttempt.getAutoCorrect()) {
+            %>
+            <input type="submit" class="send-question" onclick="submitQuestion(<%=i+1%>)" value="Submit">
+            <%
+                }
+            %>
+        </form>
+    </div>
     <%
         }
     %>
-        <br>
-        <input id="quiz-submit-button" type="submit" value="Submit">
+    <br>
+    <form id="finish-form" action="PlayQuiz" method="post">
+        <input name="userId" type="hidden" value="<%=userId%>">
+        <input name="quizAttemptId" type="hidden" value="<%=attemptId%>">
+        <input id="quiz-submit-button" type="submit" value="Finish">
     </form>
 </main>
 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script> <!-- jQuery for AJAX -->
 <script>
-    function scrollToDiv(sectionId) {
+    function updateQuestionResults() {
         <%
-            if(!quizAttempt.getShowAll()) {
+        quizAttempt = qac.getQuizAttemptById(attemptId);
+        for(int i = 0; i < quizAttempt.getQuestions().size(); i++){
         %>
-        // Hide all divs
-        var divs = document.querySelectorAll('.question-box');
-        divs.forEach(function(div) {
-            div.classList.remove('active');
-        });
-
-        // Show the selected div
-        var selectedDiv = document.getElementById(sectionId);
-        if (selectedDiv) {
-            selectedDiv.classList.add('active');
-        }
-        <%
+            var gradeElem = document.getElementById("q-res-<%=i%>");
+            console.log(<%=quizAttempt.getQuestions().get(i).getWasGraded()%>);
+            if(<%=quizAttempt.getQuestions().get(i).getWasGraded()%>){
+                console.log("here");
+                gradeElem.innerHTML = "<%=quizAttempt.getQuestions().get(i).evaluateAnswers()%> / <%=quizAttempt.getQuestions().get(i).getMaxScore()%>";
+            }else{
+                console.log("wrong");
+                gradeElem.innerHTML = "Not yet submitted";
             }
+        <%
+        }
         %>
+    }
+    updateQuestionResults();
 
+    function ajaxCall(form,formData){
+        $.ajax({
+            url: form.attr('action'),
+            type: form.attr('method'),
+            data: formData,
+            success: function(response) {
+                console.log('Ajax request successful');
+                console.log(response);
+                // Optionally, update UI or handle response
+                updateQuestionResults();
+            },
+            error: function(xhr, status, error) {
+                console.error('Ajax request failed');
+                console.error(error);
+            }
+        });
+    }
+
+    function scrollToDiv(sectionId) {
         var element = document.getElementById(sectionId);
         if (element) {
             element.scrollIntoView({ behavior: 'smooth' });
         }
     }
+
+    function submitQuestion(sectionId){
+        if(sectionId == <%=quizAttempt.getQuestions().size()%>){
+            submitQuiz();
+            return;
+        }
+
+        if(<%=!quizAttempt.getShowAll()%>){
+            // Hide all divs
+            var divs = document.querySelectorAll('.question-box');
+            divs.forEach(function(div) {
+                div.classList.remove('active');
+            });
+
+            // Show the selected div
+            var selectedDiv = document.getElementById(sectionId);
+            if (selectedDiv) {
+                selectedDiv.classList.add('active');
+            }
+        }
+    }
+
+    function submitQuiz(){
+        var form = document.getElementById("finish-form");
+
+        form.submit();
+    }
+
+    $(document).ready(function() {
+        // Ajax request on clicking the div with class 'clickableDiv'
+        $('.send-question').click(function(e) {
+            e.preventDefault();
+
+            var form = $(this).closest('form');
+            var formData = form.serializeArray();
+
+            ajaxCall(form,formData);
+        });
+    });
 </script>
 <%
     }else{

@@ -8,20 +8,21 @@ import java.util.*;
 import static org.junit.Assert.assertNotEquals;
 
 public class AttemptTests extends TestCase {
-    private QuestionAttempt getNormalQuestionAttempt(int qId, int quizId){
+    private List<Answer> getDefaultAnswers(int qId){
         List<Answer> answers = new ArrayList<>();
         answers.add(new Answer(answers.size(),"answer 0",true,qId,0));
         answers.add(new Answer(answers.size(),"answer 1",true,qId,0));
         answers.add(new Answer(answers.size(),"answer 2",true,qId,0));
+        return answers;
+    }
+    private QuestionAttempt getNormalQuestionAttempt(int qId, int quizId){
+        List<Answer> answers = getDefaultAnswers(qId);
         Question q = new Question(qId, QuestionTypes.RESPONSE, String.format("question %d",qId),quizId,null,5,null);
         QuestionAttempt qa = new QuestionAttempt(q, answers);
         return qa;
     }
     private QuestionAttempt getMixQuestionAttempt(int qId, int quizId){
-        List<Answer> answers = new ArrayList<>();
-        answers.add(new Answer(answers.size(),"answer 0",true,qId,0));
-        answers.add(new Answer(answers.size(),"answer 1",true,qId,0));
-        answers.add(new Answer(answers.size(),"answer 2",true,qId,0));
+        List<Answer> answers = getDefaultAnswers(qId);
         answers.add(new Answer(answers.size(),"another correct answer",true,qId,1));
         answers.add(new Answer(answers.size(),"wrong answer",false,qId,0));
         Question q = new Question(qId, QuestionTypes.RESPONSE, String.format("question %d",qId),quizId,null,10,null);
@@ -29,10 +30,7 @@ public class AttemptTests extends TestCase {
         return qa;
     }
     private QuestionAttempt getRightQuestionAttempt(int qId, int quizId){
-        List<Answer> answers = new ArrayList<>();
-        answers.add(new Answer(answers.size(),"answer 0",true,qId,0));
-        answers.add(new Answer(answers.size(),"answer 1",true,qId,0));
-        answers.add(new Answer(answers.size(),"answer 2",true,qId,0));
+        List<Answer> answers = getDefaultAnswers(qId);
         answers.add(new Answer(answers.size(),"another correct answer 1",true,qId,1));
         answers.add(new Answer(answers.size(),"another correct answer 2",true,qId,2));
         Question q = new Question(qId, QuestionTypes.RESPONSE, String.format("question %d",qId),quizId,null,15,null);
@@ -40,13 +38,20 @@ public class AttemptTests extends TestCase {
         return qa;
     }
     private QuestionAttempt getWrongQuestionAttempt(int qId, int quizId){
-        List<Answer> answers = new ArrayList<>();
-        answers.add(new Answer(answers.size(),"answer 0",true,qId,0));
-        answers.add(new Answer(answers.size(),"answer 1",true,qId,0));
-        answers.add(new Answer(answers.size(),"answer 2",true,qId,0));
+        List<Answer> answers = getDefaultAnswers(qId);
         answers.add(new Answer(answers.size(),"wrong answer 1",false,qId,0));
         answers.add(new Answer(answers.size(),"wrong answer 2",false,qId,0));
         Question q = new Question(qId, QuestionTypes.RESPONSE, String.format("question %d",qId),quizId,null,5,null);
+        QuestionAttempt qa = new QuestionAttempt(q, answers);
+        return qa;
+    }
+    private QuestionAttempt getMAMCQuestionAttempt(int qId, int quizId){
+        List<Answer> answers = getDefaultAnswers(qId);
+        answers.add(new Answer(answers.size(),"answer 1",true,qId,0));
+        answers.add(new Answer(answers.size(),"wrong answer 1",false,qId,1));
+        answers.add(new Answer(answers.size(),"answer 2",true,qId,2));
+        answers.add(new Answer(answers.size(),"wrong answer 2",false,qId,3));
+        Question q = new Question(qId, QuestionTypes.MULTI_ANS_MULTI_CHOICE, String.format("question %d",qId),quizId,null,10,null);
         QuestionAttempt qa = new QuestionAttempt(q, answers);
         return qa;
     }
@@ -60,7 +65,6 @@ public class AttemptTests extends TestCase {
      * Test QuestionAttempt class
      */
     public void testQuestionAttempt(){
-        // 9 questions
         List<QuestionAttempt> questionAttemptList = new ArrayList<>();
         questionAttemptList.add(getMixQuestionAttempt(questionAttemptList.size(),0)); // 0
         questionAttemptList.add(getMixQuestionAttempt(questionAttemptList.size(),0)); // 1
@@ -71,6 +75,9 @@ public class AttemptTests extends TestCase {
         questionAttemptList.add(getRightQuestionAttempt(questionAttemptList.size(),0)); // 6
         questionAttemptList.add(getWrongQuestionAttempt(questionAttemptList.size(),0)); // 7
         questionAttemptList.add(getMixQuestionAttempt(questionAttemptList.size(),0)); // 8
+        questionAttemptList.add(getMAMCQuestionAttempt(questionAttemptList.size(),0)); // 9
+        questionAttemptList.add(getMAMCQuestionAttempt(questionAttemptList.size(),0)); // 10
+        questionAttemptList.add(getMAMCQuestionAttempt(questionAttemptList.size(),0)); // 11
 
         // Check if correct answer amount is right
         assertEquals(2,questionAttemptList.get(0).getCorrectAnswersAmount()); // Mix
@@ -83,7 +90,9 @@ public class AttemptTests extends TestCase {
         List<String> writtenAnswers = new ArrayList<String>();
         writtenAnswers.add("answer 0");
         questionAttemptList.get(0).setWrittenAnswers(writtenAnswers);
+        assertFalse(questionAttemptList.get(0).getWasGraded());
         assertEquals(10*1/2,questionAttemptList.get(0).evaluateAnswers());
+        assertTrue(questionAttemptList.get(0).getWasGraded());
 
         // After evaluation, the answer shouldn't change
         writtenAnswers.add("shouldn't change");
@@ -152,6 +161,30 @@ public class AttemptTests extends TestCase {
         writtenAnswers.add("random answer");
         questionAttemptList.get(8).setWrittenAnswers(writtenAnswers);
         assertEquals(10*1/2, questionAttemptList.get(8).evaluateAnswers());
+
+        // MAMC All right
+        writtenAnswers.clear();
+        writtenAnswers.add("answer 1");
+        writtenAnswers.add("answer 2");
+        questionAttemptList.get(9).setWrittenAnswers(writtenAnswers);
+        assertEquals(10, questionAttemptList.get(9).evaluateAnswers());
+
+        // MAMC 2 right / 1 wrong
+        writtenAnswers.clear();
+        writtenAnswers.add("answer 1");
+        writtenAnswers.add("answer 2");
+        writtenAnswers.add("wrong answer 1");
+        questionAttemptList.get(10).setWrittenAnswers(writtenAnswers);
+        assertEquals(10 * 1/2, questionAttemptList.get(10).evaluateAnswers());
+
+        // MAMC All answers
+        writtenAnswers.clear();
+        writtenAnswers.add("answer 1");
+        writtenAnswers.add("answer 2");
+        writtenAnswers.add("wrong answer 1");
+        writtenAnswers.add("wrong answer 2");
+        questionAttemptList.get(11).setWrittenAnswers(writtenAnswers);
+        assertEquals(0, questionAttemptList.get(11).evaluateAnswers());
     }
 
     /**
