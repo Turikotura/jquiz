@@ -26,7 +26,7 @@ import java.util.StringTokenizer;
  * be 100% effective.
  *
  * It is required that the examples web application is removed in security
- * conscious environments as documented in the servlets.Security How-To. This filter is
+ * conscious environments as documented in the accounts.Security How-To. This filter is
  * intended to reduce the impact of failing to follow that advice. A failure by
  * this filter to obfuscate a session ID or similar value is not a security
  * vulnerability. In such instances the vulnerability is the failure to remove

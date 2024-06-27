@@ -11,8 +11,8 @@
     HistoryDatabase historyDB = getDatabase(Database.HISTORY_DB,request);
     QuizDatabase quizDB = getDatabase(Database.QUIZ_DB,request);
 
+    User curUser = (User) request.getSession().getAttribute("curUser");
     // Mail variables
-    User curUser = (User)request.getSession().getAttribute("curUser");
     List<Mail> mails = new ArrayList<Mail>();
     List<String> senderNames = new ArrayList<String>();
     Map<Integer,Integer> maxGrades = new HashMap<Integer,Integer>();
@@ -93,7 +93,7 @@
                     </div>
                     <div class="quiz-box-bot">
                         <p><%= quiz.getTotalPlayCount()%></p>
-                        <p><%= author.getUsername()%></p>
+                        <p><a href="profile.jsp?username=<%= author.getUsername()%>"><%= author.getUsername()%></a></p>
                     </div>
                 </a>
             </div>
@@ -106,24 +106,23 @@
     <div class="quiz-list-wrapper">
         <h2>All-time popular quizzes</h2>
         <div class="quiz-boxes">
-            <%
-                for (Quiz quiz : popularQuizzes) {
-                    User author = userDB.getById(quiz.getAuthorId());
-            %>
-            <div class="quiz-box">
-                <a href="quizInfo.jsp?quizId=<%=quiz.getId()%>">
-                    <div class="quiz-box-top">
-                        <p class="quiz-box-name"><%= quiz.getTitle() %></p>
-                    </div>
-                    <div class="quiz-box-bot">
-                        <p><%= quiz.getTotalPlayCount()%></p>
-                        <p><%= author.getUsername()%></p>
-                    </div>
-                </a>
-            </div>
-            <%
-                }
-            %>
+        <% for (Quiz quiz : popularQuizzes) {
+                        User author = userDB.getById(quiz.getAuthorId());
+                %>
+                <div class="quiz-box">
+                    <a href="quizInfo.jsp?quizId=<%=quiz.getId()%>">
+                        <div class="quiz-box-top">
+                            <p class="quiz-box-name"><%= quiz.getTitle() %></p>
+                        </div>
+                        <div class="quiz-box-bot">
+                            <p><%= quiz.getTotalPlayCount()%></p>
+                            <p><a href="profile.jsp?username=<%= author.getUsername()%>"><%= author.getUsername()%></a></p>
+                        </div>
+                    </a>
+                </div>
+                <%
+                        }
+                %>
         </div>
     </div>
 
@@ -141,7 +140,7 @@
                     </div>
                     <div class="quiz-box-bot">
                         <p><%= quiz.getTotalPlayCount()%></p>
-                        <p><%= author.getUsername()%></p>
+                        <p><a href="profile.jsp?username=<%= author.getUsername()%>"><%= author.getUsername()%></a></p>
                     </div>
                 </a>
             </div>

@@ -51,7 +51,6 @@
     <link href="style/sendMail.css" rel="stylesheet" type="text/css">
 </head>
 <body>
-
 <%@ include file="header.jsp" %>
 <%@ include file="mail.jsp" %>
 

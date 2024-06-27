@@ -3,7 +3,9 @@
   <component name="WebContextManager">
     <option name="state">
       <map>
+        <entry key="file://$PROJECT_DIR$/jQuiz/src/main/webapp/profile.jsp" value="file://$PROJECT_DIR$/jQuiz/src/main/webapp" />
         <entry key="file://$PROJECT_DIR$/jQuiz/src/main/webapp/quizInfo.jsp" value="file://$PROJECT_DIR$/jQuiz/src/main/webapp" />
+        <entry key="file://$PROJECT_DIR$/jQuiz/src/main/webapp/quizResult.jsp" value="file://$PROJECT_DIR$/jQuiz/src/main/webapp" />
       </map>
     </option>
   </component>

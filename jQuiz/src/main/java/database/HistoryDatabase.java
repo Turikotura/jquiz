@@ -83,9 +83,30 @@ public class HistoryDatabase extends Database<History> {
                 databaseName, USER_ID, userId, QUIZ_ID, quizId);
         return queryToList(query);
     }
+
+    public List<History> getLatestHistoriesByUserAndQuizId(int userId, int quizId) throws SQLException, ClassNotFoundException {
+        String query = String.format("SELECT * FROM %s WHERE %s = %d AND %s = %d ORDER BY %s DESC;",
+                databaseName, USER_ID, userId, QUIZ_ID, quizId, COMPLETED_AT);
+        return queryToList(query);
+    }
+    public List<History> getBestScoresByUserAndQuizId(int userId, int quizId) throws SQLException, ClassNotFoundException {
+        String query = String.format("SELECT * FROM %s WHERE %s = %d AND %s = %d ORDER BY %s DESC, %s;",
+                databaseName, USER_ID, userId, QUIZ_ID, quizId, GRADE, WRITING_TIME);
+        return queryToList(query);
+    }
+    public List<History> getFastestByUserAndQuizId(int userId, int quizId) throws SQLException, ClassNotFoundException {
+        String query = String.format("SELECT * FROM %s WHERE %s = %d AND %s = %d ORDER BY %s, %s DESC;",
+                databaseName, USER_ID, userId, QUIZ_ID, quizId, WRITING_TIME, GRADE);
+        return queryToList(query);
+    }
     public List<History> getLatestHistories(int k) throws SQLException, ClassNotFoundException {
         String query = String.format("SELECT * FROM %s ORDER BY %s DESC LIMIT %d",
                 databaseName, COMPLETED_AT, k);
+        return queryToList(query);
+    }
+    public List<History> getLatestHistoriesByQuizId(int quizId, int k) throws SQLException, ClassNotFoundException {
+        String query = String.format("SELECT * FROM %s WHERE %s = %d ORDER BY %s DESC LIMIT %d",
+                databaseName, QUIZ_ID, quizId, COMPLETED_AT, k);
         return queryToList(query);
     }
     public List<History> getHistoryByQuizId(int quizId) throws SQLException, ClassNotFoundException {
@@ -112,5 +133,19 @@ public class HistoryDatabase extends Database<History> {
                 "SELECT * FROM %s WHERE %s = %d AND %s = %d ORDER BY %s DESC, %s LIMIT 1;",
                 databaseName, USER_ID, userId, QUIZ_ID, quizId, GRADE, WRITING_TIME);
         return queryToElement(query);
+    }
+
+    public List<History> getTopPerformersByQuizId(int quizId, int k) throws SQLException, ClassNotFoundException {
+        String query = String.format(
+                "SELECT * FROM %s WHERE %s = %d ORDER BY %s DESC, %s LIMIT %d;",
+                databaseName, QUIZ_ID, quizId, GRADE, WRITING_TIME, k);
+        return queryToList(query);
+    }
+
+    public List<History> getTopInLastDayByQuizId(int quizId, int k) throws SQLException, ClassNotFoundException {
+        String query = String.format(
+                "SELECT * FROM %s WHERE %s = %d AND %s >= NOW() - INTERVAL 1 DAY ORDER BY %s DESC, %s LIMIT %d;",
+                databaseName, QUIZ_ID, quizId, "completed_at", GRADE, WRITING_TIME, k);
+        return queryToList(query);
     }
 }
