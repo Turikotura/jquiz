@@ -1,5 +1,6 @@
 package database;
 
+import models.Quiz;
 import models.User;
 import org.apache.commons.dbcp2.BasicDataSource;
 
@@ -94,6 +95,12 @@ public class UserDatabase extends Database<User>{
         String query = String.format("SELECT * FROM %s WHERE %s = '%s';",
                 databaseName, EMAIL, email);
         return queryToElement(query);
+    }
+
+    public List<User> searchUsers(String searchString) throws SQLException, ClassNotFoundException {
+        String query = String.format("SELECT * FROM %s WHERE %s LIKE '%%%s%%'",
+                databaseName, USERNAME, searchString);
+        return queryToList(query);
     }
 
     public boolean addFriend(int from, int to) throws SQLException, ClassNotFoundException {

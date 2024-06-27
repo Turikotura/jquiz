@@ -107,4 +107,11 @@ public class QuizDatabase extends Database<Quiz>{
                 databaseName, TITLE, title);
         return queryToElement(query);
     }
+
+    public List<Quiz> searchQuizzes(String searchString) throws SQLException, ClassNotFoundException {
+        String query = String.format("SELECT * FROM %s WHERE %s LIKE '%%%s%%'",
+                databaseName, TITLE, searchString);
+        return queryToList(query);
+    }
+
 }

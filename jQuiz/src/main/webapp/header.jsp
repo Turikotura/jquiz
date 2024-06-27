@@ -18,6 +18,12 @@
             <li><a onclick="togglePanel()">Show Messages</a></li>
         </ul>
     </nav>
+    <nav class="search-nav">
+        <form action="Search" method="get">
+            <input type="text" name="searchString" placeholder="Search..." required>
+            <button type="submit">Search</button>
+        </form>
+    </nav>
     <nav class="auth-nav">
         <% if (curUser == null) { %>
         <ul>
