@@ -1,13 +1,12 @@
-<%@ page import="models.History" %>
 <%@ page import="static listeners.ContextListener.getDatabase" %>
 <%@ page import="javax.xml.crypto.Data" %>
 <%@ page import="java.sql.SQLException" %>
-<%@ page import="models.Quiz" %>
-<%@ page import="models.Question" %>
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="database.*" %>
-<%@ page import="models.User" %><%--
+<%@ page import="models.*" %>
+<%@ page import="java.util.HashMap" %>
+<%@ page import="java.util.Map" %><%--
   Created by IntelliJ IDEA.
   User: Dachi
   Date: 22.06.2024
@@ -19,10 +18,31 @@
 <%
     User curUser = (User) request.getSession().getAttribute("curUser");
 
-    HistoryDatabase historydb = getDatabase(Database.HISTORY_DB,request);
-    QuizDatabase quizdb = getDatabase(Database.QUIZ_DB,request);
-    QuestionDatabase questiondb = getDatabase(Database.QUESTION_DB,request);
-    UserDatabase userdb = getDatabase(Database.USER_DB,request);
+    MailDatabase mailDB = getDatabase(Database.MAIL_DB,request);
+    UserDatabase userDB = getDatabase(Database.USER_DB,request);
+    HistoryDatabase historyDB = getDatabase(Database.HISTORY_DB,request);
+    QuizDatabase quizDB = getDatabase(Database.QUIZ_DB,request);
+    QuestionDatabase questionDB = getDatabase(Database.QUESTION_DB,request);
+
+    // Mail variables
+    List<Mail> mails = new ArrayList<Mail>();
+    List<String> senderNames = new ArrayList<String>();
+    Map<Integer,Integer> maxGrades = new HashMap<Integer,Integer>();
+
+    if(curUser != null){
+        // Get mails received by user
+        mails = mailDB.getMailsByUserId(curUser.getId(),"RECEIVE");
+        for(Mail mail : mails){
+            // Get names of senders
+            senderNames.add(userDB.getById(mail.getSenderId()).getUsername());
+            if(mail.getType() == MailTypes.CHALLENGE){
+                // Get max grade of senders for challenges
+                History history = historyDB.getBestHistoryByUserAndQuizId(mail.getSenderId(),mail.getQuizId());
+                int grade = (history == null) ? 0 : history.getGrade();
+                maxGrades.put(mail.getId(),grade);
+            }
+        }
+    }
 
     int userId = Integer.parseInt(request.getParameter("userId"));
     int quizId = Integer.parseInt(request.getParameter("quizId"));
@@ -38,23 +58,23 @@
     List<String> friendNames = new ArrayList<String>();
     List<History> friendHistories = new ArrayList<History>();
     try {
-        lastHistory = historydb.getLastHistoryByUserAndQuizId(userId, quizId);
-        quiz = quizdb.getById(lastHistory.getQuizId());
-        questionList = questiondb.getQuestionsByQuizId(quiz.getId());
+        lastHistory = historyDB.getLastHistoryByUserAndQuizId(userId, quizId);
+        quiz = quizDB.getById(lastHistory.getQuizId());
+        questionList = questionDB.getQuestionsByQuizId(quiz.getId());
         for (Question question : questionList) {
             totalScore += question.getScore();
         }
 
         // others results
 
-        bestHistory = historydb.getBestScoreHistoryByQuizId(quizId);
-        bestHistoryName = userdb.getById(bestHistory.getUserId()).getUsername();
-        prevAttempts = historydb.getHistoryByUserAndQuizId(userId, quizId);
+        bestHistory = historyDB.getBestScoreHistoryByQuizId(quizId);
+        bestHistoryName = userDB.getById(bestHistory.getUserId()).getUsername();
+        prevAttempts = historyDB.getHistoryByUserAndQuizId(userId, quizId);
         List<User> friends = new ArrayList<User>();
-        friends = userdb.getFriendsByUserId(userId);
+        friends = userDB.getFriendsByUserId(userId);
         for(User friend : friends){
             friendNames.add(friend.getUsername());
-            friendHistories.add(historydb.getLastHistoryByUserAndQuizId(friend.getId(),quiz.getId()));
+            friendHistories.add(historyDB.getLastHistoryByUserAndQuizId(friend.getId(),quiz.getId()));
         }
     }catch (SQLException e){
         System.out.println("SQL ex");
@@ -72,41 +92,8 @@
 </head>
 <body>
 
-<header>
-    <div class="logo">
-        <img src="logo.png" alt="Website Logo">
-    </div>
-    <nav class="main-nav">
-        <ul>
-            <li><a href="/">Home</a></li>
-            <li><a href="/users.jsp">Users</a></li>
-            <li><a href="/achievements.jsp">Achievements</a></li>
-            <li><a href="/categories.jsp">Categories</a></li>
-            <li><a href="/createquiz.jsp">Create quiz</a></li>
-            <li><a href="/historySummary.jsp">History</a></li>
-        </ul>
-    </nav>
-    <nav class="mail-nav">
-        <ul>
-            <li><a onclick="togglePanel()">Show Messages</a></li>
-        </ul>
-    </nav>
-    <nav class="auth-nav">
-        <%if(curUser == null) { %>
-        <ul>
-            <li><a href="login.jsp">Login</a></li>
-            <li><a href="register.jsp">Register</a></li>
-        </ul>
-        <%} else { %>
-        <ul>
-            <li><a href="#"><%=curUser.getUsername()%></a></li>
-            <li><a onclick="submitLogOut()">Log out</a></li>
-            <form id="log-out-form" style="display: none" action="Login" method="get"></form>
-        </ul>
-        <%}%>
-
-    </nav>
-</header>
+<%@ include file="header.jsp" %>
+<%@ include file="mail.jsp" %>
 
 <main>
 
@@ -164,6 +151,8 @@
 
 </main>
 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script> <!-- jQuery for AJAX -->
+<script src="script/mailPanel.js"></script>
 <script src="script/general.js"></script>
 
 </body>
