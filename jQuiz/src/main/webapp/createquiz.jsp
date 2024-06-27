@@ -1,4 +1,40 @@
+<%@ page import="models.*" %>
+<%@ page import="database.*" %>
+<%@ page import="static listeners.ContextListener.getDatabase" %>
+<%@ page import="java.util.List" %>
+<%@ page import="java.util.ArrayList" %>
+<%@ page import="java.util.Map" %>
+<%@ page import="java.util.HashMap" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+
+<%
+    User curUser = (User) request.getSession().getAttribute("curUser");
+
+    MailDatabase mailDB = getDatabase(Database.MAIL_DB,request);
+    UserDatabase userDB = getDatabase(Database.USER_DB,request);
+    HistoryDatabase historyDB = getDatabase(Database.HISTORY_DB,request);
+
+    // Mail variables
+    List<Mail> mails = new ArrayList<Mail>();
+    List<String> senderNames = new ArrayList<String>();
+    Map<Integer,Integer> maxGrades = new HashMap<Integer,Integer>();
+
+    if(curUser != null){
+        // Get mails received by user
+        mails = mailDB.getMailsByUserId(curUser.getId(),"RECEIVE");
+        for(Mail mail : mails){
+            // Get names of senders
+            senderNames.add(userDB.getById(mail.getSenderId()).getUsername());
+            if(mail.getType() == MailTypes.CHALLENGE){
+                // Get max grade of senders for challenges
+                History history = historyDB.getBestHistoryByUserAndQuizId(mail.getSenderId(),mail.getQuizId());
+                int grade = (history == null) ? 0 : history.getGrade();
+                maxGrades.put(mail.getId(),grade);
+            }
+        }
+    }
+%>
+
 <html>
 <head>
     <title>Create Quiz</title>
@@ -114,98 +150,108 @@
     </script>
 </head>
 <body>
-<h1>Create Quiz</h1>
-<form action="CreateQuiz" method="post" enctype="multipart/form-data">
-    <label for="title">Quiz Title:</label><br>
-    <input type="text" id="title" name="title"><br><br>
 
-    <label for="description">Quiz Description:</label><br>
-    <textarea id="description" name="description"></textarea><br><br>
+<%@ include file="header.jsp" %>
+<%@ include file="mail.jsp" %>
 
-    <label for="time">Total Time (in seconds):</label><br>
-    <input type="number" id="time" name="time"><br><br>
+<main>
+    <h1>Create Quiz</h1>
+    <form action="CreateQuiz" method="post" enctype="multipart/form-data">
+        <label for="title">Quiz Title:</label><br>
+        <input type="text" id="title" name="title"><br><br>
 
-    <label>Options:</label><br>
-    <input type="checkbox" id="shouldMixUp" name="shouldMixUp">
-    <label for="shouldMixUp">Mix Up Questions</label><br>
-    <input type="checkbox" id="showAll" name="showAll">
-    <label for="showAll">Show All Questions on Same Page</label><br>
-    <input type="checkbox" id="allowPractice" name="allowPractice">
-    <label for="allowPractice">Allow Practice Mode</label><br><br>
+        <label for="description">Quiz Description:</label><br>
+        <textarea id="description" name="description"></textarea><br><br>
 
-    <label for="thumbnail">Thumbnail Image:</label><br>
-    <input type="file" id="thumbnail" name="thumbnail" accept="image/*"><br><br>
+        <label for="time">Total Time (in seconds):</label><br>
+        <input type="number" id="time" name="time"><br><br>
 
-    <label for="questionType">Select Question Type:</label>
-    <select id="questionType">
-        <option value="response">Response Type</option>
-        <option value="fillBlank">Fill in the Blank</option>
-        <option value="multipleChoice">Multiple Choice</option>
-        <option value="pictureResponse">Picture Response</option>
-        <option value="multiChoiceMultiAnswer">Multiple Choice - Multiple Answer</option>
-    </select>
-    <button type="button" onclick="addQuestion()">Add Question</button><br><br>
+        <label>Options:</label><br>
+        <input type="checkbox" id="shouldMixUp" name="shouldMixUp">
+        <label for="shouldMixUp">Mix Up Questions</label><br>
+        <input type="checkbox" id="showAll" name="showAll">
+        <label for="showAll">Show All Questions on Same Page</label><br>
+        <input type="checkbox" id="allowPractice" name="allowPractice">
+        <label for="allowPractice">Allow Practice Mode</label><br><br>
 
-    <div id="questionContainer"></div><br><br>
+        <label for="thumbnail">Thumbnail Image:</label><br>
+        <input type="file" id="thumbnail" name="thumbnail" accept="image/*"><br><br>
 
-    <input type="submit" value="Create Quiz">
-</form>
+        <label for="questionType">Select Question Type:</label>
+        <select id="questionType">
+            <option value="response">Response Type</option>
+            <option value="fillBlank">Fill in the Blank</option>
+            <option value="multipleChoice">Multiple Choice</option>
+            <option value="pictureResponse">Picture Response</option>
+            <option value="multiChoiceMultiAnswer">Multiple Choice - Multiple Answer</option>
+        </select>
+        <button type="button" onclick="addQuestion()">Add Question</button><br><br>
 
-<div id="responseQuestionForm" style="display: none;">
-    <input type="hidden" name="questionTypeIdentifier" value="response">
-    <label>Question:</label><br>
-    <input type="text" name="question"><br><br>
+        <div id="questionContainer"></div><br><br>
 
-    <label>Answer:</label><br>
-    <input type="text" name="answer"><br><br>
-</div>
+        <input type="submit" value="Create Quiz">
+    </form>
 
-<div id="fillBlankQuestionForm" style="display: none;">
-    <input type="hidden" name="questionTypeIdentifier" value="fillBlank">
-    <label>Question:</label><br>
-    <input type="text" name="question"><br><br>
+    <div id="responseQuestionForm" style="display: none;">
+        <input type="hidden" name="questionTypeIdentifier" value="response">
+        <label>Question:</label><br>
+        <input type="text" name="question"><br><br>
 
-    <label>Answer:</label><br>
-    <input type="text" name="answer"><br><br>
-</div>
-
-<div id="pictureResponseQuestionForm" style="display: none;">
-    <input type="hidden" name="questionTypeIdentifier" value="pictureResponse">
-    <label>Question:</label><br>
-    <input type="text" name="question"><br><br>
-    <input type="file" name="picture" accept="image/*"><br><br>
-
-    <label>Answer:</label><br>
-    <input type="text" name="answer">
-</div>
-
-<div id="multipleChoiceQuestionForm" style="display: none;">
-    <input type="hidden" name="questionTypeIdentifier" value="multipleChoice">
-    <label>Question:</label><br>
-    <input type="text" name="question"><br><br>
-
-    <label>Answers:</label><br>
-    <div id="answer_container">
-        <input type="text" name="answer_1">
-        <input type="radio" name="correct" value="1" checked>
+        <label>Answer:</label><br>
+        <input type="text" name="answer"><br><br>
     </div>
-    <button type="button" onclick="addChoice()">Add Choice</button><br><br>
-    <button type="button" onclick="deleteLastChoice()">Delete Last Answer</button><br><br>
-</div>
 
-<div id="multiChoiceMultiAnswerQuestionForm" style="display: none;">
-    <input type="hidden" name="questionTypeIdentifier" value="multiChoiceMultiAnswer">
-    <label>Question:</label><br>
-    <input type="text" name="question"><br><br>
+    <div id="fillBlankQuestionForm" style="display: none;">
+        <input type="hidden" name="questionTypeIdentifier" value="fillBlank">
+        <label>Question:</label><br>
+        <input type="text" name="question"><br><br>
 
-    <label>Answers:</label><br>
-    <div id="answer_container">
-        <input type="text" name="answer_1">
-        <input type="checkbox" name="correct_1">
+        <label>Answer:</label><br>
+        <input type="text" name="answer"><br><br>
     </div>
-    <button type="button" onclick="addChoiceMulti()">Add Answer</button><br><br>
-    <button type="button" onclick="deleteLastChoiceMulti()">Delete Last Answer</button><br><br>
-</div>
+
+    <div id="pictureResponseQuestionForm" style="display: none;">
+        <input type="hidden" name="questionTypeIdentifier" value="pictureResponse">
+        <label>Question:</label><br>
+        <input type="text" name="question"><br><br>
+        <input type="file" name="picture" accept="image/*"><br><br>
+
+        <label>Answer:</label><br>
+        <input type="text" name="answer">
+    </div>
+
+    <div id="multipleChoiceQuestionForm" style="display: none;">
+        <input type="hidden" name="questionTypeIdentifier" value="multipleChoice">
+        <label>Question:</label><br>
+        <input type="text" name="question"><br><br>
+
+        <label>Answers:</label><br>
+        <div id="answer_container">
+            <input type="text" name="answer_1">
+            <input type="radio" name="correct" value="1" checked>
+        </div>
+        <button type="button" onclick="addChoice()">Add Choice</button><br><br>
+        <button type="button" onclick="deleteLastChoice()">Delete Last Answer</button><br><br>
+    </div>
+
+    <div id="multiChoiceMultiAnswerQuestionForm" style="display: none;">
+        <input type="hidden" name="questionTypeIdentifier" value="multiChoiceMultiAnswer">
+        <label>Question:</label><br>
+        <input type="text" name="question"><br><br>
+
+        <label>Answers:</label><br>
+        <div id="answer_container">
+            <input type="text" name="answer_1">
+            <input type="checkbox" name="correct_1">
+        </div>
+        <button type="button" onclick="addChoiceMulti()">Add Answer</button><br><br>
+        <button type="button" onclick="deleteLastChoiceMulti()">Delete Last Answer</button><br><br>
+    </div>
+</main>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script> <!-- jQuery for AJAX -->
+<script src="script/mailPanel.js"></script>
+<script src="script/general.js"></script>
 
 </body>
 </html>

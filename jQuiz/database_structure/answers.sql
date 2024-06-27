@@ -10,37 +10,37 @@ CREATE TABLE answers
     FOREIGN KEY (question_id) REFERENCES questions(id)
 );
 INSERT INTO answers (text,is_correct,question_id,uniq_id)
-VALUES ('washington',true,3,1);
+VALUES ('washington',true,1,1);
 INSERT INTO answers (text,is_correct,question_id,uniq_id)
-VALUES ('george washington',true,3,1);
+VALUES ('george washington',true,1,1);
 
 INSERT INTO answers (text,is_correct,question_id,uniq_id)
-VALUES ('jefferson',true,4,1);
+VALUES ('jefferson',true,2,1);
 INSERT INTO answers (text,is_correct,question_id,uniq_id)
-VALUES ('thomas jefferson',true,4,1);
+VALUES ('thomas jefferson',true,2,1);
 
 INSERT INTO answers (text,is_correct,question_id,uniq_id)
-VALUES ('Abraham Lincoln',true,5,1);
+VALUES ('Abraham Lincoln',true,3,1);
 INSERT INTO answers (text,is_correct,question_id,uniq_id)
-VALUES ('thomas jefferson',false,5,2);
+VALUES ('Thomas Jefferson',false,3,2);
 INSERT INTO answers (text,is_correct,question_id,uniq_id)
-VALUES ('Ulysses S. Grant',false,5,3);
+VALUES ('Ulysses S. Grant',false,3,3);
 INSERT INTO answers (text,is_correct,question_id,uniq_id)
-VALUES ('Theodore Roosevelt',false,5,4);
+VALUES ('Theodore Roosevelt',false,3,4);
 
 INSERT INTO answers (text,is_correct,question_id,uniq_id)
-VALUES ('Barack Obama',true,6,1);
+VALUES ('Barack Obama',true,4,1);
 INSERT INTO answers (text,is_correct,question_id,uniq_id)
-VALUES ('Ronald Reagan',false,6,2);
+VALUES ('Ronald Reagan',false,4,2);
 INSERT INTO answers (text,is_correct,question_id,uniq_id)
-VALUES ('Bill Clinton',false,6,3);
+VALUES ('Bill Clinton',false,4,3);
 INSERT INTO answers (text,is_correct,question_id,uniq_id)
-VALUES ('George W. Bush',true,6,4);
+VALUES ('George W. Bush',true,4,4);
 
-INSERT INTO answers (text, is_correct, question_id, uniq_id)
-VALUES ('George Washington', true, 1, 1);
-INSERT INTO answers (text, is_correct, question_id, uniq_id)
-VALUES ('John Adams', true, 1, 2);
+# INSERT INTO answers (text, is_correct, question_id, uniq_id)
+# VALUES ('George Washington', true, 1, 1);
+# INSERT INTO answers (text, is_correct, question_id, uniq_id)
+# VALUES ('John Adams', true, 1, 2);
 
 # INSERT INTO answers (text, is_correct, question_id, uniq_id)
 # VALUES ('Africa', true, 2, 1);

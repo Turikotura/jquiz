@@ -8,6 +8,7 @@ CREATE TABLE history
     grade INT,
     completed_at DATETIME,
     writing_time INT,
+    is_practice BIT,
     FOREIGN KEY (user_id) REFERENCES users(id),
     FOREIGN KEY (quiz_id) REFERENCES quizzes(id)
 );

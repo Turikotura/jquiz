@@ -1,27 +1,48 @@
-<%@ page import="models.Quiz" %>
-<%@ page import="database.QuizDatabase" %>
-<%@ page import="database.Database" %>
 <%@ page import="java.sql.SQLException" %>
-<%@ page import="database.UserDatabase" %>
-<%@ page import="models.User" %>
+<%@ page import="models.*" %>
 <%@ page import="java.util.List" %>
+<%@ page import="models.Mail" %>
+<%@ page import="java.util.ArrayList" %>
+<%@ page import="java.util.Map" %>
+<%@ page import="java.util.HashMap" %>
+<%@ page import="database.*" %>
 <%@ page import="models.History" %>
 <%@ page import="database.HistoryDatabase" %>
-<%@ page import="java.util.ArrayList" %><%--
-  Created by IntelliJ IDEA.
-  User: giorgi
-  Date: 6/17/24
-  Time: 9:56 PM
-  To change this template use File | Settings | File Templates.
---%>
+<%@ page import="database.UserDatabase" %>
+<%@ page import="static listeners.ContextListener.getDatabase" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html>
-<% int quizId = Integer.parseInt(request.getParameter("quizId"));
-    QuizDatabase quizDB = (QuizDatabase) application.getAttribute(Database.QUIZ_DB);
-    UserDatabase userDB = (UserDatabase) application.getAttribute(Database.USER_DB);
-    HistoryDatabase historyDB = (HistoryDatabase) application.getAttribute(Database.HISTORY_DB);
+<%
+    User curUser = (User) request.getSession().getAttribute("curUser");
+
+    MailDatabase mailDB = getDatabase(Database.MAIL_DB,request);
+    UserDatabase userDB = getDatabase(Database.USER_DB,request);
+    HistoryDatabase historyDB = getDatabase(Database.HISTORY_DB,request);
+    QuizDatabase quizDB = getDatabase(Database.QUIZ_DB,request);
     List<History> prevAttempts, bestAttempts, fastestAttempts = new ArrayList<History>();
+
+    // Mail variables
+    List<Mail> mails = new ArrayList<Mail>();
+    List<String> senderNames = new ArrayList<String>();
+    Map<Integer,Integer> maxGrades = new HashMap<Integer,Integer>();
+
+    if(curUser != null){
+        // Get mails received by user
+        mails = mailDB.getMailsByUserId(curUser.getId(),"RECEIVE");
+        for(Mail mail : mails){
+            // Get names of senders
+            senderNames.add(userDB.getById(mail.getSenderId()).getUsername());
+            if(mail.getType() == MailTypes.CHALLENGE){
+                // Get max grade of senders for challenges
+                History history = historyDB.getBestHistoryByUserAndQuizId(mail.getSenderId(),mail.getQuizId());
+                int grade = (history == null) ? 0 : history.getGrade();
+                maxGrades.put(mail.getId(),grade);
+            }
+        }
+    }
+
+    int quizId = Integer.parseInt(request.getParameter("quizId"));
     Quiz curQuiz = null;
     User author = null;
 
@@ -96,7 +117,9 @@
             <%}%>
         </nav>
     </header>
-    <main>
+<%@ include file="header.jsp" %>
+<%@ include file="mail.jsp" %>
+<main>
     <h1><%=curQuiz.getTitle()%></h1>
     <h3><%="Author: " + author.getUsername()%></h3>
     <h3><%="Created at: " + curQuiz.getCreatedAt().toString()%></h3>
@@ -255,5 +278,9 @@
     </div>
     </main>
 </div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script> <!-- jQuery for AJAX -->
+<script src="script/mailPanel.js"></script>
+<script src="script/general.js"></script>
 </body>
 </html>

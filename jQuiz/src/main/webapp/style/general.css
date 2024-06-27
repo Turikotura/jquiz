@@ -1,3 +1,5 @@
+@import url("colorPalette.css");
+
 /*general*/
 
 * {
@@ -7,12 +9,15 @@
 }
 
 body {
+    background-color: var(--accent-color);
 }
 
-.main {
-    width: 80%;
+main {
+    padding: 20px;
+    padding-top: 100px;
+    width: 75%;
     height: 100%;
-    background-color: red;
+    background-color: var(--primary-color);
     margin: 0 auto;
     min-height: 100vh;
 }
@@ -20,40 +25,49 @@ body {
 /*header*/
 
 header {
+    position: fixed;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 30px 40px;
-    background-color: #f8f9fa;
+    padding: 20px 30px;
+    background-color: var(--secondary-color);
+    top: 0px;
+    width: 100%;
 }
 
 .logo img {
     max-height: 50px;
 }
 
-.main-nav ul, .auth-nav ul {
+.main-nav ul, .mail-nav ul, .auth-nav ul {
     list-style-type: none;
     margin: 0;
     padding: 0;
     display: flex;
 }
 
-.main-nav ul li, .auth-nav ul li {
-    margin-right: 20px;
+.main-nav ul li, .mail-nav ul li, .auth-nav ul li {
+    margin-right: 0px;
+    padding: 10px;
 }
 
-.main-nav ul li:last-child, .auth-nav ul li:last-child {
+.main-nav ul li:last-child, .mail-nav ul li:last-child, .auth-nav ul li:last-child {
     margin-right: 0;
 }
 
-.main-nav ul li a, .auth-nav ul li a {
+.main-nav ul li a, .mail-nav ul li a, .auth-nav ul li a, .auth-nav ul li input {
     text-decoration: none;
-    color: #333;
+    color: var(--accent-color);
+    background-color: var(--primary-color);
+    padding: 20px;
     font-weight: bold;
+    border: none;
+    margin-top: 0px;
 }
 
-.main-nav ul li a:hover, .auth-nav ul li a:hover {
-    color: #555;
+.main-nav ul li a:hover, .mail-nav ul li a:hover, .auth-nav ul li a:hover, .auth-nav ul li input:hover {
+    color: var(--secondary-color);
+    background-color: var(--error-color);
 }
 
 .auth-nav {
@@ -78,10 +92,10 @@ header {
 
 .quiz-box {
     width: 250px; /* width of each quiz box */
-    border: 3px solid #ccc; /* border around each quiz box */
+    border: 3px solid var(--secondary-color); /* border around each quiz box */
     border-radius: 5px; /* rounded corners */
     overflow: hidden; /* to prevent overflow of contents */
-    background-color: #fff; /* background color of quiz box */
+    background-color: var(--secondary-color); /* background color of quiz box */
 }
 
 .quiz-box-name {
@@ -92,7 +106,7 @@ header {
     width: 100%;
     height: 150px;
     overflow: hidden;
-    background-color: green;
+    background-color: var(--accent-color);
     display: flex;
     flex-direction: column;
     justify-content: end;
@@ -108,7 +122,7 @@ header {
     display: flex;
     justify-content: space-between;
     height: 20px;
-    background-color: pink;
+    background-color: var(--secondary-color);
 }
 
 /*mail*/
@@ -120,18 +134,32 @@ header {
     top: 0;
     width: 250px;
     height: 100%;
-    background-color: #f0f0f0;
+    background-color: var(--error-color);
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
     overflow-y: auto;
     padding: 20px;
     z-index: 1000;
 }
 
-.message-box {
-    background-color: #ffffff;
-    border: 1px solid #ccc;
+#mail-panel #send-mail {
+    text-decoration: none;
+    color: var(--accent-color);
+    background-color: var(--primary-color);
     padding: 10px;
+    display: block;
+    text-align: center;
     margin-bottom: 10px;
+}
+#mail-panel #send-mail:hover {
+    color: var(--primary-color);
+    background-color: var(--accent-color);
+}
+
+.message-box {
+    background-color: var(--primary-color);
+    border: 1px solid var(--primary-color);
+    padding: 10px;
+    margin: 10px;
     word-break: break-all;
 }
 .active-message {

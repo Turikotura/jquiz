@@ -59,6 +59,7 @@ public class PlayQuizServlet extends HttpServlet {
 
         HistoryDatabase historydb = getDatabase(HistoryDatabase.HISTORY_DB, httpServletRequest);
 
+        System.out.println(history.getUserId());
         try {
             historydb.add(history);
         } catch (SQLException e) {
