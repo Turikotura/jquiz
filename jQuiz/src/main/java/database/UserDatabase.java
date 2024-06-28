@@ -123,4 +123,13 @@ public class UserDatabase extends Database<User>{
         con.close();
         return res;
     }
+
+    public void removeFriends(int user1, int user2) throws SQLException, ClassNotFoundException {
+        String curStatement = String.format("DELETE FROM %s WHERE (%s = %d AND %s = %d) OR (%s = %d AND %s = %d);",
+                Database.FRIEND_DB, USER1_ID, user1, USER2_ID, user2, USER1_ID, user2, USER2_ID, user1);
+        Connection con = getConnection();
+        Statement statement = con.createStatement();
+        statement.execute(curStatement);
+        con.close();
+    }
 }

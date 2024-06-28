@@ -1,25 +1,37 @@
 main {
-    display: flex;
-    align-items: center;
     width: 50%; /* Adjust as needed */
-    margin: 20px auto; /* Center main horizontally */
+    margin: 100px auto; /* Center main horizontally */
     border: 1px solid #ccc;
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    justify-content: flex-start; /* Align content to the left */
 }
+
 .profile-pic {
     border-radius: 50%;
-    margin-right: 20px;
     width: 150px; /* Adjust as needed for a bigger image */
     height: 150px; /* Adjust as needed for a bigger image */
     object-fit: cover;
+    float: left; /* Float the image to the left */
+    margin-right: 20px; /* Add space to the right of the image */
 }
+
 .profile-info {
-    display: flex;
-    flex-direction: column;
+    display: inline-block; /* Allow profile-info to sit next to the image */
+    vertical-align: top; /* Align profile-info to the top */
+    width: calc(100% - 170px); /* Adjust width to fit next to the image */
 }
+
 h2, h3 {
     margin: 0;
+}
+
+.quiz-boxes {
+    width: 100%; /* Ensure quiz-boxes take full width within main */
+    gap: 20px; /* Add space between quiz boxes */
+    margin-top: 20px; /* Add some space above quiz-boxes */
+}
+
+.activity {
+    margin-top: 20px;
 }
