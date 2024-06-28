@@ -1,7 +1,12 @@
 <%@ page import="attempts.QuizAttempt" %>
 <%@ page import="attempts.QuestionAttempt" %>
 <%@ page import="models.*" %>
-<%@ page import="java.util.Date" %><%--
+<%@ page import="database.MailDatabase" %>
+<%@ page import="database.UserDatabase" %>
+<%@ page import="static listeners.ContextListener.getDatabase" %>
+<%@ page import="database.Database" %>
+<%@ page import="database.HistoryDatabase" %>
+<%@ page import="java.util.*" %><%--
   Created by IntelliJ IDEA.
   User: giorgi
   Date: 6/18/24
