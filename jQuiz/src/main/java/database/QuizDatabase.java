@@ -97,6 +97,7 @@ public class QuizDatabase extends Database<Quiz>{
                 Database.QUIZ_DB,k);
         return queryToList(query);
     }
+
     public List<Quiz> getRecentlyCreatedQuizzes(int k) throws SQLException, ClassNotFoundException {
         String query = String.format("SELECT * FROM %s ORDER BY %s DESC LIMIT %d",
                 databaseName, CREATED_AT, k);
@@ -107,4 +108,17 @@ public class QuizDatabase extends Database<Quiz>{
                 databaseName, TITLE, title);
         return queryToElement(query);
     }
+
+    public List<Quiz> searchRecentQuizzes(int k, String searchString) throws SQLException, ClassNotFoundException {
+        String query = String.format("SELECT * FROM %s WHERE %s LIKE '%%%s%%' ORDER BY %s DESC LIMIT %d;",
+                databaseName, TITLE, searchString, CREATED_AT, k);
+        return queryToList(query);
+    }
+
+    public List<Quiz> searchPopularQuizzes(int k, String totalOrLastMonth, String searchString) throws SQLException, ClassNotFoundException {
+        String query = String.format("SELECT * FROM %s WHERE %s LIKE '%%%s%%' ORDER BY " + (totalOrLastMonth == "LAST_MONTH" ? LAST_MONTH_PLAY_COUNT : TOTAL_PLAY_COUNT) + " DESC LIMIT %d;",
+                Database.QUIZ_DB, TITLE, searchString, k);
+        return queryToList(query);
+    }
+
 }
