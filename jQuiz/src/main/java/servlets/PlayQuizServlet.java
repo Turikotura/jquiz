@@ -60,6 +60,12 @@ public class PlayQuizServlet extends HttpServlet {
             }
             quizAttempt.getQuestions().get(questionInd).setWrittenAnswers(answers);
 
+            if(httpServletRequest.getParameter("nextQ") != null){
+                quizAttempt.setOnQuestionIndex(quizAttempt.getOnQuestionIndex()+1);
+                System.out.println(quizAttempt.getOnQuestionIndex()+1);
+                System.out.println("---");
+            }
+
             if(httpServletRequest.getParameter("eval") != null){
                 quizAttempt.getQuestions().get(questionInd).evaluateAnswers();
 

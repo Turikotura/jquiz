@@ -285,6 +285,13 @@
             <%
             }
             %>
+            <%
+            if(!quizAttempt.getShowAll()){
+            %>
+            formData.push({ name: 'nextQ', value: 'true'});
+            <%
+            }
+            %>
 
             $.ajax({
                 url: form.attr('action'),
@@ -303,11 +310,11 @@
             });
         });
 
-        // Ajax request on clicking the div with class 'clickableDiv'
         $('.question-box').on('input', function(e) {
             e.preventDefault();
 
-            var form = $(this).closest('form');
+            var formElem = this.querySelector('form');
+            var form = $(formElem).closest('form');
             var formData = form.serializeArray();
 
             $.ajax({
