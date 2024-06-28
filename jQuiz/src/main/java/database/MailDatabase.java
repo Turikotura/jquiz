@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class MailDatabase extends Database<Mail> {
+public class  MailDatabase extends Database<Mail> {
     // Mail Columns
     public static final String  ID = "id";
     public static final String RECEIVER_ID = "receiver_id";
@@ -70,5 +70,10 @@ public class MailDatabase extends Database<Mail> {
         String query = String.format("SELECT * FROM %s WHERE %s = %d",
                 databaseName, (Objects.equals(sendOrReceive, "SEND") ? SENDER_ID : RECEIVER_ID), userId);
         return queryToList(query);
+    }
+    public boolean friendRequestPending(int from, int to) throws SQLException, ClassNotFoundException {
+        String query = String.format("SELECT * FROM %s WHERE %s = %d AND %s = %d and %s = %d",
+                databaseName, SENDER_ID, from, RECEIVER_ID, to, TYPE, MailTypes.FRIEND_REQUEST.ordinal());
+        return !queryToList(query).isEmpty();
     }
 }

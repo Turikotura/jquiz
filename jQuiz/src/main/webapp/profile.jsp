@@ -55,6 +55,21 @@
     <div class="profile-info">
     <h2><%=profileOf.getUsername()%></h2>
     <h3><%="Created at: " + profileOf.getCreated_at().toString()%></h3>
+        <% if(curUser == null) { %>
+        <p><a href="login.jsp">Log in</a> or <a href="register.jsp">register</a> to add friends and compete against them!</p>
+        <% } else if(curUser.getId() == profileOf.getId()) { %>
+        <p>This is you.</p>
+        <% } else if(mailDB.friendRequestPending(curUser.getId(),profileOf.getId())) { %>
+        <p>Friend request sent.</p>
+        <% } else if(mailDB.friendRequestPending(profileOf.getId(),curUser.getId())) { %>
+        <p><%=profileOf.getUsername() + " has already seny you a friend request. Check your mail!"%></p>
+        <% } else { %>
+            <form action="AddFriend" method="post">
+                <input type="hidden" name="from" value="<%=curUser.getId()%>">
+                <input type="hidden" name="to" value="<%=profileOf.getId()%>">
+                <input type="submit" value="Send friend request">
+            </form>
+        <% } %>
     </div>
 </main>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script> <!-- jQuery for AJAX -->
