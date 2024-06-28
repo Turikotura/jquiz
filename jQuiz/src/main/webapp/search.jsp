@@ -65,7 +65,7 @@
                 for (User user : users) {
             %>
             <div class="user-box">
-                <a href="users.jsp?userId=<%=user.getId()%>">
+                <a href="profile.jsp?username=<%=user.getUsername()%>">
                     <div class="user-box-top">
                         <img/>
                     </div>
