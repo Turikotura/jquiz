@@ -1,10 +1,4 @@
-<%@ page import="java.sql.SQLException" %>
-<%@ page import="java.util.List" %>
 <%@ page import="attempts.QuizAttempt" %>
-<%@ page import="attempts.QuizAttemptsController" %>
-<%@ page import="static listeners.SessionListener.getQuizAttemptsController" %>
-<%@ page import="database.*" %>
-<%@ page import="static listeners.ContextListener.getDatabase" %>
 <%@ page import="attempts.QuestionAttempt" %>
 <%@ page import="models.*" %>
 <%@ page import="java.util.Date" %><%--
@@ -21,12 +15,7 @@
 
     int attemptId = Integer.parseInt(request.getParameter("attemptId"));
 
-    UserDatabase userdb = getDatabase(Database.USER_DB,request);
-    int userId = -1;
-    userId = ((User) request.getSession().getAttribute("curUser")).getId();
-
-    QuizAttemptsController qac = getQuizAttemptsController(userId,request);
-    QuizAttempt quizAttempt = qac.getQuizAttemptById(attemptId);
+    QuizAttempt quizAttempt = (QuizAttempt) request.getAttribute("qa");
 %>
 <%
     if(quizAttempt != null){
@@ -72,6 +61,8 @@
 </header>
 
 <main>
+
+    <%--Quiz info--%>
     <img src="<%=quizAttempt.getThumbnail()%>">
     <h1><%=quizAttempt.getTitle()%></h1>
     <h3><%=quizAttempt.getStartTime()%></h3>
@@ -79,6 +70,7 @@
     <h4>Max Score : <%=quizAttempt.getMaxScore()%> pts</h4>
     <hr>
 
+    <%--Question jump panel--%>
     <%
         if(quizAttempt.getShowAll()) {
     %>
@@ -95,6 +87,7 @@
         }
     %>
 
+    <%--Question results--%>
     <%
         if(quizAttempt.getAutoCorrect()) {
     %>
@@ -115,6 +108,7 @@
         }
     %>
 
+    <%--Question list--%>
     <%
         for(int i = 0; i < quizAttempt.getQuestions().size(); i++){
             QuestionAttempt questionAttempt = quizAttempt.getQuestions().get(i);
@@ -130,9 +124,12 @@
     %>
     <div id="<%=i%>" class="question-box <%=active%>">
         <form action="PlayQuiz" method="post">
-            <input name="userId" type="hidden" value="<%=userId%>">
+            <%--Base question inputs--%>
+            <input name="userId" type="hidden" value="<%=curUser.getId()%>">
             <input name="quizAttemptId" type="hidden" value="<%=attemptId%>">
             <input name="questionInd" type="hidden" value="<%=i%>">
+
+            <%--Question info--%>
             <%
                 if(questionAttempt.getQuestion().getQuestionType() == QuestionTypes.PIC_RESPONSE){
             %>
@@ -148,6 +145,7 @@
             <br>
 
 
+
             <%
                 if(questionAttempt.getQuestion().getQuestionType() == QuestionTypes.MULTIPLE_CHOICE){
                     for(int j = 0; j < questionAttempt.getAnswers().size(); j++){
@@ -156,6 +154,7 @@
                             checked = "checked";
                         }
             %>
+            <%--Multi choice question--%>
             <input <%=disabled%> <%=checked%> name="<%=i%>" id="<%=i%>-<%=j%>" type="radio" value="<%=questionAttempt.getAnswers().get(j).getText()%>">
             <label for="<%=i%>-<%=j%>"> <%=questionAttempt.getAnswers().get(j).getText()%></label><br>
             <%
@@ -170,6 +169,7 @@
                             }
                         }
             %>
+            <%--MAMC question--%>
             <input <%=disabled%> <%=checked%> name="<%=i%>" id="<%=i%>-<%=j%>" type="checkbox" value="<%=questionAttempt.getAnswers().get(j).getText()%>">
             <label for="<%=i%>-<%=j%>"> <%=questionAttempt.getAnswers().get(j).getText()%></label><br>
             <%
@@ -182,6 +182,7 @@
                             val = questionAttempt.getWrittenAnswers().get(j);
                         }
             %>
+            <%--Response question--%>
             <input <%=disabled%> name="<%=i%>-<%=j%>" type="text" value="<%=val%>">
             <%
                     }
@@ -191,7 +192,8 @@
             <%
                 if(!quizAttempt.getShowAll() || quizAttempt.getAutoCorrect()) {
             %>
-            <input <%=disabled%> type="submit" class="send-question" onclick="submitQuestion(<%=i+1%>)" value="Submit">
+            <%--Question submit button--%>
+            <input <%=disabled%> type="submit" class="send-question" value="Submit">
             <%
                 }
             %>
@@ -201,8 +203,10 @@
         }
     %>
     <br>
+
+    <%--Finish Quiz--%>
     <form id="finish-form" action="PlayQuiz" method="post">
-        <input name="userId" type="hidden" value="<%=userId%>">
+        <input name="userId" type="hidden" value="<%=curUser.getId()%>">
         <input name="quizAttemptId" type="hidden" value="<%=attemptId%>">
         <input name="finishQuiz" type="hidden" value="true">
         <input id="quiz-submit-button" type="submit" value="Finish">
@@ -211,10 +215,8 @@
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script> <!-- jQuery for AJAX -->
 <script>
+    // Update the grade for a single question
     function updateSingleQuestionResult(resp){
-        <%
-        if(quizAttempt.getAutoCorrect()) {
-        %>
         var elem = document.getElementById("q-res-"+resp.qInd);
         elem.innerHTML = resp.grade + " / " + resp.maxGrade;
 
@@ -226,11 +228,9 @@
                 inps[i].disabled = true;
             }
         }
-        <%
-        }
-        %>
     }
 
+    // Scroll to question
     function scrollToDiv(sectionId) {
         var element = document.getElementById(sectionId);
         if (element) {
@@ -238,42 +238,56 @@
         }
     }
 
-    function submitQuestion(sectionId){
-        if(sectionId == <%=quizAttempt.getQuestions().size()%> && <%=!quizAttempt.getShowAll()%>){
+    // Move to next question on single question per page
+    function moveToNext(sectionId){
+        sectionId++;
+        console.log(sectionId);
+        if(sectionId == <%=quizAttempt.getQuestions().size()%>){
             submitQuiz();
             return;
         }
 
-        if(<%=!quizAttempt.getShowAll()%>){
-            var divs = document.querySelectorAll('.question-box');
-            divs.forEach(function(div) {
-                div.classList.remove('active');
-            });
+        var divs = document.querySelectorAll('.question-box');
+        divs.forEach(function(div) {
+            div.classList.remove('active');
+        });
 
-            var selectedDiv = document.getElementById(sectionId);
-            if (selectedDiv) {
-                selectedDiv.classList.add('active');
-            }
+        var selectedDiv = document.getElementById(sectionId);
+        if (selectedDiv) {
+            selectedDiv.classList.add('active');
         }
     }
 
+    // Finish quiz
     function submitQuiz(){
+        // Submit every question answer
         var questionSubmits = document.querySelectorAll('.send-question');
         questionSubmits.forEach(function (qs) {
             qs.click();
         })
 
+        // And then finish the quiz
         var form = document.getElementById("finish-form");
         form.submit();
     }
 
+
+
+    // --- AJAX calls ---
     $(document).ready(function() {
-        // Ajax request on clicking the div with class 'clickableDiv'
+        // Logic for question submit buttons
         $('.send-question').click(function(e) {
+
+            if(<%=!quizAttempt.getShowAll()%>){
+                moveToNext(this.parentNode.parentNode.id);
+            }
+
             e.preventDefault();
 
             var form = $(this).closest('form');
             var formData = form.serializeArray();
+
+            // If question submits need to be auto-corrected
             <%
             if(quizAttempt.getAutoCorrect()){
             %>
@@ -281,6 +295,8 @@
             <%
             }
             %>
+
+            // If quiz displays one question at a time
             <%
             if(!quizAttempt.getShowAll()){
             %>
@@ -296,8 +312,14 @@
                 success: function(response) {
                     console.log('Ajax request successful');
                     //console.log(response);
-                    // Optionally, update UI or handle response
+                    // Update the grade panel
+                    <%
+                    if(quizAttempt.getAutoCorrect()) {
+                    %>
                     updateSingleQuestionResult(response);
+                    <%
+                    }
+                    %>
                 },
                 error: function(xhr, status, error) {
                     console.error('Ajax request failed');
@@ -306,6 +328,7 @@
             });
         });
 
+        // Logic to save answers automatically
         $('.question-box').on('input', function(e) {
             e.preventDefault();
 
@@ -329,10 +352,12 @@
         });
     });
 
-    // Timer
-    // Function to start the countdown timer
-    function startTimer(duration, display) {
-        var timer = duration, minutes, seconds;
+
+
+    // --- Timer ---
+    // Timer logic
+    function timerLogic(timer,display){
+        // Display remaining time
         minutes = parseInt(timer / 60, 10);
         seconds = parseInt(timer % 60, 10);
 
@@ -340,38 +365,35 @@
         seconds = seconds < 10 ? "0" + seconds : seconds;
 
         display.textContent = minutes + ":" + seconds;
+
+        // Submit quiz if time is up
         if (--timer < 0) {
             timer = 0;
             // Submit the form when timer reaches 0
             submitQuiz();
         }
+    }
+
+    // Start the timer
+    function startTimer(duration, display) {
+        var timer = duration, minutes, seconds;
+        timerLogic(timer--,display);
         setInterval(function () {
-            minutes = parseInt(timer / 60, 10);
-            seconds = parseInt(timer % 60, 10);
-
-            minutes = minutes < 10 ? "0" + minutes : minutes;
-            seconds = seconds < 10 ? "0" + seconds : seconds;
-
-            display.textContent = minutes + ":" + seconds;
-            if (--timer < 0) {
-                timer = 0;
-                // Submit the form when timer reaches 0
-                submitQuiz();
-            }
+            timerLogic(timer--,display);
         }, 1000);
     }
 
-    // Get the timer display element
+    // Get timer element
     var display = document.getElementById("timer");
 
     <%
     long timeGone = ((new Date()).getTime()-quizAttempt.getStartTime().getTime())/1000;
     long timeLeft = quizAttempt.getTime()-timeGone;
     %>
-    // Set the duration of the countdown in seconds
+    // Get time left
     var timerDuration = <%=timeLeft%>;
 
-    // Start the timer when the page loads
+    // Start timer when page loads
     startTimer(timerDuration, display);
 </script>
 <%
@@ -381,5 +403,8 @@
 <%
     }
 %>
+
+
+
 </body>
 </html>

@@ -4,10 +4,10 @@ import attempts.QuestionAttempt;
 import attempts.QuizAttempt;
 import attempts.QuizAttemptsController;
 import com.google.gson.Gson;
+import database.Database;
 import database.HistoryDatabase;
-import models.History;
-import models.Question;
-import models.QuestionTypes;
+import database.QuizDatabase;
+import models.*;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -27,7 +27,15 @@ import static listeners.ContextListener.getDatabase;
 public class PlayQuizServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws ServletException, IOException {
+        User curUser = (User) httpServletRequest.getSession().getAttribute("curUser");
 
+        int attemptId = Integer.parseInt(httpServletRequest.getParameter("attemptId"));
+
+        QuizAttemptsController qac = getQuizAttemptsController(curUser.getId(),httpServletRequest);
+        QuizAttempt quizAttempt = qac.getQuizAttemptById(attemptId);
+        httpServletRequest.setAttribute("qa",quizAttempt);
+
+        httpServletRequest.getRequestDispatcher("playQuiz.jsp").forward(httpServletRequest,httpServletResponse);
     }
 
     @Override
@@ -39,10 +47,13 @@ public class PlayQuizServlet extends HttpServlet {
         QuizAttempt quizAttempt = qac.getQuizAttemptById(attemptId);
 
         if(httpServletRequest.getParameter("questionInd") != null){
+            // Question answer update
             int questionInd = Integer.parseInt(httpServletRequest.getParameter("questionInd"));
 
             QuestionAttempt questionAttempt = quizAttempt.getQuestions().get(questionInd);
             List<String> answers = new ArrayList<>();
+
+            // Get answers by question type
             if(questionAttempt.getQuestion().getQuestionType() == QuestionTypes.MULTIPLE_CHOICE){
                 answers.add(httpServletRequest.getParameter(String.format("%d",questionInd)));
             }else if(questionAttempt.getQuestion().getQuestionType() == QuestionTypes.MULTI_ANS_MULTI_CHOICE){
@@ -58,15 +69,17 @@ public class PlayQuizServlet extends HttpServlet {
                     answers.add(answer);
                 }
             }
+
+            // Update answers
             quizAttempt.getQuestions().get(questionInd).setWrittenAnswers(answers);
 
             if(httpServletRequest.getParameter("nextQ") != null){
+                // Move to next question
                 quizAttempt.setOnQuestionIndex(quizAttempt.getOnQuestionIndex()+1);
-                System.out.println(quizAttempt.getOnQuestionIndex()+1);
-                System.out.println("---");
             }
 
             if(httpServletRequest.getParameter("eval") != null){
+                // Evaluate question
                 quizAttempt.getQuestions().get(questionInd).evaluateAnswers();
 
                 Map<String,Integer> respMap = new HashMap<>();
@@ -78,6 +91,7 @@ public class PlayQuizServlet extends HttpServlet {
                 httpServletResponse.getWriter().write(new Gson().toJson(respMap));
             }
         }else{
+            // Finish quiz
             History history = qac.finishQuiz(attemptId);
 
             HistoryDatabase historydb = getDatabase(HistoryDatabase.HISTORY_DB, httpServletRequest);
@@ -90,7 +104,6 @@ public class PlayQuizServlet extends HttpServlet {
                 throw new RuntimeException(e);
             }
 
-            //httpServletResponse.sendRedirect("quizInfo.jsp?quizId="+quizAttempt.getQuizId());
             httpServletResponse.sendRedirect("quizResult.jsp?userId="+userId+"&quizId="+quizAttempt.getQuizId());
         }
     }
