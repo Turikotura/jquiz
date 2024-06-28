@@ -1,15 +1,17 @@
 <%@ page import="models.*" %>
 <%@ page import="database.*" %>
 <%@ page import="static listeners.ContextListener.getDatabase" %>
-<%@ page import="java.util.*" %><%--
+<%@ page import="java.util.List" %>
+<%@ page import="java.util.ArrayList" %>
+<%@ page import="java.util.Map" %>
+<%@ page import="java.util.HashMap" %><%--
   Created by IntelliJ IDEA.
   User: giorgi
-  Date: 6/15/24
-  Time: 1:53 PM
+  Date: 6/27/24
+  Time: 8:19 PM
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<!DOCTYPE html>
 <html>
 <%
     User curUser = (User) request.getSession().getAttribute("curUser");
@@ -17,7 +19,6 @@
     MailDatabase mailDB = getDatabase(Database.MAIL_DB,request);
     UserDatabase userDB = getDatabase(Database.USER_DB,request);
     HistoryDatabase historyDB = getDatabase(Database.HISTORY_DB,request);
-    QuizDatabase quizDB = getDatabase(Database.QUIZ_DB,request);
 
     // Mail variables
     List<Mail> mails = new ArrayList<Mail>();
@@ -38,55 +39,26 @@
             }
         }
     }
-    String message = "";
-    if(request.getServletContext().getAttribute("reg-message") != null) message = ((String) request.getServletContext().getAttribute("reg-message"));
+    String profileName = request.getParameter("username");
+    User profileOf = userDB.getByUsername(profileName);
 %>
 <head>
-    <title>Register</title>
+    <title><%=profileName%></title>
     <link href="style/general.css" rel="stylesheet" type="text/css">
+    <link href="style/profile.css" rel="stylesheet" type="text/css">
 </head>
 <body>
-
 <%@ include file="header.jsp" %>
 <%@ include file="mail.jsp" %>
-
 <main>
-    <h1>Create New Account</h1>
-    <p>Please enter proposed name and password.</p>
-    <form action="Register" method="post">
-        <label>
-            Enter your email:
-            <input type="email" name="email">
-        </label>
-        <p></p>
-        <label>
-            Username:
-            <input type="input" name="user-name">
-        </label>
-        <p></p>
-        <label>
-            Password:
-            <input type="password" name="password1">
-        </label>
-        <p></p>
-        <label>
-            Re-enter your Password:
-            <input type="password" name="password2">
-        </label>
-        <p></p>
-        <label>
-            Link to your profile photo (Not required):
-            <input type="input" name="profile-pic">
-        </label>
-        <p><%=message%></p>
-        <input type="submit" value="Create">
-    </form>
-    <span>Already have an account? <a href="login.jsp">Log in</a></span>
+    <img class="profile-pic" src="<%=profileOf.getImage()%>" alt="profile-pic">
+    <div class="profile-info">
+    <h2><%=profileOf.getUsername()%></h2>
+    <h3><%="Created at: " + profileOf.getCreated_at().toString()%></h3>
+    </div>
 </main>
-
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script> <!-- jQuery for AJAX -->
 <script src="script/mailPanel.js"></script>
 <script src="script/general.js"></script>
-
 </body>
 </html>

@@ -1,8 +1,38 @@
-<%@ page import="models.User" %>
+<%@ page import="models.*" %>
+<%@ page import="database.*" %>
+<%@ page import="static listeners.ContextListener.getDatabase" %>
+<%@ page import="java.util.List" %>
+<%@ page import="java.util.ArrayList" %>
+<%@ page import="java.util.Map" %>
+<%@ page import="java.util.HashMap" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%
     User curUser = (User) request.getSession().getAttribute("curUser");
+
+    MailDatabase mailDB = getDatabase(Database.MAIL_DB,request);
+    UserDatabase userDB = getDatabase(Database.USER_DB,request);
+    HistoryDatabase historyDB = getDatabase(Database.HISTORY_DB,request);
+
+    // Mail variables
+    List<Mail> mails = new ArrayList<Mail>();
+    List<String> senderNames = new ArrayList<String>();
+    Map<Integer,Integer> maxGrades = new HashMap<Integer,Integer>();
+
+    if(curUser != null){
+        // Get mails received by user
+        mails = mailDB.getMailsByUserId(curUser.getId(),"RECEIVE");
+        for(Mail mail : mails){
+            // Get names of senders
+            senderNames.add(userDB.getById(mail.getSenderId()).getUsername());
+            if(mail.getType() == MailTypes.CHALLENGE){
+                // Get max grade of senders for challenges
+                History history = historyDB.getBestHistoryByUserAndQuizId(mail.getSenderId(),mail.getQuizId());
+                int grade = (history == null) ? 0 : history.getGrade();
+                maxGrades.put(mail.getId(),grade);
+            }
+        }
+    }
 %>
 
 <html>
@@ -121,41 +151,8 @@
 </head>
 <body>
 
-<header>
-    <div class="logo">
-        <img src="logo.png" alt="Website Logo">
-    </div>
-    <nav class="main-nav">
-        <ul>
-            <li><a href="/">Home</a></li>
-            <li><a href="/users.jsp">Users</a></li>
-            <li><a href="/achievements.jsp">Achievements</a></li>
-            <li><a href="/categories.jsp">Categories</a></li>
-            <li><a href="/createquiz.jsp">Create quiz</a></li>
-            <li><a href="/historySummary.jsp">History</a></li>
-        </ul>
-    </nav>
-    <nav class="mail-nav">
-        <ul>
-            <li><a onclick="togglePanel()">Show Messages</a></li>
-        </ul>
-    </nav>
-    <nav class="auth-nav">
-        <%if(curUser == null) { %>
-        <ul>
-            <li><a href="login.jsp">Login</a></li>
-            <li><a href="register.jsp">Register</a></li>
-        </ul>
-        <%} else { %>
-        <ul>
-            <li><a href="#"><%=curUser.getUsername()%></a></li>
-            <li><a onclick="submitLogOut()">Log out</a></li>
-            <form id="log-out-form" style="display: none" action="Login" method="get"></form>
-        </ul>
-        <%}%>
-
-    </nav>
-</header>
+<%@ include file="header.jsp" %>
+<%@ include file="mail.jsp" %>
 
 <main>
     <h1>Create Quiz</h1>
@@ -252,6 +249,8 @@
     </div>
 </main>
 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script> <!-- jQuery for AJAX -->
+<script src="script/mailPanel.js"></script>
 <script src="script/general.js"></script>
 
 </body>
