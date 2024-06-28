@@ -14,6 +14,7 @@ public class QuizDatabase extends Database<Quiz>{
     static final String CREATED_AT = "created_at";
     static final String TIME = "time";
     static final String THUMBNAIL = "thumbnail";
+    static final String THUMBNAIL_URL = "thumbnail_url";
     static final String SHOULD_MIX_UP = "should_mix_up";
     static final String SHOW_ALL = "show_all";
     static final String AUTO_CORRECT = "auto_correct";
@@ -29,9 +30,9 @@ public class QuizDatabase extends Database<Quiz>{
     @Override
     public int add(Quiz quiz) throws SQLException, ClassNotFoundException {
         String query = String.format(
-                "INSERT INTO quizzes (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s) " +
-                        "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);",
-                TITLE, AUTHOR_ID, CREATED_AT, TIME, THUMBNAIL, SHOULD_MIX_UP, SHOW_ALL, AUTO_CORRECT, ALLOW_PRACTICE, DESCRIPTION);
+                "INSERT INTO quizzes (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) " +
+                        "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);",
+                TITLE, AUTHOR_ID, CREATED_AT, TIME, THUMBNAIL, THUMBNAIL_URL, SHOULD_MIX_UP, SHOW_ALL, AUTO_CORRECT, ALLOW_PRACTICE, DESCRIPTION);
         Connection con = getConnection();
         PreparedStatement statement = this.getStatement(query,con);
         statement.setString(1, quiz.getTitle());
@@ -39,11 +40,12 @@ public class QuizDatabase extends Database<Quiz>{
         statement.setTimestamp(3, new Timestamp(System.currentTimeMillis()));
         statement.setInt(4, quiz.getMaxTime());
         statement.setBytes(5, quiz.getThumbnail());
-        statement.setBoolean(6, quiz.getShouldMixUp());
-        statement.setBoolean(7, quiz.getShowAll());
-        statement.setBoolean(8, quiz.getAutoCorrect());
-        statement.setBoolean(9, quiz.getAllowPractice());
-        statement.setString(10, quiz.getDescription());
+        statement.setString(6, quiz.getThumbnailUrl());
+        statement.setBoolean(7, quiz.getShouldMixUp());
+        statement.setBoolean(8, quiz.getShowAll());
+        statement.setBoolean(9, quiz.getAutoCorrect());
+        statement.setBoolean(10, quiz.getAllowPractice());
+        statement.setString(11, quiz.getDescription());
 
         int affectedRows = statement.executeUpdate();
         if(affectedRows == 0){
@@ -70,6 +72,7 @@ public class QuizDatabase extends Database<Quiz>{
                 rs.getDate(CREATED_AT),
                 rs.getInt(TIME),
                 rs.getBytes(THUMBNAIL),
+                rs.getString(THUMBNAIL_URL),
                 rs.getBoolean(SHOULD_MIX_UP),
                 rs.getBoolean(SHOW_ALL),
                 rs.getBoolean(AUTO_CORRECT),

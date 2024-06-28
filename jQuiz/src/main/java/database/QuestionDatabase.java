@@ -17,7 +17,8 @@ public class QuestionDatabase extends Database<Question> {
     static final String QUESTION_TYPE = "question_type";
     static final String TEXT = "text";
     static final String QUIZ_ID = "quiz_id";
-    static final String IMAGE_URL = "image";
+    static final String IMAGE = "image";
+    static final String IMAGE_URL = "image_url";
     static final String SCORE = "score";
     AnswerDatabase answerDB;
 
@@ -28,14 +29,17 @@ public class QuestionDatabase extends Database<Question> {
 
     @Override
     public int add(Question question) throws SQLException, ClassNotFoundException {
-        String query = "INSERT INTO questions (QUESTION_TYPE, TEXT, QUIZ_ID, IMAGE, SCORE) VALUES (?, ?, ?, ?, ?)";
+        String query = String.format(
+                "INSERT INTO quizzes (%s, %s, %s, %s, %s, %s) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);",
+                QUESTION_TYPE, TEXT, QUIZ_ID, IMAGE, IMAGE_URL, SCORE);
         Connection con = getConnection();
         PreparedStatement statement = this.getStatement(query,con);
         statement.setInt(1, question.getQuestionType().ordinal());
         statement.setString(2, question.getText());
         statement.setInt(3, question.getQuizId());
         statement.setBytes(4, question.getImage());
-        statement.setInt(5, question.getScore());
+        statement.setString(5, question.getImageUrl());
+        statement.setInt(6, question.getScore());
         int affectedRows = statement.executeUpdate();
         if(affectedRows == 0){
             throw new SQLException("Creating row failed");
@@ -59,7 +63,8 @@ public class QuestionDatabase extends Database<Question> {
                 QuestionTypes.values()[rs.getInt(QUESTION_TYPE)],
                 rs.getString(TEXT),
                 rs.getInt(QUIZ_ID),
-                rs.getBytes(IMAGE_URL),
+                rs.getBytes(IMAGE),
+                rs.getString(IMAGE_URL),
                 rs.getInt(SCORE),
                 answerIds
         );

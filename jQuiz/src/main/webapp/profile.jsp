@@ -51,7 +51,7 @@
 <%@ include file="header.jsp" %>
 <%@ include file="mail.jsp" %>
 <main>
-    <img class="profile-pic" src="<%=profileOf.getImage()%>" alt="profile-pic">
+    <img class="profile-pic" src="image?type=user&userId=<%=profileOf.getId()%>" alt="profile-pic">
     <div class="profile-info">
     <h2><%=profileOf.getUsername()%></h2>
     <h3><%="Created at: " + profileOf.getCreated_at().toString()%></h3>

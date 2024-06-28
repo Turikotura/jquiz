@@ -10,6 +10,7 @@ public class Quiz {
     private Date createdAt;
     private int time;
     private byte[] thumbnail;
+    private String thumbnail_url;
     private boolean shouldMixUp;
     private boolean showAll;
     private boolean autoCorrect;
@@ -27,6 +28,7 @@ public class Quiz {
             Date createdAt,
             int time,
             byte[] thumbnail,
+            String thumbnail_url,
             boolean shouldMixUp,
             boolean showAll,
             boolean autoCorrect,
@@ -42,6 +44,7 @@ public class Quiz {
         this.createdAt = createdAt;
         this.time = time;
         this.thumbnail = thumbnail;
+        this.thumbnail_url = thumbnail_url;
         this.shouldMixUp = shouldMixUp;
         this.showAll = showAll;
         this.autoCorrect = autoCorrect;
@@ -58,6 +61,7 @@ public class Quiz {
     public int getMaxTime() {return time;}
     public String getDescription() {return description;}
     public byte[] getThumbnail() {return thumbnail;}
+    public String getThumbnailUrl() {return thumbnail_url;}
     public boolean getShouldMixUp() {return shouldMixUp;}
     public boolean getShowAll() {return showAll;}
     public boolean getAutoCorrect() {return autoCorrect;}

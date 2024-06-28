@@ -47,12 +47,14 @@ public class CreateQuizServlet extends HttpServlet {
             }
         }
 
-        Quiz quiz = new Quiz(0, title, author.getId(), null, time, thumbnail, shouldMixUp, showAll, false, allowPractice, description, new ArrayList<>(), 0, 0);
+        Quiz quiz = new Quiz(0, title, author.getId(), null, time, thumbnail, null, shouldMixUp, showAll, false, allowPractice, description, new ArrayList<>(), 0, 0);
+        System.out.println("WTF NIGGA IM");
         QuizDatabase quizDatabase = (QuizDatabase) getServletContext().getAttribute(Database.QUIZ_DB);
         int quizId = -1;
         try {
             quizId = quizDatabase.add(quiz);
         } catch (SQLException | ClassNotFoundException e) {
+            System.out.println("CRASHSSHS");
             e.printStackTrace();
             request.setAttribute("Message", "Error: " + e.getMessage());
         }
@@ -155,7 +157,7 @@ public class CreateQuizServlet extends HttpServlet {
                 default:
                     break;
             }
-            Question newQuestion = new Question(1, questionTypeEnum, questionText, quizId, picture, 1, new ArrayList<>());
+            Question newQuestion = new Question(1, questionTypeEnum, questionText, quizId, picture, null, 1, new ArrayList<>());
             QuestionDatabase questionDB = (QuestionDatabase) getServletContext().getAttribute(Database.QUESTION_DB);
             int questionId = -1;
             try {
