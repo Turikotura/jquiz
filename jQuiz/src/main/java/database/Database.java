@@ -4,7 +4,6 @@ package database;
 
 import org.apache.commons.dbcp2.BasicDataSource;
 
-import javax.persistence.Tuple;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;

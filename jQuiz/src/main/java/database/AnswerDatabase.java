@@ -3,8 +3,6 @@ package database;
 import models.Answer;
 import org.apache.commons.dbcp2.BasicDataSource;
 
-import javax.persistence.Id;
-import javax.xml.crypto.Data;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
