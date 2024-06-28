@@ -25,27 +25,7 @@ public class SearchServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        try {
-            String searchString = request.getParameter("searchString");
-
-            QuizDatabase quizDB = getDatabase(Database.QUIZ_DB, request);
-            UserDatabase userDB = getDatabase(Database.USER_DB, request);
-
-            List<Quiz> foundQuizzes = new ArrayList<>();
-            List<User> foundUsers = new ArrayList<>();
-
-            if (searchString != null && !searchString.trim().isEmpty()) {
-                foundQuizzes = quizDB.searchQuizzes(searchString);
-                foundUsers = userDB.searchUsers(searchString);
-            }
-            request.setAttribute("foundQuizzes", foundQuizzes);
-            request.setAttribute("foundUsers", foundUsers);
-            System.out.println(foundUsers + " WOW");
-            request.getRequestDispatcher("search.jsp").forward(request, response);
-
-        } catch (SQLException | ClassNotFoundException e) {
-            throw new ServletException(e);
-        }
+        request.getRequestDispatcher("search.jsp").forward(request, response);
     }
 
     @Override

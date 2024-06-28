@@ -39,8 +39,9 @@
 
     // Search variables
     String searchString = request.getParameter("searchString");
-    List<Quiz> matchingQuizzes = (List<Quiz>) request.getAttribute("foundQuizzes");
-    List<User> matchingUsers = (List<User>) request.getAttribute("foundUsers");
+    List<Quiz> recentQuizzes = quizDB.searchRecentQuizzes(5, searchString);
+    List<Quiz> popularQuizzes = quizDB.searchPopularQuizzes(5, "TOTAL", searchString);
+    List<User> users = userDB.searchUsers(10, searchString);
 %>
 <head>
     <title>Searching: <%= searchString %></title>
@@ -52,28 +53,93 @@
 <main>
     <h1>Search Results for: "<%= searchString %>"</h1>
 
+
     <section>
         <h2>Users</h2>
-        <ul>
-            <% for (User user : matchingUsers) { %>
-            <li><a href="userProfile.jsp?userId=<%= user.getId() %>"><%= user.getUsername() %></a></li>
-            <% } %>
-            <% if (matchingUsers.isEmpty()) { %>
-            <li>No users found matching "<%= searchString %>"</li>
-            <% } %>
-        </ul>
+        <div class="user-boxes">
+            <% try {
+                if (users == null) {
+                    throw new Exception("Users not found in request.");
+                }
+
+                for (User user : users) {
+            %>
+            <div class="user-box">
+                <a href="users.jsp?userId=<%=user.getId()%>">
+                    <div class="user-box-top">
+                        <img/>
+                    </div>
+                    <div class="user-box-bot">
+                        <p><%= user.getUsername()%></p>
+                    </div>
+                </a>
+            </div>
+            <% }
+            } catch (Exception e) {
+                e.printStackTrace();
+                out.println("<p>Error loading quizzes: " + e.getMessage() + "</p>");
+            } %>
+        </div>
     </section>
 
     <section>
-        <h2>Quizzes</h2>
-        <ul>
-            <% for (Quiz quiz : matchingQuizzes) { %>
-            <li><a href="quizInfo.jsp?quizId=<%= quiz.getId() %>"><%= quiz.getTitle() %></a></li>
-            <% } %>
-            <% if (matchingQuizzes.isEmpty()) { %>
-            <li>No quizzes found matching "<%= searchString %>"</li>
-            <% } %>
-        </ul>
+        <h2>Popular Quizzes</h2>
+        <div class="quiz-boxes">
+            <% try {
+                if (popularQuizzes == null) {
+                    throw new Exception("Quizzes not found in request.");
+                }
+
+                for (Quiz quiz : popularQuizzes) {
+                    User curAuthor = userDB.getById(quiz.getAuthorId());
+            %>
+            <div class="quiz-box">
+                <a href="quizInfo.jsp?quizId=<%=quiz.getId()%>">
+                    <div class="quiz-box-top">
+                        <p class="quiz-box-name"><%= quiz.getTitle() %></p>
+                    </div>
+                    <div class="quiz-box-bot">
+                        <p><%= quiz.getTotalPlayCount()%></p>
+                        <p><%= curAuthor.getUsername()%></p>
+                    </div>
+                </a>
+            </div>
+            <% }
+            } catch (Exception e) {
+                e.printStackTrace();
+                out.println("<p>Error loading quizzes: " + e.getMessage() + "</p>");
+            } %>
+        </div>
+    </section>
+
+    <section>
+        <h2>Recent Quizzes</h2>
+        <div class="quiz-boxes">
+            <% try {
+                if (recentQuizzes == null) {
+                    throw new Exception("Quizzes not found in request.");
+                }
+
+                for (Quiz quiz : recentQuizzes) {
+                    User curAuthor = userDB.getById(quiz.getAuthorId());
+            %>
+            <div class="quiz-box">
+                <a href="quizInfo.jsp?quizId=<%=quiz.getId()%>">
+                    <div class="quiz-box-top">
+                        <p class="quiz-box-name"><%= quiz.getTitle() %></p>
+                    </div>
+                    <div class="quiz-box-bot">
+                        <p><%= quiz.getTotalPlayCount()%></p>
+                        <p><%= curAuthor.getUsername()%></p>
+                    </div>
+                </a>
+            </div>
+            <% }
+            } catch (Exception e) {
+                e.printStackTrace();
+                out.println("<p>Error loading quizzes: " + e.getMessage() + "</p>");
+            } %>
+        </div>
     </section>
 </main>
 

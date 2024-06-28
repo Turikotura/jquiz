@@ -35,6 +35,60 @@ header {
     width: 100%;
 }
 
+.search-box {
+    position: relative;
+    width: 100%;
+    max-width: 250px;
+    padding-left: 20px;
+}
+
+.search-box input[type="search"] {
+    width: 100%;
+    padding: 10px 15px 10px 10px;
+    font-size: 16px;
+    color: #333;
+    background-color: #f9f9f9;
+    border: 0px solid #ccc;
+    border-radius: 3px;
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+.search-box input[type="search"]:focus {
+    border-color: #007BFF;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+    background-color: #fff;
+}
+
+.search-box input[type="search"]::placeholder {
+    color: #aaa;
+    font-style: italic;
+}
+
+.search-box button {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: #aaa;
+    cursor: pointer;
+}
+
+.search-box button:focus {
+    outline: none;
+}
+
+.search-box button:hover {
+    color: #007BFF;
+}
+
+a {
+    text-decoration: none;
+    color: white;
+}
+
 .logo img {
     max-height: 50px;
 }
@@ -91,11 +145,11 @@ header {
 }
 
 .quiz-box {
-    width: 250px; /* width of each quiz box */
-    border: 3px solid var(--secondary-color); /* border around each quiz box */
-    border-radius: 5px; /* rounded corners */
-    overflow: hidden; /* to prevent overflow of contents */
-    background-color: var(--secondary-color); /* background color of quiz box */
+    width: 250px;
+    border: 3px solid var(--secondary-color);
+    border-radius: 5px;
+    overflow: hidden;
+    background-color: var(--secondary-color);
 }
 
 .quiz-box-name {
@@ -114,13 +168,44 @@ header {
 
 .quiz-box-name {
     padding: 10px;
-    background: linear-gradient(to top, rgba(0, 0, 0, 1), rgba(255, 255, 255, 0.0));
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.5), rgba(255, 255, 255, 0.0));
 }
 
 .quiz-box-bot {
     width: 100%;
     display: flex;
     justify-content: space-between;
+    height: 20px;
+    background-color: var(--secondary-color);
+}
+
+
+
+.user-boxes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.user-box {
+    width: 150px;
+    border: 3px solid var(--secondary-color);
+    border-radius: 5px;
+    overflow: hidden;
+    background-color: var(--secondary-color);
+}
+
+.user-box-top {
+    width: 100%;
+    height: 150px;
+    overflow: hidden;
+    background-color: var(--accent-color);
+}
+
+.user-box-bot {
+    width: 100%;
+    display: flex;
+    justify-content: center;
     height: 20px;
     background-color: var(--secondary-color);
 }

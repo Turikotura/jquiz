@@ -97,9 +97,9 @@ public class UserDatabase extends Database<User>{
         return queryToElement(query);
     }
 
-    public List<User> searchUsers(String searchString) throws SQLException, ClassNotFoundException {
-        String query = String.format("SELECT * FROM %s WHERE %s LIKE '%%%s%%'",
-                databaseName, USERNAME, searchString);
+    public List<User> searchUsers(int k, String searchString) throws SQLException, ClassNotFoundException {
+        String query = String.format("SELECT * FROM %s WHERE %s LIKE '%%%s%%' LIMIT %d",
+                databaseName, USERNAME, searchString, k);
         return queryToList(query);
     }
 
