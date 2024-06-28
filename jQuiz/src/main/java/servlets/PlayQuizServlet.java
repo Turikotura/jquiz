@@ -78,27 +78,6 @@ public class PlayQuizServlet extends HttpServlet {
                 httpServletResponse.getWriter().write(new Gson().toJson(respMap));
             }
         }else{
-            for(int i = 0; i < quizAttempt.getQuestions().size(); i++){
-                QuestionAttempt questionAttempt = quizAttempt.getQuestions().get(i);
-                List<String> answers = new ArrayList<>();
-                if(questionAttempt.getQuestion().getQuestionType() == QuestionTypes.MULTIPLE_CHOICE){
-                    answers.add(httpServletRequest.getParameter(String.format("%d",i)));
-                }else if(questionAttempt.getQuestion().getQuestionType() == QuestionTypes.MULTI_ANS_MULTI_CHOICE){
-                    String[] ansPars = httpServletRequest.getParameterValues(String.format("%d",i));
-                    if(ansPars != null){
-                        for(int j = 0; j < ansPars.length; j++){
-                            answers.add(ansPars[j]);
-                        }
-                    }
-                }else{
-                    for(int j = 0; j < questionAttempt.getCorrectAnswersAmount(); j++){
-                        String answer = httpServletRequest.getParameter(String.format("%d-%d",i,j));
-                        answers.add(answer);
-                    }
-                }
-                quizAttempt.getQuestions().get(i).setWrittenAnswers(answers);
-            }
-
             History history = qac.finishQuiz(attemptId);
 
             HistoryDatabase historydb = getDatabase(HistoryDatabase.HISTORY_DB, httpServletRequest);

@@ -6,7 +6,8 @@
 <%@ page import="database.*" %>
 <%@ page import="static listeners.ContextListener.getDatabase" %>
 <%@ page import="attempts.QuestionAttempt" %>
-<%@ page import="models.*" %><%--
+<%@ page import="models.*" %>
+<%@ page import="java.util.Date" %><%--
   Created by IntelliJ IDEA.
   User: giorgi
   Date: 6/18/24
@@ -74,16 +75,7 @@
     <img src="<%=quizAttempt.getThumbnail()%>">
     <h1><%=quizAttempt.getTitle()%></h1>
     <h3><%=quizAttempt.getStartTime()%></h3>
-    <%
-        int first = quizAttempt.getTime()/3600;
-        int second = (quizAttempt.getTime()%3600)/60;
-        int third = quizAttempt.getTime()%60;
-
-        String firstStr = String.format("%" + 2 + "s",Integer.toString(first)).replace(' ','0');
-        String secondStr = String.format("%" + 2 + "s",Integer.toString(second)).replace(' ','0');
-        String thirdStr = String.format("%" + 2 + "s",Integer.toString(third)).replace(' ','0');
-    %>
-    <h3><%=firstStr%>:<%=secondStr%>:<%=thirdStr%></h3>
+    <h3 id="timer"></h3>
     <h4>Max Score : <%=quizAttempt.getMaxScore()%> pts</h4>
     <hr>
 
@@ -266,8 +258,12 @@
     }
 
     function submitQuiz(){
-        var form = document.getElementById("finish-form");
+        var questionSubmits = document.querySelectorAll('.send-question');
+        questionSubmits.forEach(function (qs) {
+            qs.click();
+        })
 
+        var form = document.getElementById("finish-form");
         form.submit();
     }
 
@@ -332,6 +328,51 @@
             });
         });
     });
+
+    // Timer
+    // Function to start the countdown timer
+    function startTimer(duration, display) {
+        var timer = duration, minutes, seconds;
+        minutes = parseInt(timer / 60, 10);
+        seconds = parseInt(timer % 60, 10);
+
+        minutes = minutes < 10 ? "0" + minutes : minutes;
+        seconds = seconds < 10 ? "0" + seconds : seconds;
+
+        display.textContent = minutes + ":" + seconds;
+        if (--timer < 0) {
+            timer = 0;
+            // Submit the form when timer reaches 0
+            submitQuiz();
+        }
+        setInterval(function () {
+            minutes = parseInt(timer / 60, 10);
+            seconds = parseInt(timer % 60, 10);
+
+            minutes = minutes < 10 ? "0" + minutes : minutes;
+            seconds = seconds < 10 ? "0" + seconds : seconds;
+
+            display.textContent = minutes + ":" + seconds;
+            if (--timer < 0) {
+                timer = 0;
+                // Submit the form when timer reaches 0
+                submitQuiz();
+            }
+        }, 1000);
+    }
+
+    // Get the timer display element
+    var display = document.getElementById("timer");
+
+    <%
+    long timeGone = ((new Date()).getTime()-quizAttempt.getStartTime().getTime())/1000;
+    long timeLeft = quizAttempt.getTime()-timeGone;
+    %>
+    // Set the duration of the countdown in seconds
+    var timerDuration = <%=timeLeft%>;
+
+    // Start the timer when the page loads
+    startTimer(timerDuration, display);
 </script>
 <%
     }else{

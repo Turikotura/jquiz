@@ -253,7 +253,7 @@ public class AttemptTests extends TestCase {
         delayQuizAttempt.getQuestions().get(1).setWrittenAnswers(question2Ans);
         delayQuizAttempt.getQuestions().get(2).setWrittenAnswers(question3Ans);
 
-        Thread.sleep(3000);
+        Thread.sleep(4000);
 
         assertEquals(0, delayQuizAttempt.evaluateQuiz());
     }
