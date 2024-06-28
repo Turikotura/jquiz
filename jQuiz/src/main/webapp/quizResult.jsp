@@ -66,7 +66,6 @@
         }
 
         // others results
-
         bestHistory = historyDB.getBestScoreHistoryByQuizId(quizId);
         bestHistoryName = userDB.getById(bestHistory.getUserId()).getUsername();
         prevAttempts = historyDB.getHistoryByUserAndQuizId(userId, quizId);
@@ -77,9 +76,9 @@
             friendHistories.add(historyDB.getLastHistoryByUserAndQuizId(friend.getId(),quiz.getId()));
         }
     }catch (SQLException e){
-        System.out.println("SQL ex");
+//        System.out.println("SQL ex");
     }catch (ClassNotFoundException e){
-        System.out.println("Class not found ex");
+//        System.out.println("Class not found ex");
     }
 %>
 
@@ -91,10 +90,8 @@
     <link href="style/quizResult.css" rel="stylesheet" type="text/css">
 </head>
 <body>
-
 <%@ include file="header.jsp" %>
 <%@ include file="mail.jsp" %>
-
 <main>
 
     <h2><%=lastHistory.getGrade()%> / <%=totalScore%></h2>

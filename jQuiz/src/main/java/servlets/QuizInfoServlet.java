@@ -29,16 +29,26 @@ public class QuizInfoServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws ServletException, IOException {
-        User user = (User)httpServletRequest.getSession().getAttribute("curUser");
-        if(user == null){
+        String username = ((User) httpServletRequest.getSession().getAttribute("curUser")).getUsername();
+        if(username == null){
             httpServletResponse.sendRedirect("login.jsp");
             return;
+        }
+
+        UserDatabase userdb = getDatabase(Database.USER_DB,httpServletRequest);
+        int userId;
+        try {
+            userId = userdb.getByUsername(username).getId();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
         }
 
         boolean practice = httpServletRequest.getParameter("practice").equals("true");
         int quizId = Integer.parseInt(httpServletRequest.getParameter("quizId"));
 
-        QuizAttemptsController qac = getQuizAttemptsController(user.getId(), httpServletRequest);
+        QuizAttemptsController qac = getQuizAttemptsController(userId,httpServletRequest);
 
         QuizDatabase quizdb = getDatabase(Database.QUIZ_DB,httpServletRequest);
         QuestionDatabase questiondb = getDatabase(Database.QUESTION_DB,httpServletRequest);
@@ -76,6 +86,8 @@ public class QuizInfoServlet extends HttpServlet {
         int attemptId = qac.attemptQuiz(quiz,practice,questionAttemptList);
 
         httpServletRequest.setAttribute("attemptId",attemptId);
-        httpServletResponse.sendRedirect("playQuiz.jsp?attemptId="+attemptId);
+        //httpServletRequest.getRequestDispatcher("/PlayQuiz").forward(httpServletRequest,httpServletResponse);
+        //httpServletResponse.sendRedirect("playQuiz.jsp?attemptId="+attemptId);
+        httpServletResponse.sendRedirect("/PlayQuiz?attemptId="+attemptId);
     }
 }

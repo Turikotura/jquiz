@@ -4,10 +4,7 @@ import database.AnswerDatabase;
 import database.Database;
 import database.QuestionDatabase;
 import database.QuizDatabase;
-import models.Answer;
-import models.Question;
-import models.QuestionTypes;
-import models.Quiz;
+import models.*;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
@@ -29,6 +26,7 @@ public class CreateQuizServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String title = request.getParameter("title");
+        User author = (User) request.getSession().getAttribute("curUser");
         String description = request.getParameter("description");
         int time = Integer.parseInt(request.getParameter("time"));
         boolean shouldMixUp = request.getParameter("shouldMixUp") != null;
@@ -49,7 +47,7 @@ public class CreateQuizServlet extends HttpServlet {
             }
         }
 
-        Quiz quiz = new Quiz(0, title, 1, null, time, thumbnail, shouldMixUp, showAll, false, allowPractice, description, new ArrayList<>(), 0, 0);
+        Quiz quiz = new Quiz(0, title, author.getId(), null, time, thumbnail, shouldMixUp, showAll, false, allowPractice, description, new ArrayList<>(), 0, 0);
         QuizDatabase quizDatabase = (QuizDatabase) getServletContext().getAttribute(Database.QUIZ_DB);
         int quizId = -1;
         try {
