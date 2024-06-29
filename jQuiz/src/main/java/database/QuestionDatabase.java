@@ -30,8 +30,8 @@ public class QuestionDatabase extends Database<Question> {
     @Override
     public int add(Question question) throws SQLException, ClassNotFoundException {
         String query = String.format(
-                "INSERT INTO quizzes (%s, %s, %s, %s, %s, %s) VALUES (?, ?, ?, ?, ?, ?);",
-                QUESTION_TYPE, TEXT, QUIZ_ID, IMAGE, IMAGE_URL, SCORE);
+                "INSERT INTO %s (%s, %s, %s, %s, %s, %s) VALUES (?, ?, ?, ?, ?, ?);",
+        databaseName, QUESTION_TYPE, TEXT, QUIZ_ID, IMAGE, IMAGE_URL, SCORE);
         Connection con = getConnection();
         PreparedStatement statement = this.getStatement(query,con);
         statement.setInt(1, question.getQuestionType().ordinal());
