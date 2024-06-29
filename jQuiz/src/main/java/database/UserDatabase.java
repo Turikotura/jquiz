@@ -56,7 +56,6 @@ public class UserDatabase extends Database<User>{
 
     @Override
     protected User getItemFromResultSet(ResultSet rs) throws SQLException, ClassNotFoundException {
-        System.out.println(rs.getString(USERNAME));
         return new User(
                 rs.getInt(ID),
                 rs.getString(USERNAME),

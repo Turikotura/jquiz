@@ -51,7 +51,6 @@ public class ImageServlet extends HttpServlet {
                     imagePath = user.getImageUrl();
                     if (imagePath != null) {
                         java.nio.file.Path path = java.nio.file.Paths.get(imagePath);
-                        System.out.println(path.toAbsolutePath());
                         if (java.nio.file.Files.exists(path)) {
                             imageBytes = java.nio.file.Files.readAllBytes(path);
                         }
