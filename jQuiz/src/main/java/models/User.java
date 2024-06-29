@@ -11,15 +11,17 @@ public class User {
     private Date created_at;
     private String email;
     private String password;
-    private String image;
+    private byte[] image;
+    private String imageUrl;
     public static final int NO_ID = -1;
-    public User(int id, String username, Date created_at, String email, String password, String image){
+    public User(int id, String username, Date created_at, String email, String password, byte[] image, String imageUrl){
         this.id = id;
         this.username = username;
         this.created_at = created_at;
         this.email = email;
         this.password = password;
         this.image = image;
+        this.imageUrl = imageUrl;
     }
     public int getId() { return id; }
     public String getUsername() { return username; }
@@ -27,5 +29,6 @@ public class User {
     public Date getCreated_at() { return created_at; }
     public String getEmail() { return email; }
     public String getPassword() { return password; }
-    public String getImage() { return image; }
+    public byte[] getImage() { return image; }
+    public String getImageUrl() { return imageUrl; }
 }

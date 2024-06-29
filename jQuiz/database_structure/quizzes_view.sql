@@ -8,6 +8,7 @@ SELECT
     q.created_at,
     q.time,
     q.thumbnail,
+    q.thumbnail_url,
     q.should_mix_up,
     q.show_all,
     q.auto_correct,

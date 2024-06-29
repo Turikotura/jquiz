@@ -8,8 +8,6 @@ main {
 main a {
     text-decoration: none;
     font-size: 20px;
-    background-color: var(--accent-color);
-    border: 5px solid var(--accent-color);
     border-radius: 5px;
     color: var(--error-color);
     margin-bottom: 20px;
@@ -20,21 +18,21 @@ main a:hover {
     color: var(--accent-color);
 }
 
-.scroll-container {
-    width: 100%; /* Full width of the viewport */
-    overflow-x: auto; /* Enable horizontal scrolling */
-    white-space: nowrap; /* Prevent boxes from wrapping */
-    padding: 10px 0; /* Optional padding for better spacing */
-}
+/*.scroll-container {*/
+/*    width: 100%; !* Full width of the viewport *!*/
+/*    overflow-x: auto; !* Enable horizontal scrolling *!*/
+/*    white-space: nowrap; !* Prevent boxes from wrapping *!*/
+/*    padding: 10px 0; !* Optional padding for better spacing *!*/
+/*}*/
 
-.box {
-    display: inline-block;
-    width: 250px; /* Adjust width as needed */
-    margin: 10px;
-    background-color: var(--accent-color);
-    border: 1px solid var(--accent-color);
-    border-radius: 5px;
-    font-family: Arial, sans-serif;
-    font-size: 16px;
-    padding: 10px;
-}
+/*.box {*/
+/*    display: inline-block;*/
+/*    width: 250px; !* Adjust width as needed *!*/
+/*    margin: 10px;*/
+/*    background-color: var(--accent-color);*/
+/*    border: 1px solid var(--accent-color);*/
+/*    border-radius: 5px;*/
+/*    font-family: Arial, sans-serif;*/
+/*    font-size: 16px;*/
+/*    padding: 10px;*/
+/*}*/

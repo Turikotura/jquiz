@@ -89,7 +89,7 @@
             %>
             <div class="quiz-box">
                 <a href="quizInfo.jsp?quizId=<%=quiz.getId()%>">
-                    <div class="quiz-box-top">
+                    <div class="quiz-box-top" style="background-size: cover; background-image: url('image?type=quiz&quizId=<%=quiz.getId()%>');">
                         <p class="quiz-box-name"><%= quiz.getTitle() %></p>
                     </div>
                     <div class="quiz-box-bot">
@@ -112,7 +112,7 @@
                 %>
                 <div class="quiz-box">
                     <a href="quizInfo.jsp?quizId=<%=quiz.getId()%>">
-                        <div class="quiz-box-top">
+                        <div class="quiz-box-top" style="background-size: cover; background-image: url('image?type=quiz&quizId=<%=quiz.getId()%>');">
                             <p class="quiz-box-name"><%= quiz.getTitle() %></p>
                         </div>
                         <div class="quiz-box-bot">
@@ -136,7 +136,7 @@
             %>
             <div class="quiz-box">
                 <a href="quizInfo.jsp?quizId=<%=quiz.getId()%>">
-                    <div class="quiz-box-top">
+                    <div class="quiz-box-top" style="background-size: cover; background-image: url('image?type=quiz&quizId=<%=quiz.getId()%>');">
                         <p class="quiz-box-name"><%= quiz.getTitle() %></p>
                     </div>
                     <div class="quiz-box-bot">

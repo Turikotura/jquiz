@@ -63,7 +63,7 @@
 <main>
 
     <%--Quiz info--%>
-    <img src="<%=quizAttempt.getThumbnail()%>">
+    <img src="image?type=quiz&quizId=<%=quizAttempt.getQuizId()%>">
     <h1><%=quizAttempt.getTitle()%></h1>
     <h3><%=quizAttempt.getStartTime()%></h3>
     <h3 id="timer"></h3>
@@ -133,7 +133,7 @@
             <%
                 if(questionAttempt.getQuestion().getQuestionType() == QuestionTypes.PIC_RESPONSE){
             %>
-            <img src="<%=questionAttempt.getQuestion().getImage()%>">
+            <img src="image?type=question&questionId=<%=questionAttempt.getQuestion().getId()%>">
             <%
                 }
             %>

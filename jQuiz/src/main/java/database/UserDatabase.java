@@ -17,6 +17,7 @@ public class UserDatabase extends Database<User>{
     public static final String EMAIL = "email";
     public static final String PASSWORD = "pass";
     public static final String IMAGE = "image";
+    public static final String IMAGE_URL = "image_url";
     // Friend Columns
     public static final String USER1_ID = "user1_id";
     public static final String USER2_ID = "user2_id";
@@ -27,8 +28,8 @@ public class UserDatabase extends Database<User>{
 
     @Override
     public int add(User toAdd) throws SQLException, ClassNotFoundException {
-        String query = String.format("INSERT INTO %s ( %s, %s, %s, %s, %s, %s ) VALUES ( ?, ?, ?, ?, ?, ?)",
-                databaseName, USERNAME, IS_ADMIN, CREATED_AT, EMAIL, PASSWORD, IMAGE);
+        String query = String.format("INSERT INTO %s ( %s, %s, %s, %s, %s, %s, %s ) VALUES ( ?, ?, ?, ?, ?, ?, ?)",
+                databaseName, USERNAME, IS_ADMIN, CREATED_AT, EMAIL, PASSWORD, IMAGE, IMAGE_URL);
         Connection con = getConnection();
         PreparedStatement statement = getStatement(query,con);
         statement.setString(1, toAdd.getUsername());
@@ -36,7 +37,8 @@ public class UserDatabase extends Database<User>{
         statement.setTimestamp(3, new Timestamp(System.currentTimeMillis()));
         statement.setString(4, toAdd.getEmail());
         statement.setString(5, toAdd.getPassword());
-        statement.setString(6, toAdd.getImage());
+        statement.setBytes(6, toAdd.getImage());
+        statement.setString(7, toAdd.getImageUrl());
         int affectedRows = statement.executeUpdate();
         if(affectedRows == 0){
             throw new SQLException("Creating row failed");
@@ -54,14 +56,14 @@ public class UserDatabase extends Database<User>{
 
     @Override
     protected User getItemFromResultSet(ResultSet rs) throws SQLException, ClassNotFoundException {
-        System.out.println(rs.getString(USERNAME));
         return new User(
                 rs.getInt(ID),
                 rs.getString(USERNAME),
                 rs.getDate(CREATED_AT),
                 rs.getString(EMAIL),
                 rs.getString(PASSWORD),
-                rs.getString(IMAGE)
+                rs.getBytes(IMAGE),
+                rs.getString(IMAGE_URL)
         );
     }
 
