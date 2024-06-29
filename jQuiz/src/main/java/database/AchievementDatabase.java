@@ -21,6 +21,7 @@ public class AchievementDatabase extends Database<Achievement> {
     public static final String USER_ID = "user_id";
     public static final String ACH_ID = "ach_id";
     static final String ACQUIRE_DATE = "acquire_date";
+    public static final String IS_UNLOCKED = "is_unlocked";
 
     public AchievementDatabase(BasicDataSource dataSource, String databaseName) {
         super(dataSource, databaseName);
@@ -54,12 +55,13 @@ public class AchievementDatabase extends Database<Achievement> {
                 rs.getString(NAME),
                 rs.getString(DESCRIPTION),
                 rs.getString(IMAGE),
-                rs.getDate(ACQUIRE_DATE)
+                rs.getDate(ACQUIRE_DATE),
+                rs.getBoolean(IS_UNLOCKED)
         );
     }
     public List<Achievement> getAchievementsByUserId(int userId) throws SQLException, ClassNotFoundException {
-        String query = String.format("SELECT a.%s, a.%s, a.%s, a.%s, au.%s, au.%s FROM %s a JOIN %s au ON a.%s = au.%s WHERE au.%s = %d;",
-                ID, NAME, DESCRIPTION, IMAGE, USER_ID, ACQUIRE_DATE, databaseName, Database.ACH_TO_USR_DB, ID, ACH_ID, USER_ID, userId);
+        String query = String.format("SELECT a.%s, a.%s, a.%s, a.%s, au.%s, au.%s, au.%s FROM %s a JOIN %s au ON a.%s = au.%s WHERE au.%s = %d;",
+                ID, NAME, DESCRIPTION, IMAGE, USER_ID, ACQUIRE_DATE, IS_UNLOCKED, databaseName, Database.ACH_TO_USR_DB, ID, ACH_ID, USER_ID, userId);
         return queryToList(query);
     }
 }

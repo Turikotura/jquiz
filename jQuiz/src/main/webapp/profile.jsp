@@ -54,8 +54,8 @@
 <%@ include file="header.jsp" %>
 <%@ include file="mail.jsp" %>
 <main>
-    <img class="profile-pic" src="<%=profileOf.getImage()%>" alt="profile-pic">
     <div class="profile-info">
+    <img class="profile-pic" src="<%=profileOf.getImage()%>" alt="profile-pic">
     <h2><%=profileOf.getUsername()%></h2>
     <h3><%="Memeber since: " + profileOf.getCreated_at().toString()%></h3>
         <% if(curUser == null) { %>
@@ -81,12 +81,13 @@
             </form>
         <% } %>
     </div>
-    <div class="quiz-boxes">
+
     <h2>Quizzes created by <%=profileName%>:</h2>
     <% if(quizzesByUser.isEmpty()) { %>
-        <h4>No quizzes created yet.</h4>
+        <h3>No quizzes created yet.</h3>
     <% } else { %>
-        <h4><%="In total: " + quizzesByUser.size()%></h4>
+        <h3><%="In total: " + quizzesByUser.size()%></h3>
+        <div class="quiz-boxes">
             <% for(Quiz curQuiz : quizzesByUser) {%>
                 <div class="quiz-box">
                     <a href="quizInfo.jsp?quizId=<%=curQuiz.getId()%>">
@@ -99,8 +100,8 @@
                     </a>
                 </div>
             <% } %>
+        </div>
     <% } %>
-    </div>
 
     <div class="activity">
         <h2>Recent Activity:</h2>

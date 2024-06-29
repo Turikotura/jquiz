@@ -20,18 +20,9 @@ main {
     display: inline-block; /* Allow profile-info to sit next to the image */
     vertical-align: top; /* Align profile-info to the top */
     width: calc(100% - 170px); /* Adjust width to fit next to the image */
+    margin-bottom: 20px;
 }
 
 h2, h3 {
     margin: 0;
-}
-
-.quiz-boxes {
-    width: 100%; /* Ensure quiz-boxes take full width within main */
-    gap: 20px; /* Add space between quiz boxes */
-    margin-top: 20px; /* Add some space above quiz-boxes */
-}
-
-.activity {
-    margin-top: 20px;
 }
