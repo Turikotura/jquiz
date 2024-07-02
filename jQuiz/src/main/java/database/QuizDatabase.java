@@ -110,9 +110,16 @@ public class QuizDatabase extends Database<Quiz>{
         return queryToList(query, (ps) -> {return ps;});
     }
     public Quiz getQuizById(int id) throws SQLException, ClassNotFoundException {
-        String query = String.format("SELECT * FROM %s WHERE %s = %d",
+        String query = String.format("SELECT * FROM %s WHERE %s = ?",
                 databaseName,ID,id);
-        return queryToElement(query,(ps) -> {return ps;});
+        return queryToElement(query,(ps) -> {
+            try{
+                ps.setInt(1,id);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+            return ps;
+        });
     }
     public Quiz getQuizByTitle(String title) throws SQLException, ClassNotFoundException {
         String query = String.format("SELECT * FROM %s WHERE %s = ?",
