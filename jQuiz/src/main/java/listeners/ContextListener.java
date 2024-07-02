@@ -26,7 +26,7 @@ public class ContextListener implements ServletContextListener {
         basicDataSource.setMaxWaitMillis(10000);
 
         UserDatabase userdb = new UserDatabase(basicDataSource, Database.USER_DB);
-        QuizDatabase quizdb = new QuizDatabase(basicDataSource, Database.QUIZ_DB);
+        QuizDatabase quizdb = new QuizDatabase(basicDataSource, Database.QUIZ_VIEW);
         QuestionDatabase questiondb = new QuestionDatabase(basicDataSource, Database.QUESTION_DB);
         AnswerDatabase answerdb = new AnswerDatabase(basicDataSource, Database.ANSWER_DB);
         AchievementDatabase achievementdb = new AchievementDatabase(basicDataSource, Database.ACHIEVEMENT_DB);

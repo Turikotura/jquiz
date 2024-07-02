@@ -26,8 +26,8 @@ public class MailDatabase extends Database<Mail> {
     public int add(Mail toAdd) throws SQLException, ClassNotFoundException {
         String query = String.format(
                 "INSERT INTO %s ( %s, %s, %s, %s, %s, %s, %s )" +
-                        " VALUES ( ?, ?, ?, ?, ?, ?, ?)", databaseName,
-                RECEIVER_ID, SENDER_ID, TYPE, QUIZ_ID, TEXT, TIME_SENT, SEEN);
+                        "VALUES ( ?,  ?,  ?,  ?,  ?,  ?,  ?  )",
+                databaseName, RECEIVER_ID, SENDER_ID, TYPE, QUIZ_ID, TEXT, TIME_SENT, SEEN);
         Connection con = getConnection();
         PreparedStatement statement = getStatement(query,con);
         statement.setInt(1, toAdd.getReceiverId());
@@ -67,8 +67,15 @@ public class MailDatabase extends Database<Mail> {
         );
     }
     public List<Mail> getMailsByUserId(int userId, String sendOrReceive) throws SQLException, ClassNotFoundException {
-        String query = String.format("SELECT * FROM %s WHERE %s = %d",
-                databaseName, (Objects.equals(sendOrReceive, "SEND") ? SENDER_ID : RECEIVER_ID), userId);
-        return queryToList(query);
+        String query = String.format("SELECT * FROM %s WHERE %s = ?",
+                databaseName, (Objects.equals(sendOrReceive, "SEND") ? SENDER_ID : RECEIVER_ID));
+        return queryToList(query, (ps) -> {
+            try {
+                ps.setInt(1,userId);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+            return ps;
+        });
     }
 }

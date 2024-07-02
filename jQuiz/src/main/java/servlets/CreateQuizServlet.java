@@ -52,6 +52,7 @@ public class CreateQuizServlet extends HttpServlet {
         int quizId = -1;
         try {
             quizId = quizDatabase.add(quiz);
+            System.out.println(quizId);
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
             request.setAttribute("Message", "Error: " + e.getMessage());
@@ -152,7 +153,7 @@ public class CreateQuizServlet extends HttpServlet {
                 default:
                     break;
             }
-            Question newQuestion = new Question(1, questionTypeEnum, questionText, quizId, picture, null, 1, new ArrayList<>());
+            Question newQuestion = new Question(1, questionTypeEnum, questionText, quizId, picture, null, 1);
             QuestionDatabase questionDB = (QuestionDatabase) getServletContext().getAttribute(Database.QUESTION_DB);
             int questionId = -1;
             try {
