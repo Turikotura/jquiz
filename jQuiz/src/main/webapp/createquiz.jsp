@@ -39,6 +39,7 @@
 <head>
     <title>Create Quiz</title>
     <link href="style/general.css" rel="stylesheet" type="text/css">
+    <link href="style/createQuiz.css" rel="stylesheet" type="text/css">
     <script>
         let questionCount = 1;
 
@@ -70,17 +71,22 @@
 
             let choiceCount = container.getElementsByTagName('input').length / 2 + 1;
 
+            let answer_box = document.createElement('div');
+            answer_box.className = "answer_box";
+
             let newInput = document.createElement('input');
             newInput.type = 'text';
             newInput.name = questionId + '_answer_' + choiceCount;
             newInput.placeholder = 'Choice ' + choiceCount;
-            container.appendChild(newInput);
+            answer_box.appendChild(newInput);
 
             let radioInput = document.createElement('input');
             radioInput.type = 'radio';
             radioInput.name = questionId + '_correct';
             radioInput.value = choiceCount;
-            container.appendChild(radioInput);
+            answer_box.appendChild(radioInput);
+
+            container.appendChild(answer_box);
         }
 
         function addChoiceMulti(questionId){
@@ -89,16 +95,21 @@
 
             let choiceCount = container.getElementsByTagName('input').length / 2 + 1;
 
+            let answer_box = document.createElement('div');
+            answer_box.className = "answer_box";
+
             let newInput = document.createElement('input');
             newInput.type = 'text';
             newInput.name = questionId + '_answer_' + choiceCount;
             newInput.placeholder = 'Choice ' + choiceCount;
-            container.appendChild(newInput);
+            answer_box.appendChild(newInput);
 
             let newCheckbox = document.createElement('input');
             newCheckbox.type = 'checkbox';
             newCheckbox.name = questionId + '_correct_' + choiceCount;
-            container.appendChild(newCheckbox);
+            answer_box.appendChild(newCheckbox);
+
+            container.appendChild(answer_box);
         }
 
         function deleteQuestion(questionId){
@@ -123,16 +134,15 @@
             let containerId = questionId + '_answer_container';
             let container = document.getElementById(containerId);
 
-            if(container.getElementsByTagName('input').length > 2) {
-                let radio = container.lastElementChild;
+            if(container.getElementsByTagName('div').length > 1) {
+                let answer_container = container.lastElementChild;
+                let radio = answer_container.lastElementChild;
                 let wasChecked = radio.checked
-                container.removeChild(radio);
-                let text = container.lastElementChild;
-                container.removeChild(text);
                 if(wasChecked){
-                    let lastRadio = container.lastElementChild;
+                    let lastRadio = container.lastElementChild.lastElementChild;
                     lastRadio.checked = true;
                 }
+                container.removeChild(answer_container);
             }
         }
 
@@ -140,11 +150,9 @@
             let containerId = questionId + '_answer_container';
             let container = document.getElementById(containerId);
 
-            if(container.getElementsByTagName('input').length > 2) {
-                let radio = container.lastElementChild;
-                container.removeChild(radio);
-                let text = container.lastElementChild;
-                container.removeChild(text);
+            if(container.getElementsByTagName('div').length > 1) {
+                let answer_container = container.lastElementChild;
+                container.removeChild(answer_container);
             }
         }
     </script>
@@ -163,19 +171,24 @@
         <label for="description">Quiz Description:</label><br>
         <textarea id="description" name="description"></textarea><br><br>
 
-        <label for="time">Total Time (in seconds):</label><br>
-        <input type="number" id="time" name="time"><br><br>
+        <div class="block">
+            <div>
+                <label for="time">Total Time (in seconds):</label><br>
+                <input type="number" id="time" name="time"><br><br>
+                <label for="thumbnail">Thumbnail Image:</label><br>
+                <input type="file" id="thumbnail" name="thumbnail" accept="image/*"><br><br>
+            </div>
+            <div>
+                <label>Options:</label><br>
+                <input type="checkbox" id="shouldMixUp" name="shouldMixUp">
+                <label for="shouldMixUp">Mix Up Questions</label><br>
+                <input type="checkbox" id="showAll" name="showAll">
+                <label for="showAll">Show All Questions on Same Page</label><br>
+                <input type="checkbox" id="allowPractice" name="allowPractice">
+                <label for="allowPractice">Allow Practice Mode</label><br><br>
 
-        <label>Options:</label><br>
-        <input type="checkbox" id="shouldMixUp" name="shouldMixUp">
-        <label for="shouldMixUp">Mix Up Questions</label><br>
-        <input type="checkbox" id="showAll" name="showAll">
-        <label for="showAll">Show All Questions on Same Page</label><br>
-        <input type="checkbox" id="allowPractice" name="allowPractice">
-        <label for="allowPractice">Allow Practice Mode</label><br><br>
-
-        <label for="thumbnail">Thumbnail Image:</label><br>
-        <input type="file" id="thumbnail" name="thumbnail" accept="image/*"><br><br>
+            </div>
+        </div>
 
         <label for="questionType">Select Question Type:</label>
         <select id="questionType">
@@ -226,12 +239,17 @@
         <input type="text" name="question"><br><br>
 
         <label>Answers:</label><br>
-        <div id="answer_container">
-            <input type="text" name="answer_1">
-            <input type="radio" name="correct" value="1" checked>
+        <div id="answer_container" class="ans_container">
+            <div class="answer_box">
+                <input type="text" name="answer_1">
+                <input type="radio" name="correct" value="1" checked>
+            </div>
         </div>
-        <button type="button" onclick="addChoice()">Add Choice</button><br><br>
-        <button type="button" onclick="deleteLastChoice()">Delete Last Answer</button><br><br>
+        <br>
+        <div class="answer_buttons">
+            <button type="button" onclick="addChoice()">Add Choice</button>
+            <button type="button" onclick="deleteLastChoice()">Delete Last Answer</button>
+        </div>
     </div>
 
     <div id="multiChoiceMultiAnswerQuestionForm" style="display: none;">
@@ -240,12 +258,16 @@
         <input type="text" name="question"><br><br>
 
         <label>Answers:</label><br>
-        <div id="answer_container">
-            <input type="text" name="answer_1">
-            <input type="checkbox" name="correct_1">
+        <div id="answer_container" class="ans_container">
+            <div class="answer_box">
+                <input type="text" name="answer_1">
+                <input type="checkbox" name="correct_1">
+            </div>
         </div>
-        <button type="button" onclick="addChoiceMulti()">Add Answer</button><br><br>
-        <button type="button" onclick="deleteLastChoiceMulti()">Delete Last Answer</button><br><br>
+        <div class="answer_buttons">
+            <button type="button" onclick="addChoiceMulti()">Add Answer</button>
+            <button type="button" onclick="deleteLastChoiceMulti()">Delete Last Answer</button>
+        </div>
     </div>
 </main>
 
