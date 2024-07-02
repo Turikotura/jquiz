@@ -6,6 +6,7 @@ import org.apache.commons.dbcp2.BasicDataSource;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class QuizDatabase extends Database<Quiz>{
     static final String ID = "id";
@@ -30,9 +31,9 @@ public class QuizDatabase extends Database<Quiz>{
     @Override
     public int add(Quiz quiz) throws SQLException, ClassNotFoundException {
         String query = String.format(
-                "INSERT INTO quizzes (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) " +
-                        "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);",
-                TITLE, AUTHOR_ID, CREATED_AT, TIME, THUMBNAIL, THUMBNAIL_URL, SHOULD_MIX_UP, SHOW_ALL, AUTO_CORRECT, ALLOW_PRACTICE, DESCRIPTION);
+                "INSERT INTO %s ( %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s ) " +
+                        "VALUES ( ?,  ?,  ?,  ?,  ?,  ?,  ?,  ?,  ?,  ?,  ?  );",
+                Database.QUIZ_DB, TITLE, AUTHOR_ID, CREATED_AT, TIME, THUMBNAIL, THUMBNAIL_URL, SHOULD_MIX_UP, SHOW_ALL, AUTO_CORRECT, ALLOW_PRACTICE, DESCRIPTION);
         Connection con = getConnection();
         PreparedStatement statement = this.getStatement(query,con);
         statement.setString(1, quiz.getTitle());
@@ -84,44 +85,67 @@ public class QuizDatabase extends Database<Quiz>{
         );
     }
     public List<Quiz> getQuizzesByAuthorId(int authorId) throws SQLException, ClassNotFoundException {
-        String query = String.format("SELECT * FROM %s WHERE %s = %d",
-                databaseName, AUTHOR_ID, authorId);
-        return queryToList(query);
-    }
-    
-    public Quiz getQuizById(int quizId) throws SQLException, ClassNotFoundException {
-        String query = String.format("SELECT * FROM %s WHERE %s = %d",
-                databaseName,ID,quizId);
-        return queryToElement(query);
+        String query = String.format("SELECT * FROM %s WHERE %s = ?",
+                databaseName, AUTHOR_ID);
+        return queryToList(query, (ps) -> {
+            try {
+                ps.setInt(1,authorId);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+            return ps;
+        });
     }
 
     public List<Quiz> getPopularQuizzes(int k, String totalOrLastMonth) throws SQLException, ClassNotFoundException {
-        String query = String.format("SELECT * FROM %s ORDER BY " + (totalOrLastMonth == "LAST_MONTH" ? LAST_MONTH_PLAY_COUNT : TOTAL_PLAY_COUNT) + " DESC LIMIT %d;",
-                Database.QUIZ_DB,k);
-        return queryToList(query);
+        String lm = Objects.equals(totalOrLastMonth, "LAST_MONTH") ? LAST_MONTH_PLAY_COUNT : TOTAL_PLAY_COUNT;
+        String query = String.format("SELECT * FROM %s ORDER BY " + lm + " DESC LIMIT %d;",
+                databaseName,k);
+        return queryToList(query, (ps) -> {return ps;});
     }
 
     public List<Quiz> getRecentlyCreatedQuizzes(int k) throws SQLException, ClassNotFoundException {
         String query = String.format("SELECT * FROM %s ORDER BY %s DESC LIMIT %d",
                 databaseName, CREATED_AT, k);
-        return queryToList(query);
+        return queryToList(query, (ps) -> {return ps;});
     }
     public Quiz getQuizByTitle(String title) throws SQLException, ClassNotFoundException {
-        String query = String.format("SELECT * FROM %s WHERE %s = '%s'",
-                databaseName, TITLE, title);
-        return queryToElement(query);
+        String query = String.format("SELECT * FROM %s WHERE %s = ?",
+                databaseName, TITLE);
+        return queryToElement(query, (ps) -> {
+            try {
+                ps.setString(1,title);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+            return ps;
+        });
     }
 
     public List<Quiz> searchRecentQuizzes(int k, String searchString) throws SQLException, ClassNotFoundException {
-        String query = String.format("SELECT * FROM %s WHERE %s LIKE '%%%s%%' ORDER BY %s DESC LIMIT %d;",
-                databaseName, TITLE, searchString, CREATED_AT, k);
-        return queryToList(query);
+        String query = String.format("SELECT * FROM %s WHERE %s LIKE ? ORDER BY %s DESC LIMIT %d;",
+                databaseName, TITLE, CREATED_AT, k);
+        return queryToList(query, (ps) -> {
+            try {
+                ps.setString(1, "%" + searchString + "%");
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+            return ps;
+        });
     }
 
     public List<Quiz> searchPopularQuizzes(int k, String totalOrLastMonth, String searchString) throws SQLException, ClassNotFoundException {
-        String query = String.format("SELECT * FROM %s WHERE %s LIKE '%%%s%%' ORDER BY " + (totalOrLastMonth == "LAST_MONTH" ? LAST_MONTH_PLAY_COUNT : TOTAL_PLAY_COUNT) + " DESC LIMIT %d;",
-                Database.QUIZ_DB, TITLE, searchString, k);
-        return queryToList(query);
+        String lm = Objects.equals(totalOrLastMonth, "LAST_MONTH") ? LAST_MONTH_PLAY_COUNT : TOTAL_PLAY_COUNT;
+        String query = String.format("SELECT * FROM %s WHERE %s LIKE ? ORDER BY " + lm + " DESC LIMIT %d;",
+                databaseName, TITLE, k);
+        return queryToList(query, (ps) -> {
+            try {
+                ps.setString(1, "%" + searchString + "%");
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+            return ps;
+        });
     }
-
 }

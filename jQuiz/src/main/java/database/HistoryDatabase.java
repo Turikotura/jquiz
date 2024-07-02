@@ -25,8 +25,8 @@ public class HistoryDatabase extends Database<History> {
     public int add(History toAdd) throws SQLException, ClassNotFoundException {
         String query = String.format(
                 "INSERT INTO %s ( %s, %s, %s, %s, %s, %s ) " +
-                        "VALUES ( ?, ?, ?, ?, ?, ? );", databaseName,
-                USER_ID, QUIZ_ID, GRADE, COMPLETED_AT, WRITING_TIME, IS_PRACTICE);
+                        "VALUES ( ?,  ?,  ?,  ?,  ?,  ?  );",
+                databaseName, USER_ID, QUIZ_ID, GRADE, COMPLETED_AT, WRITING_TIME, IS_PRACTICE);
         Connection con = getConnection();
         PreparedStatement statement = getStatement(query,con);
         statement.setInt(1,toAdd.getUserId());
@@ -64,88 +64,196 @@ public class HistoryDatabase extends Database<History> {
         );
     }
     public List<History> getHistoryByUserId(int userId) throws SQLException, ClassNotFoundException {
-        String query = String.format("SELECT * FROM %s WHERE %s = %d",
-                databaseName, USER_ID, userId);
-        return queryToList(query);
+        String query = String.format("SELECT * FROM %s WHERE %s = ?",
+                databaseName, USER_ID);
+        return queryToList(query, (ps) -> {
+            try {
+                ps.setInt(1,userId);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+            return ps;
+        });
     }
     public History getLastHistoryByUserId(int userId) throws SQLException, ClassNotFoundException {
-        String query = String.format("SELECT * FROM %s h WHERE h.%s = %d AND h.%s = (SELECT max(hi.%s) FROM %s hi WHERE hi.%s = %d)",
-                databaseName, USER_ID, userId, COMPLETED_AT, COMPLETED_AT, databaseName, USER_ID, userId);
-        return queryToElement(query);
+        String query = String.format("SELECT * FROM %s h WHERE h.%s = ? AND h.%s = (SELECT max(hi.%s) FROM %s hi WHERE hi.%s = ?)",
+                databaseName, USER_ID, COMPLETED_AT, COMPLETED_AT, databaseName, USER_ID);
+        return queryToElement(query, (ps) -> {
+            try {
+                ps.setInt(1,userId);
+                ps.setInt(2,userId);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+            return ps;
+        });
     }
     public History getLastHistoryByUserAndQuizId(int userId, int quizId) throws SQLException, ClassNotFoundException {
-        String query = String.format("SELECT * FROM %s h WHERE h.%s = %d AND h.%s = %d AND h.%s = (SELECT max(hi.%s) FROM %s hi WHERE hi.%s = %d AND hi.%s = %d)",
-                databaseName, USER_ID, userId, QUIZ_ID, quizId, COMPLETED_AT, COMPLETED_AT, databaseName, USER_ID, userId, QUIZ_ID, quizId );
-        return queryToElement(query);
+        String query = String.format("SELECT * FROM %s h WHERE h.%s = ? AND h.%s = ? AND h.%s = (SELECT max(hi.%s) FROM %s hi WHERE hi.%s = ? AND hi.%s = ?)",
+                databaseName, USER_ID, QUIZ_ID, COMPLETED_AT, COMPLETED_AT, databaseName, USER_ID, QUIZ_ID);
+        return queryToElement(query, (ps) -> {
+            try {
+                ps.setInt(1,userId);
+                ps.setInt(2,quizId);
+                ps.setInt(3,userId);
+                ps.setInt(4,quizId);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+            return ps;
+        });
     }
     public List<History> getHistoryByUserAndQuizId(int userId, int quizId) throws SQLException, ClassNotFoundException {
-        String query = String.format("SELECT * FROM %s WHERE %s = %d AND %s = %d",
-                databaseName, USER_ID, userId, QUIZ_ID, quizId);
-        return queryToList(query);
+        String query = String.format("SELECT * FROM %s WHERE %s = ? AND %s = ?",
+                databaseName, USER_ID, QUIZ_ID);
+        return queryToList(query, (ps) -> {
+            try {
+                ps.setInt(1,userId);
+                ps.setInt(2,quizId);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+            return ps;
+        });
     }
 
     public List<History> getLatestHistoriesByUserAndQuizId(int userId, int quizId) throws SQLException, ClassNotFoundException {
-        String query = String.format("SELECT * FROM %s WHERE %s = %d AND %s = %d ORDER BY %s DESC;",
-                databaseName, USER_ID, userId, QUIZ_ID, quizId, COMPLETED_AT);
-        return queryToList(query);
+        String query = String.format("SELECT * FROM %s WHERE %s = ? AND %s = ? ORDER BY %s DESC;",
+                databaseName, USER_ID, QUIZ_ID, COMPLETED_AT);
+        return queryToList(query, (ps) -> {
+            try {
+                ps.setInt(1,userId);
+                ps.setInt(2,quizId);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+            return ps;
+        });
     }
     public List<History> getBestScoresByUserAndQuizId(int userId, int quizId) throws SQLException, ClassNotFoundException {
-        String query = String.format("SELECT * FROM %s WHERE %s = %d AND %s = %d ORDER BY %s DESC, %s;",
-                databaseName, USER_ID, userId, QUIZ_ID, quizId, GRADE, WRITING_TIME);
-        return queryToList(query);
+        String query = String.format("SELECT * FROM %s WHERE %s = ? AND %s = ? ORDER BY %s DESC, %s;",
+                databaseName, USER_ID, QUIZ_ID, GRADE, WRITING_TIME);
+        return queryToList(query, (ps) -> {
+            try {
+                ps.setInt(1,userId);
+                ps.setInt(2,quizId);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+            return ps;
+        });
     }
     public List<History> getFastestByUserAndQuizId(int userId, int quizId) throws SQLException, ClassNotFoundException {
-        String query = String.format("SELECT * FROM %s WHERE %s = %d AND %s = %d ORDER BY %s, %s DESC;",
-                databaseName, USER_ID, userId, QUIZ_ID, quizId, WRITING_TIME, GRADE);
-        return queryToList(query);
+        String query = String.format("SELECT * FROM %s WHERE %s = ? AND %s = ? ORDER BY %s, %s DESC;",
+                databaseName, USER_ID, QUIZ_ID, WRITING_TIME, GRADE);
+        return queryToList(query, (ps) -> {
+            try {
+                ps.setInt(1,userId);
+                ps.setInt(2,quizId);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+            return ps;
+        });
     }
     public List<History> getLatestHistories(int k) throws SQLException, ClassNotFoundException {
         String query = String.format("SELECT * FROM %s ORDER BY %s DESC LIMIT %d",
                 databaseName, COMPLETED_AT, k);
-        return queryToList(query);
+        return queryToList(query, (ps) -> {return ps;});
     }
     public List<History> getLatestHistoriesByQuizId(int quizId, int k) throws SQLException, ClassNotFoundException {
-        String query = String.format("SELECT * FROM %s WHERE %s = %d ORDER BY %s DESC LIMIT %d",
-                databaseName, QUIZ_ID, quizId, COMPLETED_AT, k);
-        return queryToList(query);
+        String query = String.format("SELECT * FROM %s WHERE %s = ? ORDER BY %s DESC LIMIT %d",
+                databaseName, QUIZ_ID, COMPLETED_AT, k);
+        return queryToList(query, (ps) -> {
+            try {
+                ps.setInt(1,quizId);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+            return ps;
+        });
     }
     public List<History> getHistoryByQuizId(int quizId) throws SQLException, ClassNotFoundException {
-        String query = String.format("SELECT * FROM %s WHERE %s = %d",
-                databaseName, QUIZ_ID, quizId);
-        return queryToList(query);
+        String query = String.format("SELECT * FROM %s WHERE %s = ?",
+                databaseName, QUIZ_ID);
+        return queryToList(query, (ps) -> {
+            try {
+                ps.setInt(1,quizId);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+            return ps;
+        });
     }
     public List<History> getLatestHistoriesByUserId(int userId, int k) throws SQLException, ClassNotFoundException {
-        String query = String.format("SELECT * FROM %s WHERE %s = %d ORDER BY %s DESC LIMIT %d",
-                databaseName, USER_ID, userId, COMPLETED_AT, k);
-        return queryToList(query);
+        String query = String.format("SELECT * FROM %s WHERE %s = ? ORDER BY %s DESC LIMIT %d",
+                databaseName, USER_ID, COMPLETED_AT, k);
+        return queryToList(query, (ps) -> {
+            try {
+                ps.setInt(1,userId);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+            return ps;
+        });
     }
     public History getBestScoreHistoryByQuizId(int quizId) throws SQLException, ClassNotFoundException {
         String query = String.format(
-                "Select * from %s h where h.%s = %d " +
-                "and h.%s = (Select max(hi.%s) from %s hi where hi.%s = %d) " +
+                "Select * from %s h where h.%s = ? " +
+                "and h.%s = (Select max(hi.%s) from %s hi where hi.%s = ?) " +
                 "order by %s",
-                databaseName, QUIZ_ID, quizId, GRADE, GRADE, databaseName, QUIZ_ID, quizId, WRITING_TIME);
-        return queryToElement(query);
+                databaseName, QUIZ_ID, GRADE, GRADE, databaseName, QUIZ_ID, WRITING_TIME);
+        return queryToElement(query, (ps) -> {
+            try {
+                ps.setInt(1,quizId);
+                ps.setInt(2,quizId);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+            return ps;
+        });
     }
 
     public History getBestHistoryByUserAndQuizId(int userId, int quizId) throws SQLException, ClassNotFoundException {
         String query = String.format(
-                "SELECT * FROM %s WHERE %s = %d AND %s = %d ORDER BY %s DESC, %s LIMIT 1;",
-                databaseName, USER_ID, userId, QUIZ_ID, quizId, GRADE, WRITING_TIME);
-        return queryToElement(query);
+                "SELECT * FROM %s WHERE %s = ? AND %s = ? ORDER BY %s DESC, %s LIMIT 1;",
+                databaseName, USER_ID, QUIZ_ID, GRADE, WRITING_TIME);
+        return queryToElement(query, (ps) -> {
+            try {
+                ps.setInt(1,userId);
+                ps.setInt(2,quizId);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+            return ps;
+        });
     }
 
     public List<History> getTopPerformersByQuizId(int quizId, int k) throws SQLException, ClassNotFoundException {
         String query = String.format(
-                "SELECT * FROM %s WHERE %s = %d ORDER BY %s DESC, %s LIMIT %d;",
-                databaseName, QUIZ_ID, quizId, GRADE, WRITING_TIME, k);
-        return queryToList(query);
+                "SELECT * FROM %s WHERE %s = ? ORDER BY %s DESC, %s LIMIT %d;",
+                databaseName, QUIZ_ID, GRADE, WRITING_TIME, k);
+        return queryToList(query, (ps) -> {
+            try {
+                ps.setInt(1,quizId);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+            return ps;
+        });
     }
 
     public List<History> getTopInLastDayByQuizId(int quizId, int k) throws SQLException, ClassNotFoundException {
         String query = String.format(
-                "SELECT * FROM %s WHERE %s = %d AND %s >= NOW() - INTERVAL 1 DAY ORDER BY %s DESC, %s LIMIT %d;",
-                databaseName, QUIZ_ID, quizId, "completed_at", GRADE, WRITING_TIME, k);
-        return queryToList(query);
+                "SELECT * FROM %s WHERE %s = ? AND %s >= NOW() - INTERVAL 1 DAY ORDER BY %s DESC, %s LIMIT %d;",
+                databaseName, QUIZ_ID, COMPLETED_AT, GRADE, WRITING_TIME, k);
+        return queryToList(query, (ps) -> {
+            try {
+                ps.setInt(1,quizId);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+            return ps;
+        });
     }
 }

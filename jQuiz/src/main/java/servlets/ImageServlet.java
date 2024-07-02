@@ -30,7 +30,7 @@ public class ImageServlet extends HttpServlet {
             if(type.equals("quiz")){
                 QuizDatabase quizDB = getDatabase(Database.QUIZ_DB, request);
                 int quizId = Integer.parseInt(request.getParameter("quizId"));
-                Quiz quiz = quizDB.getQuizById(quizId);
+                Quiz quiz = quizDB.getById(quizId);
                 if(quiz != null) {
                     imagePath = quiz.getThumbnailUrl();
                     if (imagePath != null) {
