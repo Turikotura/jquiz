@@ -3,6 +3,7 @@ package database;
 import models.Achievement;
 import org.apache.commons.dbcp2.BasicDataSource;
 
+import javax.xml.crypto.Data;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Date;
@@ -18,7 +19,6 @@ public class AchievementDatabase extends Database<Achievement> {
     public static final String USER_ID = "user_id";
     public static final String ACH_ID = "ach_id";
     static final String ACQUIRE_DATE = "acquire_date";
-    public static final String IS_UNLOCKED = "is_unlocked";
 
     public AchievementDatabase(BasicDataSource dataSource, String databaseName) {
         super(dataSource, databaseName);
@@ -51,21 +51,6 @@ public class AchievementDatabase extends Database<Achievement> {
         }
     }
 
-    public void initAchievements(int userId) throws SQLException, ClassNotFoundException {
-        Connection con = getConnection();
-        List<Achievement> achievements = getAll();
-        for(Achievement cur : achievements) {
-            String query = String.format("INSERT INTO achToUser (%s, %s, %s, %s) VALUES (%d, %d, SYSDATE(), FALSE);",
-                    USER_ID, ACH_ID, ACQUIRE_DATE, IS_UNLOCKED, userId, cur.getId());
-            PreparedStatement statement = this.getStatement(query,con);
-            int affectedRows = statement.executeUpdate();
-            if(affectedRows == 0){
-                throw new SQLException("Creating row failed");
-            }
-        }
-        con.close();
-    }
-
     @Override
     protected Achievement getItemFromResultSet(ResultSet rs) throws SQLException, ClassNotFoundException {
         return new Achievement(
@@ -73,36 +58,30 @@ public class AchievementDatabase extends Database<Achievement> {
                 rs.getString(NAME),
                 rs.getString(DESCRIPTION),
                 rs.getString(IMAGE),
-                rs.getDate(ACQUIRE_DATE),
-                rs.getBoolean(IS_UNLOCKED)
+                new Date()
         );
     }
     public List<Achievement> getAll() throws SQLException, ClassNotFoundException {
-        Connection con = getConnection();
-        Statement statement = con.createStatement();
-        ResultSet rs = statement.executeQuery("SELECT * FROM achievements;");
-        List<Achievement> achievements = new ArrayList<>();
-        while(rs.next()) {
-            achievements.add(new Achievement(rs.getInt(ID), rs.getString(NAME),rs.getString(DESCRIPTION),rs.getString(IMAGE),new Date(),false));
-        }
-        con.close();
-        return achievements;
+        String query = "SELECT * FROM achievements;";
+        return queryToList(query, (ps) -> {return ps;});
     }
-    public List<Achievement> getAchievementsByUserId(int userId) throws SQLException, ClassNotFoundException {
-        String query = String.format("SELECT a.%s, a.%s, a.%s, a.%s, au.%s, au.%s, au.%s FROM %s a JOIN %s au ON a.%s = au.%s WHERE au.%s = ?;",
-                ID, NAME, DESCRIPTION, IMAGE, USER_ID, ACQUIRE_DATE, IS_UNLOCKED, databaseName, Database.ACH_TO_USR_DB, ID, ACH_ID, USER_ID);
-        return queryToList(query, (ps) -> {
+
+    public Achievement getAchievementByName(String name) throws SQLException, ClassNotFoundException {
+        String query = String.format("SELECT * FROM %s WHERE %s = ?",
+                Database.ACHIEVEMENT_DB, NAME);
+        return queryToElement(query, (ps) -> {
             try {
-                ps.setInt(1,userId);
+                ps.setString(1, name);
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
             return ps;
         });
     }
-    public List<Achievement> getUnlockedAchievementsByUserId(int userId) throws SQLException, ClassNotFoundException {
-        String query = String.format("SELECT a.%s, a.%s, a.%s, a.%s, au.%s, au.%s, au.%s FROM %s a JOIN %s au ON a.%s = au.%s WHERE au.%s = ? AND au.%s = TRUE;",
-                ID, NAME, DESCRIPTION, IMAGE, USER_ID, ACQUIRE_DATE, IS_UNLOCKED, databaseName, Database.ACH_TO_USR_DB, ID, ACH_ID, USER_ID, IS_UNLOCKED);
+
+    public List<Achievement> getAchievementsByUserId(int userId) throws SQLException, ClassNotFoundException {
+        String query = String.format("SELECT a.%s, a.%s, a.%s, a.%s, au.%s, au.%s FROM %s a JOIN %s au ON a.%s = au.%s WHERE au.%s = ?;",
+                ID, NAME, DESCRIPTION, IMAGE, USER_ID, ACQUIRE_DATE, databaseName, Database.ACH_TO_USR_DB, ID, ACH_ID, USER_ID);
         return queryToList(query, (ps) -> {
             try{
                 ps.setInt(1, userId);
@@ -113,10 +92,14 @@ public class AchievementDatabase extends Database<Achievement> {
         });
     }
     public void unlockAchievement(int userId, String achievementName) throws SQLException, ClassNotFoundException {
+        Achievement achievement = getAchievementByName(achievementName);
+        String query = String.format("INSERT INTO %s ( %s, %s, %s) VALUES(?, ?, ?);",
+                Database.ACH_TO_USR_DB, USER_ID, ACH_ID, ACQUIRE_DATE);
         Connection con = getConnection();
-        String query = String.format("UPDATE %s a JOIN %s au ON a.%s = au.%s SET au.%s = TRUE WHERE au.%s = %d AND a.%s = '%s';",
-                databaseName, Database.ACH_TO_USR_DB, ID, ACH_ID, IS_UNLOCKED, USER_ID, userId, NAME, achievementName);
         PreparedStatement statement = this.getStatement(query,con);
+        statement.setInt(1, userId);
+        statement.setInt(2, achievement.getId());
+        statement.setTimestamp(3, new Timestamp(System.currentTimeMillis()));
         int affectedRows = statement.executeUpdate();
         if(affectedRows == 0){
             throw new SQLException("Unlocking achievement failed.");
@@ -124,13 +107,17 @@ public class AchievementDatabase extends Database<Achievement> {
         con.close();
     }
     public boolean hasAchievementUnlocked(int userId, String achievementName) throws SQLException, ClassNotFoundException {
-        String query = String.format("SELECT * FROM %s a JOIN %s au ON a.%s = au.%s WHERE au.%s = %d AND a.%s = '%s' AND au.%s = TRUE;",
-                databaseName, Database.ACH_TO_USR_DB, ID, ACH_ID, USER_ID, userId, NAME, achievementName, IS_UNLOCKED);
-        Connection con = getConnection();
-        Statement statement = con.createStatement();
-        ResultSet rs = statement.executeQuery(query);
-        boolean hasUnlocked = rs.next();
-        con.close();
-        return hasUnlocked;
+        String query = String.format("SELECT * FROM %s a JOIN %s au ON a.%s = au.%s WHERE au.%s = ? AND a.%s = ?;",
+                databaseName, Database.ACH_TO_USR_DB, ID, ACH_ID, USER_ID, NAME);
+        List<Achievement> achievements = queryToList(query, (ps) -> {
+            try {
+                ps.setInt(1, userId);
+                ps.setString(2, achievementName);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+            return ps;
+        });
+        return achievements.size() > 0;
     }
 }

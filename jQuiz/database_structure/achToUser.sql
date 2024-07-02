@@ -6,7 +6,6 @@ CREATE TABLE achToUser
     user_id INT,
     ach_id INT,
     acquire_date DATETIME,
-    is_unlocked BOOL,
     FOREIGN KEY (user_id) REFERENCES users(id),
     FOREIGN KEY (ach_id) REFERENCES achievements(id)
 );

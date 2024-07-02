@@ -43,7 +43,6 @@ public class RegisterServlet extends HttpServlet {
                 ((UserDatabase)request.getServletContext().getAttribute(Database.USER_DB)).add(newUser);
                 newUser = ((UserDatabase)request.getServletContext().getAttribute(Database.USER_DB)).getByUsername(newUser.getUsername());
                 request.getSession().setAttribute("curUser",newUser);
-                ((AchievementDatabase)request.getServletContext().getAttribute(Database.ACHIEVEMENT_DB)).initAchievements(newUser.getId());
                 response.sendRedirect("");
             }
         } catch (SQLException | ClassNotFoundException e) {

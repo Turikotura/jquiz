@@ -45,7 +45,7 @@
     User profileOf = userDB.getByUsername(profileName);
     List<Quiz> quizzesByUser = quizDB.getQuizzesByAuthorId(profileOf.getId());
     List<History> recentActivity = historyDB.getLatestHistoriesByUserId(profileOf.getId(),10);
-    List<Achievement> unlockedAchievements = achievementDB.getUnlockedAchievementsByUserId(profileOf.getId());
+    List<Achievement> unlockedAchievements = achievementDB.getAchievementsByUserId(profileOf.getId());
 %>
 <head>
     <title><%=profileName%></title>
@@ -57,7 +57,7 @@
 <%@ include file="mail.jsp" %>
 <main>
     <div class="profile-info">
-    <img class="profile-pic" src="<%=profileOf.getImage()%>" alt="profile-pic">
+    <img class="profile-pic" src="image?type=user&userId=<%=profileOf.getId()%>" alt="profile-pic">
     <h2><%=profileOf.getUsername()%></h2>
     <h3><%="Member since: " + profileOf.getCreated_at().toString()%></h3>
         <% if(curUser == null) { %>

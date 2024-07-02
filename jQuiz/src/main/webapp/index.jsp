@@ -10,7 +10,6 @@
     UserDatabase userDB = getDatabase(Database.USER_DB,request);
     HistoryDatabase historyDB = getDatabase(Database.HISTORY_DB,request);
     QuizDatabase quizDB = getDatabase(Database.QUIZ_DB,request);
-
     User curUser = (User) request.getSession().getAttribute("curUser");
     // Mail variables
     List<Mail> mails = new ArrayList<Mail>();

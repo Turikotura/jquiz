@@ -42,9 +42,11 @@
     }
 
     List<Achievement> userAchievements = null;
+    List<Achievement> allAchievements = null;
     if(curUser != null) {
         try {
             userAchievements = achievementDB.getAchievementsByUserId(curUser.getId());
+            allAchievements = achievementDB.getAll();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } catch (ClassNotFoundException e) {
@@ -67,14 +69,14 @@
         <% if(userAchievements == null) { %>
             <p><a href="login.jsp">Log in</a> or <a href="register.jsp">Register</a> to unlock and track your achievements.</p>
         <% } else {
-            for(Achievement cur : userAchievements) { %>
+            for(Achievement cur : allAchievements) { %>
                 <div class="achievement">
                     <img class="icon" src="<%=cur.getImage()%>" alt="icon">
                     <div class="ach-info">
                     <h4><%=cur.getName()%></h4>
                     <p><%=cur.getDescription()%></p>
                     </div>
-                    <% if(!cur.getIsUnlocked()) { %>
+                    <% if(!userAchievements.contains(cur)) { %>
                         <img class="lock-img" src="https://i.pinimg.com/1200x/67/9a/8c/679a8ce044245372ca495c4c9c151225.jpg" alt="locked">
                     <% } %>
                 </div>
