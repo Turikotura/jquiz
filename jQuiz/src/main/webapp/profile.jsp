@@ -120,17 +120,21 @@
     </div>
 
     <h2>Achievements</h2>
-    <% if(unlockedAchievements.isEmpty()) { %>
-        <h3>Nothing yet.</h3>
-    <% } else {%>
-        <ul>
-        <% for(Achievement unlocked : unlockedAchievements) { %>
-            <li><%=unlocked.getName()%></li>
-        <% } %>
-        </ul>
-    <% } %>
-
-
+    <div class="achievement-container">
+        <% if(unlockedAchievements.isEmpty()) { %>
+            <h3>Nothing yet.</h3>
+        <% } else {
+            for(Achievement cur : unlockedAchievements) { %>
+            <div class="achievement">
+                <img class="icon" src="<%=cur.getImage()%>" alt="icon">
+                <div class="ach-info">
+                    <h4><%=cur.getName()%></h4>
+                    <p><%=cur.getDescription()%></p>
+                </div>
+            </div>
+        <% }
+        } %>
+    </div>
 </main>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script> <!-- jQuery for AJAX -->
 <script src="script/mailPanel.js"></script>

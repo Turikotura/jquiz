@@ -1,28 +1,58 @@
 main {
-    width: 50%; /* Adjust as needed */
-    margin: 100px auto; /* Center main horizontally */
+    margin: 100px auto;
     border: 1px solid #ccc;
     padding: 20px;
-    border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 .profile-pic {
     border-radius: 50%;
-    width: 150px; /* Adjust as needed for a bigger image */
-    height: 150px; /* Adjust as needed for a bigger image */
+    width: 150px;
+    height: 150px;
     object-fit: cover;
-    float: left; /* Float the image to the left */
     margin-right: 20px; /* Add space to the right of the image */
 }
 
 .profile-info {
-    display: inline-block; /* Allow profile-info to sit next to the image */
-    vertical-align: top; /* Align profile-info to the top */
-    width: calc(100% - 170px); /* Adjust width to fit next to the image */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     margin-bottom: 20px;
 }
 
 h2, h3 {
+    margin: 0;
+}
+
+.achievement-container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.achievement {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    margin: 10px 0;
+    padding: 10px;
+    border: 1px solid #eee;
+    border-radius: 5px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.icon {
+    border-radius: 10px;
+    width: 100px;
+    height: 100px;
+    margin-right: 20px;
+}
+
+.ach-info {
+    flex-grow: 1;
+}
+
+.achievement h4, .achievement p {
     margin: 0;
 }
