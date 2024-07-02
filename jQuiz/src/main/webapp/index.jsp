@@ -70,6 +70,7 @@
     <title>Quiz List</title>
     <link href="style/general.css" rel="stylesheet" type="text/css">
     <link href="style/index.css" rel="stylesheet" type="text/css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet" type="text/css">
 </head>
 <body>
 <%@ include file="header.jsp" %>
@@ -88,7 +89,7 @@
             %>
             <div class="quiz-box">
                 <a href="quizInfo.jsp?quizId=<%=quiz.getId()%>">
-                    <div class="quiz-box-top">
+                    <div class="quiz-box-top" style="background-size: cover; background-image: url('image?type=quiz&quizId=<%=quiz.getId()%>');">
                         <p class="quiz-box-name"><%= quiz.getTitle() %></p>
                     </div>
                     <div class="quiz-box-bot">
@@ -111,7 +112,7 @@
                 %>
                 <div class="quiz-box">
                     <a href="quizInfo.jsp?quizId=<%=quiz.getId()%>">
-                        <div class="quiz-box-top">
+                        <div class="quiz-box-top" style="background-size: cover; background-image: url('image?type=quiz&quizId=<%=quiz.getId()%>');">
                             <p class="quiz-box-name"><%= quiz.getTitle() %></p>
                         </div>
                         <div class="quiz-box-bot">
@@ -135,7 +136,7 @@
             %>
             <div class="quiz-box">
                 <a href="quizInfo.jsp?quizId=<%=quiz.getId()%>">
-                    <div class="quiz-box-top">
+                    <div class="quiz-box-top" style="background-size: cover; background-image: url('image?type=quiz&quizId=<%=quiz.getId()%>');">
                         <p class="quiz-box-name"><%= quiz.getTitle() %></p>
                     </div>
                     <div class="quiz-box-bot">

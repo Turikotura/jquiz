@@ -26,10 +26,16 @@ public class AchievementDatabase extends Database<Achievement> {
 
     @Override
     public int add(Achievement achievement) throws SQLException, ClassNotFoundException {
-        String query = String.format("INSERT INTO achievements (%s, %s, %s) VALUES ('%s', '%s', '%s')",
-                NAME, DESCRIPTION, IMAGE, achievement.getName(), achievement.getDescription(), achievement.getImage());
+        String query = String.format(
+                "INSERT INTO %s ( %s, %s, %s )" +
+                        "VALUES ( ?,  ?,  ?  )",
+                databaseName, NAME, DESCRIPTION, IMAGE);
         Connection con = getConnection();
         PreparedStatement statement = this.getStatement(query,con);
+        statement.setString(1,achievement.getName());
+        statement.setString(2,achievement.getDescription());
+        statement.setString(3,achievement.getImage());
+
         int affectedRows = statement.executeUpdate();
         if(affectedRows == 0){
             throw new SQLException("Creating row failed");
@@ -83,9 +89,16 @@ public class AchievementDatabase extends Database<Achievement> {
         return achievements;
     }
     public List<Achievement> getAchievementsByUserId(int userId) throws SQLException, ClassNotFoundException {
-        String query = String.format("SELECT a.%s, a.%s, a.%s, a.%s, au.%s, au.%s, au.%s FROM %s a JOIN %s au ON a.%s = au.%s WHERE au.%s = %d;",
-                ID, NAME, DESCRIPTION, IMAGE, USER_ID, ACQUIRE_DATE, IS_UNLOCKED, databaseName, Database.ACH_TO_USR_DB, ID, ACH_ID, USER_ID, userId);
-        return queryToList(query);
+        String query = String.format("SELECT a.%s, a.%s, a.%s, a.%s, au.%s, au.%s, au.%s FROM %s a JOIN %s au ON a.%s = au.%s WHERE au.%s = ?;",
+                ID, NAME, DESCRIPTION, IMAGE, USER_ID, ACQUIRE_DATE, IS_UNLOCKED, databaseName, Database.ACH_TO_USR_DB, ID, ACH_ID, USER_ID);
+        return queryToList(query, (ps) -> {
+            try {
+                ps.setInt(1,userId);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+            return ps;
+        });
     }
     public List<Achievement> getUnlockedAchievementsByUserId(int userId) throws SQLException, ClassNotFoundException {
         String query = String.format("SELECT a.%s, a.%s, a.%s, a.%s, au.%s, au.%s, au.%s FROM %s a JOIN %s au ON a.%s = au.%s WHERE au.%s = %d AND au.%s = TRUE;",

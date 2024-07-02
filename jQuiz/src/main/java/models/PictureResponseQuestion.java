@@ -11,8 +11,8 @@ public class PictureResponseQuestion extends Question {
     private boolean guessed;
 
 
-    public PictureResponseQuestion(String text, Set<Answer> answers, String link, QuestionTypes type) {
-        super(0,type,text,0,null,0, null);
+    public PictureResponseQuestion(String text, String link, QuestionTypes type) {
+        super(0,type,text,0,null, null,0);
         this.pictureLink = link;
     }
 

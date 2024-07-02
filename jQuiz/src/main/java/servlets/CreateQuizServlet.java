@@ -44,11 +44,12 @@ public class CreateQuizServlet extends HttpServlet {
             }
         }
 
-        Quiz quiz = new Quiz(0, title, author.getId(), null, time, thumbnail, shouldMixUp, showAll, false, allowPractice, description, new ArrayList<>(), 0, 0);
+        Quiz quiz = new Quiz(0, title, author.getId(), null, time, thumbnail, null, shouldMixUp, showAll, false, allowPractice, description, new ArrayList<>(), 0, 0);
         QuizDatabase quizDatabase = (QuizDatabase) getServletContext().getAttribute(Database.QUIZ_DB);
         int quizId = -1;
         try {
             quizId = quizDatabase.add(quiz);
+            System.out.println(quizId);
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
             request.setAttribute("Message", "Error: " + e.getMessage());
@@ -60,7 +61,6 @@ public class CreateQuizServlet extends HttpServlet {
             if (questionType == null) {
                 break; // No more questions
             }
-            System.out.println(questionType);
 
             String questionText = request.getParameter(questionIndex + "_question");
             List<Answer> answers = new ArrayList<>();
@@ -99,7 +99,6 @@ public class CreateQuizServlet extends HttpServlet {
                     }
                     Part picturePart = request.getPart(questionIndex + "_picture");
                     if (picturePart != null) {
-                        System.out.println("WTFFFFFF");
                         try (InputStream inputStream = picturePart.getInputStream();
                              ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
                             byte[] buffer = new byte[1024];
@@ -113,7 +112,6 @@ public class CreateQuizServlet extends HttpServlet {
                     break;
                 case "multipleChoice":
                     questionTypeEnum = QuestionTypes.MULTIPLE_CHOICE;
-                    System.out.println(request.getParameter(questionIndex + "_correct"));
                     int correctChoice = Integer.parseInt(request.getParameter(questionIndex + "_correct"));
                     int answerIndex = 1;
                     while(true){
@@ -152,7 +150,7 @@ public class CreateQuizServlet extends HttpServlet {
                 default:
                     break;
             }
-            Question newQuestion = new Question(1, questionTypeEnum, questionText, quizId, picture, 1, new ArrayList<>());
+            Question newQuestion = new Question(1, questionTypeEnum, questionText, quizId, picture, null, 1);
             QuestionDatabase questionDB = (QuestionDatabase) getServletContext().getAttribute(Database.QUESTION_DB);
             int questionId = -1;
             try {

@@ -2,6 +2,7 @@ package attempts;
 
 import models.Quiz;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -20,6 +21,10 @@ public class QuizAttempt {
     private int maxScore;
     private List<QuestionAttempt> questions;
     private int onQuestionIndex;
+
+    // Used to not grade the quiz more than once
+    private int gottenGrade;
+    private boolean wasGraded;
 
     /**
      * Constructor for QuizAttempt
@@ -41,10 +46,13 @@ public class QuizAttempt {
         this.description = quiz.getDescription();
         this.onQuestionIndex = 0;
 
-        this.questions = questions;
+        this.questions = new ArrayList<>(questions);
         for(QuestionAttempt qa : questions){
             this.maxScore += qa.getMaxScore();
         }
+
+        this.wasGraded = false;
+        this.gottenGrade = 0;
     }
 
     public int getId() {return id;}
@@ -67,15 +75,19 @@ public class QuizAttempt {
      * @return quiz score
      */
     public int evaluateQuiz(){
+        if(wasGraded){
+            return gottenGrade;
+        }
+        wasGraded = true;
+        gottenGrade = 0;
+
         long timeBetween = ((new Date()).getTime() - startTime.getTime())/1000;
-        if(timeBetween > time){
-            return 0;
+        if(timeBetween <= time){
+            for(QuestionAttempt qa : questions){
+                gottenGrade += qa.evaluateAnswers();
+            }
         }
-        int res = 0;
-        for(QuestionAttempt qa : questions){
-            res += qa.evaluateAnswers();
-        }
-        return res;
+        return gottenGrade;
     }
 
     /**

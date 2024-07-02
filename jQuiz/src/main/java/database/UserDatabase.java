@@ -1,5 +1,6 @@
 package database;
 
+import models.Quiz;
 import models.User;
 import org.apache.commons.dbcp2.BasicDataSource;
 
@@ -16,6 +17,7 @@ public class UserDatabase extends Database<User>{
     public static final String EMAIL = "email";
     public static final String PASSWORD = "pass";
     public static final String IMAGE = "image";
+    public static final String IMAGE_URL = "image_url";
     // Friend Columns
     public static final String USER1_ID = "user1_id";
     public static final String USER2_ID = "user2_id";
@@ -26,8 +28,10 @@ public class UserDatabase extends Database<User>{
 
     @Override
     public int add(User toAdd) throws SQLException, ClassNotFoundException {
-        String query = String.format("INSERT INTO %s ( %s, %s, %s, %s, %s, %s ) VALUES ( ?, ?, ?, ?, ?, ?)",
-                databaseName, USERNAME, IS_ADMIN, CREATED_AT, EMAIL, PASSWORD, IMAGE);
+        String query = String.format(
+                "INSERT INTO %s ( %s, %s, %s, %s, %s, %s, %s ) " +
+                        "VALUES ( ?,  ?,  ?,  ?,  ?,  ?,  ?  )",
+                databaseName, USERNAME, IS_ADMIN, CREATED_AT, EMAIL, PASSWORD, IMAGE, IMAGE_URL);
         Connection con = getConnection();
         PreparedStatement statement = getStatement(query,con);
         statement.setString(1, toAdd.getUsername());
@@ -35,7 +39,8 @@ public class UserDatabase extends Database<User>{
         statement.setTimestamp(3, new Timestamp(System.currentTimeMillis()));
         statement.setString(4, toAdd.getEmail());
         statement.setString(5, toAdd.getPassword());
-        statement.setString(6, toAdd.getImage());
+        statement.setBytes(6, toAdd.getImage());
+        statement.setString(7, toAdd.getImageUrl());
         int affectedRows = statement.executeUpdate();
         if(affectedRows == 0){
             throw new SQLException("Creating row failed");
@@ -53,21 +58,28 @@ public class UserDatabase extends Database<User>{
 
     @Override
     protected User getItemFromResultSet(ResultSet rs) throws SQLException, ClassNotFoundException {
-        System.out.println(rs.getString(USERNAME));
         return new User(
                 rs.getInt(ID),
                 rs.getString(USERNAME),
                 rs.getDate(CREATED_AT),
                 rs.getString(EMAIL),
                 rs.getString(PASSWORD),
-                rs.getString(IMAGE)
+                rs.getBytes(IMAGE),
+                rs.getString(IMAGE_URL)
         );
     }
 
     public List<User> getFriendsByUserId(int userId) throws SQLException, ClassNotFoundException {
-        String query = String.format("SELECT * FROM %s WHERE %s = %d",
-                Database.FRIEND_DB, USER1_ID, userId);
-        return queryToList(query);
+        String query = String.format("SELECT * FROM %s WHERE %s = ?",
+                Database.FRIEND_DB, USER1_ID);
+        return queryToList(query, (ps) -> {
+            try {
+                ps.setInt(1,userId);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+            return ps;
+        });
     }
 
     public List<User> getHighestPerformers(int k, String fromLastDay) throws SQLException, ClassNotFoundException {
@@ -81,19 +93,46 @@ public class UserDatabase extends Database<User>{
                 queryAddition,
                 ID, USERNAME, IS_ADMIN, CREATED_AT, EMAIL, PASSWORD, IMAGE,
                 k);
-        return queryToList(query);
+        return queryToList(query, (ps) -> {return ps;});
     }
 
     public User getByUsername(String username) throws SQLException, ClassNotFoundException {
-        String query = String.format("SELECT * FROM %s WHERE %s = '%s';",
-                Database.USER_DB,USERNAME,username);
-        return queryToElement(query);
+        String query = String.format("SELECT * FROM %s WHERE %s = ?;",
+                Database.USER_DB,USERNAME);
+        return queryToElement(query, (ps) -> {
+            try {
+                ps.setString(1,username);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+            return ps;
+        });
     }
 
     public User getByEmail(String email) throws SQLException, ClassNotFoundException {
-        String query = String.format("SELECT * FROM %s WHERE %s = '%s';",
-                databaseName, EMAIL, email);
-        return queryToElement(query);
+        String query = String.format("SELECT * FROM %s WHERE %s = ?;",
+                databaseName, EMAIL);
+        return queryToElement(query, (ps) -> {
+            try {
+                ps.setString(1,email);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+            return ps;
+        });
+    }
+
+    public List<User> searchUsers(int k, String searchString) throws SQLException, ClassNotFoundException {
+        String query = String.format("SELECT * FROM %s WHERE %s LIKE ? LIMIT %d",
+                databaseName, USERNAME, k);
+        return queryToList(query, (ps) -> {
+            try {
+                ps.setString(1, "%" + searchString + "%");
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+            return ps;
+        });
     }
 
     public boolean addFriend(int from, int to) throws SQLException, ClassNotFoundException {
@@ -115,10 +154,14 @@ public class UserDatabase extends Database<User>{
         return res;
     }
     public boolean checkAreFriends(int from, int to) throws SQLException, ClassNotFoundException {
-        String query = String.format("SELECT * FROM %s WHERE %s = %d AND %s = %d",
-                Database.FRIEND_DB, USER1_ID, from, USER2_ID, to);
+        String query = String.format("SELECT * FROM %s WHERE %s = ? AND %s = ?",
+                Database.FRIEND_DB, USER1_ID, USER2_ID);
         Connection con = getConnection();
-        ResultSet rs = getResultSet(query, con);
+        PreparedStatement ps = getStatement(query,con);
+        ps.setInt(1,from);
+        ps.setInt(2,to);
+        ps.executeQuery();
+        ResultSet rs = ps.getResultSet();
         boolean res = rs.next();
         con.close();
         return res;

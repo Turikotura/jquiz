@@ -48,6 +48,13 @@
   <servlet>
     <servlet-name>AddFriend</servlet-name>
     <servlet-class>servlets.AddFriendServlet</servlet-class>
+  <servlet>
+    <servlet-name>Search</servlet-name>
+    <servlet-class>servlets.SearchServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>Image</servlet-name>
+    <servlet-class>servlets.ImageServlet</servlet-class>
   </servlet>
 
   <servlet-mapping>
@@ -85,5 +92,13 @@
   <servlet-mapping>
     <servlet-name>AddFriend</servlet-name>
     <url-pattern>/AddFriend</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>Search</servlet-name>
+    <url-pattern>/Search</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>Image</servlet-name>
+    <url-pattern>/image</url-pattern>
   </servlet-mapping>
 </web-app>
