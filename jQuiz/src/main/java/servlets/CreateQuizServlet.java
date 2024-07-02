@@ -1,9 +1,6 @@
 package servlets;
 
-import database.AnswerDatabase;
-import database.Database;
-import database.QuestionDatabase;
-import database.QuizDatabase;
+import database.*;
 import models.*;
 
 import javax.servlet.ServletException;
@@ -178,6 +175,16 @@ public class CreateQuizServlet extends HttpServlet {
                 }
             }
             questionIndex++;
+        }
+
+        try {
+            AchievementDatabase achievementDB = (AchievementDatabase) getServletContext().getAttribute(Database.ACHIEVEMENT_DB);
+            List<Quiz> bySameAuthor = quizDatabase.getQuizzesByAuthorId(author.getId());
+            if(bySameAuthor.size() == 1) achievementDB.unlockAchievement(author.getId(), "Amateur Author");
+            else if(bySameAuthor.size() == 5) achievementDB.unlockAchievement(author.getId(), "Prolific Author");
+            else if(bySameAuthor.size() == 10) achievementDB.unlockAchievement(author.getId(), "Prodigious Author");
+        } catch (SQLException | ClassNotFoundException e) {
+            throw new RuntimeException(e);
         }
 
         response.sendRedirect("/");

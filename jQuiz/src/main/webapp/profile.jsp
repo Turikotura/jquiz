@@ -20,6 +20,7 @@
     UserDatabase userDB = getDatabase(Database.USER_DB,request);
     HistoryDatabase historyDB = getDatabase(Database.HISTORY_DB,request);
     QuizDatabase quizDB = getDatabase(Database.QUIZ_DB,request);
+    AchievementDatabase achievementDB = getDatabase(Database.ACHIEVEMENT_DB,request);
 
     // Mail variables
     List<Mail> mails = new ArrayList<Mail>();
@@ -44,6 +45,7 @@
     User profileOf = userDB.getByUsername(profileName);
     List<Quiz> quizzesByUser = quizDB.getQuizzesByAuthorId(profileOf.getId());
     List<History> recentActivity = historyDB.getLatestHistoriesByUserId(profileOf.getId(),10);
+    List<Achievement> unlockedAchievements = achievementDB.getUnlockedAchievementsByUserId(profileOf.getId());
 %>
 <head>
     <title><%=profileName%></title>
@@ -57,7 +59,7 @@
     <div class="profile-info">
     <img class="profile-pic" src="<%=profileOf.getImage()%>" alt="profile-pic">
     <h2><%=profileOf.getUsername()%></h2>
-    <h3><%="Memeber since: " + profileOf.getCreated_at().toString()%></h3>
+    <h3><%="Member since: " + profileOf.getCreated_at().toString()%></h3>
         <% if(curUser == null) { %>
         <p><a href="login.jsp">Log in</a> or <a href="register.jsp">register</a> to add friends and compete against them!</p>
         <% } else if(curUser.getId() == profileOf.getId()) { %>
@@ -65,7 +67,7 @@
         <% } else if(mailDB.friendRequestPending(curUser.getId(),profileOf.getId())) { %>
         <p>Friend request sent.</p>
         <% } else if(mailDB.friendRequestPending(profileOf.getId(),curUser.getId())) { %>
-        <p><%=profileOf.getUsername() + " has already seny you a friend request. Check your mail!"%></p>
+        <p><%=profileOf.getUsername() + " has already sent you a friend request. Check your mail!"%></p>
         <% } else if(userDB.checkAreFriends(curUser.getId(),profileOf.getId())) { %>
             <p>You are friends.</p>
             <form action="AddFriend" method="get">
@@ -106,7 +108,7 @@
     <div class="activity">
         <h2>Recent Activity:</h2>
         <% if(recentActivity.isEmpty()) { %>
-            <h4>Wow, such empty</h4>
+            <h3>Wow, such empty</h3>
         <% } else { %>
             <ul>
                 <% for(History cur : recentActivity) {
@@ -116,6 +118,19 @@
             </ul>
         <% } %>
     </div>
+
+    <h2>Achievements</h2>
+    <% if(unlockedAchievements.isEmpty()) { %>
+        <h3>Nothing yet.</h3>
+    <% } else {%>
+        <ul>
+        <% for(Achievement unlocked : unlockedAchievements) { %>
+            <li><%=unlocked.getName()%></li>
+        <% } %>
+        </ul>
+    <% } %>
+
+
 </main>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script> <!-- jQuery for AJAX -->
 <script src="script/mailPanel.js"></script>

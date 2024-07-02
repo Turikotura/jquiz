@@ -3,6 +3,7 @@ package servlets;
 import attempts.QuestionAttempt;
 import attempts.QuizAttempt;
 import attempts.QuizAttemptsController;
+import database.AchievementDatabase;
 import database.HistoryDatabase;
 import models.History;
 import models.Question;
@@ -65,6 +66,18 @@ public class PlayQuizServlet extends HttpServlet {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+
+        try {
+            List<History> quizzesWritten = historydb.getHistoryByUserId(userId);
+            AchievementDatabase achievementDB = getDatabase(AchievementDatabase.ACHIEVEMENT_DB, httpServletRequest);
+            if(quizzesWritten.size() == 10) achievementDB.unlockAchievement(userId,"Quiz Machine");
+            History bestAttempt = historydb.getBestScoreHistoryByQuizId(history.getQuizId());
+            if(bestAttempt.getUserId() == userId && !achievementDB.hasAchievementUnlocked(userId,"I am the Greatest")) achievementDB.unlockAchievement(userId,"I am the Greatest");
+            if(history.getIsPractice() && !achievementDB.hasAchievementUnlocked(userId,"Practice Makes Perfect")) achievementDB.unlockAchievement(userId,"Practice Makes Perfect");
+
+        } catch (SQLException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
 
