@@ -101,9 +101,16 @@ public class AchievementDatabase extends Database<Achievement> {
         });
     }
     public List<Achievement> getUnlockedAchievementsByUserId(int userId) throws SQLException, ClassNotFoundException {
-        String query = String.format("SELECT a.%s, a.%s, a.%s, a.%s, au.%s, au.%s, au.%s FROM %s a JOIN %s au ON a.%s = au.%s WHERE au.%s = %d AND au.%s = TRUE;",
-                ID, NAME, DESCRIPTION, IMAGE, USER_ID, ACQUIRE_DATE, IS_UNLOCKED, databaseName, Database.ACH_TO_USR_DB, ID, ACH_ID, USER_ID, userId, IS_UNLOCKED);
-        return queryToList(query);
+        String query = String.format("SELECT a.%s, a.%s, a.%s, a.%s, au.%s, au.%s, au.%s FROM %s a JOIN %s au ON a.%s = au.%s WHERE au.%s = ? AND au.%s = TRUE;",
+                ID, NAME, DESCRIPTION, IMAGE, USER_ID, ACQUIRE_DATE, IS_UNLOCKED, databaseName, Database.ACH_TO_USR_DB, ID, ACH_ID, USER_ID, IS_UNLOCKED);
+        return queryToList(query, (ps) -> {
+            try{
+                ps.setInt(1, userId);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+            return ps;
+        });
     }
     public void unlockAchievement(int userId, String achievementName) throws SQLException, ClassNotFoundException {
         Connection con = getConnection();

@@ -79,8 +79,17 @@ public class  MailDatabase extends Database<Mail> {
         });
     }
     public boolean friendRequestPending(int from, int to) throws SQLException, ClassNotFoundException {
-        String query = String.format("SELECT * FROM %s WHERE %s = %d AND %s = %d and %s = %d",
-                databaseName, SENDER_ID, from, RECEIVER_ID, to, TYPE, MailTypes.FRIEND_REQUEST.ordinal());
-        return !queryToList(query).isEmpty();
+        String query = String.format("SELECT * FROM %s WHERE %s = ? AND %s = ? and %s = ?",
+                databaseName, SENDER_ID, RECEIVER_ID, TYPE);
+        return !queryToList(query, (ps) -> {
+            try{
+                ps.setInt(1,from);
+                ps.setInt(2, to);
+                ps.setInt(3, MailTypes.FRIEND_REQUEST.ordinal());
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+            return ps;
+        }).isEmpty();
     }
 }
