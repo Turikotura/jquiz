@@ -25,11 +25,16 @@ public class AnswerDatabase extends Database<Answer> {
     @Override
     public int add(Answer answer) throws SQLException, ClassNotFoundException {
         String query = String.format(
-                "INSERT INTO answers (%s, %s, %s, %s) VALUES ('%s', %b, %d, %d);",
-                TEXT, IS_CORRECT, QUESTION_ID, UNIQ_ID,
-                answer.getText(), answer.getIsCorrect(), answer.getQuestionId(), answer.getUniquenessId());
+                "INSERT INTO %s ( %s, %s, %s, %s ) " +
+                        "VALUES ( ?,  ?,  ?,  ?  );",
+                databaseName, TEXT, IS_CORRECT, QUESTION_ID, UNIQ_ID);
         Connection con = getConnection();
         PreparedStatement statement = this.getStatement(query,con);
+        statement.setString(1, answer.getText());
+        statement.setBoolean(2, answer.getIsCorrect());
+        statement.setInt(3, answer.getQuestionId());
+        statement.setInt(4, answer.getUniquenessId());
+
         int affectedRows = statement.executeUpdate();
         if(affectedRows == 0){
             throw new SQLException("Creating row failed");
@@ -57,9 +62,11 @@ public class AnswerDatabase extends Database<Answer> {
     }
 
     public List<Integer> getAnswerIdsByQuestionId(int questionId) throws SQLException, ClassNotFoundException {
-        String query = String.format("SELECT %s FROM %s WHERE %s = %d;", ID, this.databaseName, QUESTION_ID, questionId);
+        String query = String.format("SELECT %s FROM %s WHERE %s = ?;",
+                ID, databaseName, QUESTION_ID);
         Connection con = getConnection();
-        PreparedStatement statement = this.getStatement(query,con);
+        PreparedStatement statement = getStatement(query,con);
+        statement.setInt(1,questionId);
         ResultSet rs = statement.executeQuery();
 
         List<Integer> answerIds = new ArrayList<>();
@@ -70,8 +77,15 @@ public class AnswerDatabase extends Database<Answer> {
         return answerIds;
     }
     public List<Answer> getAnswersByQuestionId(int questionId) throws SQLException, ClassNotFoundException {
-        String query = String.format("SELECT * FROM %s WHERE %s = %d;",
-                databaseName, QUESTION_ID, questionId);
-        return queryToList(query);
+        String query = String.format("SELECT * FROM %s WHERE %s = ?;",
+                databaseName, QUESTION_ID);
+        return queryToList(query, (ps) -> {
+            try {
+                ps.setInt(1,questionId);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+            return ps;
+        });
     }
 }

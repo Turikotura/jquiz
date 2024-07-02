@@ -28,7 +28,9 @@ public class UserDatabase extends Database<User>{
 
     @Override
     public int add(User toAdd) throws SQLException, ClassNotFoundException {
-        String query = String.format("INSERT INTO %s ( %s, %s, %s, %s, %s, %s, %s ) VALUES ( ?, ?, ?, ?, ?, ?, ?)",
+        String query = String.format(
+                "INSERT INTO %s ( %s, %s, %s, %s, %s, %s, %s ) " +
+                        "VALUES ( ?,  ?,  ?,  ?,  ?,  ?,  ?  )",
                 databaseName, USERNAME, IS_ADMIN, CREATED_AT, EMAIL, PASSWORD, IMAGE, IMAGE_URL);
         Connection con = getConnection();
         PreparedStatement statement = getStatement(query,con);
@@ -68,9 +70,16 @@ public class UserDatabase extends Database<User>{
     }
 
     public List<User> getFriendsByUserId(int userId) throws SQLException, ClassNotFoundException {
-        String query = String.format("SELECT * FROM %s WHERE %s = %d",
-                Database.FRIEND_DB, USER1_ID, userId);
-        return queryToList(query);
+        String query = String.format("SELECT * FROM %s WHERE %s = ?",
+                Database.FRIEND_DB, USER1_ID);
+        return queryToList(query, (ps) -> {
+            try {
+                ps.setInt(1,userId);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+            return ps;
+        });
     }
 
     public List<User> getHighestPerformers(int k, String fromLastDay) throws SQLException, ClassNotFoundException {
@@ -84,25 +93,46 @@ public class UserDatabase extends Database<User>{
                 queryAddition,
                 ID, USERNAME, IS_ADMIN, CREATED_AT, EMAIL, PASSWORD, IMAGE,
                 k);
-        return queryToList(query);
+        return queryToList(query, (ps) -> {return ps;});
     }
 
     public User getByUsername(String username) throws SQLException, ClassNotFoundException {
-        String query = String.format("SELECT * FROM %s WHERE %s = '%s';",
-                Database.USER_DB,USERNAME,username);
-        return queryToElement(query);
+        String query = String.format("SELECT * FROM %s WHERE %s = ?;",
+                Database.USER_DB,USERNAME);
+        return queryToElement(query, (ps) -> {
+            try {
+                ps.setString(1,username);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+            return ps;
+        });
     }
 
     public User getByEmail(String email) throws SQLException, ClassNotFoundException {
-        String query = String.format("SELECT * FROM %s WHERE %s = '%s';",
-                databaseName, EMAIL, email);
-        return queryToElement(query);
+        String query = String.format("SELECT * FROM %s WHERE %s = ?;",
+                databaseName, EMAIL);
+        return queryToElement(query, (ps) -> {
+            try {
+                ps.setString(1,email);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+            return ps;
+        });
     }
 
     public List<User> searchUsers(int k, String searchString) throws SQLException, ClassNotFoundException {
-        String query = String.format("SELECT * FROM %s WHERE %s LIKE '%%%s%%' LIMIT %d",
-                databaseName, USERNAME, searchString, k);
-        return queryToList(query);
+        String query = String.format("SELECT * FROM %s WHERE %s LIKE ? LIMIT %d",
+                databaseName, USERNAME, k);
+        return queryToList(query, (ps) -> {
+            try {
+                ps.setString(1, "%" + searchString + "%");
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+            return ps;
+        });
     }
 
     public boolean addFriend(int from, int to) throws SQLException, ClassNotFoundException {
@@ -124,10 +154,14 @@ public class UserDatabase extends Database<User>{
         return res;
     }
     public boolean checkAreFriends(int from, int to) throws SQLException, ClassNotFoundException {
-        String query = String.format("SELECT * FROM %s WHERE %s = %d AND %s = %d",
-                Database.FRIEND_DB, USER1_ID, from, USER2_ID, to);
+        String query = String.format("SELECT * FROM %s WHERE %s = ? AND %s = ?",
+                Database.FRIEND_DB, USER1_ID, USER2_ID);
         Connection con = getConnection();
-        ResultSet rs = getResultSet(query, con);
+        PreparedStatement ps = getStatement(query,con);
+        ps.setInt(1,from);
+        ps.setInt(2,to);
+        ps.executeQuery();
+        ResultSet rs = ps.getResultSet();
         boolean res = rs.next();
         con.close();
         return res;

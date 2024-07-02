@@ -17,7 +17,7 @@ public class AttemptTests extends TestCase {
     }
     private QuestionAttempt getNormalQuestionAttempt(int qId, int quizId){
         List<Answer> answers = getDefaultAnswers(qId);
-        Question q = new Question(qId, QuestionTypes.RESPONSE, String.format("question %d",qId),quizId,null, null,5,null);
+        Question q = new Question(qId, QuestionTypes.RESPONSE, String.format("question %d",qId),quizId,null, null,5);
         QuestionAttempt qa = new QuestionAttempt(q, answers);
         return qa;
     }
@@ -25,7 +25,7 @@ public class AttemptTests extends TestCase {
         List<Answer> answers = getDefaultAnswers(qId);
         answers.add(new Answer(answers.size(),"another correct answer",true,qId,1));
         answers.add(new Answer(answers.size(),"wrong answer",false,qId,0));
-        Question q = new Question(qId, QuestionTypes.RESPONSE, String.format("question %d",qId),quizId,null, null,10,null);
+        Question q = new Question(qId, QuestionTypes.RESPONSE, String.format("question %d",qId),quizId,null, null,10);
         QuestionAttempt qa = new QuestionAttempt(q, answers);
         return qa;
     }
@@ -33,7 +33,7 @@ public class AttemptTests extends TestCase {
         List<Answer> answers = getDefaultAnswers(qId);
         answers.add(new Answer(answers.size(),"another correct answer 1",true,qId,1));
         answers.add(new Answer(answers.size(),"another correct answer 2",true,qId,2));
-        Question q = new Question(qId, QuestionTypes.RESPONSE, String.format("question %d",qId),quizId,null,null,15,null);
+        Question q = new Question(qId, QuestionTypes.RESPONSE, String.format("question %d",qId),quizId,null,null,15);
         QuestionAttempt qa = new QuestionAttempt(q, answers);
         return qa;
     }
@@ -41,7 +41,7 @@ public class AttemptTests extends TestCase {
         List<Answer> answers = getDefaultAnswers(qId);
         answers.add(new Answer(answers.size(),"wrong answer 1",false,qId,0));
         answers.add(new Answer(answers.size(),"wrong answer 2",false,qId,0));
-        Question q = new Question(qId, QuestionTypes.RESPONSE, String.format("question %d",qId),quizId,null,null,5,null);
+        Question q = new Question(qId, QuestionTypes.RESPONSE, String.format("question %d",qId),quizId,null,null,5);
         QuestionAttempt qa = new QuestionAttempt(q, answers);
         return qa;
     }
@@ -51,7 +51,7 @@ public class AttemptTests extends TestCase {
         answers.add(new Answer(answers.size(),"wrong answer 1",false,qId,1));
         answers.add(new Answer(answers.size(),"answer 2",true,qId,2));
         answers.add(new Answer(answers.size(),"wrong answer 2",false,qId,3));
-        Question q = new Question(qId, QuestionTypes.MULTI_ANS_MULTI_CHOICE, String.format("question %d",qId),quizId,null,null,10,null);
+        Question q = new Question(qId, QuestionTypes.MULTI_ANS_MULTI_CHOICE, String.format("question %d",qId),quizId,null,null,10);
         QuestionAttempt qa = new QuestionAttempt(q, answers);
         return qa;
     }

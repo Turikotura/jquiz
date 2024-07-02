@@ -20,17 +20,16 @@ public class QuestionDatabase extends Database<Question> {
     static final String IMAGE = "image";
     static final String IMAGE_URL = "image_url";
     static final String SCORE = "score";
-    AnswerDatabase answerDB;
 
     public QuestionDatabase(BasicDataSource dataSource, String databaseName) {
         super(dataSource, databaseName);
-        answerDB = new AnswerDatabase(dataSource, Database.ANSWER_DB);
     }
 
     @Override
     public int add(Question question) throws SQLException, ClassNotFoundException {
         String query = String.format(
-                "INSERT INTO %s (%s, %s, %s, %s, %s, %s) VALUES (?, ?, ?, ?, ?, ?);",
+                "INSERT INTO %s (%s, %s, %s, %s, %s, %s ) " +
+                        "VALUES (?,  ?,  ?,  ?,  ?,  ?  );",
         databaseName, QUESTION_TYPE, TEXT, QUIZ_ID, IMAGE, IMAGE_URL, SCORE);
         Connection con = getConnection();
         PreparedStatement statement = this.getStatement(query,con);
@@ -41,6 +40,7 @@ public class QuestionDatabase extends Database<Question> {
         statement.setString(5, question.getImageUrl());
         statement.setInt(6, question.getScore());
         int affectedRows = statement.executeUpdate();
+
         if(affectedRows == 0){
             throw new SQLException("Creating row failed");
         }
@@ -57,7 +57,6 @@ public class QuestionDatabase extends Database<Question> {
 
     @Override
     protected Question getItemFromResultSet(ResultSet rs) throws SQLException, ClassNotFoundException {
-        List<Integer> answerIds = answerDB.getAnswerIdsByQuestionId(rs.getInt(ID));
         return new Question(
                 rs.getInt(ID),
                 QuestionTypes.values()[rs.getInt(QUESTION_TYPE)],
@@ -65,28 +64,20 @@ public class QuestionDatabase extends Database<Question> {
                 rs.getInt(QUIZ_ID),
                 rs.getBytes(IMAGE),
                 rs.getString(IMAGE_URL),
-                rs.getInt(SCORE),
-                answerIds
+                rs.getInt(SCORE)
         );
     }
 
-    public List<Integer> getQuestionIdsByQuizId(int quizId) throws SQLException, ClassNotFoundException {
-        String query = String.format("SELECT %s FROM %s WHERE %s = %d;", ID,
-                this.databaseName, QUIZ_ID, quizId);
-        Connection con = getConnection();
-        PreparedStatement statement = this.getStatement(query,con);
-        ResultSet rs = statement.executeQuery();
-
-        List<Integer> questionIds = new ArrayList<>();
-        while (rs.next()) {
-            questionIds.add(rs.getInt(ID));
-        }
-        con.close();
-        return questionIds;
-    }
     public List<Question> getQuestionsByQuizId(int quizId) throws SQLException, ClassNotFoundException {
-        String query = String.format("SELECT * FROM %s WHERE %s = %d",
-                databaseName, QUIZ_ID, quizId);
-        return queryToList(query);
+        String query = String.format("SELECT * FROM %s WHERE %s = ?",
+                databaseName, QUIZ_ID);
+        return queryToList(query, (ps) -> {
+            try {
+                ps.setInt(1,quizId);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+            return ps;
+        });
     }
 }
