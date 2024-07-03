@@ -72,8 +72,11 @@
         List<User> friends = new ArrayList<User>();
         friends = userDB.getFriendsByUserId(userId);
         for(User friend : friends){
-            friendNames.add(friend.getUsername());
-            friendHistories.add(historyDB.getLastHistoryByUserAndQuizId(friend.getId(),quiz.getId()));
+            History frHistory = historyDB.getLastHistoryByUserAndQuizId(friend.getId(),quiz.getId());
+            if(frHistory != null){
+                friendNames.add(friend.getUsername());
+                friendHistories.add(historyDB.getLastHistoryByUserAndQuizId(friend.getId(),quiz.getId()));
+            }
         }
     }catch (SQLException e){
 //        System.out.println("SQL ex");

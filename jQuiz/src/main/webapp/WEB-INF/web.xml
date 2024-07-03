@@ -57,6 +57,10 @@
     <servlet-name>Image</servlet-name>
     <servlet-class>servlets.ImageServlet</servlet-class>
   </servlet>
+  <servlet>
+    <servlet-name>FriendsPage</servlet-name>
+    <servlet-class>servlets.FriendsPageServlet</servlet-class>
+  </servlet>
 
   <servlet-mapping>
     <servlet-name>FrontPageServlet</servlet-name>
@@ -102,4 +106,9 @@
     <servlet-name>Image</servlet-name>
     <url-pattern>/image</url-pattern>
   </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>FriendsPage</servlet-name>
+    <url-pattern>/FriendsPage</url-pattern>
+  </servlet-mapping>
+
 </web-app>
