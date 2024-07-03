@@ -11,7 +11,9 @@ public class Register {
     public static final int EMAIL_EXISTS = 1;
     public static final int DIFF_PASSWORDS = 2;
     public static final int WEAK_PASSWORD = 3;
-    public static final int SUCCESS = 4;
+    public static final int EMAIL_BANNED = 4;
+    public static final int SUCCESS = 5;
+
 
 
     public static int createNew(String userName, String email, String password1,
@@ -22,6 +24,7 @@ public class Register {
         else if(curUserByEmail != null) return EMAIL_EXISTS;
         else if(!password1.equals(password2)) return DIFF_PASSWORDS;
         else if(!Security.isStrong(password1)) return WEAK_PASSWORD;
+        else if(db.isEmailBanned(email)) return EMAIL_BANNED;
         return SUCCESS;
     }
 }

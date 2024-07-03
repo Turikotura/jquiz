@@ -20,4 +20,5 @@ mysql -u $DB_USER -p$DB_PASSWORD $DB_NAME < $SQL_DIR/friends.sql
 mysql -u $DB_USER -p$DB_PASSWORD $DB_NAME < $SQL_DIR/history.sql
 mysql -u $DB_USER -p$DB_PASSWORD $DB_NAME < $SQL_DIR/mails.sql
 mysql -u $DB_USER -p$DB_PASSWORD $DB_NAME < $SQL_DIR/banned_users.sql
+mysql -u $DB_USER -p$DB_PASSWORD $DB_NAME < $SQL_DIR/announcements.sql
 mysql -u $DB_USER -p$DB_PASSWORD $DB_NAME < $SQL_DIR/quizzes_view.sql

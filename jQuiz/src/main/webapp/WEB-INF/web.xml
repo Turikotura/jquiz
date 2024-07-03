@@ -65,6 +65,10 @@
     <servlet-name>ManageUser</servlet-name>
     <servlet-class>servlets.ManageUserServlet</servlet-class>
   </servlet>
+  <servlet>
+    <servlet-name>Announcement</servlet-name>
+    <servlet-class>servlets.AnnouncementServlet</servlet-class>
+  </servlet>
 
   <servlet-mapping>
     <servlet-name>FrontPageServlet</servlet-name>
@@ -117,5 +121,9 @@
   <servlet-mapping>
     <servlet-name>ManageUser</servlet-name>
     <url-pattern>/ManageUser</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>Announcement</servlet-name>
+    <url-pattern>/Announcement</url-pattern>
   </servlet-mapping>
 </web-app>
