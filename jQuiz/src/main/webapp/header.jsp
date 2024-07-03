@@ -11,6 +11,7 @@
             <li><a href="/categories.jsp">Categories</a></li>
             <li><a href="/createquiz.jsp">Create quiz</a></li>
             <li><a href="/historySummary.jsp">History</a></li>
+            <li><a href="/FriendsPage">Friends</a></li>
         </ul>
     </nav>
     <nav class="mail-nav">
@@ -31,7 +32,7 @@
             <li><a href="register.jsp">Register</a></li>
         </ul>
         <% } else {
-            String loggedInAs = ((User)request.getSession().getAttribute("curUser")).getUsername();%>
+            String loggedInAs = curUser.getUsername();%>
         <ul>
             <li><a href="profile.jsp?username=<%=loggedInAs%>"><%=loggedInAs%></a></li>
             <li><a onclick="submitLogOut()">Log out</a></li>

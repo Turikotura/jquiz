@@ -32,8 +32,6 @@ public class MailPanelServlet extends HttpServlet {
         int mailId = Integer.parseInt(httpServletRequest.getParameter("mailId"));
         MailDatabase maildb = getDatabase(Database.MAIL_DB,httpServletRequest);
 
-        System.out.println("HERE!!!");
-
         try {
             if(seen){
                 maildb.setFieldById(mailId,MailDatabase.SEEN,true);
