@@ -16,6 +16,7 @@ public class Quiz {
     private boolean autoCorrect;
     private boolean allowPractice;
     private String description;
+    private String category;
     private List<Integer> questionIds;
     private int totalPlayCount;
     private int lastMonthPlayCount;
@@ -34,6 +35,7 @@ public class Quiz {
             boolean autoCorrect,
             boolean allowPractice,
             String description,
+            String category,
             List<Integer> questionIds,
             int totalPlayCount,
             int lastMonthPlayCount
@@ -50,6 +52,7 @@ public class Quiz {
         this.autoCorrect = autoCorrect;
         this.allowPractice = allowPractice;
         this.description = description;
+        this.category = category;
         this.questionIds = questionIds;
         this.totalPlayCount = totalPlayCount;
         this.lastMonthPlayCount = lastMonthPlayCount;
@@ -67,6 +70,7 @@ public class Quiz {
     public boolean getAutoCorrect() {return autoCorrect;}
     public boolean getAllowPractice() {return allowPractice;}
     public int getAuthorId() {return authorId;}
+    public String getCategory() {return category;}
     public int getTotalPlayCount() {return totalPlayCount;}
     public int getLastMonthPlayCount() {return lastMonthPlayCount;}
     public List<Integer> getQuestions() {return questionIds;}
