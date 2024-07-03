@@ -19,6 +19,7 @@ import java.util.Date;
 import java.util.List;
 
 import static listeners.ContextListener.getDatabase;
+import static listeners.ContextListener.getMailInfo;
 
 public class FriendsPageServlet extends HttpServlet {
     @Override
@@ -36,6 +37,8 @@ public class FriendsPageServlet extends HttpServlet {
 
         }
         httpServletRequest.setAttribute("friends",friends);
+
+        getMailInfo(httpServletRequest);
 
         httpServletRequest.getRequestDispatcher("friends.jsp").forward(httpServletRequest,httpServletResponse);
     }

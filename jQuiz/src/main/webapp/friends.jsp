@@ -4,7 +4,8 @@
 <%@ page import="models.Mail" %>
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="java.util.Map" %>
-<%@ page import="java.util.HashMap" %><%--
+<%@ page import="java.util.HashMap" %>
+<%@ page import="models.MailTypes" %><%--
   Created by IntelliJ IDEA.
   User: Dachi
   Date: 02.07.2024
@@ -16,6 +17,10 @@
     User curUser = (User) request.getSession().getAttribute("curUser");
 
     List<User> friends = (List<User>) request.getAttribute("friends");
+    // Mail variables
+    List<Mail> mails = (List<Mail>) request.getAttribute("mails");
+    List<String> senderNames = (List<String>) request.getAttribute("senderNames");
+    Map<Integer,Integer> maxGrades = (Map<Integer, Integer>) request.getAttribute("maxGrades");
 %>
 <html>
 <head>
@@ -26,7 +31,7 @@
 </head>
 <body>
 <%@ include file="header.jsp" %>
-<%--<%@ include file="mail.jsp" %>--%>
+<%@ include file="mail.jsp" %>
 <main>
     <%
         if(curUser != null){
@@ -64,6 +69,7 @@
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script> <!-- jQuery for AJAX -->
 <script src="script/general.js"></script>
+<script src="script/mailPanel.js"></script>
 <script>
     function ajaxCall(form,formData){
         $.ajax({
