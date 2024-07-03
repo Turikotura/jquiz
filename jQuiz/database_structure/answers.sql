@@ -50,7 +50,7 @@ INSERT INTO answers (text, is_correct, question_id, uniq_id) VALUES
 
 -- Answers for question 3: Identify the capital city from the picture
 INSERT INTO answers (text, is_correct, question_id, uniq_id) VALUES
-('Tokyo', true, 7, 1),
+('Tokyo', true, 7, 1);
 
 -- Answers for question 4: Select all the capitals in South America.
 INSERT INTO answers (text, is_correct, question_id, uniq_id) VALUES

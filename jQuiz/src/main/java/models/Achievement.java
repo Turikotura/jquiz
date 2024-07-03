@@ -20,4 +20,10 @@ public class Achievement {
     public String getDescription() { return description; }
     public String getImage() { return image; }
     public Date getAcquireDate() { return acquireDate; }
+
+    @Override
+    public boolean equals(Object o) {
+        Achievement other = (Achievement) o;
+        return this.id == other.id;
+    }
 }
