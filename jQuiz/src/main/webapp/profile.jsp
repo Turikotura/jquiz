@@ -4,7 +4,8 @@
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="java.util.Map" %>
-<%@ page import="java.util.HashMap" %><%--
+<%@ page import="java.util.HashMap" %>
+<%@ page import="java.sql.SQLException" %><%--
   Created by IntelliJ IDEA.
   User: giorgi
   Date: 6/27/24
@@ -58,30 +59,58 @@
 <main>
     <div class="profile-info">
     <img class="profile-pic" src="image?type=user&userId=<%=profileOf.getId()%>" alt="profile-pic">
+    <div class="profile-details">
     <h2><%=profileOf.getUsername()%></h2>
     <h3><%="Member since: " + profileOf.getCreated_at().toString()%></h3>
-        <% if(curUser == null) { %>
-        <p><a href="login.jsp">Log in</a> or <a href="register.jsp">register</a> to add friends and compete against them!</p>
-        <% } else if(curUser.getId() == profileOf.getId()) { %>
-        <p>This is you.</p>
-        <% } else if(mailDB.friendRequestPending(curUser.getId(),profileOf.getId())) { %>
-        <p>Friend request sent.</p>
-        <% } else if(mailDB.friendRequestPending(profileOf.getId(),curUser.getId())) { %>
-        <p><%=profileOf.getUsername() + " has already sent you a friend request. Check your mail!"%></p>
-        <% } else if(userDB.checkAreFriends(curUser.getId(),profileOf.getId())) { %>
+        <% if(userDB.isUsernameBanned(profileName)) { %>
+            <p>This user has been banned for violating our policies.</p>
+        <% } else { %>
+            <% if(curUser == null) { %>
+            <p><a href="login.jsp">Log in</a> or <a href="register.jsp">register</a> to add friends and compete against them!</p>
+            <% } else if(curUser.getId() == profileOf.getId()) { %>
+            <p>This is you.</p>
+            <% } else if(mailDB.friendRequestPending(curUser.getId(),profileOf.getId())) { %>
+            <p>Friend request sent.</p>
+            <% } else if(mailDB.friendRequestPending(profileOf.getId(),curUser.getId())) { %>
+            <p><%=profileOf.getUsername() + " has already sent you a friend request. Check your mail!"%></p>
+            <% } else if(userDB.checkAreFriends(curUser.getId(),profileOf.getId())) { %>
             <p>You are friends.</p>
             <form action="AddFriend" method="get">
                 <input type="hidden" name="from" value="<%=curUser.getId()%>">
                 <input type="hidden" name="to" value="<%=profileOf.getId()%>">
                 <input type="submit" value="Remove friend">
             </form>
-        <% } else { %>
+            <% } else { %>
             <form action="AddFriend" method="post">
                 <input type="hidden" name="from" value="<%=curUser.getId()%>">
                 <input type="hidden" name="to" value="<%=profileOf.getId()%>">
                 <input type="submit" value="Send friend request">
             </form>
+            <% } %>
+
+            <% try {
+                if(curUser != null && userDB.isUserAdmin(curUser.getId())) { %>
+            <% if(userDB.isUserAdmin(profileOf.getId())) { %>
+            <p>This user is admin.</p>
+            <% } else { %>
+            <form action="ManageUser" method="get">
+                <input type="hidden" name="userToPromote" value="<%=profileOf.getId()%>">
+                <input type="submit" value="Promote to Admin">
+            </form>
+            <% } %>
+            <form action="ManageUser" method="post">
+                <input type="hidden" name="userToRemove" value="<%=profileOf.getId()%>">
+                <input type="submit" value="Ban User">
+            </form>
+            <% }
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            } catch (ClassNotFoundException e) {
+                throw new RuntimeException(e);
+            } %>
         <% } %>
+
+    </div>
     </div>
 
     <h2>Quizzes created by <%=profileName%>:</h2>

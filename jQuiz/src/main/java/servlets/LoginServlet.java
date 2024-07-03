@@ -25,6 +25,9 @@ public class LoginServlet extends HttpServlet {
             } else if(result == Login.WRONG_PASSWORD) {
                 request.getServletContext().setAttribute("log-message","Password incorrect.");
                 response.sendRedirect("login.jsp");
+            } else if (result == Login.USER_BANNED) {
+                request.getServletContext().setAttribute("log-message","You have been banned for violating our policies.");
+                response.sendRedirect("login.jsp");
             } else {
                 request.getSession().setAttribute("curUser",((UserDatabase) request.getServletContext().getAttribute(Database.USER_DB)).getByUsername(userName));
                 response.sendRedirect("");
