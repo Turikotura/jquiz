@@ -1,9 +1,11 @@
 package database;
 
+import models.Achievement;
 import models.Announcement;
 import org.apache.commons.dbcp2.BasicDataSource;
 
 import java.sql.*;
+import java.util.List;
 
 public class AnnouncementDatabase extends Database<Announcement> {
     static final String ID = "id";
@@ -39,7 +41,6 @@ public class AnnouncementDatabase extends Database<Announcement> {
             }
         }
     }
-
     @Override
     protected Announcement getItemFromResultSet(ResultSet rs) throws SQLException, ClassNotFoundException {
         return new Announcement(
@@ -49,5 +50,9 @@ public class AnnouncementDatabase extends Database<Announcement> {
                 rs.getString(TEXT),
                 rs.getDate(CREATED_AT)
         );
+    }
+    public List<Announcement> getAllAnnouncements() throws SQLException, ClassNotFoundException {
+        String query = String.format("SELECT * FROM %s ORDER BY %s DESC;", Database.ANNOUNCEMENT_DB, CREATED_AT);
+        return queryToList(query, (ps) -> {return ps;});
     }
 }

@@ -10,6 +10,7 @@
     UserDatabase userDB = getDatabase(Database.USER_DB,request);
     HistoryDatabase historyDB = getDatabase(Database.HISTORY_DB,request);
     QuizDatabase quizDB = getDatabase(Database.QUIZ_DB,request);
+    AnnouncementDatabase announcementDB = getDatabase(Database.ANNOUNCEMENT_DB,request);
     User curUser = (User) request.getSession().getAttribute("curUser");
     // Mail variables
     List<Mail> mails = new ArrayList<Mail>();
@@ -23,6 +24,8 @@
     List<Quiz> recentQuizzes = new ArrayList<Quiz>();
     List<Quiz> popularQuizzes = new ArrayList<Quiz>();
     List<Quiz> lastMonthPopularQuizzes = new ArrayList<Quiz>();
+
+    List<Announcement> announcements = announcementDB.getAllAnnouncements();
 
     try {
         if(curUser != null){
@@ -83,6 +86,13 @@
                 <textarea placeholder="Enter your announcement here!" name="text" id="announcement-body"></textarea><br>
                 <input type="submit" value="Publish"><br>
             </form>
+        <% } %>
+
+        <% for(Announcement cur : announcements) {
+            User curAuthor = userDB.getById(cur.getAuthorId());%>
+            <h2><%=cur.getTitle()%></h2>
+            <h3><%="By: " + curAuthor.getUsername()%></h3>
+            <p><%=cur.getText()%></p>
         <% } %>
     </div>
 
