@@ -25,6 +25,7 @@ public class CreateQuizServlet extends HttpServlet {
         String title = request.getParameter("title");
         User author = (User) request.getSession().getAttribute("curUser");
         String description = request.getParameter("description");
+        String category = request.getParameter("category");
         int time = Integer.parseInt(request.getParameter("time"));
         boolean shouldMixUp = request.getParameter("shouldMixUp") != null;
         boolean showAll = request.getParameter("showAll") != null;
@@ -44,12 +45,11 @@ public class CreateQuizServlet extends HttpServlet {
             }
         }
 
-        Quiz quiz = new Quiz(0, title, author.getId(), null, time, thumbnail, null, shouldMixUp, showAll, false, allowPractice, description, new ArrayList<>(), 0, 0);
+        Quiz quiz = new Quiz(0, title, author.getId(), null, time, thumbnail, null, shouldMixUp, showAll, false, allowPractice, description, category, new ArrayList<>(), 0, 0);
         QuizDatabase quizDatabase = (QuizDatabase) getServletContext().getAttribute(Database.QUIZ_DB);
         int quizId = -1;
         try {
             quizId = quizDatabase.add(quiz);
-            System.out.println(quizId);
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
             request.setAttribute("Message", "Error: " + e.getMessage());

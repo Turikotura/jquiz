@@ -21,6 +21,7 @@ public class QuizDatabase extends Database<Quiz>{
     static final String AUTO_CORRECT = "auto_correct";
     static final String ALLOW_PRACTICE = "allow_practice";
     static final String DESCRIPTION = "description";
+    static final String CATEGORY = "category";
     static final String TOTAL_PLAY_COUNT = "total_play_count";
     static final String LAST_MONTH_PLAY_COUNT = "last_month_play_count";
 
@@ -31,9 +32,9 @@ public class QuizDatabase extends Database<Quiz>{
     @Override
     public int add(Quiz quiz) throws SQLException, ClassNotFoundException {
         String query = String.format(
-                "INSERT INTO %s ( %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s ) " +
-                        "VALUES ( ?,  ?,  ?,  ?,  ?,  ?,  ?,  ?,  ?,  ?,  ?  );",
-                Database.QUIZ_DB, TITLE, AUTHOR_ID, CREATED_AT, TIME, THUMBNAIL, THUMBNAIL_URL, SHOULD_MIX_UP, SHOW_ALL, AUTO_CORRECT, ALLOW_PRACTICE, DESCRIPTION);
+                "INSERT INTO %s ( %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s ) " +
+                        "VALUES ( ?,  ?,  ?,  ?,  ?,  ?,  ?,  ?,  ?,  ?,  ?, ? );",
+                Database.QUIZ_DB, TITLE, AUTHOR_ID, CREATED_AT, TIME, THUMBNAIL, THUMBNAIL_URL, SHOULD_MIX_UP, SHOW_ALL, AUTO_CORRECT, ALLOW_PRACTICE, DESCRIPTION, CATEGORY);
         Connection con = getConnection();
         PreparedStatement statement = this.getStatement(query,con);
         statement.setString(1, quiz.getTitle());
@@ -47,6 +48,7 @@ public class QuizDatabase extends Database<Quiz>{
         statement.setBoolean(9, quiz.getAutoCorrect());
         statement.setBoolean(10, quiz.getAllowPractice());
         statement.setString(11, quiz.getDescription());
+        statement.setString(12, quiz.getCategory());
 
         int affectedRows = statement.executeUpdate();
         if(affectedRows == 0){
@@ -79,6 +81,7 @@ public class QuizDatabase extends Database<Quiz>{
                 rs.getBoolean(AUTO_CORRECT),
                 rs.getBoolean(ALLOW_PRACTICE),
                 rs.getString(DESCRIPTION),
+                rs.getString(CATEGORY),
                 questionIds,
                 rs.getInt(TOTAL_PLAY_COUNT),
                 rs.getInt(LAST_MONTH_PLAY_COUNT)
@@ -154,6 +157,33 @@ public class QuizDatabase extends Database<Quiz>{
         return queryToList(query, (ps) -> {
             try {
                 ps.setString(1, "%" + searchString + "%");
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+            return ps;
+        });
+    }
+
+    public List<Quiz> getRecentQuizzesByCategory(int k, String category) throws SQLException, ClassNotFoundException {
+        String query = String.format("SELECT * FROM %s WHERE %s = ? ORDER BY %s DESC LIMIT %d;",
+                databaseName, CATEGORY, CREATED_AT, k);
+        return queryToList(query, (ps) -> {
+            try {
+                ps.setString(1, category);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+            return ps;
+        });
+    }
+
+    public List<Quiz> getPopularQuizzesByCategory(int k, String totalOrLastMonth, String category) throws SQLException, ClassNotFoundException {
+        String lm = Objects.equals(totalOrLastMonth, "LAST_MONTH") ? LAST_MONTH_PLAY_COUNT : TOTAL_PLAY_COUNT;
+        String query = String.format("SELECT * FROM %s WHERE %s = ? ORDER BY " + lm + " DESC LIMIT %d;",
+                databaseName, CATEGORY, k);
+        return queryToList(query, (ps) -> {
+            try {
+                ps.setString(1, category);
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }

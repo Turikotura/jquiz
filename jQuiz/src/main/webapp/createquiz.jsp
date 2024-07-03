@@ -171,6 +171,20 @@
         <label for="description">Quiz Description:</label><br>
         <textarea id="description" name="description"></textarea><br><br>
 
+        <label for="category">Quiz Category:</label>
+        <select name="category" id="category">
+            <option value="Science">Science</option>
+            <option value="Sports">Sports</option>
+            <option value="History">History</option>
+            <option value="Music">Music</option>
+            <option value="Geography">Geography</option>
+            <option value="Literature">Literature</option>
+            <option value="Movies">Movies</option>
+            <option value="Gaming">Gaming</option>
+            <option value="Arts">Arts</option>
+            <option value="Other">Other</option>
+        </select>
+
         <div class="block">
             <div>
                 <label for="time">Total Time (in seconds):</label><br>
