@@ -57,6 +57,10 @@
     <servlet-name>Image</servlet-name>
     <servlet-class>servlets.ImageServlet</servlet-class>
   </servlet>
+  <servlet>
+    <servlet-name>RemoveQuiz</servlet-name>
+    <servlet-class>servlets.RemoveQuizServlet</servlet-class>
+  </servlet>
 
   <servlet-mapping>
     <servlet-name>FrontPageServlet</servlet-name>
@@ -101,5 +105,9 @@
   <servlet-mapping>
     <servlet-name>Image</servlet-name>
     <url-pattern>/image</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>RemoveQuiz</servlet-name>
+    <url-pattern>/RemoveQuiz</url-pattern>
   </servlet-mapping>
 </web-app>

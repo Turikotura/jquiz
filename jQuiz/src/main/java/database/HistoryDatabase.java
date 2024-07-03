@@ -256,4 +256,13 @@ public class HistoryDatabase extends Database<History> {
             return ps;
         });
     }
+    public void clearQuizHistory(int quizId) throws SQLException, ClassNotFoundException {
+        String curStatement = String.format("DELETE FROM %s WHERE %s = ?;",
+                HISTORY_DB,QUIZ_ID);
+        Connection con = getConnection();
+        PreparedStatement ps = getStatement(curStatement,con);
+        ps.setInt(1,quizId);
+        ps.execute();
+        con.close();
+    }
 }

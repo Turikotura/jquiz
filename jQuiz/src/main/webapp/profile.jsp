@@ -58,6 +58,7 @@
 <main>
     <div class="profile-info">
     <img class="profile-pic" src="image?type=user&userId=<%=profileOf.getId()%>" alt="profile-pic">
+    <div class="profile-details">
     <h2><%=profileOf.getUsername()%></h2>
     <h3><%="Member since: " + profileOf.getCreated_at().toString()%></h3>
         <% if(curUser == null) { %>
@@ -82,6 +83,7 @@
                 <input type="submit" value="Send friend request">
             </form>
         <% } %>
+    </div>
     </div>
 
     <h2>Quizzes created by <%=profileName%>:</h2>

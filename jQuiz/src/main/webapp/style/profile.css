@@ -5,19 +5,22 @@ main {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-.profile-pic {
-    border-radius: 50%;
-    width: 150px;
-    height: 150px;
-    object-fit: cover;
-    margin-right: 20px; /* Add space to the right of the image */
-}
-
 .profile-info {
     display: flex;
+    align-items: flex-start;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+.profile-pic {
+    border-radius: 50%;
+    margin-right: 20px;
+    width: 150px; /* Adjust as needed for a bigger image */
+    height: 150px; /* Adjust as needed for a bigger image */
+    object-fit: cover;
+}
+.profile-details {
+    display: flex;
     flex-direction: column;
-    justify-content: center;
-    margin-bottom: 20px;
 }
 
 h2, h3 {

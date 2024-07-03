@@ -15,7 +15,7 @@
 <html>
 <%
     User curUser = (User) request.getSession().getAttribute("curUser");
-    System.out.println(curUser);
+//    System.out.println(curUser);
 
     MailDatabase mailDB = getDatabase(Database.MAIL_DB,request);
     UserDatabase userDB = getDatabase(Database.USER_DB,request);
@@ -105,9 +105,27 @@
         <input type="submit" value="Start Quiz">
     </form>
 
+    <%
+        try {
+            if(curUser != null && userDB.isUserAdmin(curUser.getId())) { %>
+            <form action="RemoveQuiz" method="get">
+                <input name="quizId" type="hidden" value="<%=curQuiz.getId()%>">
+                <input type="submit" value="Remove Quiz">
+            </form>
+            <form action="RemoveQuiz" method="post">
+                <input name="quizId" type="hidden" value="<%=curQuiz.getId()%>">
+                <input type="submit" value="Clear Quiz History">
+            </form>
+            <% }
+    } catch (SQLException e) {
+        throw new RuntimeException(e);
+    } catch (ClassNotFoundException e) {
+        throw new RuntimeException(e);
+    } %>
+
     <h3>Your previous attempts</h3>
     <hr>
-    <% if(request.getSession().getAttribute("curUser") == null) { %>
+    <% if(curUser == null) { %>
         <p><a href="login.jsp">Log in</a> to track your attempts.</p>
     <% } else { %>
         <label for="sort">Sort by:</label>

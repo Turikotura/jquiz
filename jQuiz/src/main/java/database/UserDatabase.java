@@ -175,4 +175,16 @@ public class UserDatabase extends Database<User>{
         statement.execute(curStatement);
         con.close();
     }
+    public boolean isUserAdmin(int userId) throws SQLException, ClassNotFoundException {
+        String query = String.format("SELECT * FROM %s WHERE %s = ? AND %s = TRUE;",
+                USER_DB, ID, IS_ADMIN);
+        Connection con = getConnection();
+        PreparedStatement ps = getStatement(query,con);
+        ps.setInt(1,userId);
+        ps.executeQuery();
+        ResultSet rs = ps.getResultSet();
+        boolean res = rs.next();
+        con.close();
+        return res;
+    }
 }
