@@ -21,6 +21,8 @@ public class UserDatabase extends Database<User>{
     // Friend Columns
     public static final String USER1_ID = "user1_id";
     public static final String USER2_ID = "user2_id";
+    // Banned Columns
+    public static final String USER_ID = "user_id";
 
     public UserDatabase(BasicDataSource dataSource, String databaseName) {
         super(dataSource, databaseName);
@@ -186,5 +188,60 @@ public class UserDatabase extends Database<User>{
         boolean res = rs.next();
         con.close();
         return res;
+    }
+
+    public void promoteUserToAdmin(int userId) throws SQLException, ClassNotFoundException {
+        String statement = String.format("UPDATE %s SET %s = TRUE WHERE %s = ?;",
+                USER_DB, IS_ADMIN, ID);
+        Connection con = getConnection();
+        PreparedStatement ps = getStatement(statement,con);
+        ps.setInt(1,userId);
+        ps.execute();
+        con.close();
+    }
+
+    public void banUser(int userId) throws SQLException, ClassNotFoundException {
+        String statement = String.format("INSERT INTO %s (%s) VALUES (?)",
+                BANNED_DB, USER_ID);
+        Connection con = getConnection();
+        PreparedStatement ps = getStatement(statement,con);
+        ps.setInt(1,userId);
+        ps.execute();
+        con.close();
+        removeFromFriendsDB(userId);
+    }
+    public boolean isUsernameBanned(String username) throws SQLException, ClassNotFoundException {
+        String query = String.format("SELECT * FROM %s b JOIN %s u ON b.%s = u.%s WHERE u.%s = ?;",
+                BANNED_DB, USER_DB, USER_ID, ID, USERNAME);
+        Connection con = getConnection();
+        PreparedStatement ps = getStatement(query,con);
+        ps.setString(1,username);
+        ResultSet rs = ps.executeQuery();
+        boolean isBanned = rs.next();
+        con.close();
+        return isBanned;
+    }
+
+    public boolean isEmailBanned(String email) throws SQLException, ClassNotFoundException {
+        String query = String.format("SELECT * FROM %s b JOIN %s u ON b.%s = u.%s WHERE u.%s = ?;",
+                BANNED_DB, USER_DB, USER_ID, ID, EMAIL);
+        Connection con = getConnection();
+        PreparedStatement ps = getStatement(query,con);
+        ps.setString(1,email);
+        ResultSet rs = ps.executeQuery();
+        boolean isBanned = rs.next();
+        con.close();
+        return isBanned;
+    }
+
+    private void removeFromFriendsDB(int userId) throws SQLException, ClassNotFoundException {
+        String statement = String.format("DELETE FROM %s WHERE %s = ? OR %s = ?;",
+                FRIEND_DB, USER1_ID, USER2_ID);
+        Connection con = getConnection();
+        PreparedStatement ps = getStatement(statement,con);
+        ps.setInt(1,userId);
+        ps.setInt(2,userId);
+        ps.execute();
+        con.close();
     }
 }
