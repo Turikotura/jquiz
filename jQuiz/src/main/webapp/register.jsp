@@ -53,7 +53,7 @@
 <main>
     <h1>Create New Account</h1>
     <p>Please enter proposed name and password.</p>
-    <form action="Register" method="post">
+    <form action="Register" method="post" enctype="multipart/form-data">
         <label>
             Enter your email:
             <input type="email" name="email">
@@ -75,8 +75,8 @@
         </label>
         <p></p>
         <label>
-            Link to your profile photo (Not required):
-            <input type="input" name="profile-pic">
+            Upload your profile photo (Not required):
+            <input type="file" id="photo" name="photo" accept="image/*"><br><br>
         </label>
         <p><%=message%></p>
         <input type="submit" value="Create">

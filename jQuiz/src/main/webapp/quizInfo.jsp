@@ -15,7 +15,6 @@
 <html>
 <%
     User curUser = (User) request.getSession().getAttribute("curUser");
-//    System.out.println(curUser);
 
     MailDatabase mailDB = getDatabase(Database.MAIL_DB,request);
     UserDatabase userDB = getDatabase(Database.USER_DB,request);

@@ -72,8 +72,8 @@ public class UserDatabase extends Database<User>{
     }
 
     public List<User> getFriendsByUserId(int userId) throws SQLException, ClassNotFoundException {
-        String query = String.format("SELECT * FROM %s WHERE %s = ?",
-                Database.FRIEND_DB, USER1_ID);
+        String query = String.format("SELECT * FROM %s where %s IN (SELECT %s from %s where %s = ?)",
+                Database.USER_DB, ID, USER2_ID, Database.FRIEND_DB, USER1_ID);
         return queryToList(query, (ps) -> {
             try {
                 ps.setInt(1,userId);
@@ -168,14 +168,20 @@ public class UserDatabase extends Database<User>{
         con.close();
         return res;
     }
-
-    public void removeFriends(int user1, int user2) throws SQLException, ClassNotFoundException {
-        String curStatement = String.format("DELETE FROM %s WHERE (%s = %d AND %s = %d) OR (%s = %d AND %s = %d);",
-                Database.FRIEND_DB, USER1_ID, user1, USER2_ID, user2, USER1_ID, user2, USER2_ID, user1);
+    public boolean removeFriends(int from, int to) throws SQLException, ClassNotFoundException {
+        String query = String.format(
+                "DELETE FROM %s WHERE (%s = ? AND %s = ?) OR (%s = ? AND %s = ?);",
+                Database.FRIEND_DB, USER1_ID, USER2_ID, USER1_ID, USER2_ID);
         Connection con = getConnection();
-        Statement statement = con.createStatement();
-        statement.execute(curStatement);
+        PreparedStatement ps = getStatement(query,con);
+        ps.setInt(1,from);
+        ps.setInt(2,to);
+        ps.setInt(3,to);
+        ps.setInt(4,from);
+
+        boolean res = ps.executeUpdate() > 0;
         con.close();
+        return res;
     }
     public boolean isUserAdmin(int userId) throws SQLException, ClassNotFoundException {
         String query = String.format("SELECT * FROM %s WHERE %s = ? AND %s = TRUE;",

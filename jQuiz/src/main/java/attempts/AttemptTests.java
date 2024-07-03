@@ -56,7 +56,7 @@ public class AttemptTests extends TestCase {
         return qa;
     }
     public Quiz getQuiz(int quizId, int time, boolean shouldMixUp){
-        return new Quiz(quizId,String.format("quiz %d",quizId),-1,new Date(),time,null,null,shouldMixUp,true,true,true,"desc",null,0,0);
+        return new Quiz(quizId,String.format("quiz %d",quizId),-1,new Date(),time,null,null,shouldMixUp,true,true,true,"desc","category",null,0,0);
     }
 
 

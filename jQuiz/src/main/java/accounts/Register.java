@@ -17,7 +17,7 @@ public class Register {
 
 
     public static int createNew(String userName, String email, String password1,
-                                String password2, String imageLink, UserDatabase db) throws SQLException, ClassNotFoundException {
+                                String password2, byte[] imageLink, UserDatabase db) throws SQLException, ClassNotFoundException {
         User curUser = db.getByUsername(userName);
         User curUserByEmail = db.getByEmail(email);
         if(curUser != null) return USERNAME_EXISTS;

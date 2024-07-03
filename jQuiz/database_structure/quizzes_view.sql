@@ -14,6 +14,7 @@ SELECT
     q.auto_correct,
     q.allow_practice,
     q.description,
+    q.category,
     COUNT(h.id) AS total_play_count,
     SUM(CASE WHEN h.completed_at >= DATE_SUB(CURRENT_DATE(), INTERVAL 1 MONTH) THEN 1 ELSE 0 END) AS last_month_play_count
 FROM
