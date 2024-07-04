@@ -26,6 +26,7 @@ public class CreateQuizServlet extends HttpServlet {
         User author = (User) request.getSession().getAttribute("curUser");
         String description = request.getParameter("description");
         String category = request.getParameter("category");
+        List<String> tags = Arrays.asList(request.getParameter("tags").split(" "));
         int time = Integer.parseInt(request.getParameter("time"));
         boolean shouldMixUp = request.getParameter("shouldMixUp") != null;
         boolean showAll = request.getParameter("showAll") != null;
@@ -55,6 +56,22 @@ public class CreateQuizServlet extends HttpServlet {
             request.setAttribute("Message", "Error: " + e.getMessage());
         }
 
+        TagDatabase tagDatabase = (TagDatabase) getServletContext().getAttribute(Database.TAG_DB);
+        Set<Integer> tagIds = new HashSet<>();
+
+        try {
+            for (String tag : tags) {
+                tagIds.add(tagDatabase.add(new Tag(-1, tag.toLowerCase())));
+            }
+            for (int tagId : tagIds) {
+                tagDatabase.associateTagWithQuiz(quizId, tagId);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+
         int questionIndex = 1;
         while (true) {
             String questionType = request.getParameter(questionIndex + "_questionTypeIdentifier");
@@ -82,12 +99,35 @@ public class CreateQuizServlet extends HttpServlet {
                     break;
                 case "fillBlank":
                     questionTypeEnum = QuestionTypes.FILL_BLANK;
-                    ansText = request.getParameter(questionIndex + "_answer");
-                    sameAnswers = ansText.split("/");
-                    for(String singleAnswer: sameAnswers){
-                        Answer answer = new Answer(-1,singleAnswer,true,-1,1);
-                        answers.add(answer);
+                    String formattedQuestionText = "";
+
+                    int length = questionText.length();
+                    int i = 0;
+                    int count = 0;
+
+                    while (i < length) {
+                        if (questionText.charAt(i) == '{') {
+                            int closingBracketIndex = questionText.indexOf('}', i);
+                            if (closingBracketIndex != -1) {
+                                count++;
+                                ansText = questionText.substring(i + 1, closingBracketIndex);
+                                sameAnswers = ansText.split("/");
+                                for(String singleAnswer: sameAnswers){
+                                    Answer answer = new Answer(-1,singleAnswer,true,-1,count);
+                                    answers.add(answer);
+                                }
+                                formattedQuestionText+="{}";
+                                i = closingBracketIndex + 1;
+                            } else {
+                                formattedQuestionText+=questionText.charAt(i);
+                                i++;
+                            }
+                        } else {
+                            formattedQuestionText+=questionText.charAt(i);
+                            i++;
+                        }
                     }
+                    questionText = formattedQuestionText;
                     break;
                 case "pictureResponse":
                     questionTypeEnum = QuestionTypes.PIC_RESPONSE;

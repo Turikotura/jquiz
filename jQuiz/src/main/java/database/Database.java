@@ -23,8 +23,11 @@ public abstract class Database<T> {
     public static final String HISTORY_DB = "history";
     public static final String ACH_TO_USR_DB = "achToUser";
     public static final String ACHIEVEMENT_DB = "achievements";
+    public static final String TAG_DB = "tags";
+    public static final String TAG_TO_QUIZ_DB = "tagToQuiz";
     public static final String ANNOUNCEMENT_DB = "announcements";
     public static final String COMMENT_DB = "comments";
+
     protected BasicDataSource dataSource;
     protected String databaseName;
 
