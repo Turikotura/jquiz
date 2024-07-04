@@ -3,11 +3,8 @@ package servlets;
 import attempts.QuestionAttempt;
 import attempts.QuizAttempt;
 import attempts.QuizAttemptsController;
-import database.AchievementDatabase;
+import database.*;
 import com.google.gson.Gson;
-import database.Database;
-import database.HistoryDatabase;
-import database.QuizDatabase;
 import models.*;
 
 import javax.servlet.ServletException;
@@ -107,10 +104,22 @@ public class PlayQuizServlet extends HttpServlet {
             try {
               List<History> quizzesWritten = historydb.getHistoryByUserId(userId);
               AchievementDatabase achievementDB = getDatabase(AchievementDatabase.ACHIEVEMENT_DB, httpServletRequest);
-              if(quizzesWritten.size() == 10) achievementDB.unlockAchievement(userId,"Quiz Machine");
+              MailDatabase mailDB = getDatabase(Database.MAIL_DB,httpServletRequest);
+              UserDatabase userDB = getDatabase(Database.USER_DB,httpServletRequest);
+              User system = userDB.getByUsername("System");
+              if(quizzesWritten.size() == 10) {
+                  achievementDB.unlockAchievement(userId,"Quiz Machine");
+                  mailDB.sendAchievementMail(system.getId(), userId,"Quiz Machine");
+              }
               History bestAttempt = historydb.getBestScoreHistoryByQuizId(history.getQuizId());
-              if(bestAttempt.getUserId() == userId && !achievementDB.hasAchievementUnlocked(userId,"I am the Greatest")) achievementDB.unlockAchievement(userId,"I am the Greatest");
-              if(history.getIsPractice() && !achievementDB.hasAchievementUnlocked(userId,"Practice Makes Perfect")) achievementDB.unlockAchievement(userId,"Practice Makes Perfect");
+              if(bestAttempt.getUserId() == userId && !achievementDB.hasAchievementUnlocked(userId,"I am the Greatest")) {
+                  achievementDB.unlockAchievement(userId,"I am the Greatest");
+                  mailDB.sendAchievementMail(system.getId(), userId,"I am the Greatest");
+              }
+              if(history.getIsPractice() && !achievementDB.hasAchievementUnlocked(userId,"Practice Makes Perfect")) {
+                  achievementDB.unlockAchievement(userId,"Practice Makes Perfect");
+                  mailDB.sendAchievementMail(system.getId(), userId,"Practice Makes Perfect");
+              }
             } catch (SQLException | ClassNotFoundException e) {
                 throw new RuntimeException(e);
             }

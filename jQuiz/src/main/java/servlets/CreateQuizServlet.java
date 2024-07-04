@@ -17,6 +17,8 @@ import java.io.InputStream;
 import java.sql.SQLException;
 import java.util.*;
 
+import static listeners.ContextListener.getDatabase;
+
 
 @MultipartConfig(maxFileSize = 16177215)
 public class CreateQuizServlet extends HttpServlet {
@@ -216,11 +218,24 @@ public class CreateQuizServlet extends HttpServlet {
         }
 
         try {
-            AchievementDatabase achievementDB = (AchievementDatabase) getServletContext().getAttribute(Database.ACHIEVEMENT_DB);
+            AchievementDatabase achievementDB = getDatabase(Database.ACHIEVEMENT_DB,request);
+            MailDatabase mailDB = getDatabase(Database.MAIL_DB,request);
+            UserDatabase userDB = getDatabase(Database.USER_DB,request);
+            User system = userDB.getByUsername("System");
             List<Quiz> bySameAuthor = quizDatabase.getQuizzesByAuthorId(author.getId());
-            if(bySameAuthor.size() == 1) achievementDB.unlockAchievement(author.getId(), "Amateur Author");
-            else if(bySameAuthor.size() == 5) achievementDB.unlockAchievement(author.getId(), "Prolific Author");
-            else if(bySameAuthor.size() == 10) achievementDB.unlockAchievement(author.getId(), "Prodigious Author");
+            if(bySameAuthor.size() == 1) {
+                achievementDB.unlockAchievement(author.getId(), "Amateur Author");
+                mailDB.sendAchievementMail(system.getId(), author.getId(),"Amateur Author");
+            }
+            else if(bySameAuthor.size() == 5) {
+                achievementDB.unlockAchievement(author.getId(), "Prolific Author");
+                mailDB.sendAchievementMail(system.getId(), author.getId(),"Prolific Author");
+
+            }
+            else if(bySameAuthor.size() == 10) {
+                achievementDB.unlockAchievement(author.getId(), "Prodigious Author");
+                mailDB.sendAchievementMail(system.getId(), author.getId(),"Prodigious Author");
+            }
         } catch (SQLException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }

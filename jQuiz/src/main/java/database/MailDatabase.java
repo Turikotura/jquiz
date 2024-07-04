@@ -3,9 +3,8 @@ package database;
 import models.Mail;
 import models.MailTypes;
 import org.apache.commons.dbcp2.BasicDataSource;
-
+import java.util.Date;
 import java.sql.*;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -91,5 +90,11 @@ public class  MailDatabase extends Database<Mail> {
             }
             return ps;
         }).isEmpty();
+    }
+
+    public void sendAchievementMail(int systemId, int userId, String achievementName) throws SQLException, ClassNotFoundException {
+        Mail unlockMail = new Mail(-1,systemId,userId,MailTypes.DEFAULT,-1,
+                "Congratulations! " + achievementName + " unlocked. Go to achievements page to see more.",new Date(),false);
+        add(unlockMail);
     }
 }

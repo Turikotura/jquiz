@@ -45,8 +45,10 @@
             <input type="submit" value="accept" class="friend-acpt-submit">
             <input type="submit" value="reject" class="friend-rjct-submit">
             <%
-                }
+                } else if(mail.getType() == MailTypes.QUIZ_REPORT) {
             %>
+                <a href="quizInfo.jsp?quizId=<%=mail.getQuizId()%>">Check out</a>
+            <% } %>
         </div>
     </form>
     <%
