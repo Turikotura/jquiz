@@ -190,4 +190,23 @@ public class QuizDatabase extends Database<Quiz>{
             return ps;
         });
     }
+
+    public List<Quiz> getQuizzesByTagName(String tagName) throws SQLException, ClassNotFoundException {
+        String query = String.format(
+                "SELECT q.* FROM %s q " +
+                        "JOIN %s qt ON q.id = qt.quiz_id " +
+                        "JOIN %s t ON qt.tag_id = t.id " +
+                        "WHERE t.name = ?",
+                databaseName, Database.TAG_TO_QUIZ_DB, Database.TAG_DB
+        );
+
+        return queryToList(query, (ps) -> {
+            try {
+                ps.setString(1, tagName);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+            return ps;
+        });
+    }
 }

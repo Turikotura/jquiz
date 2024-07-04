@@ -32,19 +32,16 @@
         }
     }
 
-    String categoryName = request.getParameter("category");
-    if (categoryName == null || categoryName.isEmpty()) {
+    String tagName = request.getParameter("name");
+    if (tagName == null || tagName.isEmpty()) {
         throw new IllegalArgumentException("Category name is required");
     }
 
     QuizDatabase quizDB = getDatabase(Database.QUIZ_DB, request);
-    List<Quiz> recentQuizzes;
-    List<Quiz> popularQuizzes;
-
+    List<Quiz> quizzes;
 
     try {
-        recentQuizzes = quizDB.getRecentQuizzesByCategory(5,categoryName);
-        popularQuizzes = quizDB.getPopularQuizzesByCategory(5, "TOTAL", categoryName);
+        quizzes = quizDB.getQuizzesByTagName(tagName);
     } catch (SQLException e) {
         throw new RuntimeException(e);
     }
@@ -53,41 +50,20 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Quizzes in <%= categoryName %></title>
+    <title>Quizzes with tag "<%= tagName %>"</title>
     <link href="style/general.css" rel="stylesheet" type="text/css">
-    <link href="style/category.css" rel="stylesheet" type="text/css">
+    <link href="style/tag.css" rel="stylesheet" type="text/css">
 </head>
 <body>
 <%@ include file="header.jsp" %>
 <%@ include file="mail.jsp" %>
 <main>
-    <h1>Quizzes in <%= categoryName %></h1>
+    <h1>Quizzes with tag "<%= tagName %>"</h1>
 
     <div class="quiz-list-wrapper">
-        <h2>Most Recent Quizzes</h2>
         <div class="quiz-boxes">
-            <% for (Quiz quiz : recentQuizzes) {
-            User author = userDB.getById(quiz.getAuthorId());%>
-            <div class="quiz-box">
-                <a href="quizInfo.jsp?quizId=<%= quiz.getId() %>">
-                    <div class="quiz-box-top" style="background-size: cover; background-image: url('image?type=quiz&quizId=<%= quiz.getId() %>');">
-                        <p class="quiz-box-name"><%= quiz.getTitle() %></p>
-                    </div>
-                    <div class="quiz-box-bot">
-                        <p><%= quiz.getTotalPlayCount() %> plays</p>
-                        <p><a href="profile.jsp?username=<%= author.getUsername()%>"><%= author.getUsername()%></a></p>
-                    </div>
-                </a>
-            </div>
-            <% } %>
-        </div>
-    </div>
-
-    <div class="quiz-list-wrapper">
-        <h2>Most Popular Quizzes</h2>
-        <div class="quiz-boxes">
-            <% for (Quiz quiz : popularQuizzes) {
-            User author = userDB.getById(quiz.getAuthorId());%>
+            <% for (Quiz quiz : quizzes) {
+                User author = userDB.getById(quiz.getAuthorId());%>
             <div class="quiz-box">
                 <a href="quizInfo.jsp?quizId=<%= quiz.getId() %>">
                     <div class="quiz-box-top" style="background-size: cover; background-image: url('image?type=quiz&quizId=<%= quiz.getId() %>');">

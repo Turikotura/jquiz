@@ -15,5 +15,5 @@ INSERT INTO users (id, username, is_admin, created_at, email, pass, image, image
 (1, 'luka', 1, '2024-06-16 13:30:17', 'luka@example.com', '70ccd9007338d6d81dd3b6271621b9cf9a97ea00', null, './database_structure/example_images/luka.jpg'),
 (2, 'ye', 0, '2024-06-16 13:35:17', 'ye@example.com', '123', null, './database_structure/example_images/ye.jpg'),
 (3, 'ana', 0, '2024-06-16 13:40:17', 'ana@example.com', '123', null, './database_structure/example_images/ana.jpeg'),
-(4, 'anon', 0, '2024-06-16 13:45:17', 'mike@example.com', '123', null, ''),
+(4, 'anon', 0, '2024-06-16 13:45:17', 'mike@example.com', '123', null, null),
 (5, 'jackie', 0, '2024-06-16 13:50:17', 'anna@example.com', '123', null, './database_structure/example_images/jackie.jpeg');

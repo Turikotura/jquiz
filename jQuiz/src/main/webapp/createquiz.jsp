@@ -185,6 +185,9 @@
             <option value="Other">Other</option>
         </select>
 
+        <label for="tags">Enter tags divided by space. (Optional):</label><br>
+        <input type="text" id="tags" name="tags"><br><br>
+
         <div class="block">
             <div>
                 <label for="time">Total Time (in seconds):</label><br>
@@ -232,9 +235,6 @@
         <input type="hidden" name="questionTypeIdentifier" value="fillBlank">
         <label>Question:</label><br>
         <input type="text" name="question"><br><br>
-
-        <label>Answer:</label><br>
-        <input type="text" name="answer"><br><br>
     </div>
 
     <div id="pictureResponseQuestionForm" style="display: none;">

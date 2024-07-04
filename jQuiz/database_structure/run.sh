@@ -19,5 +19,7 @@ mysql -u $DB_USER -p$DB_PASSWORD $DB_NAME < $SQL_DIR/achToUser.sql
 mysql -u $DB_USER -p$DB_PASSWORD $DB_NAME < $SQL_DIR/friends.sql
 mysql -u $DB_USER -p$DB_PASSWORD $DB_NAME < $SQL_DIR/history.sql
 mysql -u $DB_USER -p$DB_PASSWORD $DB_NAME < $SQL_DIR/mails.sql
+mysql -u $DB_USER -p$DB_PASSWORD $DB_NAME < $SQL_DIR/tags.sql
+mysql -u $DB_USER -p$DB_PASSWORD $DB_NAME < $SQL_DIR/tagToQuiz.sql
 
 mysql -u $DB_USER -p$DB_PASSWORD $DB_NAME < $SQL_DIR/quizzes_view.sql

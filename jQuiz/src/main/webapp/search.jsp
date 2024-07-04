@@ -16,6 +16,7 @@
     UserDatabase userDB = getDatabase(Database.USER_DB,request);
     HistoryDatabase historyDB = getDatabase(Database.HISTORY_DB,request);
     QuizDatabase quizDB = getDatabase(Database.QUIZ_DB,request);
+    TagDatabase tagDB = getDatabase(Database.TAG_DB,request);
 
     // Mail variables
     List<Mail> mails = new ArrayList<Mail>();
@@ -42,6 +43,7 @@
     List<Quiz> recentQuizzes = quizDB.searchRecentQuizzes(5, searchString);
     List<Quiz> popularQuizzes = quizDB.searchPopularQuizzes(5, "TOTAL", searchString);
     List<User> users = userDB.searchUsers(10, searchString);
+    List<Tag> tags = tagDB.searchTags(searchString);
 %>
 <head>
     <title>Searching: <%= searchString %></title>
@@ -140,6 +142,26 @@
             } %>
         </div>
     </section>
+
+    <section>
+        <h2>Tags</h2>
+        <div>
+            <% try {
+                if (tags == null) {
+                    throw new Exception("Tags not found in request.");
+                }
+
+                for (Tag tag : tags) {
+            %>
+            <a href="tag.jsp?name=<%= tag.getName()%>"><%= tag.getName() %></a>
+            <% }
+            } catch (Exception e) {
+                e.printStackTrace();
+                out.println("<p>Error loading tags: " + e.getMessage() + "</p>");
+            } %>
+        </div>
+    </section>
+
 </main>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script> <!-- jQuery for AJAX -->
