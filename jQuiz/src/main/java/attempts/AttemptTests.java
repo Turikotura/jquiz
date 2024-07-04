@@ -55,6 +55,14 @@ public class AttemptTests extends TestCase {
         QuestionAttempt qa = new QuestionAttempt(q, answers);
         return qa;
     }
+    private QuestionAttempt getFBQuestionAttempt(int qId, int quizId){
+        List<Answer> answers = new ArrayList<>();
+        answers.add(new Answer(answers.size(),"answer 1",true,qId,1));
+        answers.add(new Answer(answers.size(),"answer 2",true,qId,2));
+        Question q = new Question(qId, QuestionTypes.FILL_BLANK, String.format("question %d",qId),quizId,null,null,10);
+        QuestionAttempt qa = new QuestionAttempt(q, answers);
+        return qa;
+    }
     public Quiz getQuiz(int quizId, int time, boolean shouldMixUp){
         return new Quiz(quizId,String.format("quiz %d",quizId),-1,new Date(),time,null,null,shouldMixUp,true,true,true,"desc","category",null,0,0);
     }
@@ -78,6 +86,8 @@ public class AttemptTests extends TestCase {
         questionAttemptList.add(getMAMCQuestionAttempt(questionAttemptList.size(),0)); // 9
         questionAttemptList.add(getMAMCQuestionAttempt(questionAttemptList.size(),0)); // 10
         questionAttemptList.add(getMAMCQuestionAttempt(questionAttemptList.size(),0)); // 11
+        questionAttemptList.add(getFBQuestionAttempt(questionAttemptList.size(), 0)); // 12
+        questionAttemptList.add(getFBQuestionAttempt(questionAttemptList.size(), 0)); // 13
 
         // Check if correct answer amount is right
         assertEquals(2,questionAttemptList.get(0).getCorrectAnswersAmount()); // Mix
@@ -185,6 +195,20 @@ public class AttemptTests extends TestCase {
         writtenAnswers.add("wrong answer 2");
         questionAttemptList.get(11).setWrittenAnswers(writtenAnswers);
         assertEquals(0, questionAttemptList.get(11).evaluateAnswers());
+
+        // FB correct order
+        writtenAnswers.clear();
+        writtenAnswers.add("answer 1");
+        writtenAnswers.add("answer 2");
+        questionAttemptList.get(12).setWrittenAnswers(writtenAnswers);
+        assertEquals(10, questionAttemptList.get(12).evaluateAnswers());
+
+        // FB wrong order
+        writtenAnswers.clear();
+        writtenAnswers.add("answer 2");
+        writtenAnswers.add("answer 1");
+        questionAttemptList.get(13).setWrittenAnswers(writtenAnswers);
+        assertEquals(0, questionAttemptList.get(13).evaluateAnswers());
     }
 
     /**
