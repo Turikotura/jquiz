@@ -206,6 +206,12 @@ public class UserDatabase extends Database<User>{
         con.close();
     }
 
+    public List<User> getAllAdmins() throws SQLException, ClassNotFoundException {
+        String query = String.format("SELECT * FROM %s WHERE %s = TRUE;",
+                USER_DB,IS_ADMIN);
+        return queryToList(query, (ps) -> {return ps;});
+    }
+
     public void banUser(int userId) throws SQLException, ClassNotFoundException {
         String statement = String.format("INSERT INTO %s (%s) VALUES (?)",
                 BANNED_DB, USER_ID);

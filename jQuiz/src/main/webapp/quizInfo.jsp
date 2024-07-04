@@ -271,6 +271,23 @@
         </div>
     </div>
 
+    <% try {
+        if(curUser != null && !userDB.isUserAdmin(curUser.getId())) { %>
+            <div id="report">
+                <h3>Report quiz as inappropriate?</h3>
+                <form id="report-form" method="post" action="Report">
+                    <input hidden="hidden" type="number" name="quizId" value="<%=quizId%>">
+                    <textarea placeholder="Describe your issue here" id="report-text" name="report-text"></textarea><br>
+                    <input id="report-submit" type="submit" value="Report">
+                </form>
+            </div>
+        <% }
+    } catch (SQLException e) {
+        throw new RuntimeException(e);
+    } catch (ClassNotFoundException e) {
+        throw new RuntimeException(e);
+    } %>
+
     <hr>
     <%
         if(curUser != null){
