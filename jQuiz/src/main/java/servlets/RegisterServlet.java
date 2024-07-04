@@ -57,6 +57,9 @@ public class RegisterServlet extends HttpServlet {
                         "Password contain minimum of 8 symbols.\n" +
                         "Password must contain at least one uppercase letter, one lowercase letter and one digit.");
                 response.sendRedirect("register.jsp");
+            } else if(result == Register.EMAIL_BANNED) {
+                request.getServletContext().setAttribute("reg-message","You have been banned for violating our policies.");
+                response.sendRedirect("register.jsp");
             } else {
                 User newUser = new User(User.NO_ID,userName,new Date(),email, Security.getHash(password1),image,null);
                 ((UserDatabase)request.getServletContext().getAttribute(Database.USER_DB)).add(newUser);

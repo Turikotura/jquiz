@@ -88,4 +88,13 @@ public class AnswerDatabase extends Database<Answer> {
             return ps;
         });
     }
+    public void deleteAnswersByQuizId(int quizId) throws SQLException, ClassNotFoundException {
+        String curStatement = String.format("DELETE a FROM %s a JOIN %s q ON a.%s = q.%s WHERE q.%s = ?;",
+                ANSWER_DB, QUESTION_DB, QUESTION_ID, QuestionDatabase.ID, QuestionDatabase.QUIZ_ID);
+        Connection con = getConnection();
+        PreparedStatement ps = getStatement(curStatement,con);
+        ps.setInt(1,quizId);
+        ps.execute();
+        con.close();
+    }
 }

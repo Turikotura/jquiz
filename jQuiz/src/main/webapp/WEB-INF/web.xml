@@ -58,8 +58,24 @@
     <servlet-class>servlets.ImageServlet</servlet-class>
   </servlet>
   <servlet>
+    <servlet-name>RemoveQuiz</servlet-name>
+    <servlet-class>servlets.RemoveQuizServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>ManageUser</servlet-name>
+    <servlet-class>servlets.ManageUserServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>Announcement</servlet-name>
+    <servlet-class>servlets.AnnouncementServlet</servlet-class>
+  </servlet>
+  <servlet>
     <servlet-name>FriendsPage</servlet-name>
     <servlet-class>servlets.FriendsPageServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>AddComment</servlet-name>
+    <servlet-class>servlets.AddCommentServlet</servlet-class>
   </servlet>
 
   <servlet-mapping>
@@ -107,8 +123,24 @@
     <url-pattern>/image</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
+    <servlet-name>RemoveQuiz</servlet-name>
+    <url-pattern>/RemoveQuiz</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>ManageUser</servlet-name>
+    <url-pattern>/ManageUser</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>Announcement</servlet-name>
+    <url-pattern>/Announcement</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
     <servlet-name>FriendsPage</servlet-name>
     <url-pattern>/FriendsPage</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>AddComment</servlet-name>
+    <url-pattern>/AddComment</url-pattern>
   </servlet-mapping>
 
 </web-app>

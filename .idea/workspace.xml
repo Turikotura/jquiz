@@ -4,11 +4,34 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="11bfb6b0-0ab4-4275-9c08-73c2144412d4" name="Changes" comment="Achievements unlock logic added.">
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/a186986e-7e9d-4650-9ad0-5d280f91b85a.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/a186986e-7e9d-4650-9ad0-5d280f91b85a.xml" afterDir="false" />
+    <list default="true" id="11bfb6b0-0ab4-4275-9c08-73c2144412d4" name="Changes" comment="Announcement model and db added, minor fixes">
+      <change afterPath="$PROJECT_DIR$/jQuiz/src/main/java/models/Category.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/jQuiz/src/main/java/servlets/FriendsPageServlet.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/jQuiz/src/main/webapp/categories.jsp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/jQuiz/src/main/webapp/category.jsp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/jQuiz/src/main/webapp/friends.jsp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/jQuiz/src/main/webapp/style/categories.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/jQuiz/src/main/webapp/style/friends.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jQuiz/src/main/webapp/profile.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/src/main/webapp/profile.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jQuiz/src/main/webapp/style/profile.css" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/src/main/webapp/style/profile.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jQuiz/database_structure/friends.sql" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/database_structure/friends.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jQuiz/database_structure/quizzes.sql" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/database_structure/quizzes.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jQuiz/database_structure/quizzes_view.sql" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/database_structure/quizzes_view.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jQuiz/src/main/java/accounts/AccountTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/src/main/java/accounts/AccountTests.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jQuiz/src/main/java/accounts/Register.java" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/src/main/java/accounts/Register.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jQuiz/src/main/java/attempts/AttemptTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/src/main/java/attempts/AttemptTests.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jQuiz/src/main/java/database/QuizDatabase.java" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/src/main/java/database/QuizDatabase.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jQuiz/src/main/java/database/UserDatabase.java" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/src/main/java/database/UserDatabase.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jQuiz/src/main/java/listeners/ContextListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/src/main/java/listeners/ContextListener.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jQuiz/src/main/java/models/Quiz.java" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/src/main/java/models/Quiz.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jQuiz/src/main/java/servlets/CreateQuizServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/src/main/java/servlets/CreateQuizServlet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jQuiz/src/main/java/servlets/ImageServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/src/main/java/servlets/ImageServlet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jQuiz/src/main/java/servlets/RegisterServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/src/main/java/servlets/RegisterServlet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jQuiz/src/main/webapp/WEB-INF/web.xml" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/src/main/webapp/WEB-INF/web.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jQuiz/src/main/webapp/createquiz.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/src/main/webapp/createquiz.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jQuiz/src/main/webapp/header.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/src/main/webapp/header.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jQuiz/src/main/webapp/quizInfo.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/src/main/webapp/quizInfo.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jQuiz/src/main/webapp/quizResult.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/src/main/webapp/quizResult.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jQuiz/src/main/webapp/register.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/src/main/webapp/register.jsp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -23,9 +46,9 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Class" />
         <option value="Jsp File" />
         <option value="CSS File" />
+        <option value="Class" />
       </list>
     </option>
   </component>
@@ -55,7 +78,9 @@
   "keyToString": {
     "Database Script.achToUser.sql.executor": "Run",
     "Database Script.achievements.sql.executor": "Run",
+    "Database Script.announcements.sql.executor": "Run",
     "Database Script.answers.sql.executor": "Run",
+    "Database Script.banned_users.sql.executor": "Run",
     "Database Script.create_database.sql.executor": "Run",
     "Database Script.friends.sql.executor": "Run",
     "Database Script.history.sql.executor": "Run",
@@ -77,7 +102,7 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "Shell Script.run.sh.executor": "Run",
-    "git-widget-placeholder": "friend-system",
+    "git-widget-placeholder": "Merging admin",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "/home/giorgi/OOP/jmovies/jQuiz/src/main/java/AbstractQuestions",
     "list.type.of.created.stylesheet": "CSS",
@@ -115,7 +140,7 @@
       <command value="mvn tomcat7:run" />
     </option>
   </component>
-  <component name="RunManager" selected="Database Script.achievements.sql">
+  <component name="RunManager">
     <configuration name="achToUser.sql" type="DatabaseScript" editBeforeRun="true" nameIsGenerated="true">
       <script-file value="$PROJECT_DIR$/jQuiz/database_structure/achToUser.sql" />
       <script-mode>FILE</script-mode>
@@ -128,8 +153,20 @@
       <data-source id="a186986e-7e9d-4650-9ad0-5d280f91b85a" />
       <method v="2" />
     </configuration>
+    <configuration name="announcements.sql" type="DatabaseScript" editBeforeRun="true" nameIsGenerated="true">
+      <script-file value="$PROJECT_DIR$/jQuiz/database_structure/announcements.sql" />
+      <script-mode>FILE</script-mode>
+      <data-source id="a186986e-7e9d-4650-9ad0-5d280f91b85a" />
+      <method v="2" />
+    </configuration>
     <configuration name="answers.sql" type="DatabaseScript" editBeforeRun="true" nameIsGenerated="true">
       <script-file value="$PROJECT_DIR$/jQuiz/database_structure/answers.sql" />
+      <script-mode>FILE</script-mode>
+      <data-source id="a186986e-7e9d-4650-9ad0-5d280f91b85a" />
+      <method v="2" />
+    </configuration>
+    <configuration name="banned_users.sql" type="DatabaseScript" editBeforeRun="true" nameIsGenerated="true">
+      <script-file value="$PROJECT_DIR$/jQuiz/database_structure/banned_users.sql" />
       <script-mode>FILE</script-mode>
       <data-source id="a186986e-7e9d-4650-9ad0-5d280f91b85a" />
       <method v="2" />
@@ -179,13 +216,13 @@
     <configuration name="quizzes_view.sql" type="DatabaseScript" editBeforeRun="true" nameIsGenerated="true">
       <script-file value="$PROJECT_DIR$/jQuiz/database_structure/quizzes_view.sql" />
       <script-mode>FILE</script-mode>
-      <data-source id="57124589-df65-47f3-9eaf-06675d879e76" />
+      <data-source id="a186986e-7e9d-4650-9ad0-5d280f91b85a" />
       <method v="2" />
     </configuration>
     <configuration name="users.sql" type="DatabaseScript" editBeforeRun="true" nameIsGenerated="true">
       <script-file value="$PROJECT_DIR$/jQuiz/database_structure/users.sql" />
       <script-mode>FILE</script-mode>
-      <data-source id="57124589-df65-47f3-9eaf-06675d879e76" />
+      <data-source id="a186986e-7e9d-4650-9ad0-5d280f91b85a" />
       <method v="2" />
     </configuration>
   </component>
@@ -234,6 +271,8 @@
       <workItem from="1719382519655" duration="2036000" />
       <workItem from="1719642582592" duration="9663000" />
       <workItem from="1719919073977" duration="9104000" />
+      <workItem from="1719947911952" duration="1643000" />
+      <workItem from="1719999624259" duration="25378000" />
     </task>
     <task id="LOCAL-00001" summary="Objects for different question types added.">
       <option name="closed" value="true" />
@@ -387,7 +426,31 @@
       <option name="project" value="LOCAL" />
       <updated>1719922860311</updated>
     </task>
-    <option name="localTasksCounter" value="20" />
+    <task id="LOCAL-00020" summary="Admin can now delete quizzes">
+      <option name="closed" value="true" />
+      <created>1720018964471</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1720018964471</updated>
+    </task>
+    <task id="LOCAL-00021" summary="Admin can now promote or ban users.">
+      <option name="closed" value="true" />
+      <created>1720029699617</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1720029699617</updated>
+    </task>
+    <task id="LOCAL-00022" summary="Announcement model and db added, minor fixes">
+      <option name="closed" value="true" />
+      <created>1720039117306</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1720039117306</updated>
+    </task>
+    <option name="localTasksCounter" value="23" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -425,6 +488,9 @@
     <MESSAGE value="Removing friends added, more stats added to profile page." />
     <MESSAGE value="Achievements database updated, minor fixes." />
     <MESSAGE value="Achievements unlock logic added." />
-    <option name="LAST_COMMIT_MESSAGE" value="Achievements unlock logic added." />
+    <MESSAGE value="Admin can now delete quizzes" />
+    <MESSAGE value="Admin can now promote or ban users." />
+    <MESSAGE value="Announcement model and db added, minor fixes" />
+    <option name="LAST_COMMIT_MESSAGE" value="Announcement model and db added, minor fixes" />
   </component>
 </project>

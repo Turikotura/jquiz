@@ -114,7 +114,7 @@ public class QuizDatabase extends Database<Quiz>{
     }
     public Quiz getQuizById(int id) throws SQLException, ClassNotFoundException {
         String query = String.format("SELECT * FROM %s WHERE %s = ?",
-                databaseName,ID,id);
+                databaseName,ID);
         return queryToElement(query,(ps) -> {
             try{
                 ps.setInt(1,id);
@@ -164,6 +164,15 @@ public class QuizDatabase extends Database<Quiz>{
         });
     }
 
+    public void removeQuiz(int quizId) throws SQLException, ClassNotFoundException {
+        String curStatement = String.format("DELETE FROM %s WHERE %s = ?;",
+                QUIZ_DB, ID);
+        Connection con = getConnection();
+        PreparedStatement ps = getStatement(curStatement, con);
+        ps.setInt(1, quizId);
+        ps.execute();
+        con.close();
+    }
     public List<Quiz> getRecentQuizzesByCategory(int k, String category) throws SQLException, ClassNotFoundException {
         String query = String.format("SELECT * FROM %s WHERE %s = ? ORDER BY %s DESC LIMIT %d;",
                 databaseName, CATEGORY, CREATED_AT, k);
