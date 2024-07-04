@@ -1,0 +1,32 @@
+@import url("colorPalette.css");
+
+main {
+    text-align: center;
+}
+
+#comment-form {
+    background-color: var(--error-color);
+    border: 10px solid var(--error-color);
+}
+
+#comment-text {
+    width: 50%;
+    padding: 5px;
+    resize: vertical;
+}
+
+#comment-section {
+    width: 97%;
+    background-color: var(--secondary-color);
+    margin: auto;
+    margin-top: 20px;
+    padding: 5px 0px;
+}
+
+.comment-box {
+    background-color: var(--error-color);
+    margin: 10px;
+    text-align: left;
+    padding: 5px;
+    word-wrap: break-word;
+}

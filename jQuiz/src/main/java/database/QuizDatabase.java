@@ -114,7 +114,7 @@ public class QuizDatabase extends Database<Quiz>{
     }
     public Quiz getQuizById(int id) throws SQLException, ClassNotFoundException {
         String query = String.format("SELECT * FROM %s WHERE %s = ?",
-                databaseName,ID,id);
+                databaseName,ID);
         return queryToElement(query,(ps) -> {
             try{
                 ps.setInt(1,id);

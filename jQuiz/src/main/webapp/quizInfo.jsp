@@ -10,6 +10,7 @@
 <%@ page import="database.HistoryDatabase" %>
 <%@ page import="database.UserDatabase" %>
 <%@ page import="static listeners.ContextListener.getDatabase" %>
+<%@ page import="java.text.SimpleDateFormat" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html>
@@ -46,9 +47,18 @@
     Quiz curQuiz = null;
     User author = null;
 
+    CommentDatabase commentdb = getDatabase(Database.COMMENT_DB,request);
+    List<Comment> comments = new ArrayList<Comment>();
+    Map<Integer,String> commentUsernames = new HashMap<Integer,String>();
+
     try {
         curQuiz = quizDB.getById(quizId);
         author = userDB.getById(curQuiz.getAuthorId());
+
+        comments = commentdb.getCommentsByQuizId(quizId);
+        for(Comment comment : comments){
+            commentUsernames.put(comment.getId(),userDB.getById(comment.getUserId()).getUsername());
+        }
     } catch (SQLException e) {
         throw new RuntimeException(e);
     } catch (ClassNotFoundException e) {
@@ -58,7 +68,7 @@
 <head>
     <title><%=curQuiz.getTitle()%></title>
     <link href="style/general.css" rel="stylesheet" type="text/css">
-    <link href="style/quizResult.css" rel="stylesheet" type="text/css">
+    <link href="style/quizInfo.css" rel="stylesheet" type="text/css">
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const ids = ['recent','fastest','best'];
@@ -260,11 +270,77 @@
             } %>
         </div>
     </div>
-    </main>
-</div>
+
+    <hr>
+    <%
+        if(curUser != null){
+    %>
+    <form id="comment-form" method="post" action="AddComment">
+        <input hidden="hidden" type="number" name="quizId" value="<%=quizId%>">
+        <textarea id="comment-text" name="comment-text" form="comment-form"></textarea><br>
+        <input id="comment-submit" type="submit" value="Comment">
+    </form>
+    <%
+        }else{
+    %>
+    <p>log in first to comment</p>
+    <%
+        }
+    %>
+    <div id="comment-section">
+        <%
+            for (Comment comment : comments){
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                String formattedDateString = dateFormat.format(comment.getWrittenTime());
+        %>
+        <div class="comment-box">
+            <p><a href="profile.jsp?username=<%=commentUsernames.get(comment.getId())%>"><%=commentUsernames.get(comment.getId())%> : </a><%=comment.getText()%></p>
+            <p><%=formattedDateString%></p>
+        </div>
+        <%
+            }
+        %>
+    </div>
+</main>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script> <!-- jQuery for AJAX -->
 <script src="script/mailPanel.js"></script>
 <script src="script/general.js"></script>
+
+<script>
+    function addComment(resp){
+        $('#comment-section').prepend(
+            '<div class="comment-box">' +
+            '<p><a href="' + resp.username + '">' + resp.username + ' : </a>' + resp.text + '</p>' +
+            '<p>' + resp.time + '</p>' +
+            '</div>');
+    }
+
+    $(document).ready(function () {
+        $('#comment-submit').click(function (e) {
+            e.preventDefault();
+
+            var form = $(this).closest('form');
+            var formData = form.serializeArray();
+
+            $.ajax({
+                url: form.attr('action'),
+                type: form.attr('method'),
+                data: formData,
+                success: function(response) {
+                    console.log('Ajax request successful');
+                    //console.log(response);
+                    // Update the grade panel
+                    $("#comment-text").val('');
+                    addComment(response);
+                },
+                error: function(xhr, status, error) {
+                    console.error('Ajax request failed');
+                    console.error(error);
+                }
+            });
+        });
+    });
+</script>
 </body>
 </html>
