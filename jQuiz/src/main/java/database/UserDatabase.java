@@ -111,6 +111,26 @@ public class UserDatabase extends Database<User>{
         });
     }
 
+    public int getTotalUserCount() throws SQLException, ClassNotFoundException {
+        String query = String.format("SELECT COUNT(*) AS total_count FROM %s;",Database.USER_DB);
+        Connection con = getConnection();
+        PreparedStatement ps = getStatement(query,con);
+        ps.executeQuery();
+        ResultSet rs = ps.getResultSet();
+        rs.next();
+        return rs.getInt("total_count");
+    }
+
+    public int getBannedUserCount() throws SQLException, ClassNotFoundException {
+        String query = String.format("SELECT COUNT(*) AS banned_count FROM %s;",Database.BANNED_DB);
+        Connection con = getConnection();
+        PreparedStatement ps = getStatement(query,con);
+        ps.executeQuery();
+        ResultSet rs = ps.getResultSet();
+        rs.next();
+        return rs.getInt("banned_count");
+    }
+
     public User getByEmail(String email) throws SQLException, ClassNotFoundException {
         String query = String.format("SELECT * FROM %s WHERE %s = ?;",
                 databaseName, EMAIL);

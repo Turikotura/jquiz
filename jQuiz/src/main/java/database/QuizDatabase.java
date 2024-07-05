@@ -87,6 +87,15 @@ public class QuizDatabase extends Database<Quiz>{
                 rs.getInt(LAST_MONTH_PLAY_COUNT)
         );
     }
+    public int getTotalQuizCount() throws SQLException, ClassNotFoundException {
+        String query = String.format("SELECT COUNT(*) AS total_count FROM %s;",Database.QUIZ_DB);
+        Connection con = getConnection();
+        PreparedStatement ps = getStatement(query,con);
+        ps.executeQuery();
+        ResultSet rs = ps.getResultSet();
+        rs.next();
+        return rs.getInt("total_count");
+    }
     public List<Quiz> getQuizzesByAuthorId(int authorId) throws SQLException, ClassNotFoundException {
         String query = String.format("SELECT * FROM %s WHERE %s = ?",
                 databaseName, AUTHOR_ID);

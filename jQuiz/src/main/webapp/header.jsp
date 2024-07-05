@@ -1,12 +1,15 @@
 <%@ page import="models.User" %>
 <header>
+    <% UserDatabase statisticsUserDB = getDatabase(Database.USER_DB,request);%>
     <div class="logo">
         <img src="logo.png" alt="Website Logo">
     </div>
     <nav class="main-nav">
         <ul>
             <li><a href="/">Home</a></li>
-            <li><a href="/users.jsp">Users</a></li>
+            <% if(curUser != null && statisticsUserDB.isUserAdmin(curUser.getId())) { %>
+                <li><a href="/statistics.jsp">Statistics</a></li>
+            <% } %>
             <li><a href="/achievements.jsp">Achievements</a></li>
             <li><a href="/categories.jsp">Categories</a></li>
             <li><a href="/createquiz.jsp">Create quiz</a></li>
