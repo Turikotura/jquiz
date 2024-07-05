@@ -81,6 +81,10 @@
     <servlet-name>Report</servlet-name>
     <servlet-class>servlets.ReportServlet</servlet-class>
   </servlet>
+  <servlet>
+    <servlet-name>Rating</servlet-name>
+    <servlet-class>servlets.RatingServlet</servlet-class>
+  </servlet>
 
   <servlet-mapping>
     <servlet-name>FrontPageServlet</servlet-name>
@@ -149,5 +153,9 @@
   <servlet-mapping>
     <servlet-name>Report</servlet-name>
     <url-pattern>/Report</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>Rating</servlet-name>
+    <url-pattern>/Rating</url-pattern>
   </servlet-mapping>
 </web-app>

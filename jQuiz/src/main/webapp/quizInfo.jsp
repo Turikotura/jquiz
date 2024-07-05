@@ -51,6 +51,10 @@
     List<Comment> comments = new ArrayList<Comment>();
     Map<Integer,String> commentUsernames = new HashMap<Integer,String>();
 
+    RatingDatabase ratingdb = getDatabase(Database.RATING_DB,request);
+    Rating rating = null;
+    double averageRating = 0;
+
     try {
         curQuiz = quizDB.getById(quizId);
         author = userDB.getById(curQuiz.getAuthorId());
@@ -58,6 +62,20 @@
         comments = commentdb.getCommentsByQuizId(quizId);
         for(Comment comment : comments){
             commentUsernames.put(comment.getId(),userDB.getById(comment.getUserId()).getUsername());
+        }
+
+        if(curUser != null){
+            rating = ratingdb.getRatingByQuizAndUserId(quizId,curUser.getId());
+        }
+        List<Rating> quizRatings = ratingdb.getRatingsByQuizId(quizId);
+        int sum = 0;
+        int am = 0;
+        for(Rating r : quizRatings){
+            sum += r.getRating();
+            am++;
+        }
+        if(am > 0){
+            averageRating = (int) Math.rint((double) sum / am);
         }
     } catch (SQLException e) {
         throw new RuntimeException(e);
@@ -97,6 +115,19 @@
 <%@ include file="mail.jsp" %>
 <main>
     <h1><%=curQuiz.getTitle()%></h1>
+    <h2 id="avg-quiz-rating">
+        <%
+            for(int i = 1; i <= 5; i++){
+                String checkedRating = "";
+                if(i <= averageRating){
+                    checkedRating = "check-star";
+                }
+        %>
+        <a class="star <%=checkedRating%>">&#9733;</a>
+        <%
+            }
+        %>
+    </h2>
     <h3><%="Author: " + author.getUsername()%></h3>
     <h3><%="Created at: " + curQuiz.getCreatedAt().toString()%></h3>
     <h3><%="Time Limit: " + curQuiz.getMaxTime() + " seconds"%></h3>
@@ -288,6 +319,23 @@
         throw new RuntimeException(e);
     } %>
 
+    <h2 id="user-rating">
+        <%
+            for(int i = 1; i <= 5; i++){
+                String checkedRating = "";
+                String onClick = "";
+                if(curUser != null){
+                    onClick = "onclick=\"checkStar(" + i + ")\"";
+                }
+                if(rating != null && i <= rating.getRating()){
+                    checkedRating = "check-star";
+                }
+        %>
+        <a class="star <%=checkedRating%>" id="star-<%=i%>" <%=onClick%>>&#9733;</a>
+        <%
+            }
+        %>
+    </h2>
     <hr>
     <%
         if(curUser != null){
@@ -325,6 +373,33 @@
 <script src="script/general.js"></script>
 
 <script>
+    function checkStar(x){
+        $.ajax({
+            url: 'Rating',
+            method: 'POST',
+            data: {
+                rating: x,
+                quizId: <%=quizId%>,
+                userId: <%=curUser == null ? -1 : curUser.getId()%>
+            },
+            success: function(response) {
+                console.log('Ajax request successful');
+                console.log(response);
+                // Optionally, update UI or handle response
+                for(var i = 1; i <= 5; i++){
+                    $('#star-'+i).removeClass('check-star');
+                }
+                for(var i = 1; i <= x; i++){
+                    $('#star-'+i).addClass('check-star');
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error('Ajax request failed');
+                console.error(error);
+            }
+        })
+    }
+
     function addComment(resp){
         $('#comment-section').prepend(
             '<div class="comment-box">' +
