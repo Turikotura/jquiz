@@ -63,6 +63,15 @@ public class HistoryDatabase extends Database<History> {
                 rs.getBoolean(IS_PRACTICE)
         );
     }
+    public int getTotalAttemptCount() throws SQLException, ClassNotFoundException {
+        String query = String.format("SELECT COUNT(*) AS total_count FROM %s;",Database.HISTORY_DB);
+        Connection con = getConnection();
+        PreparedStatement ps = getStatement(query,con);
+        ps.executeQuery();
+        ResultSet rs = ps.getResultSet();
+        rs.next();
+        return rs.getInt("total_count");
+    }
     public List<History> getHistoryByUserId(int userId) throws SQLException, ClassNotFoundException {
         String query = String.format("SELECT * FROM %s WHERE %s = ?",
                 databaseName, USER_ID);
