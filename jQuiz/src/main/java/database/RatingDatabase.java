@@ -4,6 +4,7 @@ import models.Rating;
 import org.apache.commons.dbcp2.BasicDataSource;
 
 import java.sql.*;
+import java.util.List;
 
 public class RatingDatabase extends Database<Rating> {
     public static final String ID = "id";
@@ -63,6 +64,21 @@ public class RatingDatabase extends Database<Rating> {
                 throw new RuntimeException(e);
             }
             return ps;
+        });
+    }
+
+    public List<Rating> getRatingsByQuizId(int quizId) throws SQLException, ClassNotFoundException {
+        String query = String.format(
+                "SELECT * FROM %s WHERE %s = ?",
+                databaseName, QUIZ_ID
+        );
+        return queryToList(query, (ps) -> {
+           try{
+               ps.setInt(1,quizId);
+           }catch (SQLException e){
+               throw new RuntimeException(e);
+           }
+           return ps;
         });
     }
 }

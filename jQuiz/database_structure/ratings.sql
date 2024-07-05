@@ -12,5 +12,3 @@ CREATE TABLE ratings
     CHECK ( rating <= 5 )
 );
 
-ALTER table ratings add check (rating >= 0);
-alter table ratings add check ( rating <= 5 );

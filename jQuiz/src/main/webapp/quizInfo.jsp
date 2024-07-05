@@ -53,6 +53,7 @@
 
     RatingDatabase ratingdb = getDatabase(Database.RATING_DB,request);
     Rating rating = null;
+    double averageRating = 0;
 
     try {
         curQuiz = quizDB.getById(quizId);
@@ -65,6 +66,16 @@
 
         if(curUser != null){
             rating = ratingdb.getRatingByQuizAndUserId(quizId,curUser.getId());
+        }
+        List<Rating> quizRatings = ratingdb.getRatingsByQuizId(quizId);
+        int sum = 0;
+        int am = 0;
+        for(Rating r : quizRatings){
+            sum += r.getRating();
+            am++;
+        }
+        if(am > 0){
+            averageRating = (int) Math.rint((double) sum / am);
         }
     } catch (SQLException e) {
         throw new RuntimeException(e);
@@ -104,19 +115,15 @@
 <%@ include file="mail.jsp" %>
 <main>
     <h1><%=curQuiz.getTitle()%></h1>
-    <h2 id="ratings">
+    <h2 id="avg-quiz-rating">
         <%
             for(int i = 1; i <= 5; i++){
                 String checkedRating = "";
-                String onClick = "";
-                if(curUser != null){
-                    onClick = "onclick=\"checkStar(" + i + ")\"";
-                }
-                if(rating != null && i <= rating.getRating()){
+                if(i <= averageRating){
                     checkedRating = "check-star";
                 }
         %>
-        <a class="star <%=checkedRating%>" id="star-<%=i%>" <%=onClick%>>&#9733;</a>
+        <a class="star <%=checkedRating%>">&#9733;</a>
         <%
             }
         %>
@@ -312,6 +319,23 @@
         throw new RuntimeException(e);
     } %>
 
+    <h2 id="user-rating">
+        <%
+            for(int i = 1; i <= 5; i++){
+                String checkedRating = "";
+                String onClick = "";
+                if(curUser != null){
+                    onClick = "onclick=\"checkStar(" + i + ")\"";
+                }
+                if(rating != null && i <= rating.getRating()){
+                    checkedRating = "check-star";
+                }
+        %>
+        <a class="star <%=checkedRating%>" id="star-<%=i%>" <%=onClick%>>&#9733;</a>
+        <%
+            }
+        %>
+    </h2>
     <hr>
     <%
         if(curUser != null){
