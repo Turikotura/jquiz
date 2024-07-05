@@ -4,6 +4,8 @@ main {
     text-align: center;
 }
 
+/*comment*/
+
 #comment-form {
     background-color: var(--error-color);
     border: 10px solid var(--error-color);
@@ -29,4 +31,12 @@ main {
     text-align: left;
     padding: 5px;
     word-wrap: break-word;
+}
+
+/*ratings*/
+.star {
+    color: gray;
+}
+.check-star {
+    color: var(--secondary-color);
 }
