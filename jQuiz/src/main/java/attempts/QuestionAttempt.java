@@ -16,17 +16,17 @@ public class QuestionAttempt {
     // Used to not grade a question more than once
     private int gottenGrade;
     private boolean wasGraded;
+    private boolean isPractice;
 
     /**
      * Constructor for QuestionAttempt
      * @param question - question object
      * @param answers - answer list
      */
-    public QuestionAttempt(Question question, List<Answer> answers){
+    public QuestionAttempt(Question question, List<Answer> answers, boolean isPractice){
         this.question = question;
         this.writtenAnswers = new ArrayList<>();
         this.answers = new ArrayList<>(answers);
-        Collections.shuffle(this.answers);
         this.maxScore = question.getScore();
 
         Set<Answer> corAns = new HashSet<>();
@@ -39,6 +39,7 @@ public class QuestionAttempt {
 
         this.wasGraded = false;
         this.gottenGrade = 0;
+        this.isPractice = isPractice;
     }
 
     public Question getQuestion() {return question;}
@@ -47,13 +48,14 @@ public class QuestionAttempt {
     public int getMaxScore() {return maxScore;}
     public int getCorrectAnswersAmount() {return correctAnswersAmount;}
     public boolean getWasGraded() {return wasGraded;}
+    public boolean getIsPractice() {return isPractice;}
 
     /**
      * Sets the answers written by user
      * @param answers - answers written by user
      */
     public void setWrittenAnswers(List<String> answers) {
-        if(wasGraded) {
+        if(wasGraded && !isPractice) {
             return;
         }
         writtenAnswers = new ArrayList<>(answers);
@@ -64,7 +66,7 @@ public class QuestionAttempt {
      * @return the score of the question
      */
     public int evaluateAnswers(){
-        if(wasGraded){
+        if(wasGraded && !isPractice){
             return gottenGrade;
         }
         Set<Answer> corAns = new HashSet<>();
@@ -91,6 +93,9 @@ public class QuestionAttempt {
         }
         wasGraded = true;
         gottenGrade = maxScore * correctAnswers / correctAnswersAmount;
+        if(isPractice){
+            writtenAnswers.clear();
+        }
         return gottenGrade;
     }
 }

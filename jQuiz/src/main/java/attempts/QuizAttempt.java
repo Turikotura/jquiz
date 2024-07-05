@@ -2,9 +2,7 @@ package attempts;
 
 import models.Quiz;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 public class QuizAttempt {
     private int id;
@@ -16,7 +14,6 @@ public class QuizAttempt {
     private byte[] thumbnail;
     private boolean showAll;
     private boolean autoCorrect;
-    private boolean isPractice;
     private String description;
     private int maxScore;
     private List<QuestionAttempt> questions;
@@ -26,6 +23,9 @@ public class QuizAttempt {
     private int gottenGrade;
     private boolean wasGraded;
 
+    // Practice mode
+    private boolean isPractice;
+    private Map<Integer,Integer> qToAnsRow;
     /**
      * Constructor for QuizAttempt
      * @param id - id of the quiz attempt
@@ -42,7 +42,6 @@ public class QuizAttempt {
         this.thumbnail = quiz.getThumbnail();
         this.showAll = quiz.getShowAll();
         this.autoCorrect = quiz.getAutoCorrect();
-        this.isPractice = isPractice;
         this.description = quiz.getDescription();
         this.onQuestionIndex = 0;
 
@@ -53,6 +52,15 @@ public class QuizAttempt {
 
         this.wasGraded = false;
         this.gottenGrade = 0;
+
+        this.isPractice = isPractice;
+        this.qToAnsRow = null;
+        if(this.isPractice){
+            this.qToAnsRow = new HashMap<Integer,Integer>();
+            for(int i = 0; i < questions.size(); i++){
+                this.qToAnsRow.put(i,0);
+            }
+        }
     }
 
     public int getId() {return id;}
@@ -75,7 +83,7 @@ public class QuizAttempt {
      * @return quiz score
      */
     public int evaluateQuiz(){
-        if(wasGraded){
+        if(wasGraded && !isPractice){
             return gottenGrade;
         }
         wasGraded = true;
@@ -95,4 +103,30 @@ public class QuizAttempt {
      * @param ind - the new current question index
      */
     public void setOnQuestionIndex(int ind) {onQuestionIndex = ind;}
+
+    private void setOnQuestionIndexPractice(){
+        if(qToAnsRow.isEmpty()){
+            return;
+        }
+        List<Integer> keysAsArray = new ArrayList<>(qToAnsRow.keySet());
+        Random r = new Random();
+        onQuestionIndex = keysAsArray.get(r.nextInt(keysAsArray.size()));
+    }
+    public boolean evaluateQuestionPractice(int qid){
+        if(!isPractice){
+            return false;
+        }
+        int evalAns = questions.get(qid).evaluateAnswers();
+        boolean res = (evalAns == questions.get(qid).getMaxScore());
+        if(res){
+            qToAnsRow.put(qid,qToAnsRow.get(qid)+1);
+            if(qToAnsRow.get(qid) >= 3){
+                qToAnsRow.remove(qid);
+            }
+        }else{
+            qToAnsRow.put(qid,0);
+        }
+        setOnQuestionIndexPractice();
+        return res;
+    }
 }
