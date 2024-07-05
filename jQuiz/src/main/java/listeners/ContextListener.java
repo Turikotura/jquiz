@@ -75,6 +75,7 @@ public class ContextListener implements ServletContextListener {
         TagDatabase tagdb = new TagDatabase(basicDataSource, Database.TAG_DB);
         AnnouncementDatabase announcementdb = new AnnouncementDatabase(basicDataSource, Database.ANNOUNCEMENT_DB);
         CommentDatabase commentdb = new CommentDatabase(basicDataSource, Database.COMMENT_DB);
+        RatingDatabase ratingdb = new RatingDatabase(basicDataSource, Database.RATING_DB);
 
         servletContextEvent.getServletContext().setAttribute(Database.USER_DB, userdb);
         servletContextEvent.getServletContext().setAttribute(Database.QUIZ_DB, quizdb);
@@ -86,6 +87,7 @@ public class ContextListener implements ServletContextListener {
         servletContextEvent.getServletContext().setAttribute(Database.TAG_DB, tagdb);
         servletContextEvent.getServletContext().setAttribute(Database.ANNOUNCEMENT_DB, announcementdb);
         servletContextEvent.getServletContext().setAttribute(Database.COMMENT_DB, commentdb);
+        servletContextEvent.getServletContext().setAttribute(Database.RATING_DB, ratingdb);
     }
 
     @Override

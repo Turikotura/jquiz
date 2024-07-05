@@ -27,6 +27,7 @@ public abstract class Database<T> {
     public static final String TAG_TO_QUIZ_DB = "tagToQuiz";
     public static final String ANNOUNCEMENT_DB = "announcements";
     public static final String COMMENT_DB = "comments";
+    public static final String RATING_DB = "ratings";
 
     protected BasicDataSource dataSource;
     protected String databaseName;

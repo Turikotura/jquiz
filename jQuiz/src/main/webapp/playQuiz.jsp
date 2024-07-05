@@ -137,7 +137,14 @@
             <%
                 }
             %>
+
+                <%
+                    if(questionAttempt.getQuestion().getQuestionType() != QuestionTypes.FILL_BLANK){
+                %>
             <p style="float: left;"><%=questionAttempt.getQuestion().getText()%></p>
+                <%
+                    }
+                %>
             <p style="float: right"><%=questionAttempt.getMaxScore()%> pts</p>
             <br>
             <br>
@@ -174,6 +181,23 @@
             <label for="<%=i%>-<%=j%>"> <%=questionAttempt.getAnswers().get(j).getText()%></label><br>
             <%
                     }
+                }
+                else if(questionAttempt.getQuestion().getQuestionType() == QuestionTypes.FILL_BLANK){
+                    String text = " " + questionAttempt.getQuestion().getText() + " ";
+                    String[] split = text.split("\\{}");
+            %>
+                <p>
+                    <%
+                        for(int j = 0; j < split.length-1; j++){
+                    %>
+                    <%=split[j]%>
+                    <input <%=disabled%> name="<%=i%>-<%=j%>" type="text">
+                    <%
+                        }
+                    %>
+                    <%=split[split.length-1]%>
+                </p>
+                <%
                 }
                 else{
                     for(int j = 0; j < questionAttempt.getCorrectAnswersAmount(); j++){
