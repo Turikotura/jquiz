@@ -56,6 +56,9 @@ public class QuizAttempt {
         this.isPractice = isPractice;
         this.qToAnsRow = null;
         if(this.isPractice){
+            this.showAll = false;
+            this.autoCorrect = false;
+
             this.qToAnsRow = new HashMap<Integer,Integer>();
             for(int i = 0; i < questions.size(); i++){
                 this.qToAnsRow.put(i,0);
@@ -83,10 +86,13 @@ public class QuizAttempt {
      * @return quiz score
      */
     public int evaluateQuiz(){
-        if(wasGraded && !isPractice){
+        if(wasGraded){
             return gottenGrade;
         }
-        wasGraded = true;
+
+        if(!isPractice){
+            wasGraded = true;
+        }
         gottenGrade = 0;
 
         long timeBetween = ((new Date()).getTime() - startTime.getTime())/1000;
@@ -106,25 +112,27 @@ public class QuizAttempt {
 
     private void setOnQuestionIndexPractice(){
         if(qToAnsRow.isEmpty()){
+            onQuestionIndex = -1;
             return;
         }
         List<Integer> keysAsArray = new ArrayList<>(qToAnsRow.keySet());
         Random r = new Random();
         onQuestionIndex = keysAsArray.get(r.nextInt(keysAsArray.size()));
     }
-    public boolean evaluateQuestionPractice(int qid){
+    public boolean evaluateQuestionPractice(int qind){
         if(!isPractice){
             return false;
         }
-        int evalAns = questions.get(qid).evaluateAnswers();
-        boolean res = (evalAns == questions.get(qid).getMaxScore());
+
+        int evalAns = questions.get(qind).evaluateAnswers();
+        boolean res = (evalAns == questions.get(qind).getMaxScore());
         if(res){
-            qToAnsRow.put(qid,qToAnsRow.get(qid)+1);
-            if(qToAnsRow.get(qid) >= 3){
-                qToAnsRow.remove(qid);
+            qToAnsRow.put(qind,qToAnsRow.get(qind)+1);
+            if(qToAnsRow.get(qind) >= 3){
+                qToAnsRow.remove(qind);
             }
         }else{
-            qToAnsRow.put(qid,0);
+            qToAnsRow.put(qind,0);
         }
         setOnQuestionIndexPractice();
         return res;

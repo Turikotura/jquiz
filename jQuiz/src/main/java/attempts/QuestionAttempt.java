@@ -55,7 +55,7 @@ public class QuestionAttempt {
      * @param answers - answers written by user
      */
     public void setWrittenAnswers(List<String> answers) {
-        if(wasGraded && !isPractice) {
+        if(wasGraded) {
             return;
         }
         writtenAnswers = new ArrayList<>(answers);
@@ -66,7 +66,7 @@ public class QuestionAttempt {
      * @return the score of the question
      */
     public int evaluateAnswers(){
-        if(wasGraded && !isPractice){
+        if(wasGraded){
             return gottenGrade;
         }
         Set<Answer> corAns = new HashSet<>();
@@ -91,11 +91,12 @@ public class QuestionAttempt {
         if(question.getQuestionType() == QuestionTypes.MULTI_ANS_MULTI_CHOICE){
             correctAnswers = Math.max(0, correctAnswers-wrongAnswers);
         }
-        wasGraded = true;
-        gottenGrade = maxScore * correctAnswers / correctAnswersAmount;
         if(isPractice){
             writtenAnswers.clear();
+        }else{
+            wasGraded = true;
         }
+        gottenGrade = maxScore * correctAnswers / correctAnswersAmount;
         return gottenGrade;
     }
 }
