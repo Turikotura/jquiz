@@ -70,10 +70,12 @@ public class QuestionAttempt {
         Set<Answer> corAns = new HashSet<>();
         int wrongAnswers = 0;
 
-        for(String wrAns : writtenAnswers){
+        for(int i = 0; i < writtenAnswers.size(); i++){
+            String wrAns = writtenAnswers.get(i);
             boolean isRight = false;
-            for(Answer ans : answers){
-                if(ans.equals(wrAns) && ans.getIsCorrect()){
+            for(int j = 0; j < answers.size(); j++){
+                Answer ans = answers.get(j);
+                if(ans.equals(wrAns) && ans.getIsCorrect() && ((question.getQuestionType() != QuestionTypes.FILL_BLANK) || (i+1) == ans.getUniquenessId())){
                     corAns.add(ans);
                     isRight = true;
                 }
