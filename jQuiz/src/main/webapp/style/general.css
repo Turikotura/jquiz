@@ -256,3 +256,7 @@ a {
 .active-message {
     background-color: #643d00;
 }
+
+.hidden {
+    display: none;
+}
