@@ -217,9 +217,9 @@
         </select>
         <button type="button" onclick="addQuestion()">Add Question</button><br><br>
 
-        <div id="questionContainer"></div><br><br>
+        <div id="questionContainer"></div>
 
-        <input type="submit" value="Create Quiz">
+        <button type="submit">Create Quiz</button>
     </form>
 
     <div id="responseQuestionForm" style="display: none;">
