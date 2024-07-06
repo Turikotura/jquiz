@@ -11,6 +11,7 @@
 <%@ page import="database.UserDatabase" %>
 <%@ page import="static listeners.ContextListener.getDatabase" %>
 <%@ page import="java.text.SimpleDateFormat" %>
+<%@ page import="Statistics.Statistics" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html>
@@ -82,6 +83,16 @@
     } catch (ClassNotFoundException e) {
         throw new RuntimeException(e);
     }
+
+    List<History> allAttempts = historyDB.getHistoryByQuizId(quizId);
+    ArrayList<Integer> allGrades = new ArrayList();
+    ArrayList<Integer> allTimes = new ArrayList();
+    for(History curAttempt : allAttempts) {
+        allGrades.add(curAttempt.getGrade());
+        allTimes.add(curAttempt.getGrade());
+    }
+    double gradeAv = Statistics.getAverage(allGrades), gradeVar = Statistics.getVariance(allGrades),
+            timeAv = Statistics.getAverage(allTimes), timeVar = Statistics.getVariance(allTimes);
 %>
 <head>
     <title><%=curQuiz.getTitle()%></title>
@@ -162,6 +173,10 @@
     } catch (ClassNotFoundException e) {
         throw new RuntimeException(e);
     } %>
+
+    <h4>This quiz has been taken <%=allAttempts.size()%> times.</h4>
+    <h4>Average grade po all users on this quiz is <%=gradeAv%> with variance of <%=gradeVar%>.</h4>
+    <h4>Average time spent on all attempts of this quiz is <%=timeAv%> with variance of <%=timeVar%>.</h4>
 
     <h3>Your previous attempts</h3>
     <hr>
