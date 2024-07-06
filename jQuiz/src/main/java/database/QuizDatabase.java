@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class QuizDatabase extends Database<Quiz>{
+    // Constants for column names
     static final String ID = "id";
     static final String TITLE = "title";
     static final String AUTHOR_ID = "author_id";
@@ -29,6 +30,13 @@ public class QuizDatabase extends Database<Quiz>{
         super(dataSource, databaseName);
     }
 
+    /**
+     * Adds new entry to quizzes table
+     * @param quiz Quiz Object describing new row
+     * @return id of the new row
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
     @Override
     public int add(Quiz quiz) throws SQLException, ClassNotFoundException {
         String query = String.format(
@@ -65,6 +73,13 @@ public class QuizDatabase extends Database<Quiz>{
         }
     }
 
+    /**
+     * Assembles Quiz object from ResultSet
+     * @param rs ResultSet of quizzes table rows
+     * @return Quiz Object
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
     @Override
     protected Quiz getItemFromResultSet(ResultSet rs) throws SQLException, ClassNotFoundException {
         List<Integer> questionIds = new ArrayList<>();
@@ -87,6 +102,14 @@ public class QuizDatabase extends Database<Quiz>{
                 rs.getInt(LAST_MONTH_PLAY_COUNT)
         );
     }
+
+    /**
+     * Get quizzes created by user specified
+     * @param authorId Id of the author
+     * @return List of every quiz created by the user
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
     public List<Quiz> getQuizzesByAuthorId(int authorId) throws SQLException, ClassNotFoundException {
         String query = String.format("SELECT * FROM %s WHERE %s = ?",
                 databaseName, AUTHOR_ID);
@@ -100,6 +123,14 @@ public class QuizDatabase extends Database<Quiz>{
         });
     }
 
+    /**
+     * Get k most popular quizzes of all time or from last month
+     * @param k maximum number iq quizzes returned
+     * @param totalOrLastMonth equals LAST_MONTH if caller wants popular quizzes from the last month
+     * @return List of Quiz objects that are most popular
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
     public List<Quiz> getPopularQuizzes(int k, String totalOrLastMonth) throws SQLException, ClassNotFoundException {
         String lm = Objects.equals(totalOrLastMonth, "LAST_MONTH") ? LAST_MONTH_PLAY_COUNT : TOTAL_PLAY_COUNT;
         String query = String.format("SELECT * FROM %s ORDER BY " + lm + " DESC LIMIT %d;",
@@ -107,11 +138,26 @@ public class QuizDatabase extends Database<Quiz>{
         return queryToList(query, (ps) -> {return ps;});
     }
 
+    /**
+     * Get k most recently created quizzes
+     * @param k maximum number of quizzes returned
+     * @return List of most recently created quizzes with maximum length of k
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
     public List<Quiz> getRecentlyCreatedQuizzes(int k) throws SQLException, ClassNotFoundException {
         String query = String.format("SELECT * FROM %s ORDER BY %s DESC LIMIT %d",
                 databaseName, CREATED_AT, k);
         return queryToList(query, (ps) -> {return ps;});
     }
+
+    /**
+     * Get quiz with the id specified
+     * @param id Id of the quiz
+     * @return Quiz object with the id passed
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
     public Quiz getQuizById(int id) throws SQLException, ClassNotFoundException {
         String query = String.format("SELECT * FROM %s WHERE %s = ?",
                 databaseName,ID);
@@ -137,6 +183,14 @@ public class QuizDatabase extends Database<Quiz>{
         });
     }
 
+    /**
+     * Gets k most recent quizzes, such that it's name contains searchString as substring, ordered from most to least recent
+     * @param k Maximum number of quizzes returned
+     * @param searchString String we are searching by
+     * @return List of Quiz Objects, such that it's name contains searchString as substring, ordered from most to least recent
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
     public List<Quiz> searchRecentQuizzes(int k, String searchString) throws SQLException, ClassNotFoundException {
         String query = String.format("SELECT * FROM %s WHERE %s LIKE ? ORDER BY %s DESC LIMIT %d;",
                 databaseName, TITLE, CREATED_AT, k);
@@ -150,6 +204,15 @@ public class QuizDatabase extends Database<Quiz>{
         });
     }
 
+    /**
+     * Gets k most popular quizzes from last month or all time that contain the search string int the title
+     * @param k maximum number of quizzes returned
+     * @param totalOrLastMonth Is LAST_MONTH if caller wants quizzes from last month
+     * @param searchString String we are searching by
+     * @return List of k most popular quizzes that contain search string in the title
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
     public List<Quiz> searchPopularQuizzes(int k, String totalOrLastMonth, String searchString) throws SQLException, ClassNotFoundException {
         String lm = Objects.equals(totalOrLastMonth, "LAST_MONTH") ? LAST_MONTH_PLAY_COUNT : TOTAL_PLAY_COUNT;
         String query = String.format("SELECT * FROM %s WHERE %s LIKE ? ORDER BY " + lm + " DESC LIMIT %d;",
@@ -164,6 +227,12 @@ public class QuizDatabase extends Database<Quiz>{
         });
     }
 
+    /**
+     * Deletes the quiz specified
+     * @param quizId Id of the quiz to be deleted
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
     public void removeQuiz(int quizId) throws SQLException, ClassNotFoundException {
         String curStatement = String.format("DELETE FROM %s WHERE %s = ?;",
                 QUIZ_DB, ID);
@@ -173,6 +242,15 @@ public class QuizDatabase extends Database<Quiz>{
         ps.execute();
         con.close();
     }
+
+    /**
+     * Get k most recent quizzes from category specified
+     * @param k Maximum number of quizzes returned
+     * @param category Name of the category
+     * @return List of most recent quizzes from category passed
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
     public List<Quiz> getRecentQuizzesByCategory(int k, String category) throws SQLException, ClassNotFoundException {
         String query = String.format("SELECT * FROM %s WHERE %s = ? ORDER BY %s DESC LIMIT %d;",
                 databaseName, CATEGORY, CREATED_AT, k);
@@ -186,6 +264,15 @@ public class QuizDatabase extends Database<Quiz>{
         });
     }
 
+    /**
+     * Get k most popular quizzes from last month or all time from category specified
+     * @param k Maximum number of quizzes returned
+     * @param totalOrLastMonth Is LAST_MONTH if caller wants quizzes from last month
+     * @param category name of the category
+     * @return List of most popular quizzes of last month or all time from category specified
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
     public List<Quiz> getPopularQuizzesByCategory(int k, String totalOrLastMonth, String category) throws SQLException, ClassNotFoundException {
         String lm = Objects.equals(totalOrLastMonth, "LAST_MONTH") ? LAST_MONTH_PLAY_COUNT : TOTAL_PLAY_COUNT;
         String query = String.format("SELECT * FROM %s WHERE %s = ? ORDER BY " + lm + " DESC LIMIT %d;",
@@ -200,6 +287,13 @@ public class QuizDatabase extends Database<Quiz>{
         });
     }
 
+    /**
+     * Get quizzes with tag specified
+     * @param tagName Name of the tag
+     * @return List of quizzes with tag specified
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
     public List<Quiz> getQuizzesByTagName(String tagName) throws SQLException, ClassNotFoundException {
         String query = String.format(
                 "SELECT q.* FROM %s q " +
