@@ -27,6 +27,9 @@ public class QuestionAttempt {
         this.question = question;
         this.writtenAnswers = new ArrayList<>();
         this.answers = new ArrayList<>(answers);
+        if(question.getQuestionType() != QuestionTypes.FILL_BLANK){
+            Collections.shuffle(answers);
+        }
         this.maxScore = question.getScore();
 
         Set<Answer> corAns = new HashSet<>();
