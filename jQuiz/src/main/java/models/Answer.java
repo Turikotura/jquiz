@@ -24,7 +24,7 @@ public class Answer {
     public boolean equals(Object other) {return this.questionId == ((Answer)other).getQuestionId() && this.uniquenessId == ((Answer)other).getUniquenessId();}
     @Override
     public int hashCode(){return this.questionId ^ this.uniquenessId;}
-    public boolean equals(String other) {return this.text.equals(other);}
+    public boolean equals(String other) {return this.text.toLowerCase().equals(other.toLowerCase());}
 
     public void setQuestionId(int questionId) {
         this.questionId = questionId;

@@ -71,26 +71,41 @@ public class PlayQuizServlet extends HttpServlet {
             // Update answers
             quizAttempt.getQuestions().get(questionInd).setWrittenAnswers(answers);
 
-            if(httpServletRequest.getParameter("nextQ") != null){
-                // Move to next question
-                quizAttempt.setOnQuestionIndex(quizAttempt.getOnQuestionIndex()+1);
+            Map<String,Integer> respMap = new HashMap<>();
+
+            if(quizAttempt.getIsPractice()){
+                if(httpServletRequest.getParameter("eval") != null) {
+                    boolean wasRight = quizAttempt.evaluateQuestionPractice(questionInd);
+
+                    respMap.put("correct",wasRight ? 1 : 0);
+                    respMap.put("onQuestion",quizAttempt.getOnQuestionIndex());
+                }
+            }else{
+                if(httpServletRequest.getParameter("nextQ") != null){
+                    // Move to next question
+                    quizAttempt.setOnQuestionIndex(quizAttempt.getOnQuestionIndex()+1);
+                }
+
+                if(httpServletRequest.getParameter("eval") != null){
+                    // Evaluate question
+                    quizAttempt.getQuestions().get(questionInd).evaluateAnswers();
+
+                    respMap.put("qInd",questionInd);
+                    respMap.put("grade",quizAttempt.getQuestions().get(questionInd).evaluateAnswers());
+                    respMap.put("maxGrade",quizAttempt.getQuestions().get(questionInd).getMaxScore());
+                }
             }
 
-            if(httpServletRequest.getParameter("eval") != null){
-                // Evaluate question
-                quizAttempt.getQuestions().get(questionInd).evaluateAnswers();
-
-                Map<String,Integer> respMap = new HashMap<>();
-                respMap.put("qInd",questionInd);
-                respMap.put("grade",quizAttempt.getQuestions().get(questionInd).evaluateAnswers());
-                respMap.put("maxGrade",quizAttempt.getQuestions().get(questionInd).getMaxScore());
-                httpServletResponse.setContentType("application/json");
-                httpServletResponse.setCharacterEncoding("UTF-8");
-                httpServletResponse.getWriter().write(new Gson().toJson(respMap));
-            }
+            httpServletResponse.setContentType("application/json");
+            httpServletResponse.setCharacterEncoding("UTF-8");
+            httpServletResponse.getWriter().write(new Gson().toJson(respMap));
         }else{
             // Finish quiz
             History history = qac.finishQuiz(attemptId);
+            if(history == null){
+                httpServletResponse.sendRedirect("");
+                return;
+            }
             HistoryDatabase historydb = getDatabase(HistoryDatabase.HISTORY_DB, httpServletRequest);
 
             try {

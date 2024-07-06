@@ -1,9 +1,18 @@
 package attempts;
 
+import models.Answer;
 import models.History;
+import models.Question;
 import models.Quiz;
 
 import java.util.*;
+
+class IdSorter implements Comparator<QuestionAttempt>{
+    @Override
+    public int compare(QuestionAttempt o1, QuestionAttempt o2) {
+        return o1.getQuestion().getId() - o2.getQuestion().getId();
+    }
+}
 
 /**
  * Class to store quiz attempts
@@ -35,14 +44,21 @@ public class QuizAttemptsController {
     /**
      * Add a quiz the user is currently attempting
      * @param quiz - the quiz the user is attempting
-     * @param questions - the quiz questions
+     * @param practice - tells if the quiz attempt is a practice attempt
+     * @param questionToAnswers - the mapping of the quizzes questions to answers
      * @return the id of the quiz attempt
      */
-    public int attemptQuiz(Quiz quiz, boolean practice, List<QuestionAttempt> questions){
-        if(quiz.getShouldMixUp()){
-            Collections.shuffle(questions);
+    public int attemptQuiz(Quiz quiz, boolean practice, Map<Question,List<Answer>> questionToAnswers){
+        List<QuestionAttempt> qas = new ArrayList<>();
+        for(Map.Entry<Question,List<Answer>> entry : questionToAnswers.entrySet()){
+            qas.add(new QuestionAttempt(entry.getKey(),entry.getValue(),practice));
         }
-        QuizAttempt qa = new QuizAttempt(++lastId, quiz, practice, questions);
+        if(quiz.getShouldMixUp()){
+            Collections.shuffle(qas);
+        }else{
+            qas.sort(new IdSorter());
+        }
+        QuizAttempt qa = new QuizAttempt(++lastId, quiz, practice, qas);
         quizAttempts.put(lastId, qa);
         return lastId;
     }
@@ -55,7 +71,10 @@ public class QuizAttemptsController {
     public History finishQuiz(int qaId){
         Date done = new Date();
         QuizAttempt qa = quizAttempts.get(qaId);
-        History h = new History(-1,userId,qa.getQuizId(),qa.evaluateQuiz(),done,(int)(done.getTime()-qa.getStartTime().getTime()),qa.getIsPractice());
+        History h = null;
+        if(!qa.getIsPractice()){
+            h = new History(-1,userId,qa.getQuizId(),qa.evaluateQuiz(),done,(int)(done.getTime()-qa.getStartTime().getTime()),qa.getIsPractice());
+        }
         quizAttempts.remove(qaId);
         return h;
     }

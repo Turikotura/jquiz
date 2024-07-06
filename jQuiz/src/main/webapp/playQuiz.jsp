@@ -108,6 +108,17 @@
         }
     %>
 
+        <%--Practice result--%>
+        <%
+            if(quizAttempt.getIsPractice()){
+        %>
+        <div id="practice-result-panel">
+            <h3 id="practice-result-text">No Previous question</h3>
+        </div>
+        <%
+            }
+        %>
+
     <%--Question list--%>
     <%
         for(int i = 0; i < quizAttempt.getQuestions().size(); i++){
@@ -266,7 +277,6 @@
     // Move to next question on single question per page
     function moveToNext(sectionId){
         sectionId++;
-        console.log(sectionId);
         if(sectionId == <%=quizAttempt.getQuestions().size()%>){
             submitQuiz();
             return;
@@ -296,6 +306,19 @@
         form.submit();
     }
 
+    function usePracticeResponse(resp){
+        if(resp.correct == '1'){
+            $("#practice-result-text").text('Correct');
+            $("#practice-result-panel").removeClass('incorrect');
+            $("#practice-result-panel").addClass('correct');
+        }else{
+            $("#practice-result-text").text('Incorrect');
+            $("#practice-result-panel").removeClass('correct');
+            $("#practice-result-panel").addClass('incorrect');
+        }
+        moveToNext(resp.onQuestion-1);
+    }
+
 
 
     // --- AJAX calls ---
@@ -303,18 +326,52 @@
         // Logic for question submit buttons
         $('.send-question').click(function(e) {
 
-            if(<%=!quizAttempt.getShowAll()%>){
-                moveToNext(this.parentNode.parentNode.id);
+            <%
+            if(!quizAttempt.getShowAll() && !quizAttempt.getIsPractice()){
+            %>
+            moveToNext(this.parentNode.parentNode.id);
+            <%
             }
+            %>
 
             e.preventDefault();
 
             var form = $(this).closest('form');
             var formData = form.serializeArray();
 
+            <%
+            if(quizAttempt.getIsPractice()){
+            %>
+            // Find all input, textarea, and select elements within the form and clear their values
+            form.find('input, textarea, select').each(function() {
+                var elementType = $(this).attr('type'); // Get the type attribute of the element
+
+                // Clear the value based on element type
+                switch (elementType) {
+                    case 'text':
+                    case 'password':
+                    case 'textarea':
+                    case 'email':
+                    case 'number':
+                        $(this).val('');
+                        break;
+                    case 'checkbox':
+                    case 'radio':
+                        $(this).prop('checked', false);
+                        break;
+                    case 'select-one':
+                        $(this).prop('selectedIndex', 0);
+                        break;
+                    // Add more cases as needed for different types of inputs
+                }
+            });
+            <%
+            }
+            %>
+
             // If question submits need to be auto-corrected
             <%
-            if(quizAttempt.getAutoCorrect()){
+            if(quizAttempt.getAutoCorrect() || quizAttempt.getIsPractice()){
             %>
             formData.push({ name: 'eval', value: 'true' });
             <%
@@ -342,6 +399,13 @@
                     if(quizAttempt.getAutoCorrect()) {
                     %>
                     updateSingleQuestionResult(response);
+                    <%
+                    }
+                    %>
+                    <%
+                    if(quizAttempt.getIsPractice()){
+                    %>
+                    usePracticeResponse(response);
                     <%
                     }
                     %>
@@ -419,7 +483,13 @@
     var timerDuration = <%=timeLeft%>;
 
     // Start timer when page loads
+    <%
+    if(!quizAttempt.getIsPractice()){
+    %>
     startTimer(timerDuration, display);
+    <%
+    }
+    %>
 </script>
 <%
     }else{

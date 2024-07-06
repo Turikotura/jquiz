@@ -16,17 +16,20 @@ public class QuestionAttempt {
     // Used to not grade a question more than once
     private int gottenGrade;
     private boolean wasGraded;
+    private boolean isPractice;
 
     /**
      * Constructor for QuestionAttempt
      * @param question - question object
      * @param answers - answer list
      */
-    public QuestionAttempt(Question question, List<Answer> answers){
+    public QuestionAttempt(Question question, List<Answer> answers, boolean isPractice){
         this.question = question;
         this.writtenAnswers = new ArrayList<>();
         this.answers = new ArrayList<>(answers);
-        Collections.shuffle(this.answers);
+        if(question.getQuestionType() != QuestionTypes.FILL_BLANK){
+            Collections.shuffle(answers);
+        }
         this.maxScore = question.getScore();
 
         Set<Answer> corAns = new HashSet<>();
@@ -39,6 +42,7 @@ public class QuestionAttempt {
 
         this.wasGraded = false;
         this.gottenGrade = 0;
+        this.isPractice = isPractice;
     }
 
     public Question getQuestion() {return question;}
@@ -47,6 +51,7 @@ public class QuestionAttempt {
     public int getMaxScore() {return maxScore;}
     public int getCorrectAnswersAmount() {return correctAnswersAmount;}
     public boolean getWasGraded() {return wasGraded;}
+    public boolean getIsPractice() {return isPractice;}
 
     /**
      * Sets the answers written by user
@@ -89,7 +94,11 @@ public class QuestionAttempt {
         if(question.getQuestionType() == QuestionTypes.MULTI_ANS_MULTI_CHOICE){
             correctAnswers = Math.max(0, correctAnswers-wrongAnswers);
         }
-        wasGraded = true;
+        if(isPractice){
+            writtenAnswers.clear();
+        }else{
+            wasGraded = true;
+        }
         gottenGrade = maxScore * correctAnswers / correctAnswersAmount;
         return gottenGrade;
     }
