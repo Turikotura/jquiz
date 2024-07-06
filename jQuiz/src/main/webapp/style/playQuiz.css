@@ -89,3 +89,16 @@ h1, h3, h4 {
     width: 13%;
     text-align: center;
 }
+
+#practice-result-panel {
+    position: fixed;
+    left: 10px;
+    top: 200px;
+    background-color: var(--error-color);
+}
+.correct {
+    background-color: green;
+}
+.incorrect {
+    background-color: red;
+}
