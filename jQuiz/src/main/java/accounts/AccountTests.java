@@ -39,19 +39,19 @@ public class AccountTests extends TestCase {
     }
 
     public void testRegister() throws SQLException, ClassNotFoundException {
-        int result = Register.createNew("luka","mail@mail.com","pass","pass",null,userdb);
+        int result = Register.createNew("luka","mail@mail.com","pass","pass", userdb);
         assertEquals(Register.USERNAME_EXISTS,result);
 
-        result = Register.createNew("newluka","luka@example.com","pass","pass",null,userdb);
+        result = Register.createNew("newluka","luka@example.com","pass","pass", userdb);
         assertEquals(Register.EMAIL_EXISTS,result);
 
-        result = Register.createNew("newluka","newluka@example.com","pass1","pass2",null,userdb);
+        result = Register.createNew("newluka","newluka@example.com","pass1","pass2", userdb);
         assertEquals(Register.DIFF_PASSWORDS,result);
 
-        result = Register.createNew("newluka","newluka@example.com","pass1","pass1",null,userdb);
+        result = Register.createNew("newluka","newluka@example.com","pass1","pass1", userdb);
         assertEquals(Register.WEAK_PASSWORD,result);
 
-        result = Register.createNew("newluka","newluka@example.com","Strongpass1","Strongpass1",null,userdb);
+        result = Register.createNew("newluka","newluka@example.com","Strongpass1","Strongpass1", userdb);
         assertEquals(Register.SUCCESS,result);
     }
 
