@@ -30,7 +30,7 @@ header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 20px 30px;
+    padding: 20px 10px;
     background-color: var(--secondary-color);
     top: 0px;
     width: 100%;
@@ -119,6 +119,7 @@ a {
     margin: 0;
     padding: 0;
     display: flex;
+    flex-wrap: wrap;
 }
 
 .main-nav ul li, .mail-nav ul li, .auth-nav ul li {
@@ -126,15 +127,11 @@ a {
     padding: 10px;
 }
 
-.main-nav ul li:last-child, .mail-nav ul li:last-child, .auth-nav ul li:last-child {
-    margin-right: 0;
-}
-
 .main-nav ul li a, .mail-nav ul li a, .auth-nav ul li a, .auth-nav ul li input {
     text-decoration: none;
     color: var(--accent-color);
     background-color: var(--primary-color);
-    padding: 20px;
+    padding: 20px 13px;
     font-weight: bold;
     border: none;
     margin-top: 0px;
