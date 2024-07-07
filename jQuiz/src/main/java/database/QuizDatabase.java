@@ -104,6 +104,21 @@ public class QuizDatabase extends Database<Quiz>{
     }
 
     /**
+     * Get amount of quizzes the website hosts
+     * @return amount of quizzes the website hosts
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
+    public int getTotalQuizCount() throws SQLException, ClassNotFoundException {
+        String query = String.format("SELECT COUNT(*) AS total_count FROM %s;",Database.QUIZ_DB);
+        Connection con = getConnection();
+        PreparedStatement ps = getStatement(query,con);
+        ps.executeQuery();
+        ResultSet rs = ps.getResultSet();
+        rs.next();
+        return rs.getInt("total_count");
+    }
+    /**
      * Get quizzes created by user specified
      * @param authorId Id of the author
      * @return List of every quiz created by the user

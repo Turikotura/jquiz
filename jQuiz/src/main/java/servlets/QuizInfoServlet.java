@@ -16,7 +16,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static listeners.ContextListener.getDatabase;
 import static listeners.SessionListener.getQuizAttemptsController;
@@ -70,7 +72,7 @@ public class QuizInfoServlet extends HttpServlet {
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
-        List<QuestionAttempt> questionAttemptList = new ArrayList<>();
+        Map<Question,List<Answer>> qToA = new HashMap<Question,List<Answer>>();
         for(Question question : questionList){
             List<Answer> answerList = null;
             try {
@@ -80,10 +82,10 @@ public class QuizInfoServlet extends HttpServlet {
             } catch (ClassNotFoundException e) {
                 throw new RuntimeException(e);
             }
-            questionAttemptList.add(new QuestionAttempt(question,answerList));
+            qToA.put(question,answerList);
         }
 
-        int attemptId = qac.attemptQuiz(quiz,practice,questionAttemptList);
+        int attemptId = qac.attemptQuiz(quiz,practice,qToA);
 
         httpServletRequest.setAttribute("attemptId",attemptId);
         //httpServletRequest.getRequestDispatcher("/PlayQuiz").forward(httpServletRequest,httpServletResponse);

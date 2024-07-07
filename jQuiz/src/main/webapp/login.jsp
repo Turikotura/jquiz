@@ -43,30 +43,33 @@
 <head>
     <title>Log In</title>
     <link href="style/general.css" rel="stylesheet" type="text/css">
+    <link href="style/login.css" rel="stylesheet" type="text/css">
 </head>
 <body>
 
 <%@ include file="header.jsp" %>
 <%@ include file="mail.jsp" %>
 
-<main>
+<main class="login-main">
     <h1>Please log in.</h1>
-    <p>Enter your username and password:</p>
     <form action="Login" method="post">
-        <label>
-            Username:
-            <input type="input" name="user-name">
-        </label>
-        <p></p>
-        <label>
-            Password:
-            <input type="password" name="password">
-        </label>
-        <p><%=message%></p>
-        <input type="submit" value="Log in">
+        <div>
+            <label>
+                Username:
+                <input type="input" name="user-name">
+            </label>
+            <p></p>
+            <label>
+                Password:
+                <input type="password" name="password">
+            </label>
+            <p class="error-message"><%=message%></p>
+            <input type="submit" value="Log in">
+            <span>New around here? <a href="register.jsp">Create new account</a></span>
+        </div>
     </form>
-    <span>New around here? <a href="register.jsp">Create new account</a></span>
 </main>
+
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script> <!-- jQuery for AJAX -->
 <script src="script/mailPanel.js"></script>

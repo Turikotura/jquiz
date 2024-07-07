@@ -40,6 +40,7 @@ public class RegisterServlet extends HttpServlet {
                 image = outputStream.toByteArray();
             }
         }
+        image = image.length == 0 ? null : image;
 
         try {
             int result = Register.createNew(userName,email,password1,password2, (UserDatabase)request.getServletContext().getAttribute(Database.USER_DB));

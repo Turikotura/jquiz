@@ -140,6 +140,37 @@ public class UserDatabase extends Database<User>{
     }
 
     /**
+     * Get how many users the website has in total
+     * @return amount of users the website has in total
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
+    public int getTotalUserCount() throws SQLException, ClassNotFoundException {
+        String query = String.format("SELECT COUNT(*) AS total_count FROM %s;",Database.USER_DB);
+        Connection con = getConnection();
+        PreparedStatement ps = getStatement(query,con);
+        ps.executeQuery();
+        ResultSet rs = ps.getResultSet();
+        rs.next();
+        return rs.getInt("total_count");
+    }
+
+    /**
+     * Get how many users have been banned
+     * @return amount of users have been banned
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
+    public int getBannedUserCount() throws SQLException, ClassNotFoundException {
+        String query = String.format("SELECT COUNT(*) AS banned_count FROM %s;",Database.BANNED_DB);
+        Connection con = getConnection();
+        PreparedStatement ps = getStatement(query,con);
+        ps.executeQuery();
+        ResultSet rs = ps.getResultSet();
+        rs.next();
+        return rs.getInt("banned_count");
+    }
+    /**
      * Get user with email passed
      * @param email Email address of the user
      * @return User object with email specified

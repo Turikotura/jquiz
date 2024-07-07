@@ -1,6 +1,5 @@
 package database;
 
-import models.Achievement;
 import models.Announcement;
 import org.apache.commons.dbcp2.BasicDataSource;
 
@@ -68,13 +67,13 @@ public class AnnouncementDatabase extends Database<Announcement> {
     }
 
     /**
-     * Returns all announcements in the table
-     * @return List of every Announcement
+     * Get three latest announcements published
+     * @return List of three latest announcements
      * @throws SQLException
      * @throws ClassNotFoundException
      */
-    public List<Announcement> getAllAnnouncements() throws SQLException, ClassNotFoundException {
-        String query = String.format("SELECT * FROM %s ORDER BY %s DESC;", Database.ANNOUNCEMENT_DB, CREATED_AT);
+    public List<Announcement> getThreeAnnouncements() throws SQLException, ClassNotFoundException {
+        String query = String.format("SELECT * FROM %s ORDER BY %s DESC LIMIT 3;", Database.ANNOUNCEMENT_DB, CREATED_AT);
         return queryToList(query, (ps) -> {return ps;});
     }
 }

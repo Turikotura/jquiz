@@ -80,6 +80,21 @@ public class HistoryDatabase extends Database<History> {
     }
 
     /**
+     * Get total amount of times quizzes have been taken
+     * @return total amount of times quizzes have been taken
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
+    public int getTotalAttemptCount() throws SQLException, ClassNotFoundException {
+        String query = String.format("SELECT COUNT(*) AS total_count FROM %s;",Database.HISTORY_DB);
+        Connection con = getConnection();
+        PreparedStatement ps = getStatement(query,con);
+        ps.executeQuery();
+        ResultSet rs = ps.getResultSet();
+        rs.next();
+        return rs.getInt("total_count");
+    }
+    /**
      * Get entire history of user passed
      * @param userId Id of the user
      * @return List of History objects which belong to the user
@@ -138,6 +153,26 @@ public class HistoryDatabase extends Database<History> {
             try {
                 ps.setInt(1,userId);
                 ps.setInt(2,quizId);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+            return ps;
+        });
+    }
+
+    /**
+     * Get all attempts on the quiz specified
+     * @param quizId Id of the quiz
+     * @return List of every attempt made on the quiz specified
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
+    public List<History> getHistoryByQuizId(int quizId) throws SQLException, ClassNotFoundException {
+        String query = String.format("SELECT * FROM %s WHERE %s = ?",
+                databaseName, QUIZ_ID);
+        return queryToList(query, (ps) -> {
+            try {
+                ps.setInt(1,quizId);
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }

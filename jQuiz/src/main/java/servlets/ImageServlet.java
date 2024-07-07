@@ -51,12 +51,18 @@ public class ImageServlet extends HttpServlet {
                     imagePath = user.getImageUrl();
                     if (imagePath != null) {
                         java.nio.file.Path path = java.nio.file.Paths.get(imagePath);
+                        System.out.println(imagePath==null);
+                        System.out.println(imagePath);
                         if (java.nio.file.Files.exists(path)) {
                             imageBytes = java.nio.file.Files.readAllBytes(path);
                         }
                     }
                     if (imageBytes == null) {
                         imageBytes = user.getImage();
+                    }
+                    if (imageBytes == null) {
+                        java.nio.file.Path path = java.nio.file.Paths.get("./database_structure/example_images/default_user.png");
+                        imageBytes = java.nio.file.Files.readAllBytes(path);
                     }
                 }
             }else if(type.equals("question")){

@@ -11,6 +11,7 @@
 <%@ page import="database.UserDatabase" %>
 <%@ page import="static listeners.ContextListener.getDatabase" %>
 <%@ page import="java.text.SimpleDateFormat" %>
+<%@ page import="Statistics.Statistics" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html>
@@ -82,6 +83,16 @@
     } catch (ClassNotFoundException e) {
         throw new RuntimeException(e);
     }
+
+    List<History> allAttempts = historyDB.getHistoryByQuizId(quizId);
+    ArrayList<Integer> allGrades = new ArrayList();
+    ArrayList<Integer> allTimes = new ArrayList();
+    for(History curAttempt : allAttempts) {
+        allGrades.add(curAttempt.getGrade());
+        allTimes.add(curAttempt.getWritingTime());
+    }
+    double gradeAv = Statistics.getAverage(allGrades), gradeVar = Statistics.getVariance(allGrades),
+            timeAv = Statistics.getAverage(allTimes), timeVar = Statistics.getVariance(allTimes);
 %>
 <head>
     <title><%=curQuiz.getTitle()%></title>
@@ -132,18 +143,36 @@
     <h3><%="Created at: " + curQuiz.getCreatedAt().toString()%></h3>
     <h3><%="Time Limit: " + curQuiz.getMaxTime() + " seconds"%></h3>
     <p><%=curQuiz.getDescription()%></p>
-    <% if(curQuiz.getAllowPractice()) { %>
+    <%
+        if(curUser != null) {
+            if(curQuiz.getAllowPractice()){
+    %>
     <form action="QuizInfo" method="post">
         <input name="practice" type="hidden" value="true">
         <input name="quizId" type="hidden" value="<%=curQuiz.getId()%>">
         <input type="submit" value="Practice">
     </form>
-    <% } %>
+    <%
+            }
+    %>
     <form action="QuizInfo" method="post">
         <input name="practice" type="hidden" value="false">
         <input name="quizId" type="hidden" value="<%=curQuiz.getId()%>">
         <input type="submit" value="Start Quiz">
     </form>
+    <button id="challenge-button">Challenge</button>
+    <form id="challenge-form" class="hidden" action="SendChallenge" method="post">
+        <input hidden="hidden" name="quizId" type="hidden" value="<%=quizId%>">
+        <label>Send to :</label><br>
+        <input name="toUsername" type="text"><br>
+        <label>Text :</label><br>
+        <input name="message" type="text"><br>
+        <label id="send-challenge-error-label"></label><br>
+        <input id="send-challenge-button" type="submit" value="send">
+    </form>
+    <%
+        }
+    %>
 
     <%
         try {
@@ -162,6 +191,10 @@
     } catch (ClassNotFoundException e) {
         throw new RuntimeException(e);
     } %>
+
+    <h4>This quiz has been taken <%=allAttempts.size()%> times.</h4>
+    <h4>Average grade po all users on this quiz is <%=gradeAv%> with variance of <%=gradeVar%>.</h4>
+    <h4>Average time spent on all attempts of this quiz is <%=timeAv%> with variance of <%=timeVar%>.</h4>
 
     <h3>Your previous attempts</h3>
     <hr>
@@ -431,6 +464,65 @@
                     console.error(error);
                 }
             });
+        });
+
+        $('#send-challenge-button').click(function (e) {
+            e.preventDefault();
+
+            var form = $(this).closest('form');
+            var formData = form.serializeArray();
+
+            $.ajax({
+                url: form.attr('action'),
+                type: form.attr('method'),
+                data: formData,
+                success: function(response) {
+                    console.log('Ajax request successful');
+                    //console.log(response);
+                    // Update the grade panel
+                    // Find all input, textarea, and select elements within the form and clear their values
+                    if(response.errorText == null){
+                        $('#send-challenge-error-label').text('');
+                        form.find('input, textarea, select').each(function() {
+                            var elementType = $(this).attr('type'); // Get the type attribute of the element
+
+                            // Clear the value based on element type
+                            switch (elementType) {
+                                case 'text':
+                                case 'password':
+                                case 'textarea':
+                                case 'email':
+                                case 'number':
+                                    $(this).val('');
+                                    break;
+                                case 'checkbox':
+                                case 'radio':
+                                    $(this).prop('checked', false);
+                                    break;
+                                case 'select-one':
+                                    $(this).prop('selectedIndex', 0);
+                                    break;
+                                // Add more cases as needed for different types of inputs
+                            }
+                        });
+                    }else{
+                        $('#send-challenge-error-label').text(response.errorText);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('Ajax request failed');
+                    console.error(error);
+                }
+            });
+        });
+
+        $('#challenge-button').click(function (e) {
+            var form = $('#challenge-form');
+            if(form.hasClass('hidden')){
+                form.removeClass('hidden');
+            }else{
+                form.addClass('hidden');
+            }
         });
     });
 </script>
