@@ -43,31 +43,23 @@ public class RegisterServlet extends HttpServlet {
         image = image.length == 0 ? null : image;
 
         try {
-            int result = Register.createNew(userName,email,password1,password2,image,(UserDatabase)request.getServletContext().getAttribute(Database.USER_DB));
-            if(result == Register.USERNAME_EXISTS) {
-                request.getServletContext().setAttribute("reg-message","User named " + userName + " already exists.");
-                response.sendRedirect("register.jsp");
-            } else if(result == Register.EMAIL_EXISTS) {
-                request.getServletContext().setAttribute("reg-message","User with email " + email + " already exists.");
-                response.sendRedirect("register.jsp");
-            } else if(result == Register.DIFF_PASSWORDS) {
-                request.getServletContext().setAttribute("reg-message","Passwords don't match.");
-                response.sendRedirect("register.jsp");
-            } else if(result == Register.WEAK_PASSWORD) {
-                request.getServletContext().setAttribute("reg-message","Password is not strong enough.\n" +
-                        "Password contain minimum of 8 symbols.\n" +
-                        "Password must contain at least one uppercase letter, one lowercase letter and one digit.");
-                response.sendRedirect("register.jsp");
-            } else if(result == Register.EMAIL_BANNED) {
-                request.getServletContext().setAttribute("reg-message","You have been banned for violating our policies.");
-                response.sendRedirect("register.jsp");
-            } else {
+            int result = Register.createNew(userName,email,password1,password2, (UserDatabase)request.getServletContext().getAttribute(Database.USER_DB));
+            if(result == Register.USERNAME_EXISTS) request.getServletContext().setAttribute("reg-message","User named " + userName + " already exists.");
+            else if(result == Register.EMAIL_EXISTS) request.getServletContext().setAttribute("reg-message","User with email " + email + " already exists.");
+            else if(result == Register.DIFF_PASSWORDS) request.getServletContext().setAttribute("reg-message","Passwords don't match.");
+            else if(result == Register.WEAK_PASSWORD) request.getServletContext().setAttribute("reg-message","Password is not strong enough.\n" +
+                                                                                                                    "Password contain minimum of 8 symbols.\n" +
+                                                                                                                    "Password must contain at least one uppercase letter, one lowercase letter and one digit.");
+            else if(result == Register.EMAIL_BANNED) request.getServletContext().setAttribute("reg-message","You have been banned for violating our policies.");
+            else {
                 User newUser = new User(User.NO_ID,userName,new Date(),email, Security.getHash(password1),image,null);
                 ((UserDatabase)request.getServletContext().getAttribute(Database.USER_DB)).add(newUser);
                 newUser = ((UserDatabase)request.getServletContext().getAttribute(Database.USER_DB)).getByUsername(newUser.getUsername());
                 request.getSession().setAttribute("curUser",newUser);
-                response.sendRedirect("");
             }
+
+            if(result == Register.SUCCESS) response.sendRedirect("");
+            else response.sendRedirect("register.jsp");
         } catch (SQLException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }

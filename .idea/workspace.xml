@@ -4,34 +4,46 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="11bfb6b0-0ab4-4275-9c08-73c2144412d4" name="Changes" comment="Announcement model and db added, minor fixes">
-      <change afterPath="$PROJECT_DIR$/jQuiz/src/main/java/models/Category.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/jQuiz/src/main/java/servlets/FriendsPageServlet.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/jQuiz/src/main/webapp/categories.jsp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/jQuiz/src/main/webapp/category.jsp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/jQuiz/src/main/webapp/friends.jsp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/jQuiz/src/main/webapp/style/categories.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/jQuiz/src/main/webapp/style/friends.css" afterDir="false" />
+    <list default="true" id="11bfb6b0-0ab4-4275-9c08-73c2144412d4" name="Changes" comment="Comments added to Account related classes, some code cleanup">
+      <change afterPath="$PROJECT_DIR$/jQuiz/src/main/java/Statistics/Statistics.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/jQuiz/src/main/java/Statistics/StatisticsTests.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/jQuiz/src/main/java/servlets/SendChallengeServlet.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/jQuiz/src/main/webapp/statistics.jsp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/jQuiz/src/main/webapp/style/login.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/jQuiz/src/main/webapp/style/register.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/a186986e-7e9d-4650-9ad0-5d280f91b85a.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/a186986e-7e9d-4650-9ad0-5d280f91b85a.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jQuiz/database_structure/friends.sql" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/database_structure/friends.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jQuiz/database_structure/quizzes.sql" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/database_structure/quizzes.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jQuiz/database_structure/quizzes_view.sql" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/database_structure/quizzes_view.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jQuiz/src/main/java/accounts/AccountTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/src/main/java/accounts/AccountTests.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jQuiz/src/main/java/accounts/Register.java" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/src/main/java/accounts/Register.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jQuiz/database_structure/drop.sql" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/database_structure/drop.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jQuiz/database_structure/questions.sql" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/database_structure/questions.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jQuiz/database_structure/run.sh" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/database_structure/run.sh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jQuiz/database_structure/users.sql" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/database_structure/users.sql" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/jQuiz/src/main/java/attempts/AttemptTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/src/main/java/attempts/AttemptTests.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jQuiz/src/main/java/attempts/QuestionAttempt.java" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/src/main/java/attempts/QuestionAttempt.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jQuiz/src/main/java/attempts/QuizAttempt.java" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/src/main/java/attempts/QuizAttempt.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jQuiz/src/main/java/attempts/QuizAttemptsController.java" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/src/main/java/attempts/QuizAttemptsController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jQuiz/src/main/java/database/AnnouncementDatabase.java" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/src/main/java/database/AnnouncementDatabase.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jQuiz/src/main/java/database/DBInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/src/main/java/database/DBInfo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jQuiz/src/main/java/database/HistoryDatabase.java" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/src/main/java/database/HistoryDatabase.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/jQuiz/src/main/java/database/QuizDatabase.java" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/src/main/java/database/QuizDatabase.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/jQuiz/src/main/java/database/UserDatabase.java" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/src/main/java/database/UserDatabase.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jQuiz/src/main/java/listeners/ContextListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/src/main/java/listeners/ContextListener.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jQuiz/src/main/java/models/Quiz.java" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/src/main/java/models/Quiz.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jQuiz/src/main/java/servlets/CreateQuizServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/src/main/java/servlets/CreateQuizServlet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jQuiz/src/main/java/models/Answer.java" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/src/main/java/models/Answer.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/jQuiz/src/main/java/servlets/ImageServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/src/main/java/servlets/ImageServlet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jQuiz/src/main/java/servlets/PlayQuizServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/src/main/java/servlets/PlayQuizServlet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jQuiz/src/main/java/servlets/QuizInfoServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/src/main/java/servlets/QuizInfoServlet.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/jQuiz/src/main/java/servlets/RegisterServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/src/main/java/servlets/RegisterServlet.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/jQuiz/src/main/webapp/WEB-INF/web.xml" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/src/main/webapp/WEB-INF/web.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/jQuiz/src/main/webapp/createquiz.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/src/main/webapp/createquiz.jsp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/jQuiz/src/main/webapp/header.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/src/main/webapp/header.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jQuiz/src/main/webapp/index.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/src/main/webapp/index.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jQuiz/src/main/webapp/login.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/src/main/webapp/login.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jQuiz/src/main/webapp/playQuiz.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/src/main/webapp/playQuiz.jsp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/jQuiz/src/main/webapp/quizInfo.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/src/main/webapp/quizInfo.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jQuiz/src/main/webapp/quizResult.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/src/main/webapp/quizResult.jsp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/jQuiz/src/main/webapp/register.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/src/main/webapp/register.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jQuiz/src/main/webapp/style/colorPalette.css" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/src/main/webapp/style/colorPalette.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jQuiz/src/main/webapp/style/general.css" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/src/main/webapp/style/general.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jQuiz/src/main/webapp/style/index.css" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/src/main/webapp/style/index.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jQuiz/src/main/webapp/style/playQuiz.css" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/src/main/webapp/style/playQuiz.css" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -102,7 +114,7 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "Shell Script.run.sh.executor": "Run",
-    "git-widget-placeholder": "Merging admin",
+    "git-widget-placeholder": "Merging documentation",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "/home/giorgi/OOP/jmovies/jQuiz/src/main/java/AbstractQuestions",
     "list.type.of.created.stylesheet": "CSS",
@@ -140,7 +152,7 @@
       <command value="mvn tomcat7:run" />
     </option>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Database Script.achievements.sql">
     <configuration name="achToUser.sql" type="DatabaseScript" editBeforeRun="true" nameIsGenerated="true">
       <script-file value="$PROJECT_DIR$/jQuiz/database_structure/achToUser.sql" />
       <script-mode>FILE</script-mode>
@@ -273,6 +285,8 @@
       <workItem from="1719919073977" duration="9104000" />
       <workItem from="1719947911952" duration="1643000" />
       <workItem from="1719999624259" duration="25378000" />
+      <workItem from="1720256243281" duration="11157000" />
+      <workItem from="1720372456008" duration="3741000" />
     </task>
     <task id="LOCAL-00001" summary="Objects for different question types added.">
       <option name="closed" value="true" />
@@ -450,7 +464,23 @@
       <option name="project" value="LOCAL" />
       <updated>1720039117306</updated>
     </task>
-    <option name="localTasksCounter" value="23" />
+    <task id="LOCAL-00023" summary="Comments added to Database Objects">
+      <option name="closed" value="true" />
+      <created>1720273682328</created>
+      <option name="number" value="00023" />
+      <option name="presentableId" value="LOCAL-00023" />
+      <option name="project" value="LOCAL" />
+      <updated>1720273682328</updated>
+    </task>
+    <task id="LOCAL-00024" summary="Comments added to Account related classes, some code cleanup">
+      <option name="closed" value="true" />
+      <created>1720376319386</created>
+      <option name="number" value="00024" />
+      <option name="presentableId" value="LOCAL-00024" />
+      <option name="project" value="LOCAL" />
+      <updated>1720376319386</updated>
+    </task>
+    <option name="localTasksCounter" value="25" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -491,6 +521,8 @@
     <MESSAGE value="Admin can now delete quizzes" />
     <MESSAGE value="Admin can now promote or ban users." />
     <MESSAGE value="Announcement model and db added, minor fixes" />
-    <option name="LAST_COMMIT_MESSAGE" value="Announcement model and db added, minor fixes" />
+    <MESSAGE value="Comments added to Database Objects" />
+    <MESSAGE value="Comments added to Account related classes, some code cleanup" />
+    <option name="LAST_COMMIT_MESSAGE" value="Comments added to Account related classes, some code cleanup" />
   </component>
 </project>

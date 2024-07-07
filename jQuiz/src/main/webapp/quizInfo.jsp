@@ -89,7 +89,7 @@
     ArrayList<Integer> allTimes = new ArrayList();
     for(History curAttempt : allAttempts) {
         allGrades.add(curAttempt.getGrade());
-        allTimes.add(curAttempt.getGrade());
+        allTimes.add(curAttempt.getWritingTime());
     }
     double gradeAv = Statistics.getAverage(allGrades), gradeVar = Statistics.getVariance(allGrades),
             timeAv = Statistics.getAverage(allTimes), timeVar = Statistics.getVariance(allTimes);

@@ -28,6 +28,13 @@ public class UserDatabase extends Database<User>{
         super(dataSource, databaseName);
     }
 
+    /**
+     * Adds new entry to users table
+     * @param toAdd User Object describing new row
+     * @return id of the new row
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
     @Override
     public int add(User toAdd) throws SQLException, ClassNotFoundException {
         String query = String.format(
@@ -58,6 +65,13 @@ public class UserDatabase extends Database<User>{
         }
     }
 
+    /**
+     * Assembles User object from ResultSet
+     * @param rs ResultSet of users table rows
+     * @return User Object
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
     @Override
     protected User getItemFromResultSet(ResultSet rs) throws SQLException, ClassNotFoundException {
         return new User(
@@ -71,6 +85,13 @@ public class UserDatabase extends Database<User>{
         );
     }
 
+    /**
+     * Get friends of the user specified
+     * @param userId Id of the user
+     * @return List of Users that are friends with user specified
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
     public List<User> getFriendsByUserId(int userId) throws SQLException, ClassNotFoundException {
         String query = String.format("SELECT * FROM %s where %s IN (SELECT %s from %s where %s = ?)",
                 Database.USER_DB, ID, USER2_ID, Database.FRIEND_DB, USER1_ID);
@@ -98,6 +119,13 @@ public class UserDatabase extends Database<User>{
         return queryToList(query, (ps) -> {return ps;});
     }
 
+    /**
+     * Get user by their username
+     * @param username Name of the user
+     * @return User object with username specified
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
     public User getByUsername(String username) throws SQLException, ClassNotFoundException {
         String query = String.format("SELECT * FROM %s WHERE %s = ?;",
                 Database.USER_DB,USERNAME);
@@ -111,6 +139,12 @@ public class UserDatabase extends Database<User>{
         });
     }
 
+    /**
+     * Get how many users the website has in total
+     * @return amount of users the website has in total
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
     public int getTotalUserCount() throws SQLException, ClassNotFoundException {
         String query = String.format("SELECT COUNT(*) AS total_count FROM %s;",Database.USER_DB);
         Connection con = getConnection();
@@ -121,6 +155,12 @@ public class UserDatabase extends Database<User>{
         return rs.getInt("total_count");
     }
 
+    /**
+     * Get how many users have been banned
+     * @return amount of users have been banned
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
     public int getBannedUserCount() throws SQLException, ClassNotFoundException {
         String query = String.format("SELECT COUNT(*) AS banned_count FROM %s;",Database.BANNED_DB);
         Connection con = getConnection();
@@ -130,7 +170,13 @@ public class UserDatabase extends Database<User>{
         rs.next();
         return rs.getInt("banned_count");
     }
-
+    /**
+     * Get user with email passed
+     * @param email Email address of the user
+     * @return User object with email specified
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
     public User getByEmail(String email) throws SQLException, ClassNotFoundException {
         String query = String.format("SELECT * FROM %s WHERE %s = ?;",
                 databaseName, EMAIL);
@@ -144,6 +190,14 @@ public class UserDatabase extends Database<User>{
         });
     }
 
+    /**
+     * Get k users whose usernames have searchString as substring
+     * @param k maximum nmber of users
+     * @param searchString String we are searching by
+     * @returnList of users whose usernames have searchString as substring
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
     public List<User> searchUsers(int k, String searchString) throws SQLException, ClassNotFoundException {
         String query = String.format("SELECT * FROM %s WHERE %s LIKE ? LIMIT %d",
                 databaseName, USERNAME, k);
@@ -157,6 +211,14 @@ public class UserDatabase extends Database<User>{
         });
     }
 
+    /**
+     * Add two users as friends
+     * @param from Id of the first user
+     * @param to Id of the second user
+     * @return true if insertion was successful, false otherwise
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
     public boolean addFriend(int from, int to) throws SQLException, ClassNotFoundException {
         String first = String.format("INSERT INTO %s ( %s, %s ) VALUES ( ?, ? )",
                 Database.FRIEND_DB, USER1_ID, USER2_ID);
@@ -175,6 +237,15 @@ public class UserDatabase extends Database<User>{
         con.close();
         return res;
     }
+
+    /**
+     * Check if two users are friends
+     * @param from Id of user1
+     * @param to Id of user2
+     * @return true if they are friends, false otherwise
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
     public boolean checkAreFriends(int from, int to) throws SQLException, ClassNotFoundException {
         String query = String.format("SELECT * FROM %s WHERE %s = ? AND %s = ?",
                 Database.FRIEND_DB, USER1_ID, USER2_ID);
@@ -203,6 +274,14 @@ public class UserDatabase extends Database<User>{
         con.close();
         return res;
     }
+
+    /**
+     * Check if the user is an admin
+     * @param userId Id of the user
+     * @return true if the user is admin, false otherwise
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
     public boolean isUserAdmin(int userId) throws SQLException, ClassNotFoundException {
         String query = String.format("SELECT * FROM %s WHERE %s = ? AND %s = TRUE;",
                 USER_DB, ID, IS_ADMIN);
@@ -216,6 +295,12 @@ public class UserDatabase extends Database<User>{
         return res;
     }
 
+    /**
+     * Appoint user as an admin
+     * @param userId Id of the user
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
     public void promoteUserToAdmin(int userId) throws SQLException, ClassNotFoundException {
         String statement = String.format("UPDATE %s SET %s = TRUE WHERE %s = ?;",
                 USER_DB, IS_ADMIN, ID);
@@ -226,12 +311,24 @@ public class UserDatabase extends Database<User>{
         con.close();
     }
 
+    /**
+     * Get all the admins of the website
+     * @return List of all Users who are admins
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
     public List<User> getAllAdmins() throws SQLException, ClassNotFoundException {
         String query = String.format("SELECT * FROM %s WHERE %s = TRUE;",
                 USER_DB,IS_ADMIN);
         return queryToList(query, (ps) -> {return ps;});
     }
 
+    /**
+     * Ban the user specified
+     * @param userId Id of the user to ban
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
     public void banUser(int userId) throws SQLException, ClassNotFoundException {
         String statement = String.format("INSERT INTO %s (%s) VALUES (?)",
                 BANNED_DB, USER_ID);
@@ -242,6 +339,14 @@ public class UserDatabase extends Database<User>{
         con.close();
         removeFromFriendsDB(userId);
     }
+
+    /**
+     * Check if the user is banned
+     * @param username Username of the user
+     * @return true if the user is banned, false otherwise
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
     public boolean isUsernameBanned(String username) throws SQLException, ClassNotFoundException {
         String query = String.format("SELECT * FROM %s b JOIN %s u ON b.%s = u.%s WHERE u.%s = ?;",
                 BANNED_DB, USER_DB, USER_ID, ID, USERNAME);
@@ -254,6 +359,13 @@ public class UserDatabase extends Database<User>{
         return isBanned;
     }
 
+    /**
+     * Check if the user with email passed is banned
+     * @param email Email address of the user
+     * @return true if the user is banned, false otherwise
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
     public boolean isEmailBanned(String email) throws SQLException, ClassNotFoundException {
         String query = String.format("SELECT * FROM %s b JOIN %s u ON b.%s = u.%s WHERE u.%s = ?;",
                 BANNED_DB, USER_DB, USER_ID, ID, EMAIL);
@@ -266,6 +378,12 @@ public class UserDatabase extends Database<User>{
         return isBanned;
     }
 
+    /**
+     * Remove user from the friends database
+     * @param userId Id of the user to be removed
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
     private void removeFromFriendsDB(int userId) throws SQLException, ClassNotFoundException {
         String statement = String.format("DELETE FROM %s WHERE %s = ? OR %s = ?;",
                 FRIEND_DB, USER1_ID, USER2_ID);

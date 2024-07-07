@@ -7,6 +7,7 @@ import java.sql.*;
 import java.util.List;
 
 public class RatingDatabase extends Database<Rating> {
+    // Constants for column names
     public static final String ID = "id";
     public static final String RATING = "rating";
     public static final String QUIZ_ID = "quiz_id";
@@ -14,6 +15,14 @@ public class RatingDatabase extends Database<Rating> {
     public RatingDatabase(BasicDataSource dataSource, String databaseName) {
         super(dataSource, databaseName);
     }
+
+    /**
+     * Adds new entry to ratings table
+     * @param toAdd Rating Object describing new row
+     * @return id of the new row
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
     @Override
     public int add(Rating toAdd) throws SQLException, ClassNotFoundException {
         String query = String.format(
@@ -41,6 +50,13 @@ public class RatingDatabase extends Database<Rating> {
         }
     }
 
+    /**
+     * Assembles Rating object from ResultSet
+     * @param rs ResultSet of ratings table rows
+     * @return rating Object
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
     @Override
     protected Rating getItemFromResultSet(ResultSet rs) throws SQLException, ClassNotFoundException {
         return new Rating(
@@ -51,6 +67,14 @@ public class RatingDatabase extends Database<Rating> {
         );
     }
 
+    /**
+     * Get rating user left on the quiz specified
+     * @param quizId Id of the quiz
+     * @param userId Id of the user
+     * @return Rating user left on the quiz
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
     public Rating getRatingByQuizAndUserId(int quizId, int userId) throws SQLException, ClassNotFoundException {
         String query = String.format(
                 "SELECT * FROM %s WHERE %s = ? AND %s = ?",
@@ -67,6 +91,13 @@ public class RatingDatabase extends Database<Rating> {
         });
     }
 
+    /**
+     * Get every rating left on the quiz
+     * @param quizId Id of the quiz
+     * @return List of Rating objects left on the quiz
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
     public List<Rating> getRatingsByQuizId(int quizId) throws SQLException, ClassNotFoundException {
         String query = String.format(
                 "SELECT * FROM %s WHERE %s = ?",

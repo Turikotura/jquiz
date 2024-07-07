@@ -25,6 +25,13 @@ public class QuestionDatabase extends Database<Question> {
         super(dataSource, databaseName);
     }
 
+    /**
+     * Adds new entry to questions table
+     * @param question Question Object describing new row
+     * @return Id of the new row
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
     @Override
     public int add(Question question) throws SQLException, ClassNotFoundException {
         String query = String.format(
@@ -55,6 +62,13 @@ public class QuestionDatabase extends Database<Question> {
         }
     }
 
+    /**
+     * Assembles Question object from ResultSet
+     * @param rs ResultSet of questions table rows
+     * @return Question object
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
     @Override
     protected Question getItemFromResultSet(ResultSet rs) throws SQLException, ClassNotFoundException {
         return new Question(
@@ -68,6 +82,13 @@ public class QuestionDatabase extends Database<Question> {
         );
     }
 
+    /**
+     * Get all the questions belonging to the quiz specified
+     * @param quizId Id of the quiz
+     * @return List of Questions belonging to the quiz specified
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
     public List<Question> getQuestionsByQuizId(int quizId) throws SQLException, ClassNotFoundException {
         String query = String.format("SELECT * FROM %s WHERE %s = ?",
                 databaseName, QUIZ_ID);
@@ -81,6 +102,12 @@ public class QuestionDatabase extends Database<Question> {
         });
     }
 
+    /**
+     * Delete all the questions belonging to the quiz specified
+     * @param quizId Id of the quiz
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
     public void deleteQuestionsByQuizId(int quizId) throws SQLException, ClassNotFoundException {
         String curStatement = String.format("DELETE FROM %s WHERE %s = ?;",
                 QUESTION_DB,QUIZ_ID);

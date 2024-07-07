@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class HistoryDatabase extends Database<History> {
+    // Constants for column names
     public static final String ID = "id";
     public static final String USER_ID = "user_id";
     public static final String QUIZ_ID = "quiz_id";
@@ -21,6 +22,14 @@ public class HistoryDatabase extends Database<History> {
     public HistoryDatabase(BasicDataSource dataSource, String databaseName){
         super(dataSource,databaseName);
     }
+
+    /**
+     * Adds new entry to history table
+     * @param toAdd History Object describing new row
+     * @return id of the new row
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
     @Override
     public int add(History toAdd) throws SQLException, ClassNotFoundException {
         String query = String.format(
@@ -51,6 +60,12 @@ public class HistoryDatabase extends Database<History> {
         }
     }
 
+    /**
+     * Assembles History object from ResultSet
+     * @param rs ResultSet of history table rows
+     * @return History object
+     * @throws SQLException
+     */
     @Override
     protected History getItemFromResultSet(ResultSet rs) throws SQLException {
         return new History(
@@ -63,6 +78,13 @@ public class HistoryDatabase extends Database<History> {
                 rs.getBoolean(IS_PRACTICE)
         );
     }
+
+    /**
+     * Get total amount of times quizzes have been taken
+     * @return total amount of times quizzes have been taken
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
     public int getTotalAttemptCount() throws SQLException, ClassNotFoundException {
         String query = String.format("SELECT COUNT(*) AS total_count FROM %s;",Database.HISTORY_DB);
         Connection con = getConnection();
@@ -72,6 +94,13 @@ public class HistoryDatabase extends Database<History> {
         rs.next();
         return rs.getInt("total_count");
     }
+    /**
+     * Get entire history of user passed
+     * @param userId Id of the user
+     * @return List of History objects which belong to the user
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
     public List<History> getHistoryByUserId(int userId) throws SQLException, ClassNotFoundException {
         String query = String.format("SELECT * FROM %s WHERE %s = ?",
                 databaseName, USER_ID);
@@ -84,19 +113,15 @@ public class HistoryDatabase extends Database<History> {
             return ps;
         });
     }
-    public History getLastHistoryByUserId(int userId) throws SQLException, ClassNotFoundException {
-        String query = String.format("SELECT * FROM %s h WHERE h.%s = ? AND h.%s = (SELECT max(hi.%s) FROM %s hi WHERE hi.%s = ?)",
-                databaseName, USER_ID, COMPLETED_AT, COMPLETED_AT, databaseName, USER_ID);
-        return queryToElement(query, (ps) -> {
-            try {
-                ps.setInt(1,userId);
-                ps.setInt(2,userId);
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
-            return ps;
-        });
-    }
+
+    /**
+     * Get the last time user wrote the quiz specified
+     * @param userId Id of the user
+     * @param quizId Id of the quiz
+     * @return History object of last instance user wrote the quiz specified
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
     public History getLastHistoryByUserAndQuizId(int userId, int quizId) throws SQLException, ClassNotFoundException {
         String query = String.format("SELECT * FROM %s h WHERE h.%s = ? AND h.%s = ? AND h.%s = (SELECT max(hi.%s) FROM %s hi WHERE hi.%s = ? AND hi.%s = ?)",
                 databaseName, USER_ID, QUIZ_ID, COMPLETED_AT, COMPLETED_AT, databaseName, USER_ID, QUIZ_ID);
@@ -112,6 +137,15 @@ public class HistoryDatabase extends Database<History> {
             return ps;
         });
     }
+
+    /**
+     * Get every instance of user taking the quiz specified
+     * @param userId Id of the user
+     * @param quizId Id of the quiz
+     * @return List of every History object where user took the quiz
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
     public List<History> getHistoryByUserAndQuizId(int userId, int quizId) throws SQLException, ClassNotFoundException {
         String query = String.format("SELECT * FROM %s WHERE %s = ? AND %s = ?",
                 databaseName, USER_ID, QUIZ_ID);
@@ -126,6 +160,34 @@ public class HistoryDatabase extends Database<History> {
         });
     }
 
+    /**
+     * Get all attempts on the quiz specified
+     * @param quizId Id of the quiz
+     * @return List of every attempt made on the quiz specified
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
+    public List<History> getHistoryByQuizId(int quizId) throws SQLException, ClassNotFoundException {
+        String query = String.format("SELECT * FROM %s WHERE %s = ?",
+                databaseName, QUIZ_ID);
+        return queryToList(query, (ps) -> {
+            try {
+                ps.setInt(1,quizId);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+            return ps;
+        });
+    }
+
+    /**
+     * Get every instance of user taking the quiz specified ordered from most to least recent
+     * @param userId Id of the user
+     * @param quizId Id of the quiz
+     * @return List of every History object where user took the quiz ordered from most to least recent
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
     public List<History> getLatestHistoriesByUserAndQuizId(int userId, int quizId) throws SQLException, ClassNotFoundException {
         String query = String.format("SELECT * FROM %s WHERE %s = ? AND %s = ? ORDER BY %s DESC;",
                 databaseName, USER_ID, QUIZ_ID, COMPLETED_AT);
@@ -139,6 +201,15 @@ public class HistoryDatabase extends Database<History> {
             return ps;
         });
     }
+
+    /**
+     * Get user's attempts of quiz ordered from best to worst
+     * @param userId Id of the user
+     * @param quizId Id of the quiz
+     * @return List of every History object where user took the quiz ordered from best to worst
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
     public List<History> getBestScoresByUserAndQuizId(int userId, int quizId) throws SQLException, ClassNotFoundException {
         String query = String.format("SELECT * FROM %s WHERE %s = ? AND %s = ? ORDER BY %s DESC, %s;",
                 databaseName, USER_ID, QUIZ_ID, GRADE, WRITING_TIME);
@@ -152,6 +223,15 @@ public class HistoryDatabase extends Database<History> {
             return ps;
         });
     }
+
+    /**
+     * Get user's attempts of quiz ordered from fastest to slowest
+     * @param userId Id of the user
+     * @param quizId Id of the quiz
+     * @return List of every History object where user took the quiz ordered from fastest to slowest
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
     public List<History> getFastestByUserAndQuizId(int userId, int quizId) throws SQLException, ClassNotFoundException {
         String query = String.format("SELECT * FROM %s WHERE %s = ? AND %s = ? ORDER BY %s, %s DESC;",
                 databaseName, USER_ID, QUIZ_ID, WRITING_TIME, GRADE);
@@ -165,11 +245,15 @@ public class HistoryDatabase extends Database<History> {
             return ps;
         });
     }
-    public List<History> getLatestHistories(int k) throws SQLException, ClassNotFoundException {
-        String query = String.format("SELECT * FROM %s ORDER BY %s DESC LIMIT %d",
-                databaseName, COMPLETED_AT, k);
-        return queryToList(query, (ps) -> {return ps;});
-    }
+
+    /**
+     * Get last k times someone took the quiz specified ordered from most to least recent
+     * @param quizId Id of the quiz
+     * @param k Amount of rows returned
+     * @return List of History objects with max length of k, of most recent times someone took the quiz specified
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
     public List<History> getLatestHistoriesByQuizId(int quizId, int k) throws SQLException, ClassNotFoundException {
         String query = String.format("SELECT * FROM %s WHERE %s = ? ORDER BY %s DESC LIMIT %d",
                 databaseName, QUIZ_ID, COMPLETED_AT, k);
@@ -182,18 +266,15 @@ public class HistoryDatabase extends Database<History> {
             return ps;
         });
     }
-    public List<History> getHistoryByQuizId(int quizId) throws SQLException, ClassNotFoundException {
-        String query = String.format("SELECT * FROM %s WHERE %s = ?",
-                databaseName, QUIZ_ID);
-        return queryToList(query, (ps) -> {
-            try {
-                ps.setInt(1,quizId);
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
-            return ps;
-        });
-    }
+
+    /**
+     * Get the last k times the user took a quiz from most to least recent
+     * @param userId Id of the user
+     * @param k Maximum number of rows returned
+     * @return List of History objects with max length of k, of most recent times user took a quiz
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
     public List<History> getLatestHistoriesByUserId(int userId, int k) throws SQLException, ClassNotFoundException {
         String query = String.format("SELECT * FROM %s WHERE %s = ? ORDER BY %s DESC LIMIT %d",
                 databaseName, USER_ID, COMPLETED_AT, k);
@@ -206,6 +287,14 @@ public class HistoryDatabase extends Database<History> {
             return ps;
         });
     }
+
+    /**
+     * Get entry for the best attempt for the quiz specified
+     * @param quizId Id of the quiz
+     * @return History object of the best attempt for the quiz specified
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
     public History getBestScoreHistoryByQuizId(int quizId) throws SQLException, ClassNotFoundException {
         String query = String.format(
                 "Select * from %s h where h.%s = ? " +
@@ -223,6 +312,14 @@ public class HistoryDatabase extends Database<History> {
         });
     }
 
+    /**
+     * Get best attempt user has had on a quiz
+     * @param userId Id of the user
+     * @param quizId Id of the quiz
+     * @return History object for the best attempt user has had on the quiz specified
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
     public History getBestHistoryByUserAndQuizId(int userId, int quizId) throws SQLException, ClassNotFoundException {
         String query = String.format(
                 "SELECT * FROM %s WHERE %s = ? AND %s = ? ORDER BY %s DESC, %s LIMIT 1;",
@@ -238,6 +335,14 @@ public class HistoryDatabase extends Database<History> {
         });
     }
 
+    /**
+     * Get the best k attempts of all time for the quiz specified
+     * @param quizId Id of the quiz
+     * @param k Maximum number of entries
+     * @return List of History objects for best k attempts on a quiz, ordered from best to worst
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
     public List<History> getTopPerformersByQuizId(int quizId, int k) throws SQLException, ClassNotFoundException {
         String query = String.format(
                 "SELECT * FROM %s WHERE %s = ? ORDER BY %s DESC, %s LIMIT %d;",
@@ -252,6 +357,14 @@ public class HistoryDatabase extends Database<History> {
         });
     }
 
+    /**
+     * Get best k attempts from the last day for the quiz specified, ordered from best to worst
+     * @param quizId Id of the quiz
+     * @param k Maximum number of entries
+     * @return List of History objects for best k attempts on a quiz from the last day, ordered from best to worst
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
     public List<History> getTopInLastDayByQuizId(int quizId, int k) throws SQLException, ClassNotFoundException {
         String query = String.format(
                 "SELECT * FROM %s WHERE %s = ? AND %s >= NOW() - INTERVAL 1 DAY ORDER BY %s DESC, %s LIMIT %d;",
@@ -265,6 +378,13 @@ public class HistoryDatabase extends Database<History> {
             return ps;
         });
     }
+
+    /**
+     * Clear all history entries for the quiz specified
+     * @param quizId Id of the quiz
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
     public void clearQuizHistory(int quizId) throws SQLException, ClassNotFoundException {
         String curStatement = String.format("DELETE FROM %s WHERE %s = ?;",
                 HISTORY_DB,QUIZ_ID);

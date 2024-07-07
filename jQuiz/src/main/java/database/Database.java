@@ -37,6 +37,12 @@ public abstract class Database<T> {
         this.dataSource = dataSource;
     }
 
+    /**
+     * Get all rows from the table
+     * @return List of every row
+     * @throws ClassNotFoundException
+     * @throws SQLException
+     */
     public List<T> getAll() throws ClassNotFoundException, SQLException {
         String query = String.format("SELECT * FROM %s;", databaseName);
         Connection con = getConnection();
@@ -45,6 +51,14 @@ public abstract class Database<T> {
         con.close();
         return res;
     }
+
+    /**
+     * Get row from the table with id
+     * @param id Id of the row
+     * @return Object describing the row
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
     public T getById(int id) throws SQLException, ClassNotFoundException {
         String query = String.format("SELECT * FROM %s WHERE id = ?;", databaseName);
         Connection con = getConnection();
@@ -54,6 +68,14 @@ public abstract class Database<T> {
         con.close();
         return res;
     }
+
+    /**
+     * Delete the row with id passed
+     * @param id id of the row
+     * @return true if deletion was successful, false otherwise
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
     public boolean removeById(int id) throws SQLException, ClassNotFoundException {
         String query = String.format("DELETE FROM %s WHERE id = ?", databaseName);
         Connection con = getConnection();
@@ -63,6 +85,16 @@ public abstract class Database<T> {
         con.close();
         return res;
     }
+
+    /**
+     * Update an entry in the table
+     * @param id id of the row
+     * @param columnName name of the column
+     * @param value new value for the entry
+     * @return true if update was successful, false otherwise
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
     public boolean setFieldById(int id, String columnName, Object value) throws SQLException, ClassNotFoundException {
         String query = String.format("UPDATE %s SET %s = ? WHERE id = ?", databaseName, columnName);
         Connection con = getConnection();
@@ -88,16 +120,56 @@ public abstract class Database<T> {
         con.close();
         return res;
     }
+
+    /**
+     * Add new row to the table
+     * @param toAdd Object describing new row
+     * @return id of the ne row
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
     public abstract int add(T toAdd) throws SQLException, ClassNotFoundException;
+
+    /**
+     * Assembles object from the ResultSet
+     * @param rs ResultSet of row objects
+     * @return Row object
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
     protected abstract T getItemFromResultSet(ResultSet rs) throws SQLException, ClassNotFoundException;
+
+    /**
+     * Get PreparedStatement object for a query
+     * @param query Query to be executed
+     * @param con Connection object to database
+     * @return PreparedStatement object
+     * @throws ClassNotFoundException
+     * @throws SQLException
+     */
     protected  PreparedStatement getStatement(String query, Connection con) throws ClassNotFoundException, SQLException {
         return con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
     }
+
+    /**
+     * Get Connection object to database
+     * @return Connection object
+     * @throws ClassNotFoundException
+     * @throws SQLException
+     */
     protected Connection getConnection() throws ClassNotFoundException, SQLException {
         Class.forName("com.mysql.cj.jdbc.Driver");
         Connection con = dataSource.getConnection();
         return con;
     }
+
+    /**
+     * Executes the statement and returns the result
+     * @param ps PreparedStatement object
+     * @return List of rows returned
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
     protected List<T> statementToList(PreparedStatement ps) throws SQLException, ClassNotFoundException {
         List<T> res = new ArrayList<>();
         ps.executeQuery();
@@ -107,6 +179,14 @@ public abstract class Database<T> {
         }
         return res;
     }
+
+    /**
+     * Executes the statement and get element returned
+     * @param ps PreparedStatement object
+     * @return Element returned by the query
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
     protected T statementToElement(PreparedStatement ps) throws SQLException, ClassNotFoundException {
         T res = null;
         ps.executeQuery();
@@ -117,6 +197,14 @@ public abstract class Database<T> {
         return res;
     }
 
+    /**
+     * Create statement for query and execute it
+     * @param query Query to be executed
+     * @param statementBindFunc Function to modify PreparedStatement parameters
+     * @return List of rows returned by the query
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
     protected List<T> queryToList(String query, Function<PreparedStatement,PreparedStatement> statementBindFunc) throws SQLException, ClassNotFoundException {
         Connection con = getConnection();
         PreparedStatement ps = getStatement(query,con);
@@ -125,6 +213,15 @@ public abstract class Database<T> {
         con.close();
         return res;
     }
+
+    /**
+     * Execute the query passed and get the row returned by it
+     * @param query Query to be executed
+     * @param statementBindFunc Function to modify PreparedStatement parameters
+     * @return Element returned by the query
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
     protected T queryToElement(String query, Function<PreparedStatement,PreparedStatement> statementBindFunc) throws SQLException, ClassNotFoundException {
         Connection con = getConnection();
         PreparedStatement ps = getStatement(query,con);

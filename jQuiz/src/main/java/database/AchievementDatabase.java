@@ -24,6 +24,13 @@ public class AchievementDatabase extends Database<Achievement> {
         super(dataSource, databaseName);
     }
 
+    /**
+     * Adds new achievement to achievements table
+     * @param achievement new Achievement object
+     * @return id of new row
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
     @Override
     public int add(Achievement achievement) throws SQLException, ClassNotFoundException {
         String query = String.format(
@@ -51,6 +58,13 @@ public class AchievementDatabase extends Database<Achievement> {
         }
     }
 
+    /**
+     * Assembles Achievement object from ResultSet
+     * @param rs ResultSet of achievements table rows
+     * @return Achievement object
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
     @Override
     protected Achievement getItemFromResultSet(ResultSet rs) throws SQLException, ClassNotFoundException {
         return new Achievement(
@@ -61,11 +75,25 @@ public class AchievementDatabase extends Database<Achievement> {
                 new Date()
         );
     }
+
+    /**
+     * Returns every achievement in achievements table
+     * @return List of every achievement
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
     public List<Achievement> getAll() throws SQLException, ClassNotFoundException {
         String query = "SELECT * FROM achievements;";
         return queryToList(query, (ps) -> {return ps;});
     }
 
+    /**
+     * Returns Achievement which has the name passed
+     * @param name Name of the achievement
+     * @return Achievement object of passed name
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
     public Achievement getAchievementByName(String name) throws SQLException, ClassNotFoundException {
         String query = String.format("SELECT * FROM %s WHERE %s = ?",
                 Database.ACHIEVEMENT_DB, NAME);
@@ -79,6 +107,13 @@ public class AchievementDatabase extends Database<Achievement> {
         });
     }
 
+    /**
+     * Get every achievement user has unlocked
+     * @param userId Id of the user
+     * @return List of user's achievements
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
     public List<Achievement> getAchievementsByUserId(int userId) throws SQLException, ClassNotFoundException {
         String query = String.format("SELECT a.%s, a.%s, a.%s, a.%s, au.%s, au.%s FROM %s a JOIN %s au ON a.%s = au.%s WHERE au.%s = ?;",
                 ID, NAME, DESCRIPTION, IMAGE, USER_ID, ACQUIRE_DATE, databaseName, Database.ACH_TO_USR_DB, ID, ACH_ID, USER_ID);
@@ -91,6 +126,14 @@ public class AchievementDatabase extends Database<Achievement> {
             return ps;
         });
     }
+
+    /**
+     * Unlocks achievement for the user
+     * @param userId Id of the user
+     * @param achievementName Name of the achievement
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
     public void unlockAchievement(int userId, String achievementName) throws SQLException, ClassNotFoundException {
         Achievement achievement = getAchievementByName(achievementName);
         String query = String.format("INSERT INTO %s ( %s, %s, %s) VALUES(?, ?, ?);",
@@ -106,6 +149,15 @@ public class AchievementDatabase extends Database<Achievement> {
         }
         con.close();
     }
+
+    /**
+     * Checks if the user has achievement unlocked
+     * @param userId Id of the user
+     * @param achievementName Name of the achievement
+     * @return true if the user has achievement unlocked, false otherwise
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
     public boolean hasAchievementUnlocked(int userId, String achievementName) throws SQLException, ClassNotFoundException {
         String query = String.format("SELECT * FROM %s a JOIN %s au ON a.%s = au.%s WHERE au.%s = ? AND a.%s = ?;",
                 databaseName, Database.ACH_TO_USR_DB, ID, ACH_ID, USER_ID, NAME);
