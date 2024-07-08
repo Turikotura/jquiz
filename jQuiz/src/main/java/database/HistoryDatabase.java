@@ -3,10 +3,7 @@ package database;
 import models.History;
 import org.apache.commons.dbcp2.BasicDataSource;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,7 +29,7 @@ public class HistoryDatabase extends Database<History> {
         statement.setInt(1,toAdd.getUserId());
         statement.setInt(2,toAdd.getQuizId());
         statement.setInt(3,toAdd.getGrade());
-        statement.setTimestamp(4, new java.sql.Timestamp(toAdd.getCompletedAt().getTime()));
+        statement.setTimestamp(4, new Timestamp(System.currentTimeMillis()));
         statement.setInt(5, toAdd.getWritingTime());
         statement.setBoolean(6,toAdd.getIsPractice());
 

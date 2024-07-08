@@ -18,6 +18,7 @@ h1, h3, h4 {
     border: 1px solid var(--secondary-color);
     border-radius: 5px;
     display: none;
+    overflow: hidden;
 }
 .active {
     display: block;
@@ -101,4 +102,30 @@ h1, h3, h4 {
 }
 .incorrect {
     background-color: red;
+}
+
+
+
+img {
+    width: 100%;
+    object-fit: contain;
+    height: 500px;
+}
+.answer-inp {
+    border: none;
+    padding: 5px;
+    margin: 5px;
+    width: 20%;
+}
+.mamc-inp, .mc-inp {
+    width: 5%;
+}
+.send-question {
+    border: none;
+    padding: 10px;
+    background-color: var(--error-color);
+    float: right;
+}
+.send-question:hover {
+    background-color: var(--accent-color);
 }

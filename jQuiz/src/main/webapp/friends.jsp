@@ -49,7 +49,7 @@
         </div>
         <form class="mail-form hidden" id="m-f-<%=friend.getId()%>" action="FriendsPage" method="post">
             <input hidden="hidden" type="number" name="receiverId" value="<%=friend.getId()%>">
-            <input class="message-input" type="text" name="message" required>
+            <textarea class="message-input" name="message" form="m-f-<%=friend.getId()%>" required></textarea><br>
             <button class="send-mail" type="submit">Send</button>
         </form>
         <div class="friend-buttons">
@@ -107,7 +107,6 @@
             success: function(response) {
                 console.log('Ajax request successful');
                 console.log(response);
-                // Optionally, update UI or handle response
                 $('#friend-'+toRemoveId).remove();
             },
             error: function(xhr, status, error) {

@@ -50,7 +50,7 @@
 <main>
 
     <%--Quiz info--%>
-    <img src="image?type=quiz&quizId=<%=quizAttempt.getQuizId()%>">
+    <img id="quiz-thumbnail" src="image?type=quiz&quizId=<%=quizAttempt.getQuizId()%>">
     <h1><%=quizAttempt.getTitle()%></h1>
     <h3><%=quizAttempt.getStartTime()%></h3>
     <h3 id="timer"></h3>
@@ -86,7 +86,7 @@
                     toWrite = quizAttempt.getQuestions().get(i).evaluateAnswers() + " / " + quizAttempt.getQuestions().get(i).getMaxScore();
                 }
         %>
-        <p id="q-res-<%=i%>"><%=toWrite%></p>
+        <p id="q-res-<%=i%>"><%=i%> : <%=toWrite%></p>
         <%
             }
         %>
@@ -127,10 +127,11 @@
             <input name="quizAttemptId" type="hidden" value="<%=attemptId%>">
             <input name="questionInd" type="hidden" value="<%=i%>">
                 <%--Question info--%>
+                <p>&#8470; <%=i%></p>
                 <%
                     if(questionAttempt.getQuestion().getQuestionType() == QuestionTypes.PIC_RESPONSE){
                 %>
-                <img src="image?type=question&questionId=<%=questionAttempt.getQuestion().getId()%>">
+                <img src="image?type=question&questionId=<%=questionAttempt.getQuestion().getId()%>"><br><br>
                 <%
                     }
                 %>
@@ -159,7 +160,7 @@
                             }
                 %>
                 <%--Multi choice question--%>
-                <input <%=disabled%> <%=checked%> name="<%=i%>" id="<%=i%>-<%=j%>" type="radio" value="<%=questionAttempt.getAnswers().get(j).getText()%>">
+                <input class="answer-inp mc-inp" <%=disabled%> <%=checked%> name="<%=i%>" id="<%=i%>-<%=j%>" type="radio" value="<%=questionAttempt.getAnswers().get(j).getText()%>">
                 <label for="<%=i%>-<%=j%>"> <%=questionAttempt.getAnswers().get(j).getText()%></label><br>
                 <%
                         }
@@ -174,7 +175,7 @@
                             }
                 %>
                 <%--MAMC question--%>
-                <input <%=disabled%> <%=checked%> name="<%=i%>" id="<%=i%>-<%=j%>" type="checkbox" value="<%=questionAttempt.getAnswers().get(j).getText()%>">
+                <input class="answer-inp mamc-inp" <%=disabled%> <%=checked%> name="<%=i%>" id="<%=i%>-<%=j%>" type="checkbox" value="<%=questionAttempt.getAnswers().get(j).getText()%>">
                 <label for="<%=i%>-<%=j%>"> <%=questionAttempt.getAnswers().get(j).getText()%></label><br>
                 <%
                         }
@@ -183,12 +184,17 @@
                         String text = " " + questionAttempt.getQuestion().getText() + " ";
                         String[] split = text.split("\\{}");
                 %>
+                <%--Fill in the blank question--%>
                 <p>
                     <%
                         for(int j = 0; j < split.length-1; j++){
+                            String val = "";
+                            if(!questionAttempt.getWrittenAnswers().isEmpty()){
+                                val = questionAttempt.getWrittenAnswers().get(j);
+                            }
                     %>
                     <%=split[j]%>
-                    <input <%=disabled%> name="<%=i%>-<%=j%>" type="text">
+                    <input class="answer-inp" <%=disabled%> name="<%=i%>-<%=j%>" type="text" value="<%=val%>">
                     <%
                         }
                     %>
@@ -204,7 +210,7 @@
                             }
                 %>
                 <%--Response question--%>
-                <input <%=disabled%> name="<%=i%>-<%=j%>" type="text" value="<%=val%>">
+                <input class="answer-inp" <%=disabled%> name="<%=i%>-<%=j%>" type="text" value="<%=val%>"><br>
                 <%
                         }
                     }
@@ -240,7 +246,7 @@
     // Update the grade for a single question
     function updateSingleQuestionResult(resp){
         // Update question result text
-        $('#q-res-'+resp.qInd).text(resp.grade + ' / ' + resp.maxGrade);
+        $('#q-res-'+resp.qInd).text(resp.qInd + ' : ' +  resp.grade + ' / ' + resp.maxGrade);
 
         // Disable inputs
         var form = $('#'+resp.qInd).find('form');

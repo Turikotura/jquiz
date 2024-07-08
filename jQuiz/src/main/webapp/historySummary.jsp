@@ -42,12 +42,8 @@
     <%
         if(curUser != null){
             for(History history : histories){
-                String isPractice = "";
-                if(history.getIsPractice()){
-                    isPractice = "practice";
-                }
     %>
-    <div class="history-box <%=isPractice%>">
+    <div class="history-box">
         <h3 class="history-grade"><%=history.getGrade()%> Pts</h3>
         <h3 class="history-writing-time"><%=(double)history.getWritingTime()/1000%> Seconds</h3>
         <h4 class="history-completed-at"><%=history.getCompletedAt()%></h4>
