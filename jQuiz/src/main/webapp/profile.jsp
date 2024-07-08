@@ -75,13 +75,15 @@
             <p><%=profileOf.getUsername() + " has already sent you a friend request. Check your mail!"%></p>
             <% } else if(userDB.checkAreFriends(curUser.getId(),profileOf.getId())) { %>
             <p>You are friends.</p>
-            <form action="AddFriend" method="get">
+            <form action="AddFriend" method="post">
+                <input type="hidden" name="requestSent" value="false">
                 <input type="hidden" name="from" value="<%=curUser.getId()%>">
                 <input type="hidden" name="to" value="<%=profileOf.getId()%>">
                 <input type="submit" value="Remove friend">
             </form>
             <% } else { %>
             <form action="AddFriend" method="post">
+                <input type="hidden" name="requestSent" value="true">
                 <input type="hidden" name="from" value="<%=curUser.getId()%>">
                 <input type="hidden" name="to" value="<%=profileOf.getId()%>">
                 <input type="submit" value="Send friend request">
@@ -93,13 +95,15 @@
             <% if(userDB.isUserAdmin(profileOf.getId())) { %>
             <p>This user is admin.</p>
             <% } else { %>
-            <form action="ManageUser" method="get">
-                <input type="hidden" name="userToPromote" value="<%=profileOf.getId()%>">
+            <form action="ManageUser" method="post">
+                <input type="hidden" name="userPromoted" value="true">
+                <input type="hidden" name="managedUserId" value="<%=profileOf.getId()%>">
                 <input type="submit" value="Promote to Admin">
             </form>
             <% } %>
             <form action="ManageUser" method="post">
-                <input type="hidden" name="userToRemove" value="<%=profileOf.getId()%>">
+                <input type="hidden" name="userPromoted" value="false">
+                <input type="hidden" name="managedUserId" value="<%=profileOf.getId()%>">
                 <input type="submit" value="Ban User">
             </form>
             <% }

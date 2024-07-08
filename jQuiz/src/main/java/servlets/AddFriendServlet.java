@@ -26,7 +26,7 @@ public class AddFriendServlet extends HttpServlet {
             remover = userDB.getById(from);
             removed = userDB.getById(to);
             Mail friendRequest = new Mail(-1,from,to, MailTypes.DEFAULT,-1,
-                    removed.getUsername() + "has removed you from the friend list.",new Date(),false);
+                    remover.getUsername() + "has removed you from the friend list.",new Date(),false);
             userDB.removeFriends(from,to);
         } catch (SQLException | ClassNotFoundException e) {
             throw new RuntimeException(e);
@@ -40,12 +40,21 @@ public class AddFriendServlet extends HttpServlet {
         MailDatabase mailDB = (MailDatabase) request.getServletContext().getAttribute(Database.MAIL_DB);
         UserDatabase userDB = (UserDatabase) request.getServletContext().getAttribute(Database.USER_DB);
         int from = Integer.parseInt(request.getParameter("from")), to = Integer.parseInt(request.getParameter("to"));
-        User reciever = null;
+        boolean requestSent = Boolean.parseBoolean(request.getParameter("requestSent"));
+        User sender, reciever = null;
 
-        Mail friendRequest = new Mail(-1,from,to, MailTypes.FRIEND_REQUEST,-1,"",new Date(),false);
         try {
+            sender = userDB.getById(from);
             reciever = userDB.getById(to);
-            mailDB.add(friendRequest);
+            if(requestSent) {
+                Mail friendRequest = new Mail(-1,from,to, MailTypes.FRIEND_REQUEST,-1,"",new Date(),false);
+                mailDB.add(friendRequest);
+            } else {
+                Mail removalNote = new Mail(-1,from,to, MailTypes.DEFAULT,-1,
+                        sender.getUsername() + "has removed you from the friend list.",new Date(),false);
+                mailDB.add(removalNote);
+                userDB.removeFriends(from,to);
+            }
         } catch (SQLException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }

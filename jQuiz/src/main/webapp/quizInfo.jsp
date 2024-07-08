@@ -177,11 +177,13 @@
     <%
         try {
             if(curUser != null && userDB.isUserAdmin(curUser.getId())) { %>
-            <form action="RemoveQuiz" method="get">
+            <form action="RemoveQuiz" method="post">
+                <input type="hidden" name="deleteQuiz" value="true">
                 <input name="quizId" type="hidden" value="<%=curQuiz.getId()%>">
                 <input type="submit" value="Remove Quiz">
             </form>
             <form action="RemoveQuiz" method="post">
+                <input type="hidden" name="deleteQuiz" value="false">
                 <input name="quizId" type="hidden" value="<%=curQuiz.getId()%>">
                 <input type="submit" value="Clear Quiz History">
             </form>

@@ -11,6 +11,8 @@ public class TagDatabase extends Database<Tag> {
     // Constants for column names
     static final String ID = "id";
     static final String NAME = "name";
+    public static final String QUIZ_ID = "quiz_id";
+    public static final String TAG_ID = "tag_id";
 
     public TagDatabase(BasicDataSource dataSource, String databaseName) {
         super(dataSource, databaseName);
@@ -165,5 +167,23 @@ public class TagDatabase extends Database<Tag> {
             }
             return ps;
         });
+    }
+
+    /**
+     * Remove tags connected to quiz specified
+     * @param quizId Id of the quiz
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
+    public void clearTagsConnectionByQuizId(int quizId) throws SQLException, ClassNotFoundException {
+        String query = String.format(
+                "DELETE FROM %s WHERE %s = ?",
+                TAG_TO_QUIZ_DB, QUIZ_ID
+        );
+        Connection con = getConnection();
+        PreparedStatement ps = getStatement(query,con);
+        ps.setInt(1,quizId);
+        ps.execute();
+        con.close();
     }
 }

@@ -39,8 +39,10 @@
         <ul>
             <li><a href="profile.jsp?username=<%=loggedInAs%>"><%=loggedInAs%></a></li>
             <li><a onclick="submitLogOut()">Log out</a></li>
-            <form id="log-out-form" style="display: none" action="Login" method="get"></form>
         </ul>
+        <form id="log-out-form" style="display: none" action="Login" method="post">
+            <input type="hidden" name="logInAttempted" value="false">
+        </form>
         <% } %>
     </nav>
 </header>

@@ -53,6 +53,7 @@
 <main class="login-main">
     <h1>Please log in.</h1>
     <form action="Login" method="post">
+        <input type="hidden" name="logInAttempted" value="true">
         <div>
             <label>
                 Username:
