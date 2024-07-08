@@ -19,6 +19,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static listeners.ContextListener.getMailInfo;
 import static listeners.SessionListener.getQuizAttemptsController;
 import static listeners.ContextListener.getDatabase;
 
@@ -32,6 +33,8 @@ public class PlayQuizServlet extends HttpServlet {
         QuizAttemptsController qac = getQuizAttemptsController(curUser.getId(),httpServletRequest);
         QuizAttempt quizAttempt = qac.getQuizAttemptById(attemptId);
         httpServletRequest.setAttribute("qa",quizAttempt);
+
+        getMailInfo(httpServletRequest);
 
         httpServletRequest.getRequestDispatcher("playQuiz.jsp").forward(httpServletRequest,httpServletResponse);
     }
@@ -139,7 +142,7 @@ public class PlayQuizServlet extends HttpServlet {
                 throw new RuntimeException(e);
             }
 
-            httpServletResponse.sendRedirect("quizResult.jsp?userId="+userId+"&quizId="+quizAttempt.getQuizId());
+            httpServletResponse.sendRedirect("/QuizResult?userId="+userId+"&quizId="+quizAttempt.getQuizId());
         }
     }
 }

@@ -33,13 +33,14 @@
             <p>Best Score: <%=maxGrades.get(mail.getId())%> pts</p>
             <a href="quizInfo.jsp?quizId=<%=mail.getQuizId()%>">Accept</a>
             <%
-            }else if(mail.getType() == MailTypes.FRIEND_REQUEST){
-                // Display friend request visual
+                }else if(mail.getType() == MailTypes.FRIEND_REQUEST){
+                    // Display friend request visual
             %>
             <input type="submit" value="accept" class="friend-acpt-submit">
             <input type="submit" value="reject" class="friend-rjct-submit">
             <%
                 } else if(mail.getType() == MailTypes.QUIZ_REPORT) {
+                // Display report sent about a quiz
             %>
                 <a href="quizInfo.jsp?quizId=<%=mail.getQuizId()%>">Check out</a>
             <% } %>

@@ -85,6 +85,10 @@
     <servlet-name>SendChallenge</servlet-name>
     <servlet-class>servlets.SendChallengeServlet</servlet-class>
   </servlet>
+  <servlet>
+    <servlet-name>QuizResult</servlet-name>
+    <servlet-class>servlets.QuizResultServlet</servlet-class>
+  </servlet>
 
   <servlet-mapping>
     <servlet-name>FrontPageServlet</servlet-name>
@@ -157,5 +161,9 @@
   <servlet-mapping>
     <servlet-name>SendChallenge</servlet-name>
     <url-pattern>/SendChallenge</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>QuizResult</servlet-name>
+    <url-pattern>/QuizResult</url-pattern>
   </servlet-mapping>
 </web-app>

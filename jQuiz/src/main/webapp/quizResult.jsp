@@ -18,71 +18,19 @@
 <%
     User curUser = (User) request.getSession().getAttribute("curUser");
 
-    MailDatabase mailDB = getDatabase(Database.MAIL_DB,request);
-    UserDatabase userDB = getDatabase(Database.USER_DB,request);
-    HistoryDatabase historyDB = getDatabase(Database.HISTORY_DB,request);
-    QuizDatabase quizDB = getDatabase(Database.QUIZ_DB,request);
-    QuestionDatabase questionDB = getDatabase(Database.QUESTION_DB,request);
-
     // Mail variables
-    List<Mail> mails = new ArrayList<Mail>();
-    List<String> senderNames = new ArrayList<String>();
-    Map<Integer,Integer> maxGrades = new HashMap<Integer,Integer>();
+    List<Mail> mails = (List<Mail>) request.getAttribute("mails");
+    List<String> senderNames = (List<String>) request.getAttribute("senderNames");
+    Map<Integer,Integer> maxGrades = (Map<Integer, Integer>) request.getAttribute("maxGrades");
 
-    if(curUser != null){
-        // Get mails received by user
-        mails = mailDB.getMailsByUserId(curUser.getId(),"RECEIVE");
-        for(Mail mail : mails){
-            // Get names of senders
-            senderNames.add(userDB.getById(mail.getSenderId()).getUsername());
-            if(mail.getType() == MailTypes.CHALLENGE){
-                // Get max grade of senders for challenges
-                History history = historyDB.getBestHistoryByUserAndQuizId(mail.getSenderId(),mail.getQuizId());
-                int grade = (history == null) ? 0 : history.getGrade();
-                maxGrades.put(mail.getId(),grade);
-            }
-        }
-    }
+    History lastHistory = (History) request.getAttribute("lastHistory");
+    int totalScore = (Integer) request.getAttribute("totalScore");
 
-    int userId = Integer.parseInt(request.getParameter("userId"));
-    int quizId = Integer.parseInt(request.getParameter("quizId"));
-
-    History lastHistory = null;
-    Quiz quiz = null;
-    List<Question> questionList = new ArrayList<Question>();
-    int totalScore = 0;
-
-    String bestHistoryName = "";
-    History bestHistory = null;
-    List<History> prevAttempts = new ArrayList<History>();
-    List<String> friendNames = new ArrayList<String>();
-    List<History> friendHistories = new ArrayList<History>();
-    try {
-        lastHistory = historyDB.getLastHistoryByUserAndQuizId(userId, quizId);
-        quiz = quizDB.getById(lastHistory.getQuizId());
-        questionList = questionDB.getQuestionsByQuizId(quiz.getId());
-        for (Question question : questionList) {
-            totalScore += question.getScore();
-        }
-
-        // others results
-        bestHistory = historyDB.getBestScoreHistoryByQuizId(quizId);
-        bestHistoryName = userDB.getById(bestHistory.getUserId()).getUsername();
-        prevAttempts = historyDB.getHistoryByUserAndQuizId(userId, quizId);
-        List<User> friends = new ArrayList<User>();
-        friends = userDB.getFriendsByUserId(userId);
-        for(User friend : friends){
-            History frHistory = historyDB.getLastHistoryByUserAndQuizId(friend.getId(),quiz.getId());
-            if(frHistory != null){
-                friendNames.add(friend.getUsername());
-                friendHistories.add(historyDB.getLastHistoryByUserAndQuizId(friend.getId(),quiz.getId()));
-            }
-        }
-    }catch (SQLException e){
-//        System.out.println("SQL ex");
-    }catch (ClassNotFoundException e){
-//        System.out.println("Class not found ex");
-    }
+    String bestHistoryName = (String) request.getAttribute("bestHistoryName");
+    History bestHistory = (History) request.getAttribute("bestHistory");
+    List<History> prevAttempts = (List<History>) request.getAttribute("prevAttempts");
+    List<String> friendNames = (List<String>) request.getAttribute("friendNames");
+    List<History> friendHistories = (List<History>) request.getAttribute("friendHistories");
 %>
 
 <html>
