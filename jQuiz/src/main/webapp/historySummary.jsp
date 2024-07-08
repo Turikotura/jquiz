@@ -18,44 +18,18 @@
 <%
     User curUser = (User) request.getSession().getAttribute("curUser");
 
-    MailDatabase mailDB = getDatabase(Database.MAIL_DB,request);
-    UserDatabase userDB = getDatabase(Database.USER_DB,request);
-    HistoryDatabase historyDB = getDatabase(Database.HISTORY_DB,request);
-    QuizDatabase quizDB = getDatabase(Database.QUIZ_DB,request);
-
     // Mail variables
-    List<Mail> mails = new ArrayList<Mail>();
-    List<String> senderNames = new ArrayList<String>();
-    Map<Integer,Integer> maxGrades = new HashMap<Integer,Integer>();
+    List<Mail> mails = (List<Mail>) request.getAttribute("mails");
+    List<String> senderNames = (List<String>) request.getAttribute("senderNames");
+    Map<Integer,Integer> maxGrades = (Map<Integer, Integer>) request.getAttribute("maxGrades");
     // History variables
-    List<History> histories = new ArrayList<History>();
-    Map<Integer,String> historyQuizNames = new HashMap<Integer,String>();
-
-    if(curUser != null){
-        // Get mails received by user
-        mails = mailDB.getMailsByUserId(curUser.getId(),"RECEIVE");
-        for(Mail mail : mails){
-            // Get names of senders
-            senderNames.add(userDB.getById(mail.getSenderId()).getUsername());
-            if(mail.getType() == MailTypes.CHALLENGE){
-                // Get max grade of senders for challenges
-                History history = historyDB.getBestHistoryByUserAndQuizId(mail.getSenderId(),mail.getQuizId());
-                int grade = (history == null) ? 0 : history.getGrade();
-                maxGrades.put(mail.getId(),grade);
-            }
-        }
-
-        // Get history for panel
-        histories = historyDB.getHistoryByUserId(curUser.getId());
-        for(History history : histories){
-            historyQuizNames.put(history.getId(),quizDB.getById(history.getQuizId()).getTitle());
-        }
-    }
+    List<History> histories = (List<History>) request.getAttribute("histories");
+    Map<Integer,String> historyQuizNames = (Map<Integer, String>) request.getAttribute("historyQuizNames");
 %>
 
 <html>
 <head>
-    <title>Title</title>
+    <title>Quiz summary</title>
     <link href="style/general.css" rel="stylesheet" type="text/css">
     <link href="style/historySummary.css" rel="stylesheet" type="text/css">
 </head>

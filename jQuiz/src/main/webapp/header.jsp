@@ -13,7 +13,7 @@
             <li><a href="/achievements.jsp">Achievements</a></li>
             <li><a href="/categories.jsp">Categories</a></li>
             <li><a href=<%=curUser == null ? "/login.jsp" : "/createquiz.jsp"%>>Create quiz</a></li>
-            <li><a href=<%=curUser == null ? "/login.jsp" : "/historySummary.jsp"%>>History</a></li>
+            <li><a href=<%=curUser == null ? "/login.jsp" : "/HistorySummary"%>>History</a></li>
             <li><a href=<%=curUser == null ? "/login.jsp" : "/FriendsPage"%>>Friends</a></li>
         </ul>
     </nav>
