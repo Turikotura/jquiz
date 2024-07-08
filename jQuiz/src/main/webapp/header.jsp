@@ -11,7 +11,7 @@
                 <li><a href="/statistics.jsp">Statistics</a></li>
             <% } %>
             <li><a href="/achievements.jsp">Achievements</a></li>
-            <li><a href="/categories.jsp">Categories</a></li>
+            <li><a href="/categories.jsp">Categories&Tags</a></li>
             <li><a href="/createquiz.jsp">Create quiz</a></li>
             <li><a href="/historySummary.jsp">History</a></li>
             <li><a href="/FriendsPage">Friends</a></li>

@@ -106,6 +106,7 @@
     %>
     <div class="quiz-list-wrapper">
         <h2>Recently added quizzes</h2>
+        <h4><a href="quizzes?sortBy=NEWEST">See all</a></h4>
         <div class="quiz-boxes">
             <%
                 for (Quiz quiz : recentQuizzes) {
@@ -130,6 +131,7 @@
 
     <div class="quiz-list-wrapper">
         <h2>All-time popular quizzes</h2>
+        <h4><a href="quizzes?sortBy=TOTAL">See all</a></h4>
         <div class="quiz-boxes">
         <% for (Quiz quiz : popularQuizzes) {
                         User author = userDB.getById(quiz.getAuthorId());
@@ -153,6 +155,7 @@
 
     <div class="quiz-list-wrapper">
         <h2>Popular quizzes in the last month</h2>
+        <h4><a href="quizzes?sortBy=LAST_MONTH">See all</a></h4>
         <div class="quiz-boxes">
             <%
                 for (Quiz quiz : lastMonthPopularQuizzes) {

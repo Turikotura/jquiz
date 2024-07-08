@@ -85,6 +85,7 @@
 
     <section>
         <h2>Popular Quizzes</h2>
+        <h4><a href="quizzes?match=<%= searchString%>&sortBy=TOTAL">See all</a></h4>
         <div class="quiz-boxes">
             <% try {
                 if (popularQuizzes == null) {
@@ -115,6 +116,7 @@
 
     <section>
         <h2>Recent Quizzes</h2>
+        <h4><a href="quizzes?match=<%= searchString%>&sortBy=NEWEST">See all</a></h4>
         <div class="quiz-boxes">
             <% try {
                 if (recentQuizzes == null) {
@@ -153,7 +155,7 @@
 
                 for (Tag tag : tags) {
             %>
-            <a href="tag.jsp?name=<%= tag.getName()%>"><%= tag.getName() %></a>
+            <a href="quizzes?tag=<%= tag.getName()%>"><%= tag.getName()%></a>
             <% }
             } catch (Exception e) {
                 e.printStackTrace();
