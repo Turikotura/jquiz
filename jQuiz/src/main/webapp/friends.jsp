@@ -37,7 +37,9 @@
         if(curUser != null){
             for(User friend : friends){
     %>
+    <%--row for friend info--%>
     <div id="friend-<%=friend.getId()%>" class="friend-box">
+        <%--friend info--%>
         <div class="friend-info">
             <div class="friend-img" style="background-size: cover; background-image: url('image?type=user&userId=<%=friend.getId()%>');"></div>
             <div>
@@ -47,11 +49,13 @@
 
             <a href="profile.jsp?username=<%=friend.getUsername()%>">Go to profile</a>
         </div>
+        <%--send mail--%>
         <form class="mail-form hidden" id="m-f-<%=friend.getId()%>" action="FriendsPage" method="post">
             <input hidden="hidden" type="number" name="receiverId" value="<%=friend.getId()%>">
             <textarea class="message-input" name="message" form="m-f-<%=friend.getId()%>" required></textarea><br>
             <button class="send-mail" type="submit">Send</button>
         </form>
+        <%--friend button--%>
         <div class="friend-buttons">
             <button class="friend-text-reveal-button" onclick="displayTextForm(<%=friend.getId()%>)">Text</button>
             <button class="friend-remove-button" onclick="removeFriend(<%=friend.getId()%>)">Remove</button>
@@ -71,32 +75,17 @@
 <script src="script/general.js"></script>
 <script src="script/mailPanel.js"></script>
 <script>
-    function ajaxCall(form,formData){
-        $.ajax({
-            url: form.attr('action'),
-            type: form.attr('method'),
-            data: formData,
-            success: function(response) {
-                console.log('Ajax request successful');
-                console.log(response);
-                // Optionally, update UI or handle response
-            },
-            error: function(xhr, status, error) {
-                console.error('Ajax request failed');
-                console.error(error);
-            }
-        });
-    }
-
+    // Display text to send mail
     function displayTextForm(friendId) {
-        var form = document.getElementById("m-f-"+friendId);
-        if(form.classList.contains('hidden')){
-            form.classList.remove('hidden');
+        var form = $("#m-f-"+friendId);
+        if(form.hasClass('hidden')){
+            form.removeClass('hidden');
         }else{
-            form.classList.add('hidden');
+            form.addClass('hidden');
         }
     }
 
+    // Remove friend
     function removeFriend(toRemoveId){
         $.ajax({
             url: 'FriendsPage',
@@ -105,17 +94,16 @@
                 toRemoveId: toRemoveId
             },
             success: function(response) {
-                console.log('Ajax request successful');
-                console.log(response);
+                console.log('Removed friend');
                 $('#friend-'+toRemoveId).remove();
             },
             error: function(xhr, status, error) {
-                console.error('Ajax request failed');
-                console.error(error);
+                console.error('Could not remove friend');
             }
         })
     }
 
+    // Send mail
     $(document).ready(function() {
         $('.send-mail').click(function (e) {
            e.preventDefault();
@@ -125,7 +113,20 @@
 
             $(this.parentNode).find('.message-input').val('');
 
-            ajaxCall(form,formData);
+            $.ajax({
+                url: form.attr('action'),
+                type: form.attr('method'),
+                data: formData,
+                success: function(response) {
+                    console.log('Ajax request successful');
+                    console.log(response);
+                    // Optionally, update UI or handle response
+                },
+                error: function(xhr, status, error) {
+                    console.error('Ajax request failed');
+                    console.error(error);
+                }
+            });
         });
     });
 </script>

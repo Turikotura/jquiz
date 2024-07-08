@@ -42,6 +42,7 @@ public class SendChallengeServlet extends HttpServlet {
         try {
             User toUser = userdb.getByUsername(toUsername);
 
+            // Challenge error checking
             if(Objects.equals(curUser.getUsername(), toUsername)){
                 respMap.put("errorText","Can't have your own name");
             }else if(toUser == null){
@@ -49,6 +50,7 @@ public class SendChallengeServlet extends HttpServlet {
             }else if(!userdb.checkAreFriends(curUser.getId(),toUser.getId())){
                 respMap.put("errorText","Can't challenge a non friend");
             }else{
+                // If passed all, send
                 maildb.add(new Mail(-1,curUser.getId(),toUser.getId(), MailTypes.CHALLENGE,quizId,message,new Date(),false));
             }
         } catch (SQLException e) {
@@ -57,6 +59,7 @@ public class SendChallengeServlet extends HttpServlet {
             throw new RuntimeException(e);
         }
 
+        // Return response
         httpServletResponse.setContentType("application/json");
         httpServletResponse.setCharacterEncoding("UTF-8");
         httpServletResponse.getWriter().write(new Gson().toJson(respMap));

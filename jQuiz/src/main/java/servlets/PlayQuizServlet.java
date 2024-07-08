@@ -48,6 +48,8 @@ public class PlayQuizServlet extends HttpServlet {
         QuizAttempt quizAttempt = qac.getQuizAttemptById(attemptId);
 
         if(httpServletRequest.getParameter("questionInd") != null){
+            // Question answers submitted
+
             // Question answer update
             int questionInd = Integer.parseInt(httpServletRequest.getParameter("questionInd"));
 
@@ -78,6 +80,7 @@ public class PlayQuizServlet extends HttpServlet {
 
             if(quizAttempt.getIsPractice()){
                 if(httpServletRequest.getParameter("eval") != null) {
+                    // Evaluate question for practice
                     boolean wasRight = quizAttempt.evaluateQuestionPractice(questionInd);
 
                     respMap.put("correct",wasRight ? 1 : 0);
@@ -99,6 +102,7 @@ public class PlayQuizServlet extends HttpServlet {
                 }
             }
 
+            // Send response
             httpServletResponse.setContentType("application/json");
             httpServletResponse.setCharacterEncoding("UTF-8");
             httpServletResponse.getWriter().write(new Gson().toJson(respMap));
@@ -118,7 +122,8 @@ public class PlayQuizServlet extends HttpServlet {
             } catch (ClassNotFoundException e) {
                 throw new RuntimeException(e);
             }
-          
+
+            // Check Achievements
             try {
               List<History> quizzesWritten = historydb.getHistoryByUserId(userId);
               AchievementDatabase achievementDB = getDatabase(AchievementDatabase.ACHIEVEMENT_DB, httpServletRequest);

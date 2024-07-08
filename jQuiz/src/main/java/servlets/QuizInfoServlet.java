@@ -88,8 +88,6 @@ public class QuizInfoServlet extends HttpServlet {
         int attemptId = qac.attemptQuiz(quiz,practice,qToA);
 
         httpServletRequest.setAttribute("attemptId",attemptId);
-        //httpServletRequest.getRequestDispatcher("/PlayQuiz").forward(httpServletRequest,httpServletResponse);
-        //httpServletResponse.sendRedirect("playQuiz.jsp?attemptId="+attemptId);
         httpServletResponse.sendRedirect("/PlayQuiz?attemptId="+attemptId);
     }
 }

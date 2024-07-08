@@ -6,7 +6,8 @@
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="java.sql.SQLException" %>
 <%@ page import="java.util.HashMap" %>
-<%@ page import="java.util.Map" %><%--
+<%@ page import="java.util.Map" %>
+<%@ page import="java.text.SimpleDateFormat" %><%--
   Created by IntelliJ IDEA.
   User: Dachi
   Date: 26.06.2024
@@ -25,6 +26,7 @@
     // History variables
     List<History> histories = (List<History>) request.getAttribute("histories");
     Map<Integer,String> historyQuizNames = (Map<Integer, String>) request.getAttribute("historyQuizNames");
+    Map<Integer,Integer> quizIdToMaxScore = (Map<Integer, Integer>) request.getAttribute("quizIdToMaxScore");
 %>
 
 <html>
@@ -42,11 +44,14 @@
     <%
         if(curUser != null){
             for(History history : histories){
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                String compAt = dateFormat.format(history.getCompletedAt());
     %>
+    <%--history info--%>
     <div class="history-box">
-        <h3 class="history-grade"><%=history.getGrade()%> Pts</h3>
+        <h3 class="history-grade"><%=history.getGrade()%> / <%=quizIdToMaxScore.get(history.getQuizId())%> pts</h3>
         <h3 class="history-writing-time"><%=(double)history.getWritingTime()/1000%> Seconds</h3>
-        <h4 class="history-completed-at"><%=history.getCompletedAt()%></h4>
+        <h4 class="history-completed-at"><%=compAt%></h4>
         <a class="history-quiz" href="quizInfo.jsp?quizId=<%=history.getQuizId()%>"><%=historyQuizNames.get(history.getId())%></a>
     </div>
     <%

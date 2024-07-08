@@ -246,6 +246,7 @@ public class AttemptTests extends TestCase {
         assertEquals(0, onTimeQuizAttempt.getOnQuestionIndex());
         onTimeQuizAttempt.setOnQuestionIndex(2);
         assertEquals(2, onTimeQuizAttempt.getOnQuestionIndex());
+        assertFalse(onTimeQuizAttempt.evaluateQuestionPractice(0));
 
         // Checking when finished on time
         List<String> question1Ans = new ArrayList<>();
@@ -266,6 +267,7 @@ public class AttemptTests extends TestCase {
         onTimeQuizAttempt.getQuestions().get(1).setWrittenAnswers(question2Ans);
         onTimeQuizAttempt.getQuestions().get(2).setWrittenAnswers(question3Ans);
 
+        assertEquals(10 * 1/2 + 15 + 0, onTimeQuizAttempt.evaluateQuiz());
         assertEquals(10 * 1/2 + 15 + 0, onTimeQuizAttempt.evaluateQuiz());
 
         // Checking when finished dalayed
@@ -309,6 +311,7 @@ public class AttemptTests extends TestCase {
             assertFalse(practiceQuizAttempt.evaluateQuestionPractice(0));
             i++;
         }
+        // Check if on question index moves after question answer
         assertTrue(practiceQuizAttempt.getOnQuestionIndex() != 0);
 
         question1Ans.clear();
@@ -322,6 +325,7 @@ public class AttemptTests extends TestCase {
         practiceQuizAttempt.getQuestions().get(1).setWrittenAnswers(question2Ans);
         practiceQuizAttempt.getQuestions().get(2).setWrittenAnswers(question3Ans);
 
+        // First evaluation
         assertEquals(10 * 1/2 + 15 * 1/3 + 5 * 1/1, practiceQuizAttempt.evaluateQuiz());
 
         question1Ans.clear();
@@ -351,12 +355,14 @@ public class AttemptTests extends TestCase {
             practiceQuizAttempt.getQuestions().get(2).setWrittenAnswers(question3Ans);
             i++;
         }
+        // Check that question 0 is not visited after 3 conseq right answers
         assertEquals(i, maxIterations);
 
         practiceQuizAttempt.getQuestions().get(0).setWrittenAnswers(question1Ans);
         practiceQuizAttempt.getQuestions().get(1).setWrittenAnswers(question2Ans);
         practiceQuizAttempt.getQuestions().get(2).setWrittenAnswers(question3Ans);
 
+        // Evaluate again
         assertEquals(10 * 2/2 + 15 * 3/3 + 5 * 0/1, practiceQuizAttempt.evaluateQuiz());
     }
 
@@ -456,7 +462,6 @@ public class AttemptTests extends TestCase {
         assertFalse(qa.getQuestions().get(0).getQuestion().getText().equals("question 3"));
 
         // Practice quiz
-
         int id4 = qac.attemptQuiz(fourthQuiz,true, fourthQas);
         assertEquals(null,qac.finishQuiz(id4));
     }

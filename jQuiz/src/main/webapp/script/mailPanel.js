@@ -1,3 +1,4 @@
+// Default server call
 function ajaxCall(form,formData){
     $.ajax({
         url: form.attr('action'),
@@ -6,7 +7,6 @@ function ajaxCall(form,formData){
         success: function(response) {
             console.log('Ajax request successful');
             console.log(response);
-            // Optionally, update UI or handle response
         },
         error: function(xhr, status, error) {
             console.error('Ajax request failed');
@@ -15,8 +15,9 @@ function ajaxCall(form,formData){
     });
 }
 
+// Mail behaviour
 $(document).ready(function() {
-    // Ajax request on clicking the div with class 'clickableDiv'
+    // Clicking box - save mail as seen
     $('.message-box').click(function() {
         $(this).removeClass('active-message');
         var form = $(this).closest('form');
@@ -26,9 +27,9 @@ $(document).ready(function() {
         ajaxCall(form,formData);
     });
 
-    // Ajax request on form submit button click
+    // Accept - add friend and delete mail
     $('.friend-acpt-submit').click(function(e) {
-        e.preventDefault(); // Prevent default form submission
+        e.preventDefault();
 
         var form = $(this).closest('form');
         var formData = form.serializeArray();
@@ -39,9 +40,9 @@ $(document).ready(function() {
         ajaxCall(form,formData);
     });
 
-    // Ajax request on form submit button click
+    // Reject - reject friend request and delete mail
     $('.friend-rjct-submit').click(function(e) {
-        e.preventDefault(); // Prevent default form submission
+        e.preventDefault();
 
         var form = $(this).closest('form');
         var formData = form.serializeArray();
@@ -52,6 +53,7 @@ $(document).ready(function() {
         ajaxCall(form,formData);
     });
 });
+// Show mail panel
 function togglePanel() {
     var panel = document.getElementById("mail-panel");
     panel.style.display = (panel.style.display === "block") ? "none" : "block";

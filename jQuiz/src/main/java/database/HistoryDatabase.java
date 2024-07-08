@@ -55,7 +55,7 @@ public class HistoryDatabase extends Database<History> {
                 rs.getInt(USER_ID),
                 rs.getInt(QUIZ_ID),
                 rs.getInt(GRADE),
-                rs.getDate(COMPLETED_AT),
+                rs.getTimestamp(COMPLETED_AT),
                 rs.getInt(WRITING_TIME),
                 rs.getBoolean(IS_PRACTICE)
         );

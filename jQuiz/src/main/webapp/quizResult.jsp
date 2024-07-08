@@ -48,6 +48,7 @@
 <%@ include file="mail.jsp" %>
 <main>
 
+    <%--Finished quiz result--%>
     <h2>Result : <%=lastHistory.getGrade()%> / <%=totalScore%> pts</h2>
     <h2>Writing time : <%=(double) lastHistory.getWritingTime() / 1000%> Seconds</h2>
 
@@ -56,6 +57,7 @@
     <strong><a href="/">Return</a></strong>
 
     <br><br><br>
+    <%--Previous attempt history--%>
     <h2>Previous Attempts</h2>
     <hr>
     <div class="scroll-container">
@@ -76,6 +78,7 @@
     </div>
 
     <br>
+    <%--Top score--%>
     <h2>Top Score</h2>
     <hr>
     <div class="history-box">
@@ -91,6 +94,7 @@
     </div>
 
     <br>
+    <%--Friends--%>
     <h2>Friends</h2>
     <hr>
     <div class="scroll-container">

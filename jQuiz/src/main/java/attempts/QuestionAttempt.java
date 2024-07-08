@@ -16,6 +16,7 @@ public class QuestionAttempt {
     // Used to not grade a question more than once
     private int gottenGrade;
     private boolean wasGraded;
+    // Practice mode
     private boolean isPractice;
 
     /**
@@ -56,6 +57,7 @@ public class QuestionAttempt {
      */
     public void setWrittenAnswers(List<String> answers) {
         if(wasGraded) {
+            // If was already graded, don't change the answers
             return;
         }
         writtenAnswers = new ArrayList<>(answers);
@@ -67,8 +69,10 @@ public class QuestionAttempt {
      */
     public int evaluateAnswers(){
         if(wasGraded){
+            // If was already graded, return grade
             return gottenGrade;
         }
+        // Evaluate answers
         Set<Answer> corAns = new HashSet<>();
         int wrongAnswers = 0;
 
@@ -78,22 +82,27 @@ public class QuestionAttempt {
             for(int j = 0; j < answers.size(); j++){
                 Answer ans = answers.get(j);
                 if(ans.equals(wrAns) && ans.getIsCorrect() && ((question.getQuestionType() != QuestionTypes.FILL_BLANK) || (i+1) == ans.getUniquenessId())){
+                    // If answer matches and answer is correct and if it's for FILL_BLANK and it's order is correct, add to answers
                     corAns.add(ans);
                     isRight = true;
                 }
             }
             if(!isRight){
+                // If not, increment wrong answers
                 wrongAnswers++;
             }
         }
 
         int correctAnswers = corAns.size();
         if(question.getQuestionType() == QuestionTypes.MULTI_ANS_MULTI_CHOICE){
+            // For MAMC, Check the difference between right and wrong answers
             correctAnswers = Math.max(0, correctAnswers-wrongAnswers);
         }
         if(isPractice){
+            // If it's practice mode, clear answers
             writtenAnswers.clear();
         }else{
+            // If not, set graded to true
             wasGraded = true;
         }
         gottenGrade = maxScore * correctAnswers / correctAnswersAmount;
