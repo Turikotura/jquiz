@@ -82,7 +82,7 @@
         <% if(curUser != null && userDB.isUserAdmin(curUser.getId())) { %>
             <form action="Announcement" method="get">
                 <input type="hidden" name="authorId" value="<%=curUser.getId()%>">
-                <input type="text" placeholder="Title" name="title" id="announcement-title"><br>
+                <input type="text" placeholder="Title" name="title" id="announcement-title" maxlength="50"><br>
                 <textarea placeholder="Enter your announcement here!" name="text" id="announcement-body"></textarea><br>
                 <input type="submit" value="Publish"><br>
             </form>

@@ -6,13 +6,7 @@
     %>
     <h3 id="log-in-first">Log in first</h3>
     <%
-    }else{
-    %>
-    <%--button to send mails--%>
-    <a id="send-mail" href="sendMail.jsp">Send Mail</a>
-    <hr>
-    <%
-        }
+    }
     %>
     <%
         for(int i = 0; i < mails.size(); i++){

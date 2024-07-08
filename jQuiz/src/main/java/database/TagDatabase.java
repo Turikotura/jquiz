@@ -8,8 +8,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TagDatabase extends Database<Tag> {
-    static final String ID = "id";
-    static final String NAME = "name";
+    public static final String ID = "id";
+    public static final String NAME = "name";
+    public static final String QUIZ_ID = "quiz_id";
+    public static final String TAG_ID = "tag_id";
 
     public TagDatabase(BasicDataSource dataSource, String databaseName) {
         super(dataSource, databaseName);
@@ -76,8 +78,8 @@ public class TagDatabase extends Database<Tag> {
 
     public void associateTagWithQuiz(int quizId, int tagId) throws SQLException, ClassNotFoundException {
         String query = String.format(
-                "INSERT INTO %s (quiz_id, tag_id) VALUES (?, ?);",
-                Database.TAG_TO_QUIZ_DB);
+                "INSERT INTO %s ( %s, %s ) VALUES (?, ?);",
+                Database.TAG_TO_QUIZ_DB, QUIZ_ID, TAG_ID);
         Connection con = getConnection();
         PreparedStatement statement = this.getStatement(query, con);
         statement.setInt(1, quizId);
@@ -92,8 +94,8 @@ public class TagDatabase extends Database<Tag> {
 
     public List<Tag> getTagsForQuiz(int quizId) throws SQLException, ClassNotFoundException {
         String query = String.format(
-                "SELECT t.* FROM %s t JOIN %s tq ON t.id = tq.tag_id WHERE tq.quiz_id = ?;",
-                Database.TAG_DB, Database.TAG_TO_QUIZ_DB);
+                "SELECT t.* FROM %s t JOIN %s tq ON t.id = tq.%s WHERE tq.%s = ?;",
+                Database.TAG_DB, Database.TAG_TO_QUIZ_DB, TAG_ID, QUIZ_ID);
         return queryToList(query, (ps) -> {
             try {
                 ps.setInt(1, quizId);
@@ -116,5 +118,16 @@ public class TagDatabase extends Database<Tag> {
             }
             return ps;
         });
+    }
+    public void clearTagsConnectionByQuizId(int quizId) throws SQLException, ClassNotFoundException {
+        String query = String.format(
+                "DELETE FROM %s WHERE %s = ?",
+                TAG_TO_QUIZ_DB, QUIZ_ID
+        );
+        Connection con = getConnection();
+        PreparedStatement ps = getStatement(query,con);
+        ps.setInt(1,quizId);
+        ps.execute();
+        con.close();
     }
 }

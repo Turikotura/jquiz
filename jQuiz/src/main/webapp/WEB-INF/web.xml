@@ -42,10 +42,6 @@
     <servlet-class>servlets.MailPanelServlet</servlet-class>
   </servlet>
   <servlet>
-    <servlet-name>SendMail</servlet-name>
-    <servlet-class>servlets.SendMailServlet</servlet-class>
-  </servlet>
-  <servlet>
     <servlet-name>AddFriend</servlet-name>
     <servlet-class>servlets.AddFriendServlet</servlet-class>
   </servlet>
@@ -117,10 +113,6 @@
   <servlet-mapping>
     <servlet-name>MailPanel</servlet-name>
     <url-pattern>/MailPanel</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-    <servlet-name>SendMail</servlet-name>
-    <url-pattern>/SendMail</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
     <servlet-name>AddFriend</servlet-name>

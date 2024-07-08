@@ -122,16 +122,16 @@ public class PlayQuizServlet extends HttpServlet {
               MailDatabase mailDB = getDatabase(Database.MAIL_DB,httpServletRequest);
               UserDatabase userDB = getDatabase(Database.USER_DB,httpServletRequest);
               User system = userDB.getByUsername("System");
-              if(quizzesWritten.size() == 10) {
+              if(!achievementDB.hasAchievementUnlocked(userId, "Quiz Machine") && quizzesWritten.size() == 10) {
                   achievementDB.unlockAchievement(userId,"Quiz Machine");
                   mailDB.sendAchievementMail(system.getId(), userId,"Quiz Machine");
               }
               History bestAttempt = historydb.getBestScoreHistoryByQuizId(history.getQuizId());
-              if(bestAttempt.getUserId() == userId && !achievementDB.hasAchievementUnlocked(userId,"I am the Greatest")) {
+              if(!achievementDB.hasAchievementUnlocked(userId, "I am the Greatest") && bestAttempt.getUserId() == userId && !achievementDB.hasAchievementUnlocked(userId,"I am the Greatest")) {
                   achievementDB.unlockAchievement(userId,"I am the Greatest");
                   mailDB.sendAchievementMail(system.getId(), userId,"I am the Greatest");
               }
-              if(history.getIsPractice() && !achievementDB.hasAchievementUnlocked(userId,"Practice Makes Perfect")) {
+              if(!achievementDB.hasAchievementUnlocked(userId, "Practice Makes Perfect") && history.getIsPractice() && !achievementDB.hasAchievementUnlocked(userId,"Practice Makes Perfect")) {
                   achievementDB.unlockAchievement(userId,"Practice Makes Perfect");
                   mailDB.sendAchievementMail(system.getId(), userId,"Practice Makes Perfect");
               }

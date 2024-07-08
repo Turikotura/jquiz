@@ -30,9 +30,7 @@ public class ManageUserServlet extends HttpServlet {
             Mail promotionMail = new Mail(-1,system.getId(),newAdminId, MailTypes.DEFAULT,-1,
                     "Congratulations! You have been promoted to admin by " + curUser.getUsername() + ". Keep up the good work!",new Date(),false);
             mailDB.add(promotionMail);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        } catch (ClassNotFoundException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
         response.sendRedirect("profile.jsp?username="+newAdmin.getUsername());
@@ -47,9 +45,7 @@ public class ManageUserServlet extends HttpServlet {
         try {
             userDB.banUser(punishedId);
             punishedUser = userDB.getById(punishedId);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        } catch (ClassNotFoundException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
         response.sendRedirect("profile.jsp?username="+punishedUser.getUsername());

@@ -62,7 +62,7 @@
             Password:
             <input type="password" name="password">
         </label>
-        <p><%=message%></p>
+        <p style="word-wrap: break-word"><%=message%></p>
         <input type="submit" value="Log in">
     </form>
     <span>New around here? <a href="register.jsp">Create new account</a></span>

@@ -60,6 +60,9 @@ public class RegisterServlet extends HttpServlet {
             } else if(result == Register.EMAIL_BANNED) {
                 request.getServletContext().setAttribute("reg-message","You have been banned for violating our policies.");
                 response.sendRedirect("register.jsp");
+            }else if(result == Register.NO_EMAIL){
+                request.getServletContext().setAttribute("reg-message","Email can't be empty");
+                response.sendRedirect("register.jsp");
             } else {
                 User newUser = new User(User.NO_ID,userName,new Date(),email, Security.getHash(password1),image,null);
                 ((UserDatabase)request.getServletContext().getAttribute(Database.USER_DB)).add(newUser);

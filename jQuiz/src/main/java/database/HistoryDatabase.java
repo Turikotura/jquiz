@@ -73,8 +73,8 @@ public class HistoryDatabase extends Database<History> {
         return rs.getInt("total_count");
     }
     public List<History> getHistoryByUserId(int userId) throws SQLException, ClassNotFoundException {
-        String query = String.format("SELECT * FROM %s WHERE %s = ?",
-                databaseName, USER_ID);
+        String query = String.format("SELECT * FROM %s WHERE %s = ? ORDER BY %s DESC",
+                databaseName, USER_ID, COMPLETED_AT);
         return queryToList(query, (ps) -> {
             try {
                 ps.setInt(1,userId);
@@ -113,8 +113,8 @@ public class HistoryDatabase extends Database<History> {
         });
     }
     public List<History> getHistoryByUserAndQuizId(int userId, int quizId) throws SQLException, ClassNotFoundException {
-        String query = String.format("SELECT * FROM %s WHERE %s = ? AND %s = ?",
-                databaseName, USER_ID, QUIZ_ID);
+        String query = String.format("SELECT * FROM %s WHERE %s = ? AND %s = ? ORDER BY %s DESC",
+                databaseName, USER_ID, QUIZ_ID, COMPLETED_AT);
         return queryToList(query, (ps) -> {
             try {
                 ps.setInt(1,userId);
@@ -183,8 +183,8 @@ public class HistoryDatabase extends Database<History> {
         });
     }
     public List<History> getHistoryByQuizId(int quizId) throws SQLException, ClassNotFoundException {
-        String query = String.format("SELECT * FROM %s WHERE %s = ?",
-                databaseName, QUIZ_ID);
+        String query = String.format("SELECT * FROM %s WHERE %s = ? ORDER BY %s DESC",
+                databaseName, QUIZ_ID, COMPLETED_AT);
         return queryToList(query, (ps) -> {
             try {
                 ps.setInt(1,quizId);

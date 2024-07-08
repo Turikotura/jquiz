@@ -66,8 +66,8 @@ public class  MailDatabase extends Database<Mail> {
         );
     }
     public List<Mail> getMailsByUserId(int userId, String sendOrReceive) throws SQLException, ClassNotFoundException {
-        String query = String.format("SELECT * FROM %s WHERE %s = ?",
-                databaseName, (Objects.equals(sendOrReceive, "SEND") ? SENDER_ID : RECEIVER_ID));
+        String query = String.format("SELECT * FROM %s WHERE %s = ? ORDER BY %s DESC",
+                databaseName, (Objects.equals(sendOrReceive, "SEND") ? SENDER_ID : RECEIVER_ID), TIME_SENT);
         return queryToList(query, (ps) -> {
             try {
                 ps.setInt(1,userId);
