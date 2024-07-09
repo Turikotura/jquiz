@@ -25,7 +25,7 @@
     List<Quiz> popularQuizzes = new ArrayList<Quiz>();
     List<Quiz> lastMonthPopularQuizzes = new ArrayList<Quiz>();
 
-    List<Announcement> announcements = announcementDB.getAllAnnouncements();
+    List<Announcement> announcements = announcementDB.getThreeAnnouncements();
 
     try {
         if(curUser != null){
@@ -82,18 +82,23 @@
         <% if(curUser != null && userDB.isUserAdmin(curUser.getId())) { %>
             <form action="Announcement" method="get">
                 <input type="hidden" name="authorId" value="<%=curUser.getId()%>">
-                <input type="text" placeholder="Title" name="title" id="announcement-title" maxlength="50"><br>
-                <textarea placeholder="Enter your announcement here!" name="text" id="announcement-body"></textarea><br>
+                <input type="text" placeholder="Title" name="title" id="announcement-editor-title" maxlength="50"><br>
+                <textarea placeholder="Enter your announcement here!" name="text" id="announcement-editor-body"></textarea><br>
                 <input type="submit" value="Publish"><br>
             </form>
         <% } %>
 
-        <% for(Announcement cur : announcements) {
-            User curAuthor = userDB.getById(cur.getAuthorId());%>
-            <h2><%=cur.getTitle()%></h2>
-            <h3><%="By: " + curAuthor.getUsername()%></h3>
-            <p><%=cur.getText()%></p>
-        <% } %>
+        <div class="announcements-section">
+            <% for (Announcement cur : announcements) {
+                User curAuthor = userDB.getById(cur.getAuthorId());
+            %>
+            <div class="announcement">
+                <h2 class="announcement-title"><%= cur.getTitle() %></h2>
+                <h3 class="announcement-author"><%="By: " + curAuthor.getUsername() %></h3>
+                <p class="announcement-text"><%= cur.getText() %></p>
+            </div>
+            <% } %>
+        </div>
     </div>
 
     <%
@@ -101,6 +106,7 @@
     %>
     <div class="quiz-list-wrapper">
         <h2>Recently added quizzes</h2>
+        <h4><a href="quizzes?sortBy=NEWEST">See all</a></h4>
         <div class="quiz-boxes">
             <%
                 for (Quiz quiz : recentQuizzes) {
@@ -125,6 +131,7 @@
 
     <div class="quiz-list-wrapper">
         <h2>All-time popular quizzes</h2>
+        <h4><a href="quizzes?sortBy=TOTAL">See all</a></h4>
         <div class="quiz-boxes">
         <% for (Quiz quiz : popularQuizzes) {
                         User author = userDB.getById(quiz.getAuthorId());
@@ -148,6 +155,7 @@
 
     <div class="quiz-list-wrapper">
         <h2>Popular quizzes in the last month</h2>
+        <h4><a href="quizzes?sortBy=LAST_MONTH">See all</a></h4>
         <div class="quiz-boxes">
             <%
                 for (Quiz quiz : lastMonthPopularQuizzes) {

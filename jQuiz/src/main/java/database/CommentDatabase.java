@@ -18,6 +18,13 @@ public class CommentDatabase extends Database<Comment>{
         super(dataSource, databaseName);
     }
 
+    /**
+     * Adds new comment to comments table
+     * @param toAdd new Comment object
+     * @return id of new row
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
     @Override
     public int add(Comment toAdd) throws SQLException, ClassNotFoundException {
         String query = String.format(
@@ -46,6 +53,13 @@ public class CommentDatabase extends Database<Comment>{
         }
     }
 
+    /**
+     * Assembles Comment object from ResultSet
+     * @param rs ResultSet of comments table rows
+     * @return Comment object
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
     @Override
     protected Comment getItemFromResultSet(ResultSet rs) throws SQLException, ClassNotFoundException {
         return new Comment(
@@ -57,6 +71,13 @@ public class CommentDatabase extends Database<Comment>{
         );
     }
 
+    /**
+     * Returns cooments of quiz passed
+     * @param quizId Id of the quiz
+     * @return List of Comments left on the quiz
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
     public List<Comment> getCommentsByQuizId(int quizId) throws SQLException, ClassNotFoundException {
         String query = String.format(
                 "SELECT * FROM %s WHERE %s = ? ORDER BY %s DESC",

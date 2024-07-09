@@ -1,6 +1,5 @@
 package database;
 
-import models.Achievement;
 import models.Announcement;
 import org.apache.commons.dbcp2.BasicDataSource;
 
@@ -17,6 +16,13 @@ public class AnnouncementDatabase extends Database<Announcement> {
         super(dataSource, databaseName);
     }
 
+    /**
+     * Add new announcement to announcements table
+     * @param toAdd new Announcement object
+     * @return id of new row
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
     @Override
     public int add(Announcement toAdd) throws SQLException, ClassNotFoundException {
         String query = String.format("INSERT INTO %s (%s, %s, %s, %s) VALUES (?,?,?,?);",
@@ -41,6 +47,14 @@ public class AnnouncementDatabase extends Database<Announcement> {
             }
         }
     }
+
+    /**
+     * Assembles Announcement object from ResultSet
+     * @param rs ResultSet of announcements table rows
+     * @return Announcement Object
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
     @Override
     protected Announcement getItemFromResultSet(ResultSet rs) throws SQLException, ClassNotFoundException {
         return new Announcement(
@@ -51,8 +65,15 @@ public class AnnouncementDatabase extends Database<Announcement> {
                 rs.getDate(CREATED_AT)
         );
     }
-    public List<Announcement> getAllAnnouncements() throws SQLException, ClassNotFoundException {
-        String query = String.format("SELECT * FROM %s ORDER BY %s DESC;", Database.ANNOUNCEMENT_DB, CREATED_AT);
+
+    /**
+     * Get three latest announcements published
+     * @return List of three latest announcements
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
+    public List<Announcement> getThreeAnnouncements() throws SQLException, ClassNotFoundException {
+        String query = String.format("SELECT * FROM %s ORDER BY %s DESC LIMIT 3;", Database.ANNOUNCEMENT_DB, CREATED_AT);
         return queryToList(query, (ps) -> {return ps;});
     }
 }

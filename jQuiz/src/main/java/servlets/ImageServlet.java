@@ -58,6 +58,10 @@ public class ImageServlet extends HttpServlet {
                     if (imageBytes == null) {
                         imageBytes = user.getImage();
                     }
+                    if (imageBytes == null) {
+                        java.nio.file.Path path = java.nio.file.Paths.get("./database_structure/example_images/default_user.png");
+                        imageBytes = java.nio.file.Files.readAllBytes(path);
+                    }
                 }
             }else if(type.equals("question")){
                 QuestionDatabase questionDB = getDatabase(Database.QUESTION_DB, request);

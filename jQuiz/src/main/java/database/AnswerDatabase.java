@@ -22,6 +22,13 @@ public class AnswerDatabase extends Database<Answer> {
         super(dataSource, databaseName);
     }
 
+    /**
+     * Adds new answer to answers table
+     * @param answer new Answer object
+     * @return id of new row
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
     @Override
     public int add(Answer answer) throws SQLException, ClassNotFoundException {
         String query = String.format(
@@ -49,7 +56,13 @@ public class AnswerDatabase extends Database<Answer> {
             }
         }
     }
-
+    /**
+     * Assembles Answer object from ResultSet
+     * @param rs ResultSet of answers table rows
+     * @return Answer object
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
     @Override
     protected Answer getItemFromResultSet(ResultSet rs) throws SQLException, ClassNotFoundException {
         return new Answer(
@@ -61,21 +74,13 @@ public class AnswerDatabase extends Database<Answer> {
         );
     }
 
-    public List<Integer> getAnswerIdsByQuestionId(int questionId) throws SQLException, ClassNotFoundException {
-        String query = String.format("SELECT %s FROM %s WHERE %s = ?;",
-                ID, databaseName, QUESTION_ID);
-        Connection con = getConnection();
-        PreparedStatement statement = getStatement(query,con);
-        statement.setInt(1,questionId);
-        ResultSet rs = statement.executeQuery();
-
-        List<Integer> answerIds = new ArrayList<>();
-        while (rs.next()) {
-            answerIds.add(rs.getInt(ID));
-        }
-        con.close();
-        return answerIds;
-    }
+    /**
+     * Get answers which belong to question passed
+     * @param questionId Id of the question
+     * @return List of Answers to the question
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
     public List<Answer> getAnswersByQuestionId(int questionId) throws SQLException, ClassNotFoundException {
         String query = String.format("SELECT * FROM %s WHERE %s = ?;",
                 databaseName, QUESTION_ID);
@@ -88,6 +93,13 @@ public class AnswerDatabase extends Database<Answer> {
             return ps;
         });
     }
+
+    /**
+     * Deletes answers which belong to quiz passed
+     * @param quizId Id of the quiz
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
     public void deleteAnswersByQuizId(int quizId) throws SQLException, ClassNotFoundException {
         String curStatement = String.format("DELETE a FROM %s a JOIN %s q ON a.%s = q.%s WHERE q.%s = ?;",
                 ANSWER_DB, QUESTION_DB, QUESTION_ID, QuestionDatabase.ID, QuestionDatabase.QUIZ_ID);

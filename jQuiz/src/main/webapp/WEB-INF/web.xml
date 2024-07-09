@@ -93,6 +93,10 @@
     <servlet-name>HistorySummary</servlet-name>
     <servlet-class>servlets.HistorySummaryServlet</servlet-class>
   </servlet>
+  <servlet>
+    <servlet-name>Quizzes</servlet-name>
+    <servlet-class>servlets.QuizzesServlet</servlet-class>
+  </servlet>
 
   <servlet-mapping>
     <servlet-name>FrontPageServlet</servlet-name>
@@ -173,5 +177,9 @@
   <servlet-mapping>
     <servlet-name>HistorySummary</servlet-name>
     <url-pattern>/HistorySummary</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>Quizzes</servlet-name>
+    <url-pattern>/quizzes</url-pattern>
   </servlet-mapping>
 </web-app>

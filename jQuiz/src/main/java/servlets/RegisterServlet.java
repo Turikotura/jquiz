@@ -40,9 +40,10 @@ public class RegisterServlet extends HttpServlet {
                 image = outputStream.toByteArray();
             }
         }
+        image = image.length == 0 ? null : image;
 
         try {
-            int result = Register.createNew(userName,email,password1,password2,image,(UserDatabase)request.getServletContext().getAttribute(Database.USER_DB));
+            int result = Register.createNew(userName,email,password1,password2, (UserDatabase)request.getServletContext().getAttribute(Database.USER_DB));
             if(result == Register.USERNAME_EXISTS) {
                 request.getServletContext().setAttribute("reg-message","User named " + userName + " already exists.");
                 response.sendRedirect("register.jsp");
@@ -68,8 +69,10 @@ public class RegisterServlet extends HttpServlet {
                 ((UserDatabase)request.getServletContext().getAttribute(Database.USER_DB)).add(newUser);
                 newUser = ((UserDatabase)request.getServletContext().getAttribute(Database.USER_DB)).getByUsername(newUser.getUsername());
                 request.getSession().setAttribute("curUser",newUser);
-                response.sendRedirect("");
             }
+
+            if(result == Register.SUCCESS) response.sendRedirect("");
+            else response.sendRedirect("register.jsp");
         } catch (SQLException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }

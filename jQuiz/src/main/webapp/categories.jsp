@@ -40,6 +40,21 @@
     categories.add(new Category("Gaming", "https://cdn-icons-png.freepik.com/512/7708/7708371.png"));
     categories.add(new Category("Arts", "https://cdn-icons-png.freepik.com/512/5259/5259910.png"));
     categories.add(new Category("Other", "https://simpleicon.com/wp-content/uploads/smile.png"));
+
+    TagDatabase tagDB = getDatabase(Database.TAG_DB,request);
+    List<Tag> tags = tagDB.getAllTags();
+
+    Map<Character, List<Tag>> tagGroups = new TreeMap<Character, List<Tag>>();
+    for (Tag tag : tags) {
+
+        if(!tag.getName().isEmpty()){
+            char firstLetter = Character.toUpperCase(tag.getName().charAt(0));
+            if (!tagGroups.containsKey(firstLetter)) {
+                tagGroups.put(firstLetter, new ArrayList<Tag>());
+            }
+            tagGroups.get(firstLetter).add(tag);
+        }
+    }
 %>
 <!DOCTYPE html>
 <html>
@@ -55,7 +70,7 @@
 
 <main>
     <div class="category-list-wrapper">
-        <h2>Categories</h2>
+        <h1>Categories</h1>
         <div class="category-boxes">
             <%
                 for (Category category : categories) {
@@ -69,6 +84,19 @@
             <%
                 }
             %>
+        </div>
+        <h1>Tags</h1>
+        <div class="tag-lexicon">
+            <% for (Map.Entry<Character, List<Tag>> entry : tagGroups.entrySet()) { %>
+            <div class="tag-group">
+                <h2><%= entry.getKey() %></h2>
+                <ul>
+                    <% for (Tag tag : entry.getValue()) { %>
+                    <li><a href="quizzes?tag=<%= tag.getName()%>"><%= tag.getName()%></a></li>
+                    <% } %>
+                </ul>
+            </div>
+            <% } %>
         </div>
     </div>
 </main>

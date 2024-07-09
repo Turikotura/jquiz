@@ -166,7 +166,7 @@
     <h1>Create Quiz</h1>
     <form action="CreateQuiz" method="post" enctype="multipart/form-data">
         <label for="title">Quiz Title:</label><br>
-        <input type="text" id="title" name="title" maxlength="50"><br><br>
+        <input type="text" id="title" name="title" maxlength="50" required><br><br>
 
         <label for="description">Quiz Description:</label><br>
         <textarea id="description" name="description"></textarea><br><br>
@@ -191,7 +191,7 @@
         <div class="block">
             <div>
                 <label for="time">Total Time (in seconds):</label><br>
-                <input type="number" id="time" name="time"><br><br>
+                <input type="number" id="time" name="time" required value="60"><br><br>
                 <label for="thumbnail">Thumbnail Image:</label><br>
                 <input type="file" id="thumbnail" name="thumbnail" accept="image/*"><br><br>
             </div>
@@ -217,9 +217,9 @@
         </select>
         <button type="button" onclick="addQuestion()">Add Question</button><br><br>
 
-        <div id="questionContainer"></div><br><br>
+        <div id="questionContainer"></div>
 
-        <input type="submit" value="Create Quiz">
+        <button type="submit">Create Quiz</button>
     </form>
 
     <div id="responseQuestionForm" style="display: none;">

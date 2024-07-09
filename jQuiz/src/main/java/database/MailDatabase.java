@@ -21,6 +21,14 @@ public class  MailDatabase extends Database<Mail> {
     public MailDatabase(BasicDataSource dataSource, String databaseName) {
         super(dataSource, databaseName);
     }
+
+    /**
+     * Adds new entry to mails table
+     * @param toAdd Mail Object describing new row
+     * @return id of the new row
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
     @Override
     public int add(Mail toAdd) throws SQLException, ClassNotFoundException {
         String query = String.format(
@@ -52,6 +60,13 @@ public class  MailDatabase extends Database<Mail> {
         }
     }
 
+    /**
+     * Assembles Mail object from ResultSet
+     * @param rs ResultSet of mails table rows
+     * @return Mail object
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
     @Override
     protected Mail getItemFromResultSet(ResultSet rs) throws SQLException, ClassNotFoundException {
         return new Mail(
@@ -65,6 +80,15 @@ public class  MailDatabase extends Database<Mail> {
                 rs.getBoolean(SEEN)
         );
     }
+
+    /**
+     * Get all the messages sent or received by the user
+     * @param userId Id of the user
+     * @param sendOrReceive equals SEND if we want mails sent by the user
+     * @return List of Mails sent by the user
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
     public List<Mail> getMailsByUserId(int userId, String sendOrReceive) throws SQLException, ClassNotFoundException {
         String query = String.format("SELECT * FROM %s WHERE %s = ? ORDER BY %s DESC",
                 databaseName, (Objects.equals(sendOrReceive, "SEND") ? SENDER_ID : RECEIVER_ID), TIME_SENT);
@@ -77,6 +101,15 @@ public class  MailDatabase extends Database<Mail> {
             return ps;
         });
     }
+
+    /**
+     * Checks if there is friend request pending from one user to another
+     * @param from Id of the user who sent the request
+     * @param to Id of the user who was receiving the request
+     * @return true if there is friend request pending, false otherwise
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
     public boolean friendRequestPending(int from, int to) throws SQLException, ClassNotFoundException {
         String query = String.format("SELECT * FROM %s WHERE %s = ? AND %s = ? and %s = ?",
                 databaseName, SENDER_ID, RECEIVER_ID, TYPE);
@@ -92,6 +125,14 @@ public class  MailDatabase extends Database<Mail> {
         }).isEmpty();
     }
 
+    /**
+     * Send mail notifying the user that they unlocked an achievement
+     * @param systemId Id of the System user
+     * @param userId Id of the user who unlocked the achievement
+     * @param achievementName Name of the achievement unlocked
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
     public void sendAchievementMail(int systemId, int userId, String achievementName) throws SQLException, ClassNotFoundException {
         Mail unlockMail = new Mail(-1,systemId,userId,MailTypes.DEFAULT,-1,
                 "Congratulations! " + achievementName + " unlocked. Go to achievements page to see more.",new Date(),false);

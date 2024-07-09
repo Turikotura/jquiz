@@ -1,6 +1,5 @@
 package attempts;
 
-import com.sun.jmx.snmp.agent.SnmpUserDataFactory;
 import junit.framework.TestCase;
 import models.*;
 
