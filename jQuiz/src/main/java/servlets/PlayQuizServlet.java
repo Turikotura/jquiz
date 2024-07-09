@@ -19,6 +19,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static listeners.ContextListener.getMailInfo;
 import static listeners.SessionListener.getQuizAttemptsController;
 import static listeners.ContextListener.getDatabase;
 
@@ -33,6 +34,8 @@ public class PlayQuizServlet extends HttpServlet {
         QuizAttempt quizAttempt = qac.getQuizAttemptById(attemptId);
         httpServletRequest.setAttribute("qa",quizAttempt);
 
+        getMailInfo(httpServletRequest);
+
         httpServletRequest.getRequestDispatcher("playQuiz.jsp").forward(httpServletRequest,httpServletResponse);
     }
 
@@ -45,6 +48,8 @@ public class PlayQuizServlet extends HttpServlet {
         QuizAttempt quizAttempt = qac.getQuizAttemptById(attemptId);
 
         if(httpServletRequest.getParameter("questionInd") != null){
+            // Question answers submitted
+
             // Question answer update
             int questionInd = Integer.parseInt(httpServletRequest.getParameter("questionInd"));
 
@@ -75,6 +80,7 @@ public class PlayQuizServlet extends HttpServlet {
 
             if(quizAttempt.getIsPractice()){
                 if(httpServletRequest.getParameter("eval") != null) {
+                    // Evaluate question for practice
                     boolean wasRight = quizAttempt.evaluateQuestionPractice(questionInd);
 
                     respMap.put("correct",wasRight ? 1 : 0);
@@ -96,6 +102,7 @@ public class PlayQuizServlet extends HttpServlet {
                 }
             }
 
+            // Send response
             httpServletResponse.setContentType("application/json");
             httpServletResponse.setCharacterEncoding("UTF-8");
             httpServletResponse.getWriter().write(new Gson().toJson(respMap));
@@ -115,23 +122,24 @@ public class PlayQuizServlet extends HttpServlet {
             } catch (ClassNotFoundException e) {
                 throw new RuntimeException(e);
             }
-          
+
+            // Check Achievements
             try {
               List<History> quizzesWritten = historydb.getHistoryByUserId(userId);
               AchievementDatabase achievementDB = getDatabase(AchievementDatabase.ACHIEVEMENT_DB, httpServletRequest);
               MailDatabase mailDB = getDatabase(Database.MAIL_DB,httpServletRequest);
               UserDatabase userDB = getDatabase(Database.USER_DB,httpServletRequest);
               User system = userDB.getByUsername("System");
-              if(quizzesWritten.size() == 10) {
+              if(!achievementDB.hasAchievementUnlocked(userId, "Quiz Machine") && quizzesWritten.size() == 10) {
                   achievementDB.unlockAchievement(userId,"Quiz Machine");
                   mailDB.sendAchievementMail(system.getId(), userId,"Quiz Machine");
               }
               History bestAttempt = historydb.getBestScoreHistoryByQuizId(history.getQuizId());
-              if(bestAttempt.getUserId() == userId && !achievementDB.hasAchievementUnlocked(userId,"I am the Greatest")) {
+              if(!achievementDB.hasAchievementUnlocked(userId, "I am the Greatest") && bestAttempt.getUserId() == userId && !achievementDB.hasAchievementUnlocked(userId,"I am the Greatest")) {
                   achievementDB.unlockAchievement(userId,"I am the Greatest");
                   mailDB.sendAchievementMail(system.getId(), userId,"I am the Greatest");
               }
-              if(history.getIsPractice() && !achievementDB.hasAchievementUnlocked(userId,"Practice Makes Perfect")) {
+              if(!achievementDB.hasAchievementUnlocked(userId, "Practice Makes Perfect") && history.getIsPractice() && !achievementDB.hasAchievementUnlocked(userId,"Practice Makes Perfect")) {
                   achievementDB.unlockAchievement(userId,"Practice Makes Perfect");
                   mailDB.sendAchievementMail(system.getId(), userId,"Practice Makes Perfect");
               }
@@ -139,7 +147,7 @@ public class PlayQuizServlet extends HttpServlet {
                 throw new RuntimeException(e);
             }
 
-            httpServletResponse.sendRedirect("quizResult.jsp?userId="+userId+"&quizId="+quizAttempt.getQuizId());
+            httpServletResponse.sendRedirect("/QuizResult?userId="+userId+"&quizId="+quizAttempt.getQuizId());
         }
     }
 }

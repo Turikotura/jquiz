@@ -103,6 +103,109 @@ public class QuizDatabase extends Database<Quiz>{
         );
     }
 
+    public List<Quiz> getQuizzesByOffset(int offset, int limit, String match, String category, String tag, String sortBy) throws SQLException, ClassNotFoundException {
+        String query = String.format("SELECT q.* FROM %s q ", databaseName);
+        if(tag!=null && !tag.isEmpty()){
+            query+=String.format("LEFT JOIN %s qt ON q.id = qt.quiz_id " +
+                                    "LEFT JOIN %s t ON qt.tag_id = t.id ",
+                                    Database.TAG_TO_QUIZ_DB, Database.TAG_DB);
+        }
+        List<String> conditions = new ArrayList<>();
+        if(match != null && !match.isEmpty()){
+            conditions.add("q.title LIKE ?");
+        }
+        if(category != null && !category.isEmpty()){
+            conditions.add("q.category = ?");
+        }
+        if(tag != null && !tag.isEmpty()){
+            conditions.add("t.name = ?");
+        }
+
+        if(!conditions.isEmpty()){
+            query += "WHERE " + String.join(" AND ", conditions) + " ";
+        }
+
+        switch (sortBy) {
+            case "TOTAL":
+                query += "ORDER BY q.total_play_count DESC ";
+                break;
+            case "LAST_MONTH":
+                query += "ORDER BY q.last_month_play_count DESC ";
+                break;
+            case "NEWEST":
+                query += "ORDER BY q.created_at DESC ";
+                break;
+            default:
+                query += "ORDER BY q.created_at DESC ";
+                break;
+        }
+
+        query += "LIMIT ? OFFSET ?";
+
+        return queryToList(query, (ps) -> {
+            try {
+                int paramIndex = 1;
+                if (match != null && !match.isEmpty()) {
+                    ps.setString(paramIndex++, "%" + match + "%");
+                }
+                if (category != null && !category.isEmpty()) {
+                    ps.setString(paramIndex++, category);
+                }
+                if (tag != null && !tag.isEmpty()) {
+                    ps.setString(paramIndex++, tag);
+                }
+                ps.setInt(paramIndex++, limit);
+                ps.setInt(paramIndex, offset);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+            return ps;
+        });
+    }
+    /**
+     * Get amount of quizzes the website hosts
+     * @return amount of quizzes the website hosts
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
+    public int getTotalQuizCount(String match, String category, String tag) throws SQLException, ClassNotFoundException {
+        String query = String.format("SELECT COUNT(*) AS total_count FROM %s q ", databaseName);
+        if(tag!=null && !tag.isEmpty()){
+            query+=String.format("LEFT JOIN %s qt ON q.id = qt.quiz_id " +
+                            "LEFT JOIN %s t ON qt.tag_id = t.id ",
+                    Database.TAG_TO_QUIZ_DB, Database.TAG_DB);
+        }
+        List<String> conditions = new ArrayList<>();
+        if(match != null && !match.isEmpty()){
+            conditions.add("q.title LIKE ?");
+        }
+        if(category != null && !category.isEmpty()){
+            conditions.add("q.category = ?");
+        }
+        if(tag != null && !tag.isEmpty()){
+            conditions.add("t.name = ?");
+        }
+
+        if(!conditions.isEmpty()){
+            query += "WHERE " + String.join(" AND ", conditions) + " ";
+        }
+        Connection con = getConnection();
+        PreparedStatement ps = getStatement(query,con);
+        int paramIndex = 1;
+        if (match != null && !match.isEmpty()) {
+            ps.setString(paramIndex++, "%" + match + "%");
+        }
+        if (category != null && !category.isEmpty()) {
+            ps.setString(paramIndex++, category);
+        }
+        if (tag != null && !tag.isEmpty()) {
+            ps.setString(paramIndex, tag);
+        }
+        ps.executeQuery();
+        ResultSet rs = ps.getResultSet();
+        rs.next();
+        return rs.getInt("total_count");
+    }
     /**
      * Get amount of quizzes the website hosts
      * @return amount of quizzes the website hosts

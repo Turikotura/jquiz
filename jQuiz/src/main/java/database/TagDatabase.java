@@ -113,8 +113,8 @@ public class TagDatabase extends Database<Tag> {
      */
     public void associateTagWithQuiz(int quizId, int tagId) throws SQLException, ClassNotFoundException {
         String query = String.format(
-                "INSERT INTO %s (quiz_id, tag_id) VALUES (?, ?);",
-                Database.TAG_TO_QUIZ_DB);
+                "INSERT INTO %s ( %s, %s ) VALUES (?, ?);",
+                Database.TAG_TO_QUIZ_DB, QUIZ_ID, TAG_ID);
         Connection con = getConnection();
         PreparedStatement statement = this.getStatement(query, con);
         statement.setInt(1, quizId);
@@ -136,8 +136,8 @@ public class TagDatabase extends Database<Tag> {
      */
     public List<Tag> getTagsForQuiz(int quizId) throws SQLException, ClassNotFoundException {
         String query = String.format(
-                "SELECT t.* FROM %s t JOIN %s tq ON t.id = tq.tag_id WHERE tq.quiz_id = ?;",
-                Database.TAG_DB, Database.TAG_TO_QUIZ_DB);
+                "SELECT t.* FROM %s t JOIN %s tq ON t.id = tq.%s WHERE tq.%s = ?;",
+                Database.TAG_DB, Database.TAG_TO_QUIZ_DB, TAG_ID, QUIZ_ID);
         return queryToList(query, (ps) -> {
             try {
                 ps.setInt(1, quizId);
@@ -168,7 +168,6 @@ public class TagDatabase extends Database<Tag> {
             return ps;
         });
     }
-
     /**
      * Remove tags connected to quiz specified
      * @param quizId Id of the quiz

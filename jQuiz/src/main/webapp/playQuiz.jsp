@@ -18,28 +18,15 @@
 <%
     User curUser = (User) request.getSession().getAttribute("curUser");
 
-    MailDatabase mailDB = getDatabase(Database.MAIL_DB,request);
-    UserDatabase userDB = getDatabase(Database.USER_DB,request);
-    HistoryDatabase historyDB = getDatabase(Database.HISTORY_DB,request);
-
     // Mail variables
     List<Mail> mails = new ArrayList<Mail>();
     List<String> senderNames = new ArrayList<String>();
     Map<Integer,Integer> maxGrades = new HashMap<Integer,Integer>();
 
     if(curUser != null){
-        // Get mails received by user
-        mails = mailDB.getMailsByUserId(curUser.getId(),"RECEIVE");
-        for(Mail mail : mails){
-            // Get names of senders
-            senderNames.add(userDB.getById(mail.getSenderId()).getUsername());
-            if(mail.getType() == MailTypes.CHALLENGE){
-                // Get max grade of senders for challenges
-                History history = historyDB.getBestHistoryByUserAndQuizId(mail.getSenderId(),mail.getQuizId());
-                int grade = (history == null) ? 0 : history.getGrade();
-                maxGrades.put(mail.getId(),grade);
-            }
-        }
+        mails = (List<Mail>) request.getAttribute("mails");
+        senderNames = (List<String>) request.getAttribute("senderNames");
+        maxGrades = (Map<Integer, Integer>) request.getAttribute("maxGrades");
     }
 
     int attemptId = Integer.parseInt(request.getParameter("attemptId"));
@@ -63,7 +50,7 @@
 <main>
 
     <%--Quiz info--%>
-    <img src="image?type=quiz&quizId=<%=quizAttempt.getQuizId()%>">
+    <img id="quiz-thumbnail" src="image?type=quiz&quizId=<%=quizAttempt.getQuizId()%>">
     <h1><%=quizAttempt.getTitle()%></h1>
     <h3><%=quizAttempt.getStartTime()%></h3>
     <h3 id="timer"></h3>
@@ -99,7 +86,7 @@
                     toWrite = quizAttempt.getQuestions().get(i).evaluateAnswers() + " / " + quizAttempt.getQuestions().get(i).getMaxScore();
                 }
         %>
-        <p id="q-res-<%=i%>"><%=toWrite%></p>
+        <p id="q-res-<%=i%>"><%=i%> : <%=toWrite%></p>
         <%
             }
         %>
@@ -139,104 +126,109 @@
             <input name="userId" type="hidden" value="<%=curUser.getId()%>">
             <input name="quizAttemptId" type="hidden" value="<%=attemptId%>">
             <input name="questionInd" type="hidden" value="<%=i%>">
-
-            <%--Question info--%>
-            <%
-                if(questionAttempt.getQuestion().getQuestionType() == QuestionTypes.PIC_RESPONSE){
-            %>
-            <img src="image?type=question&questionId=<%=questionAttempt.getQuestion().getId()%>">
-            <%
-                }
-            %>
+                <%--Question info--%>
+                <p>&#8470; <%=i%></p>
+                <%
+                    if(questionAttempt.getQuestion().getQuestionType() == QuestionTypes.PIC_RESPONSE){
+                %>
+                <img src="image?type=question&questionId=<%=questionAttempt.getQuestion().getId()%>"><br><br>
+                <%
+                    }
+                %>
 
                 <%
                     if(questionAttempt.getQuestion().getQuestionType() != QuestionTypes.FILL_BLANK){
                 %>
-            <p style="float: left;"><%=questionAttempt.getQuestion().getText()%></p>
+
+                <p style="float: left;"><%=questionAttempt.getQuestion().getText()%></p>
                 <%
                     }
                 %>
-            <p style="float: right"><%=questionAttempt.getMaxScore()%> pts</p>
-            <br>
-            <br>
-            <hr>
-            <br>
+                <%--Question point--%>
+                <p style="float: right"><%=questionAttempt.getMaxScore()%> pts</p>
+                <br>
+                <br>
+                <hr>
+                <br>
 
-
-
-            <%
-                if(questionAttempt.getQuestion().getQuestionType() == QuestionTypes.MULTIPLE_CHOICE){
-                    for(int j = 0; j < questionAttempt.getAnswers().size(); j++){
-                        String checked = "";
-                        if(!questionAttempt.getWrittenAnswers().isEmpty() && questionAttempt.getAnswers().get(j).equals(questionAttempt.getWrittenAnswers().get(0))){
-                            checked = "checked";
-                        }
-            %>
-            <%--Multi choice question--%>
-            <input <%=disabled%> <%=checked%> name="<%=i%>" id="<%=i%>-<%=j%>" type="radio" value="<%=questionAttempt.getAnswers().get(j).getText()%>">
-            <label for="<%=i%>-<%=j%>"> <%=questionAttempt.getAnswers().get(j).getText()%></label><br>
-            <%
-                    }
-                }
-                else if(questionAttempt.getQuestion().getQuestionType() == QuestionTypes.MULTI_ANS_MULTI_CHOICE){
-                    for(int j = 0; j < questionAttempt.getAnswers().size(); j++){
-                        String checked = "";
-                        for(String wAns : questionAttempt.getWrittenAnswers()){
-                            if(questionAttempt.getAnswers().get(j).equals(wAns)){
+                <%
+                    if(questionAttempt.getQuestion().getQuestionType() == QuestionTypes.MULTIPLE_CHOICE){
+                        for(int j = 0; j < questionAttempt.getAnswers().size(); j++){
+                            String checked = "";
+                            if(!questionAttempt.getWrittenAnswers().isEmpty() && questionAttempt.getAnswers().get(j).equals(questionAttempt.getWrittenAnswers().get(0))){
                                 checked = "checked";
                             }
+                %>
+                <%--Multi choice question--%>
+                <input class="answer-inp mc-inp" <%=disabled%> <%=checked%> name="<%=i%>" id="<%=i%>-<%=j%>" type="radio" value="<%=questionAttempt.getAnswers().get(j).getText()%>">
+                <label for="<%=i%>-<%=j%>"> <%=questionAttempt.getAnswers().get(j).getText()%></label><br>
+                <%
                         }
-            %>
-            <%--MAMC question--%>
-            <input <%=disabled%> <%=checked%> name="<%=i%>" id="<%=i%>-<%=j%>" type="checkbox" value="<%=questionAttempt.getAnswers().get(j).getText()%>">
-            <label for="<%=i%>-<%=j%>"> <%=questionAttempt.getAnswers().get(j).getText()%></label><br>
-            <%
                     }
-                }
-                else if(questionAttempt.getQuestion().getQuestionType() == QuestionTypes.FILL_BLANK){
-                    String text = " " + questionAttempt.getQuestion().getText() + " ";
-                    String[] split = text.split("\\{}");
-            %>
+                    else if(questionAttempt.getQuestion().getQuestionType() == QuestionTypes.MULTI_ANS_MULTI_CHOICE){
+                        for(int j = 0; j < questionAttempt.getAnswers().size(); j++){
+                            String checked = "";
+                            for(String wAns : questionAttempt.getWrittenAnswers()){
+                                if(questionAttempt.getAnswers().get(j).equals(wAns)){
+                                    checked = "checked";
+                                }
+                            }
+                %>
+                <%--MAMC question--%>
+                <input class="answer-inp mamc-inp" <%=disabled%> <%=checked%> name="<%=i%>" id="<%=i%>-<%=j%>" type="checkbox" value="<%=questionAttempt.getAnswers().get(j).getText()%>">
+                <label for="<%=i%>-<%=j%>"> <%=questionAttempt.getAnswers().get(j).getText()%></label><br>
+                <%
+                        }
+                    }
+                    else if(questionAttempt.getQuestion().getQuestionType() == QuestionTypes.FILL_BLANK){
+                        String text = " " + questionAttempt.getQuestion().getText() + " ";
+                        String[] split = text.split("\\{}");
+                %>
+                <%--Fill in the blank question--%>
                 <p>
                     <%
                         for(int j = 0; j < split.length-1; j++){
+                            String val = "";
+                            if(!questionAttempt.getWrittenAnswers().isEmpty()){
+                                val = questionAttempt.getWrittenAnswers().get(j);
+                            }
                     %>
                     <%=split[j]%>
-                    <input <%=disabled%> name="<%=i%>-<%=j%>" type="text">
+                    <input class="answer-inp" <%=disabled%> name="<%=i%>-<%=j%>" type="text" value="<%=val%>">
                     <%
                         }
                     %>
                     <%=split[split.length-1]%>
                 </p>
                 <%
-                }
-                else{
-                    for(int j = 0; j < questionAttempt.getCorrectAnswersAmount(); j++){
-                        String val = "";
-                        if(!questionAttempt.getWrittenAnswers().isEmpty()){
-                            val = questionAttempt.getWrittenAnswers().get(j);
-                        }
-            %>
-            <%--Response question--%>
-            <input <%=disabled%> name="<%=i%>-<%=j%>" type="text" value="<%=val%>">
-            <%
                     }
-                }
-            %>
+                    else{
+                        for(int j = 0; j < questionAttempt.getCorrectAnswersAmount(); j++){
+                            String val = "";
+                            if(!questionAttempt.getWrittenAnswers().isEmpty()){
+                                val = questionAttempt.getWrittenAnswers().get(j);
+                            }
+                %>
+                <%--Response question--%>
+                <input class="answer-inp" <%=disabled%> name="<%=i%>-<%=j%>" type="text" value="<%=val%>"><br>
+                <%
+                        }
+                    }
+                %>
 
-            <%
-                if(!quizAttempt.getShowAll() || quizAttempt.getAutoCorrect()) {
-            %>
-            <%--Question submit button--%>
-            <input <%=disabled%> type="submit" class="send-question" value="Submit">
-            <%
-                }
-            %>
+                <%
+                    if(!quizAttempt.getShowAll() || quizAttempt.getAutoCorrect()) {
+                %>
+                <%--Question submit button--%>
+                <input <%=disabled%> type="submit" class="send-question" value="Submit">
+                <%
+                    }
+                %>
         </form>
     </div>
-    <%
-        }
-    %>
+        <%
+            }
+        %>
     <br>
 
     <%--Finish Quiz--%>
@@ -253,57 +245,48 @@
 <script>
     // Update the grade for a single question
     function updateSingleQuestionResult(resp){
-        var elem = document.getElementById("q-res-"+resp.qInd);
-        elem.innerHTML = resp.grade + " / " + resp.maxGrade;
+        // Update question result text
+        $('#q-res-'+resp.qInd).text(resp.qInd + ' : ' +  resp.grade + ' / ' + resp.maxGrade);
 
-        var form = document.getElementById(resp.qInd).querySelector('form');
-        if (form) {
-            // Find the submit button with class 'send-question'
-            var inps = form.querySelectorAll('input');
-            for(var i = 0; i < inps.length; i++){
-                inps[i].disabled = true;
-            }
+        // Disable inputs
+        var form = $('#'+resp.qInd).find('form');
+        if (form.length > 0) {
+            form.find('input').prop('disabled',true);
         }
     }
 
     // Scroll to question
     function scrollToDiv(sectionId) {
-        var element = document.getElementById(sectionId);
-        if (element) {
-            element.scrollIntoView({ behavior: 'smooth' });
+        var element = $('#'+sectionId);
+        if (element.length) {
+            $('html, body').animate({
+                scrollTop: element.offset().top-100
+            }, 800);
         }
     }
 
     // Move to next question on single question per page
     function moveToNext(sectionId){
-        sectionId++;
         if(sectionId == <%=quizAttempt.getQuestions().size()%>){
+            // At the end of the quiz, finish quiz
             submitQuiz();
             return;
         }
 
-        var divs = document.querySelectorAll('.question-box');
-        divs.forEach(function(div) {
-            div.classList.remove('active');
-        });
+        // Hide every question
+        $('.question-box').removeClass('active');
 
-        var selectedDiv = document.getElementById(sectionId);
-        if (selectedDiv) {
-            selectedDiv.classList.add('active');
-        }
+        // Show only one question
+        $('#'+Number(sectionId)).addClass('active');
     }
 
     // Finish quiz
     function submitQuiz(){
-        // Submit every question answer
-        var questionSubmits = document.querySelectorAll('.send-question');
-        questionSubmits.forEach(function (qs) {
-            qs.click();
-        })
+        $('.send-question').each(function () {
+           $(this).click();
+        });
 
-        // And then finish the quiz
-        var form = document.getElementById("finish-form");
-        form.submit();
+        $('#finish-form').submit;
     }
 
     function usePracticeResponse(resp){
@@ -316,37 +299,36 @@
             $("#practice-result-panel").removeClass('correct');
             $("#practice-result-panel").addClass('incorrect');
         }
-        moveToNext(resp.onQuestion-1);
+        moveToNext(resp.onQuestion);
     }
 
 
 
     // --- AJAX calls ---
     $(document).ready(function() {
-        // Logic for question submit buttons
+        // Send answer for question
         $('.send-question').click(function(e) {
-
-            <%
-            if(!quizAttempt.getShowAll() && !quizAttempt.getIsPractice()){
-            %>
-            moveToNext(this.parentNode.parentNode.id);
-            <%
-            }
-            %>
-
             e.preventDefault();
 
             var form = $(this).closest('form');
             var formData = form.serializeArray();
 
             <%
+            if(!quizAttempt.getShowAll() && !quizAttempt.getIsPractice()){
+            %>
+            // Display next question after answering
+            moveToNext(Number(this.parentNode.parentNode.id)+1);
+            <%
+            }
+            %>
+
+            <%
             if(quizAttempt.getIsPractice()){
             %>
-            // Find all input, textarea, and select elements within the form and clear their values
+            // Clear input answers when practice question is answered
             form.find('input, textarea, select').each(function() {
-                var elementType = $(this).attr('type'); // Get the type attribute of the element
+                var elementType = $(this).attr('type');
 
-                // Clear the value based on element type
                 switch (elementType) {
                     case 'text':
                     case 'password':
@@ -362,26 +344,25 @@
                     case 'select-one':
                         $(this).prop('selectedIndex', 0);
                         break;
-                    // Add more cases as needed for different types of inputs
                 }
             });
             <%
             }
             %>
 
-            // If question submits need to be auto-corrected
             <%
             if(quizAttempt.getAutoCorrect() || quizAttempt.getIsPractice()){
             %>
+            // If question submits need to be auto-corrected
             formData.push({ name: 'eval', value: 'true' });
             <%
             }
             %>
 
-            // If quiz displays one question at a time
             <%
             if(!quizAttempt.getShowAll()){
             %>
+            // If quiz displays one question at a time
             formData.push({ name: 'nextQ', value: 'true'});
             <%
             }
@@ -392,9 +373,7 @@
                 type: form.attr('method'),
                 data: formData,
                 success: function(response) {
-                    console.log('Ajax request successful');
-                    //console.log(response);
-                    // Update the grade panel
+                    console.log('Question successfully submitted');
                     <%
                     if(quizAttempt.getAutoCorrect()) {
                     %>
@@ -411,8 +390,8 @@
                     %>
                 },
                 error: function(xhr, status, error) {
-                    console.error('Ajax request failed');
-                    console.error(error);
+                    console.log('Question did not submit');
+                    console.log(error);
                 }
             });
         });
@@ -421,7 +400,7 @@
         $('.question-box').on('input', function(e) {
             e.preventDefault();
 
-            var formElem = this.querySelector('form');
+            var formElem = $(this).find('form');
             var form = $(formElem).closest('form');
             var formData = form.serializeArray();
 
@@ -430,12 +409,11 @@
                 type: form.attr('method'),
                 data: formData,
                 success: function(response) {
-                    console.log('Ajax request successful');
-                    //console.log(response);
+                    console.log('Answer saved');
                 },
                 error: function(xhr, status, error) {
-                    console.error('Ajax request failed');
-                    console.error(error);
+                    console.log('Could not save answer');
+                    console.log(error);
                 }
             });
         });

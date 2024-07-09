@@ -176,7 +176,7 @@
 
     <%
         try {
-            if(curUser != null && userDB.isUserAdmin(curUser.getId())) { %>
+            if(curUser != null && (userDB.isUserAdmin(curUser.getId()) || curQuiz.getAuthorId() == curUser.getId())) { %>
             <form action="RemoveQuiz" method="post">
                 <input type="hidden" name="deleteQuiz" value="true">
                 <input name="quizId" type="hidden" value="<%=curQuiz.getId()%>">
@@ -187,12 +187,12 @@
                 <input name="quizId" type="hidden" value="<%=curQuiz.getId()%>">
                 <input type="submit" value="Clear Quiz History">
             </form>
-            <% }
-    } catch (SQLException e) {
-        throw new RuntimeException(e);
-    } catch (ClassNotFoundException e) {
-        throw new RuntimeException(e);
-    } %>
+                <% }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        } %>
 
     <h4>This quiz has been taken <%=allAttempts.size()%> times.</h4>
     <h4>Average grade po all users on this quiz is <%=gradeAv%> with variance of <%=gradeVar%>.</h4>

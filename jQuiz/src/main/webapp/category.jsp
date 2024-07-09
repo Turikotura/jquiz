@@ -65,6 +65,7 @@
 
     <div class="quiz-list-wrapper">
         <h2>Most Recent Quizzes</h2>
+        <a href="quizzes?sortBy=LAST_MONTH&category=<%= categoryName%>">See all</a>
         <div class="quiz-boxes">
             <% for (Quiz quiz : recentQuizzes) {
             User author = userDB.getById(quiz.getAuthorId());%>
@@ -85,6 +86,7 @@
 
     <div class="quiz-list-wrapper">
         <h2>Most Popular Quizzes</h2>
+        <a href="quizzes?sortBy=TOTAL&category=<%= categoryName%>">See all</a>
         <div class="quiz-boxes">
             <% for (Quiz quiz : popularQuizzes) {
             User author = userDB.getById(quiz.getAuthorId());%>

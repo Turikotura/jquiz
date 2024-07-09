@@ -48,6 +48,7 @@ public class CreateQuizServlet extends HttpServlet {
             }
         }
 
+        // Add checker for title size. 0 <= [Title size] <= 50
         Quiz quiz = new Quiz(0, title, author.getId(), null, time, thumbnail, null, shouldMixUp, showAll, false, allowPractice, description, category, new ArrayList<>(), 0, 0);
         QuizDatabase quizDatabase = (QuizDatabase) getServletContext().getAttribute(Database.QUIZ_DB);
         int quizId = -1;
@@ -223,16 +224,16 @@ public class CreateQuizServlet extends HttpServlet {
             UserDatabase userDB = getDatabase(Database.USER_DB,request);
             User system = userDB.getByUsername("System");
             List<Quiz> bySameAuthor = quizDatabase.getQuizzesByAuthorId(author.getId());
-            if(bySameAuthor.size() == 1) {
+            if(!achievementDB.hasAchievementUnlocked(author.getId(),"Amateur Author") && bySameAuthor.size() == 1) {
                 achievementDB.unlockAchievement(author.getId(), "Amateur Author");
                 mailDB.sendAchievementMail(system.getId(), author.getId(),"Amateur Author");
             }
-            else if(bySameAuthor.size() == 5) {
+            else if(!achievementDB.hasAchievementUnlocked(author.getId(),"Prolific Author") && bySameAuthor.size() == 5) {
                 achievementDB.unlockAchievement(author.getId(), "Prolific Author");
                 mailDB.sendAchievementMail(system.getId(), author.getId(),"Prolific Author");
 
             }
-            else if(bySameAuthor.size() == 10) {
+            else if(!achievementDB.hasAchievementUnlocked(author.getId(),"Prodigious Author") && bySameAuthor.size() == 10) {
                 achievementDB.unlockAchievement(author.getId(), "Prodigious Author");
                 mailDB.sendAchievementMail(system.getId(), author.getId(),"Prodigious Author");
             }

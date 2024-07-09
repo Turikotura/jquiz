@@ -28,8 +28,11 @@ public class RemoveQuizServlet extends HttpServlet {
         QuestionDatabase questionDB = getDatabase(Database.QUESTION_DB,request);
         QuizDatabase quizDB = getDatabase(Database.QUIZ_DB,request);
         TagDatabase tagDB = getDatabase(Database.TAG_DB,request);
+        CommentDatabase commentDB = getDatabase(Database.COMMENT_DB,request);
+
         try {
             // Clear history for both cases
+            commentDB.removeCommentsByQuizId(quizId);
             historyDB.clearQuizHistory(quizId);
             if(deleteQuiz) {
                 // Delete answers, questions, tag and quiz itself

@@ -91,4 +91,15 @@ public class CommentDatabase extends Database<Comment>{
             return ps;
         });
     }
+    public void removeCommentsByQuizId(int quizId) throws SQLException, ClassNotFoundException {
+        String query = String.format(
+                "DELETE FROM %s WHERE %s = ?",
+                databaseName, QUIZ_ID
+        );
+        Connection con = getConnection();
+        PreparedStatement ps = getStatement(query,con);
+        ps.setInt(1,quizId);
+        ps.execute();
+        con.close();
+    }
 }

@@ -16,7 +16,6 @@ import java.util.Date;
 import static listeners.ContextListener.getDatabase;
 
 public class ManageUserServlet extends HttpServlet {
-    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html");
         // Get user and whether he is being promoted or banned from the parameters

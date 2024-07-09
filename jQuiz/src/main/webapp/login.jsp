@@ -59,7 +59,6 @@
                 Username:
                 <input type="input" name="user-name">
             </label>
-            <p></p>
             <label>
                 Password:
                 <input type="password" name="password">

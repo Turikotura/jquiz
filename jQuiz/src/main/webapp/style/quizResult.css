@@ -3,36 +3,30 @@
 main {
     height: fit-content;
     text-align: center;
+    color: var(--accent-color)
 }
 
-main a {
+main strong a {
     text-decoration: none;
     font-size: 20px;
     border-radius: 5px;
     color: var(--error-color);
     margin-bottom: 20px;
+    padding: 10px;
 }
-main a:hover {
+main strong a:hover {
     background-color: var(--error-color);
     border-color: var(--error-color);
     color: var(--accent-color);
 }
 
-/*.scroll-container {*/
-/*    width: 100%; !* Full width of the viewport *!*/
-/*    overflow-x: auto; !* Enable horizontal scrolling *!*/
-/*    white-space: nowrap; !* Prevent boxes from wrapping *!*/
-/*    padding: 10px 0; !* Optional padding for better spacing *!*/
-/*}*/
-
-/*.box {*/
-/*    display: inline-block;*/
-/*    width: 250px; !* Adjust width as needed *!*/
-/*    margin: 10px;*/
-/*    background-color: var(--accent-color);*/
-/*    border: 1px solid var(--accent-color);*/
-/*    border-radius: 5px;*/
-/*    font-family: Arial, sans-serif;*/
-/*    font-size: 16px;*/
-/*    padding: 10px;*/
-/*}*/
+.history-box {
+    display: inline-block;
+    background-color: var(--error-color);
+    margin: 10px;
+    padding: 10px;
+    border-radius: 5px;
+}
+.history-box hr{
+    border: 1px solid var(--accent-color);
+}
