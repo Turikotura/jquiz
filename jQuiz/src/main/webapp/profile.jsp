@@ -101,11 +101,17 @@
                 <input type="submit" value="Promote to Admin">
             </form>
             <% } %>
+        <%
+            if(!profileName.equals(curUser.getUsername())) {
+        %>
             <form action="ManageUser" method="post">
                 <input type="hidden" name="userPromoted" value="false">
                 <input type="hidden" name="managedUserId" value="<%=profileOf.getId()%>">
                 <input type="submit" value="Ban User">
             </form>
+        <%
+            }
+        %>
             <% }
             } catch (SQLException e) {
                 throw new RuntimeException(e);
