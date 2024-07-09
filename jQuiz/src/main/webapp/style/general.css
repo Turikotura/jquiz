@@ -2,6 +2,14 @@
 
 /*general*/
 
+button, input[type="submit"] {
+    padding: 10px;
+    margin-bottom: 10px;
+    font-size: 16px;
+    border: 2px solid var(--accent-color);
+    border-radius: 5px;
+}
+
 * {
     margin: 0;
     padding: 0;

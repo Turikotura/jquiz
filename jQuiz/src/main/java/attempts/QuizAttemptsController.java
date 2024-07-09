@@ -73,7 +73,8 @@ public class QuizAttemptsController {
         QuizAttempt qa = quizAttempts.get(qaId);
         History h = null;
         if(!qa.getIsPractice()){
-            h = new History(-1,userId,qa.getQuizId(),qa.evaluateQuiz(),done,(int)(done.getTime()-qa.getStartTime().getTime()),qa.getIsPractice());
+            int writingTime = Math.min(qa.getTime()*1000,(int)(done.getTime()-qa.getStartTime().getTime()));
+            h = new History(-1,userId,qa.getQuizId(),qa.evaluateQuiz(),done,writingTime,qa.getIsPractice());
         }
         quizAttempts.remove(qaId);
         return h;

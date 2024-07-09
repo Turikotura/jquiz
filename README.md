@@ -53,3 +53,8 @@ This is our final project for OOP class.
 16. register - Displays user registration page
 17. search - Page displayed after search bar input
 18. statistics - Page displaying the statistics of the quiz site
+
+## For testing
+
+Before testing, run  'run.sh' to set up database structure and change DBInfo credentials
+Base administrator is System, pass : xyz

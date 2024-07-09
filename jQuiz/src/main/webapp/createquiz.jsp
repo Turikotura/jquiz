@@ -234,9 +234,10 @@
                 <label for="shouldMixUp">Mix Up Questions</label><br>
                 <input type="checkbox" id="showAll" name="showAll">
                 <label for="showAll">Show All Questions on Same Page</label><br>
+                <input type="checkbox" id="autoCorrect" name="autoCorrect">
+                <label for="autoCorrect">Allow Auto Correct</label><br>
                 <input type="checkbox" id="allowPractice" name="allowPractice">
                 <label for="allowPractice">Allow Practice Mode</label><br><br>
-
             </div>
         </div>
 
@@ -258,7 +259,10 @@
     <div id="responseQuestionForm" style="display: none;">
         <input type="hidden" name="questionTypeIdentifier" value="response">
         <label>Question:</label><br>
-        <input type="text" name="question"><br><br>
+        <div class="question-container">
+            <input type="text" name="question">
+            <input type="number" min="1" value="1" class="score-input" name="score"/>
+        </div>
 
         <label>Answer:</label><br>
         <input type="text" name="answer"><br><br>
@@ -267,13 +271,19 @@
     <div id="fillBlankQuestionForm" style="display: none;">
         <input type="hidden" name="questionTypeIdentifier" value="fillBlank">
         <label>Question:</label><br>
-        <input type="text" name="question"><br><br>
+        <div class="question-container">
+            <input type="text" name="question">
+            <input type="number" min="1" value="1" class="score-input" name="score"/>
+        </div>
     </div>
 
     <div id="pictureResponseQuestionForm" style="display: none;">
         <input type="hidden" name="questionTypeIdentifier" value="pictureResponse">
         <label>Question:</label><br>
-        <input type="text" name="question"><br><br>
+        <div class="question-container">
+            <input type="text" name="question">
+            <input type="number" min="1" value="1" class="score-input" name="score"/>
+        </div>
         <input type="file" name="picture" accept="image/*"><br><br>
 
         <label>Answer:</label><br>
@@ -283,7 +293,10 @@
     <div id="multipleChoiceQuestionForm" style="display: none;">
         <input type="hidden" name="questionTypeIdentifier" value="multipleChoice">
         <label>Question:</label><br>
-        <input type="text" name="question"><br><br>
+        <div class="question-container">
+            <input type="text" name="question">
+            <input type="number" min="1" value="1" class="score-input" name="score"/>
+        </div>
 
         <label>Answers:</label><br>
         <div id="answer_container" class="ans_container">
@@ -302,7 +315,10 @@
     <div id="multiChoiceMultiAnswerQuestionForm" style="display: none;">
         <input type="hidden" name="questionTypeIdentifier" value="multiChoiceMultiAnswer">
         <label>Question:</label><br>
-        <input type="text" name="question"><br><br>
+        <div class="question-container">
+            <input type="text" name="question">
+            <input type="number" min="1" value="1" class="score-input" name="score"/>
+        </div>
 
         <label>Answers:</label><br>
         <div id="answer_container" class="ans_container">

@@ -33,6 +33,7 @@ public class CreateQuizServlet extends HttpServlet {
         boolean shouldMixUp = request.getParameter("shouldMixUp") != null;
         boolean showAll = request.getParameter("showAll") != null;
         boolean allowPractice = request.getParameter("allowPractice") != null;
+        boolean autoCorrect = request.getParameter("autoCorrect") != null;
         byte[] thumbnail = null;
 
         Part filePart = request.getPart("thumbnail");
@@ -49,7 +50,7 @@ public class CreateQuizServlet extends HttpServlet {
         }
 
         // Add checker for title size. 0 <= [Title size] <= 50
-        Quiz quiz = new Quiz(0, title, author.getId(), null, time, thumbnail, null, shouldMixUp, showAll, false, allowPractice, description, category, new ArrayList<>(), 0, 0);
+        Quiz quiz = new Quiz(0, title, author.getId(), null, time, thumbnail, null, shouldMixUp, showAll, autoCorrect, allowPractice, description, category, new ArrayList<>(), 0, 0);
         QuizDatabase quizDatabase = (QuizDatabase) getServletContext().getAttribute(Database.QUIZ_DB);
         int quizId = -1;
         try {
@@ -83,6 +84,7 @@ public class CreateQuizServlet extends HttpServlet {
             }
 
             String questionText = request.getParameter(questionIndex + "_question");
+            int score = Integer.parseInt(request.getParameter(questionIndex+"_score"));
             List<Answer> answers = new ArrayList<>();
             QuestionTypes questionTypeEnum = null;
             Set<String> correctAnswers = new HashSet<>();
@@ -193,7 +195,7 @@ public class CreateQuizServlet extends HttpServlet {
                 default:
                     break;
             }
-            Question newQuestion = new Question(1, questionTypeEnum, questionText, quizId, picture, null, 1);
+            Question newQuestion = new Question(1, questionTypeEnum, questionText, quizId, picture, null, score);
             QuestionDatabase questionDB = (QuestionDatabase) getServletContext().getAttribute(Database.QUESTION_DB);
             int questionId = -1;
             try {

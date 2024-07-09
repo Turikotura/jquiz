@@ -127,6 +127,7 @@
             },
             error: function(xhr, status, error) {
                 console.error('Could not remove friend');
+                alert('Could not remove friend');
             }
         })
     }
@@ -146,13 +147,12 @@
                 type: form.attr('method'),
                 data: formData,
                 success: function(response) {
-                    console.log('Ajax request successful');
-                    console.log(response);
-                    // Optionally, update UI or handle response
+                    console.log('Mail sent');
                 },
                 error: function(xhr, status, error) {
-                    console.error('Ajax request failed');
+                    console.error('Mail could not send');
                     console.error(error);
+                    alert('Mail could not send');
                 }
             });
         });

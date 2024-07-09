@@ -421,9 +421,7 @@
                 userId: <%=curUser == null ? -1 : curUser.getId()%>
             },
             success: function(response) {
-                console.log('Ajax request successful');
-                console.log(response);
-                // Optionally, update UI or handle response
+                console.log('Rated successfully');
                 for(var i = 1; i <= 5; i++){
                     $('#star-'+i).removeClass('check-star');
                 }
@@ -432,8 +430,9 @@
                 }
             },
             error: function(xhr, status, error) {
-                console.error('Ajax request failed');
+                console.error('Rating failed');
                 console.error(error);
+                alert('Could not rate');
             }
         })
     }
@@ -458,15 +457,15 @@
                 type: form.attr('method'),
                 data: formData,
                 success: function(response) {
-                    console.log('Ajax request successful');
-                    //console.log(response);
-                    // Update the grade panel
+                    window.postMessage("Success");
+                    console.log('Comment submitted');
                     $("#comment-text").val('');
                     addComment(response);
                 },
                 error: function(xhr, status, error) {
-                    console.error('Ajax request failed');
+                    console.error('Could not submit comment');
                     console.error(error);
+                    alert('Could not submit comment');
                 }
             });
         });
@@ -482,9 +481,7 @@
                 type: form.attr('method'),
                 data: formData,
                 success: function(response) {
-                    console.log('Ajax request successful');
-                    //console.log(response);
-                    // Update the grade panel
+                    console.log('Challenge send');
                     // Find all input, textarea, and select elements within the form and clear their values
                     if(response.errorText == null){
                         $('#send-challenge-error-label').text('');
@@ -515,8 +512,9 @@
                     }
                 },
                 error: function(xhr, status, error) {
-                    console.error('Ajax request failed');
+                    console.error('Could not challenge');
                     console.error(error);
+                    alert('Could not challenge');
                 }
             });
         });

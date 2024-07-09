@@ -286,7 +286,7 @@
            $(this).click();
         });
 
-        $('#finish-form').submit;
+        $('#finish-form').submit();
     }
 
     function usePracticeResponse(resp){
@@ -392,6 +392,7 @@
                 error: function(xhr, status, error) {
                     console.log('Question did not submit');
                     console.log(error);
+                    alert('question did not submit');
                 }
             });
         });
@@ -414,6 +415,7 @@
                 error: function(xhr, status, error) {
                     console.log('Could not save answer');
                     console.log(error);
+                    alert('answer could not save');
                 }
             });
         });

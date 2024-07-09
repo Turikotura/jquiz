@@ -62,5 +62,10 @@
     </uL>
     <p>This website offers <%=totalQuizCount%> different quizzes. In total, they have been attempted <%=totalAttempts%> times.</p>
 </main>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script> <!-- jQuery for AJAX -->
+<script src="script/mailPanel.js"></script>
+<script src="script/general.js"></script>
+
 </body>
 </html>

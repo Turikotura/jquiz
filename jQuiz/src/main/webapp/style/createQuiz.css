@@ -91,6 +91,15 @@ form input[type="submit"]:hover {
     color: var(--accent-color);
 }
 
+.question-container {
+    display:flex;
+    gap:20px;
+}
+
+.score-input {
+    width: 10% !important;
+}
+
 .block {
     display: flex;
     flex-direction: row;

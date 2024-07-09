@@ -63,6 +63,20 @@ input[type="text"] {
     margin-bottom: 10px;
 }
 
+.announcements {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.announcement-form {
+    width: 1000px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
 #announcement-editor-title {
     height: 30px;
 }
@@ -74,7 +88,7 @@ input[type="text"] {
 
 
 .announcements-section {
-    max-width: 80%;
+    min-width: 100%;
     margin: 0 auto;
     padding: 10px;
 }
