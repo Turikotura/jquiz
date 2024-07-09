@@ -1,11 +1,7 @@
 package servlets;
 
-import database.Database;
-import database.MailDatabase;
-import database.UserDatabase;
-import models.Mail;
-import models.MailTypes;
-import models.User;
+import database.*;
+import models.*;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -15,6 +11,7 @@ import javax.xml.crypto.Data;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -26,17 +23,43 @@ public class FriendsPageServlet extends HttpServlet {
     protected void doGet(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws ServletException, IOException {
         User curUser = (User) httpServletRequest.getSession().getAttribute("curUser");
 
-        UserDatabase userdb = getDatabase(UserDatabase.USER_DB,httpServletRequest);
+        UserDatabase userdb = getDatabase(Database.USER_DB,httpServletRequest);
+        QuizDatabase quizdb = getDatabase(Database.QUIZ_DB,httpServletRequest);
+        HistoryDatabase historydb = getDatabase(Database.HISTORY_DB,httpServletRequest);
+        AchievementDatabase achdb = getDatabase(Database.ACHIEVEMENT_DB,httpServletRequest);
 
         List<User> friends = new ArrayList<>();
+
+        List<Quiz> rfq = new ArrayList<>();
+        List<History> rfh = new ArrayList<>();
+        List<Achievement> rfa = new ArrayList<>();
+
+        List<Activity> activities = new ArrayList<>();
         try {
             if(curUser != null){
                 friends = userdb.getFriendsByUserId(curUser.getId());
+
+                rfq = quizdb.getLatestFriendQuizzesByUserId(curUser.getId(),10);
+                rfh = historydb.getLatestFriendHistoriesByUserId(curUser.getId(),10);
+
+                for(Quiz quiz : rfq){
+                    String authorName = userdb.getById(quiz.getAuthorId()).getUsername();
+                    activities.add(new Activity(quiz.getCreatedAt(),quiz.getAuthorId(),authorName,"Created quiz",ActivityTypes.QUIZ_CREATE,quiz.getId(),quiz.getTitle()));
+                }
+                for(History history : rfh){
+                    String writerName = userdb.getById(history.getUserId()).getUsername();
+                    String quizTitle = quizdb.getById(history.getQuizId()).getTitle();
+                    activities.add(new Activity(history.getCompletedAt(),history.getUserId(),writerName,"Written quiz : " + history.getGrade() + " pts",ActivityTypes.QUIZ_WRITE,history.getQuizId(),quizTitle));
+                }
+
+                activities.sort(Collections.reverseOrder());
             }
         } catch (SQLException | ClassNotFoundException e) {
 
         }
         httpServletRequest.setAttribute("friends",friends);
+
+        httpServletRequest.setAttribute("activities",activities);
 
         getMailInfo(httpServletRequest);
 

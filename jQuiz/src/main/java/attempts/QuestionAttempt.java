@@ -105,6 +105,9 @@ public class QuestionAttempt {
             // If not, set graded to true
             wasGraded = true;
         }
+        if(correctAnswersAmount == 0) {
+            return 0;
+        }
         gottenGrade = maxScore * correctAnswers / correctAnswersAmount;
         return gottenGrade;
     }
