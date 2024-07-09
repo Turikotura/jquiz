@@ -4,46 +4,66 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="11bfb6b0-0ab4-4275-9c08-73c2144412d4" name="Changes" comment="Comments added to Account related classes, some code cleanup">
-      <change afterPath="$PROJECT_DIR$/jQuiz/src/main/java/Statistics/Statistics.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/jQuiz/src/main/java/Statistics/StatisticsTests.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/jQuiz/src/main/java/servlets/SendChallengeServlet.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/jQuiz/src/main/webapp/statistics.jsp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/jQuiz/src/main/webapp/style/login.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/jQuiz/src/main/webapp/style/register.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/a186986e-7e9d-4650-9ad0-5d280f91b85a.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/a186986e-7e9d-4650-9ad0-5d280f91b85a.xml" afterDir="false" />
+    <list default="true" id="11bfb6b0-0ab4-4275-9c08-73c2144412d4" name="Changes" comment="Servlet methods now follow convention">
+      <change afterPath="$PROJECT_DIR$/jQuiz/src/main/java/servlets/HistorySummaryServlet.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/jQuiz/src/main/java/servlets/QuizResultServlet.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/jQuiz/src/main/java/servlets/QuizzesServlet.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/jQuiz/src/main/webapp/quizzes.jsp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/jQuiz/src/main/webapp/style/quizzes.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/webContexts.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/webContexts.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jQuiz/database_structure/drop.sql" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/database_structure/drop.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jQuiz/database_structure/questions.sql" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/database_structure/questions.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jQuiz/database_structure/run.sh" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/database_structure/run.sh" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jQuiz/database_structure/users.sql" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/database_structure/users.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jQuiz/database_structure/quizzes.sql" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/database_structure/quizzes.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jQuiz/src/main/java/accounts/Register.java" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/src/main/java/accounts/Register.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/jQuiz/src/main/java/attempts/AttemptTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/src/main/java/attempts/AttemptTests.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/jQuiz/src/main/java/attempts/QuestionAttempt.java" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/src/main/java/attempts/QuestionAttempt.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/jQuiz/src/main/java/attempts/QuizAttempt.java" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/src/main/java/attempts/QuizAttempt.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jQuiz/src/main/java/attempts/QuizAttemptsController.java" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/src/main/java/attempts/QuizAttemptsController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jQuiz/src/main/java/database/AnnouncementDatabase.java" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/src/main/java/database/AnnouncementDatabase.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jQuiz/src/main/java/database/DBInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/src/main/java/database/DBInfo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jQuiz/src/main/java/database/CommentDatabase.java" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/src/main/java/database/CommentDatabase.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/jQuiz/src/main/java/database/HistoryDatabase.java" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/src/main/java/database/HistoryDatabase.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jQuiz/src/main/java/database/MailDatabase.java" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/src/main/java/database/MailDatabase.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/jQuiz/src/main/java/database/QuizDatabase.java" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/src/main/java/database/QuizDatabase.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jQuiz/src/main/java/database/UserDatabase.java" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/src/main/java/database/UserDatabase.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jQuiz/src/main/java/database/TagDatabase.java" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/src/main/java/database/TagDatabase.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/jQuiz/src/main/java/models/Answer.java" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/src/main/java/models/Answer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jQuiz/src/main/java/servlets/AddCommentServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/src/main/java/servlets/AddCommentServlet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jQuiz/src/main/java/servlets/CreateQuizServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/src/main/java/servlets/CreateQuizServlet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jQuiz/src/main/java/servlets/FriendsPageServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/src/main/java/servlets/FriendsPageServlet.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/jQuiz/src/main/java/servlets/ImageServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/src/main/java/servlets/ImageServlet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jQuiz/src/main/java/servlets/MailPanelServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/src/main/java/servlets/MailPanelServlet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jQuiz/src/main/java/servlets/ManageUserServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/src/main/java/servlets/ManageUserServlet.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/jQuiz/src/main/java/servlets/PlayQuizServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/src/main/java/servlets/PlayQuizServlet.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/jQuiz/src/main/java/servlets/QuizInfoServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/src/main/java/servlets/QuizInfoServlet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jQuiz/src/main/java/servlets/RatingServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/src/main/java/servlets/RatingServlet.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/jQuiz/src/main/java/servlets/RegisterServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/src/main/java/servlets/RegisterServlet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jQuiz/src/main/java/servlets/RemoveQuizServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/src/main/java/servlets/RemoveQuizServlet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jQuiz/src/main/java/servlets/SendChallengeServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/src/main/java/servlets/SendChallengeServlet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jQuiz/src/main/java/servlets/SendMailServlet.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/jQuiz/src/main/webapp/WEB-INF/web.xml" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/src/main/webapp/WEB-INF/web.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jQuiz/src/main/webapp/categories.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/src/main/webapp/categories.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jQuiz/src/main/webapp/category.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/src/main/webapp/category.jsp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/jQuiz/src/main/webapp/createquiz.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/src/main/webapp/createquiz.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jQuiz/src/main/webapp/friends.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/src/main/webapp/friends.jsp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/jQuiz/src/main/webapp/header.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/src/main/webapp/header.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jQuiz/src/main/webapp/historySummary.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/src/main/webapp/historySummary.jsp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/jQuiz/src/main/webapp/index.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/src/main/webapp/index.jsp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/jQuiz/src/main/webapp/login.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/src/main/webapp/login.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jQuiz/src/main/webapp/mail.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/src/main/webapp/mail.jsp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/jQuiz/src/main/webapp/playQuiz.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/src/main/webapp/playQuiz.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jQuiz/src/main/webapp/profile.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/src/main/webapp/profile.jsp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/jQuiz/src/main/webapp/quizInfo.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/src/main/webapp/quizInfo.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jQuiz/src/main/webapp/register.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/src/main/webapp/register.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jQuiz/src/main/webapp/style/colorPalette.css" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/src/main/webapp/style/colorPalette.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jQuiz/src/main/webapp/quizResult.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/src/main/webapp/quizResult.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jQuiz/src/main/webapp/script/mailPanel.js" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/src/main/webapp/script/mailPanel.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jQuiz/src/main/webapp/search.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/src/main/webapp/search.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jQuiz/src/main/webapp/sendMail.jsp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jQuiz/src/main/webapp/style/achievements.css" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/src/main/webapp/style/achievements.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jQuiz/src/main/webapp/style/categories.css" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/src/main/webapp/style/categories.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jQuiz/src/main/webapp/style/friends.css" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/src/main/webapp/style/friends.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/jQuiz/src/main/webapp/style/general.css" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/src/main/webapp/style/general.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jQuiz/src/main/webapp/style/index.css" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/src/main/webapp/style/index.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jQuiz/src/main/webapp/style/historySummary.css" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/src/main/webapp/style/historySummary.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/jQuiz/src/main/webapp/style/playQuiz.css" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/src/main/webapp/style/playQuiz.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jQuiz/src/main/webapp/style/quizResult.css" beforeDir="false" afterPath="$PROJECT_DIR$/jQuiz/src/main/webapp/style/quizResult.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jQuiz/src/main/webapp/style/sendMail.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jQuiz/src/main/webapp/style/tags.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jQuiz/src/main/webapp/tag.jsp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jQuiz/src/main/webapp/tags.jsp" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -75,8 +95,18 @@
   <component name="GithubDefaultAccount">
     <option name="defaultAccountId" value="c1639ba4-7b9f-49b7-b242-b846b2d12abe" />
   </component>
+  <component name="JspContextManager">
+    <jsp-to-context jsp-file="file://$PROJECT_DIR$/jQuiz/src/main/webapp/header.jsp" context-file="file://$PROJECT_DIR$/jQuiz/src/main/webapp/achievements.jsp" />
+  </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
+  </component>
+  <component name="MavenImportPreferences">
+    <option name="generalSettings">
+      <MavenGeneralSettings>
+        <option name="workOffline" value="true" />
+      </MavenGeneralSettings>
+    </option>
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 1
@@ -114,7 +144,7 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "Shell Script.run.sh.executor": "Run",
-    "git-widget-placeholder": "Merging documentation",
+    "git-widget-placeholder": "Merging servlet-cleanup",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "/home/giorgi/OOP/jmovies/jQuiz/src/main/java/AbstractQuestions",
     "list.type.of.created.stylesheet": "CSS",
@@ -287,6 +317,8 @@
       <workItem from="1719999624259" duration="25378000" />
       <workItem from="1720256243281" duration="11157000" />
       <workItem from="1720372456008" duration="3741000" />
+      <workItem from="1720463655152" duration="3353000" />
+      <workItem from="1720519687526" duration="1104000" />
     </task>
     <task id="LOCAL-00001" summary="Objects for different question types added.">
       <option name="closed" value="true" />
@@ -480,7 +512,15 @@
       <option name="project" value="LOCAL" />
       <updated>1720376319386</updated>
     </task>
-    <option name="localTasksCounter" value="25" />
+    <task id="LOCAL-00025" summary="Servlet methods now follow convention">
+      <option name="closed" value="true" />
+      <created>1720466997000</created>
+      <option name="number" value="00025" />
+      <option name="presentableId" value="LOCAL-00025" />
+      <option name="project" value="LOCAL" />
+      <updated>1720466997000</updated>
+    </task>
+    <option name="localTasksCounter" value="26" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -498,8 +538,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Objects for different question types added." />
-    <MESSAGE value="Basic Answer Class, Question Types Changed" />
     <MESSAGE value=".gitignore and xml files added" />
     <MESSAGE value="Quiz class added, minor fixes" />
     <MESSAGE value="Skeleton for Log in/Sign up" />
@@ -523,6 +561,8 @@
     <MESSAGE value="Announcement model and db added, minor fixes" />
     <MESSAGE value="Comments added to Database Objects" />
     <MESSAGE value="Comments added to Account related classes, some code cleanup" />
-    <option name="LAST_COMMIT_MESSAGE" value="Comments added to Account related classes, some code cleanup" />
+    <MESSAGE value="Servlets now follow convention" />
+    <MESSAGE value="Servlet methods now follow convention" />
+    <option name="LAST_COMMIT_MESSAGE" value="Servlet methods now follow convention" />
   </component>
 </project>
