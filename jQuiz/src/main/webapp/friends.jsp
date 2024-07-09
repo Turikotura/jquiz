@@ -69,7 +69,7 @@
     <div id="friend-<%=friend.getId()%>" class="friend-box">
         <%--friend info--%>
         <div class="friend-info">
-            <div class="friend-img" style="background-size: cover; background-image: url('image?type=user&userId=<%=friend.getId()%>');"></div>
+            <div class="friend-img" style="background-size: cover; background-image: url('image?type=user&userId=<%=friend.getId()%>'); background-position: center center;"></div>
             <div>
                 <div class="friend-name"><strong>Name: </strong><%=friend.getUsername()%></div>
                 <div class="friend-email"><strong>Email: </strong><%=friend.getEmail()%></div>

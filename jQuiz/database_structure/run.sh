@@ -1,7 +1,7 @@
 #!/bin/bash
 
 DB_USER="root"
-DB_PASSWORD=""
+DB_PASSWORD="nanjing123"
 DB_NAME="quizDB"  # Define your database name here
 echo
 
