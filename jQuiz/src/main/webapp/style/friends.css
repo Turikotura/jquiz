@@ -1,7 +1,7 @@
 .friend-box {
     display: flex;
     align-items: center;
-    border: 1px solid #ccc;
+    background-color: var(--error-color);
     padding: 10px;
     margin-bottom: 10px;
 }
@@ -9,6 +9,10 @@
     flex: 1;
     display: flex;
     align-items: center;
+    color: var(--secondary-color);
+}
+.friend-info a {
+    margin-left: 100px;
 }
 .friend-img {
     width: 50px;
@@ -27,7 +31,28 @@
     margin-bottom: 5px;
     padding: 5px 10px;
     cursor: pointer;
+    border: none;
+    background-color: var(--accent-color);
+    width: 100px;
+}
+.friend-buttons button:hover {
+    background-color: var(--secondary-color);
 }
 .hidden {
     display: none;
+}
+.mail-form textarea {
+    border: none;
+    width: 200px;
+}
+.mail-form button {
+    margin-bottom: 5px;
+    padding: 5px 10px;
+    cursor: pointer;
+    border: none;
+    background-color: var(--accent-color);
+    width: 200px;
+}
+.mail-form button:hover {
+    background-color: var(--secondary-color);
 }

@@ -6,7 +6,8 @@
 <%@ page import="database.*" %>
 <%@ page import="models.*" %>
 <%@ page import="java.util.HashMap" %>
-<%@ page import="java.util.Map" %><%--
+<%@ page import="java.util.Map" %>
+<%@ page import="java.text.SimpleDateFormat" %><%--
   Created by IntelliJ IDEA.
   User: Dachi
   Date: 22.06.2024
@@ -18,71 +19,21 @@
 <%
     User curUser = (User) request.getSession().getAttribute("curUser");
 
-    MailDatabase mailDB = getDatabase(Database.MAIL_DB,request);
-    UserDatabase userDB = getDatabase(Database.USER_DB,request);
-    HistoryDatabase historyDB = getDatabase(Database.HISTORY_DB,request);
-    QuizDatabase quizDB = getDatabase(Database.QUIZ_DB,request);
-    QuestionDatabase questionDB = getDatabase(Database.QUESTION_DB,request);
-
     // Mail variables
-    List<Mail> mails = new ArrayList<Mail>();
-    List<String> senderNames = new ArrayList<String>();
-    Map<Integer,Integer> maxGrades = new HashMap<Integer,Integer>();
+    List<Mail> mails = (List<Mail>) request.getAttribute("mails");
+    List<String> senderNames = (List<String>) request.getAttribute("senderNames");
+    Map<Integer,Integer> maxGrades = (Map<Integer, Integer>) request.getAttribute("maxGrades");
 
-    if(curUser != null){
-        // Get mails received by user
-        mails = mailDB.getMailsByUserId(curUser.getId(),"RECEIVE");
-        for(Mail mail : mails){
-            // Get names of senders
-            senderNames.add(userDB.getById(mail.getSenderId()).getUsername());
-            if(mail.getType() == MailTypes.CHALLENGE){
-                // Get max grade of senders for challenges
-                History history = historyDB.getBestHistoryByUserAndQuizId(mail.getSenderId(),mail.getQuizId());
-                int grade = (history == null) ? 0 : history.getGrade();
-                maxGrades.put(mail.getId(),grade);
-            }
-        }
-    }
+    History lastHistory = (History) request.getAttribute("lastHistory");
+    int totalScore = (Integer) request.getAttribute("totalScore");
 
-    int userId = Integer.parseInt(request.getParameter("userId"));
-    int quizId = Integer.parseInt(request.getParameter("quizId"));
+    String bestHistoryName = (String) request.getAttribute("bestHistoryName");
+    History bestHistory = (History) request.getAttribute("bestHistory");
+    List<History> prevAttempts = (List<History>) request.getAttribute("prevAttempts");
+    List<String> friendNames = (List<String>) request.getAttribute("friendNames");
+    List<History> friendHistories = (List<History>) request.getAttribute("friendHistories");
 
-    History lastHistory = null;
-    Quiz quiz = null;
-    List<Question> questionList = new ArrayList<Question>();
-    int totalScore = 0;
-
-    String bestHistoryName = "";
-    History bestHistory = null;
-    List<History> prevAttempts = new ArrayList<History>();
-    List<String> friendNames = new ArrayList<String>();
-    List<History> friendHistories = new ArrayList<History>();
-    try {
-        lastHistory = historyDB.getLastHistoryByUserAndQuizId(userId, quizId);
-        quiz = quizDB.getById(lastHistory.getQuizId());
-        questionList = questionDB.getQuestionsByQuizId(quiz.getId());
-        for (Question question : questionList) {
-            totalScore += question.getScore();
-        }
-
-        // others results
-        bestHistory = historyDB.getBestScoreHistoryByQuizId(quizId);
-        bestHistoryName = userDB.getById(bestHistory.getUserId()).getUsername();
-        prevAttempts = historyDB.getHistoryByUserAndQuizId(userId, quizId);
-        List<User> friends = new ArrayList<User>();
-        friends = userDB.getFriendsByUserId(userId);
-        for(User friend : friends){
-            History frHistory = historyDB.getLastHistoryByUserAndQuizId(friend.getId(),quiz.getId());
-            if(frHistory != null){
-                friendNames.add(friend.getUsername());
-                friendHistories.add(historyDB.getLastHistoryByUserAndQuizId(friend.getId(),quiz.getId()));
-            }
-        }
-    }catch (SQLException e){
-//        System.out.println("SQL ex");
-    }catch (ClassNotFoundException e){
-//        System.out.println("Class not found ex");
-    }
+    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 %>
 
 <html>
@@ -97,24 +48,29 @@
 <%@ include file="mail.jsp" %>
 <main>
 
-    <h2><%=lastHistory.getGrade()%> / <%=totalScore%></h2>
-    <h2><%=(double) lastHistory.getWritingTime() / 1000%> Seconds</h2>
+    <%--Finished quiz result--%>
+    <h2>Result : <%=lastHistory.getGrade()%> / <%=totalScore%> pts</h2>
+    <h2>Writing time : <%=(double) lastHistory.getWritingTime() / 1000%> Seconds</h2>
 
     <br>
     <br>
     <strong><a href="/">Return</a></strong>
 
     <br><br><br>
+    <%--Previous attempt history--%>
     <h2>Previous Attempts</h2>
     <hr>
     <div class="scroll-container">
         <%
             for(int i = 0; i < prevAttempts.size(); i++){
+                dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                String prevCompAt = dateFormat.format(prevAttempts.get(i).getCompletedAt());
         %>
-        <div class="box">
+        <div class="history-box">
             <h3><%=prevAttempts.get(i).getGrade()%> / <%=totalScore%></h3>
+            <hr>
             <h3><%=(double) prevAttempts.get(i).getWritingTime() / 1000%> Seconds</h3>
-            <h4><%=prevAttempts.get(i).getCompletedAt()%></h4>
+            <h4><%=prevCompAt%></h4>
         </div>
         <%
             }
@@ -122,27 +78,37 @@
     </div>
 
     <br>
+    <%--Top score--%>
     <h2>Top Score</h2>
     <hr>
-    <div class="box">
-        <h2><%=bestHistoryName%></h2>
+    <div class="history-box">
+        <%
+            dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String bestCompAt = dateFormat.format(bestHistory.getCompletedAt());
+        %>
+        <h2><a href="profile.jsp?username=<%=bestHistoryName%>"><%=bestHistoryName%></a></h2>
         <h3><%=bestHistory.getGrade()%> / <%=totalScore%></h3>
+        <hr>
         <h3><%=(double) bestHistory.getWritingTime() / 1000%> Seconds</h3>
-        <h4><%=bestHistory.getCompletedAt()%></h4>
+        <h4><%=bestCompAt%></h4>
     </div>
 
     <br>
+    <%--Friends--%>
     <h2>Friends</h2>
     <hr>
     <div class="scroll-container">
         <%
             for(int i = 0; i < friendHistories.size(); i++){
+                dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                String friendCompAt = dateFormat.format(friendHistories.get(i).getCompletedAt());
         %>
-        <div class="box">
-            <h2><%=friendNames.get(i)%></h2>
+        <div class="history-box">
+            <h2><a href="profile.jsp?username=<%=friendNames.get(i)%>"><%=friendNames.get(i)%></a></h2>
             <h3><%=friendHistories.get(i).getGrade()%> / <%=totalScore%></h3>
+            <hr>
             <h3><%=friendHistories.get(i).getWritingTime()%> Seconds</h3>
-            <h4><%=friendHistories.get(i).getCompletedAt()%></h4>
+            <h4><%=friendCompAt%></h4>
         </div>
         <%
             }

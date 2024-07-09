@@ -6,13 +6,7 @@
     %>
     <h3 id="log-in-first">Log in first</h3>
     <%
-    }else{
-    %>
-    <%--button to send mails--%>
-    <a id="send-mail" href="sendMail.jsp">Send Mail</a>
-    <hr>
-    <%
-        }
+    }
     %>
     <%
         for(int i = 0; i < mails.size(); i++){
@@ -39,13 +33,14 @@
             <p>Best Score: <%=maxGrades.get(mail.getId())%> pts</p>
             <a href="quizInfo.jsp?quizId=<%=mail.getQuizId()%>">Accept</a>
             <%
-            }else if(mail.getType() == MailTypes.FRIEND_REQUEST){
-                // Display friend request visual
+                }else if(mail.getType() == MailTypes.FRIEND_REQUEST){
+                    // Display friend request visual
             %>
             <input type="submit" value="accept" class="friend-acpt-submit">
             <input type="submit" value="reject" class="friend-rjct-submit">
             <%
                 } else if(mail.getType() == MailTypes.QUIZ_REPORT) {
+                // Display report sent about a quiz
             %>
                 <a href="quizInfo.jsp?quizId=<%=mail.getQuizId()%>">Check out</a>
             <% } %>

@@ -14,6 +14,7 @@ public class Register {
     public static final int WEAK_PASSWORD = 3;
     public static final int EMAIL_BANNED = 4;
     public static final int SUCCESS = 5;
+    public static final int NO_EMAIL = 6;
 
     /**
      * Attempt to create new account and return the outcome
@@ -37,6 +38,7 @@ public class Register {
         else if(!password1.equals(password2)) return DIFF_PASSWORDS;
         else if(!Security.isStrong(password1)) return WEAK_PASSWORD;
         else if(db.isEmailBanned(email)) return EMAIL_BANNED;
+        else if(email.isEmpty()) return NO_EMAIL;
         return SUCCESS;
     }
 }

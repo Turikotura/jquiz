@@ -46,11 +46,14 @@
 
     Map<Character, List<Tag>> tagGroups = new TreeMap<Character, List<Tag>>();
     for (Tag tag : tags) {
-        char firstLetter = Character.toUpperCase(tag.getName().charAt(0));
-        if (!tagGroups.containsKey(firstLetter)) {
-            tagGroups.put(firstLetter, new ArrayList<Tag>());
+
+        if(!tag.getName().isEmpty()){
+            char firstLetter = Character.toUpperCase(tag.getName().charAt(0));
+            if (!tagGroups.containsKey(firstLetter)) {
+                tagGroups.put(firstLetter, new ArrayList<Tag>());
+            }
+            tagGroups.get(firstLetter).add(tag);
         }
-        tagGroups.get(firstLetter).add(tag);
     }
 %>
 <!DOCTYPE html>
@@ -100,6 +103,7 @@
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script> <!-- jQuery for AJAX -->
 <script src="script/general.js"></script>
+<script src="script/mailPanel.js"></script>
 
 </body>
 </html>

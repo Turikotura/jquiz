@@ -176,7 +176,7 @@
 
     <%
         try {
-            if(curUser != null && userDB.isUserAdmin(curUser.getId())) { %>
+            if(curUser != null && (userDB.isUserAdmin(curUser.getId()) || curQuiz.getAuthorId() == curUser.getId())) { %>
             <form action="RemoveQuiz" method="get">
                 <input name="quizId" type="hidden" value="<%=curQuiz.getId()%>">
                 <input type="submit" value="Remove Quiz">

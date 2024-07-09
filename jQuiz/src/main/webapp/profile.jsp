@@ -142,7 +142,7 @@
             <ul>
                 <% for(History cur : recentActivity) {
                     Quiz curQuiz = quizDB.getQuizById(cur.getQuizId());%>
-                <li><a href="quizInfo.jsp?<%=cur.getQuizId()%>"><%=curQuiz.getTitle()%></a>, Score: <%=cur.getGrade()%></li>
+                <li><a href="quizInfo.jsp?quizId=<%=cur.getQuizId()%>"><%=curQuiz.getTitle()%></a>, Score: <%=cur.getGrade()%></li>
                 <% } %>
             </ul>
         <% } %>

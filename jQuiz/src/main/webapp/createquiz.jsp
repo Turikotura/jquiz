@@ -166,7 +166,7 @@
     <h1>Create Quiz</h1>
     <form action="CreateQuiz" method="post" enctype="multipart/form-data">
         <label for="title">Quiz Title:</label><br>
-        <input type="text" id="title" name="title" required><br><br>
+        <input type="text" id="title" name="title" maxlength="50" required><br><br>
 
         <label for="description">Quiz Description:</label><br>
         <textarea id="description" name="description"></textarea><br><br>

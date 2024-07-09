@@ -42,10 +42,6 @@
     <servlet-class>servlets.MailPanelServlet</servlet-class>
   </servlet>
   <servlet>
-    <servlet-name>SendMail</servlet-name>
-    <servlet-class>servlets.SendMailServlet</servlet-class>
-  </servlet>
-  <servlet>
     <servlet-name>AddFriend</servlet-name>
     <servlet-class>servlets.AddFriendServlet</servlet-class>
   </servlet>
@@ -90,6 +86,14 @@
     <servlet-class>servlets.SendChallengeServlet</servlet-class>
   </servlet>
   <servlet>
+    <servlet-name>QuizResult</servlet-name>
+    <servlet-class>servlets.QuizResultServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>HistorySummary</servlet-name>
+    <servlet-class>servlets.HistorySummaryServlet</servlet-class>
+  </servlet>
+  <servlet>
     <servlet-name>Quizzes</servlet-name>
     <servlet-class>servlets.QuizzesServlet</servlet-class>
   </servlet>
@@ -121,10 +125,6 @@
   <servlet-mapping>
     <servlet-name>MailPanel</servlet-name>
     <url-pattern>/MailPanel</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-    <servlet-name>SendMail</servlet-name>
-    <url-pattern>/SendMail</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
     <servlet-name>AddFriend</servlet-name>
@@ -169,6 +169,14 @@
   <servlet-mapping>
     <servlet-name>SendChallenge</servlet-name>
     <url-pattern>/SendChallenge</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>QuizResult</servlet-name>
+    <url-pattern>/QuizResult</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>HistorySummary</servlet-name>
+    <url-pattern>/HistorySummary</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
     <servlet-name>Quizzes</servlet-name>

@@ -28,16 +28,20 @@ public class AddCommentServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws ServletException, IOException {
+        // Add comment to a quiz
         User curUser = (User) httpServletRequest.getSession().getAttribute("curUser");
         int quizId = Integer.parseInt(httpServletRequest.getParameter("quizId"));
         String text = httpServletRequest.getParameter("comment-text");
 
         CommentDatabase commentdb = getDatabase(Database.COMMENT_DB,httpServletRequest);
         try {
+            // Send the comment
             int commentId = commentdb.add(new Comment(-1,text,new Date(),curUser.getId(),quizId));
 
+            // Get send comment info
             Comment comment = commentdb.getById(commentId);
 
+            // Information to display on the page
             Map<String,String> respMap = new HashMap<>();
             respMap.put("username", curUser.getUsername());
             respMap.put("text", comment.getText());
@@ -47,9 +51,7 @@ public class AddCommentServlet extends HttpServlet {
             httpServletResponse.setContentType("application/json");
             httpServletResponse.setCharacterEncoding("UTF-8");
             httpServletResponse.getWriter().write(new Gson().toJson(respMap));
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        } catch (ClassNotFoundException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
     }

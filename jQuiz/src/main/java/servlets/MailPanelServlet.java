@@ -33,14 +33,15 @@ public class MailPanelServlet extends HttpServlet {
         MailDatabase maildb = getDatabase(Database.MAIL_DB,httpServletRequest);
 
         try {
-            if(seen){
-                maildb.setFieldById(mailId,MailDatabase.SEEN,true);
-            }else{
+            // Set mail as seen
+            maildb.setFieldById(mailId,MailDatabase.SEEN,true);
+            if(!seen){
                 Mail mail = maildb.getById(mailId);
                 if(mail.getType() == MailTypes.FRIEND_REQUEST){
                     boolean accept = httpServletRequest.getParameter("accept").equals("true");
 
                     if(accept){
+                        // If accept - add friend
                         UserDatabase userdb = getDatabase(Database.USER_DB,httpServletRequest);
 
                         if(!userdb.checkAreFriends(mail.getSenderId(),mail.getReceiverId())){

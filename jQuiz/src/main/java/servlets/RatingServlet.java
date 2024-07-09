@@ -31,8 +31,10 @@ public class RatingServlet extends HttpServlet {
         try {
             Rating r = ratingdb.getRatingByQuizAndUserId(quizId,userId);
             if(r != null){
+                // If has rating by user, update
                 ratingdb.setFieldById(r.getId(),RatingDatabase.RATING,rating);
             }else{
+                // If doesn't have rating by user, add
                 ratingdb.add(new Rating(-1,rating,quizId,userId));
             }
         } catch (SQLException e) {

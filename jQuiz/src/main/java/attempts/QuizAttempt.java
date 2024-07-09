@@ -87,16 +87,19 @@ public class QuizAttempt {
      */
     public int evaluateQuiz(){
         if(wasGraded){
+            // If was already graded, return the grade
             return gottenGrade;
         }
 
         if(!isPractice){
+            // If it's not in practice mode, then grade the quiz so it doesn't change
             wasGraded = true;
         }
         gottenGrade = 0;
 
         long timeBetween = ((new Date()).getTime() - startTime.getTime())/1000;
         if(timeBetween <= time){
+            // Check if on time
             for(QuestionAttempt qa : questions){
                 gottenGrade += qa.evaluateAnswers();
             }
@@ -110,28 +113,44 @@ public class QuizAttempt {
      */
     public void setOnQuestionIndex(int ind) {onQuestionIndex = ind;}
 
+    /**
+     * Set OnQuestionIndex to a new random question
+     */
     private void setOnQuestionIndexPractice(){
         if(qToAnsRow.isEmpty()){
+            // If no more questions, set index to invalid position
             onQuestionIndex = -1;
             return;
         }
+        // Else return next random question
         List<Integer> keysAsArray = new ArrayList<>(qToAnsRow.keySet());
         Random r = new Random();
         onQuestionIndex = keysAsArray.get(r.nextInt(keysAsArray.size()));
     }
+
+    /**
+     * Evaluate question in practice mode
+     * @param qind - the index of the question
+     * @return was the answers correct or not
+     */
     public boolean evaluateQuestionPractice(int qind){
         if(!isPractice){
+            // If not in practice mode, can't use method
             return false;
         }
 
+        // Evaluate practice answer
         int evalAns = questions.get(qind).evaluateAnswers();
         boolean res = (evalAns == questions.get(qind).getMaxScore());
         if(res){
+            // If right, increment conseq
             qToAnsRow.put(qind,qToAnsRow.get(qind)+1);
             if(qToAnsRow.get(qind) >= 3){
+                // If 3 right in a row, remove question from question pool
                 qToAnsRow.remove(qind);
             }
         }else{
+            // If wrong, reset
             qToAnsRow.put(qind,0);
         }
         setOnQuestionIndexPractice();

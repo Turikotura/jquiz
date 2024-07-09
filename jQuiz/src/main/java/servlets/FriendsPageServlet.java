@@ -48,6 +48,7 @@ public class FriendsPageServlet extends HttpServlet {
         User curUser = (User) httpServletRequest.getSession().getAttribute("curUser");
 
         if(httpServletRequest.getParameter("receiverId") != null){
+            // Send mail
             int receiverId = Integer.parseInt(httpServletRequest.getParameter("receiverId"));
             String text = httpServletRequest.getParameter("message");
 
@@ -61,6 +62,7 @@ public class FriendsPageServlet extends HttpServlet {
                 throw new RuntimeException(e);
             }
         }else if(httpServletRequest.getParameter("toRemoveId") != null){
+            // Remove friend
             int toRemoveId = Integer.parseInt(httpServletRequest.getParameter("toRemoveId"));
 
             UserDatabase userdb = getDatabase(Database.USER_DB,httpServletRequest);

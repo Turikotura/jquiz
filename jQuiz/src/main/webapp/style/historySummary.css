@@ -5,7 +5,8 @@ main {
 }
 
 .history-box {
-    background-color: #f0f0f0;
+    background-color: var(--error-color);
+    color: var(--accent-color);
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -20,37 +21,23 @@ main {
 
 .history-writing-time {
     font-size: 1rem;
-    color: #666;
 }
 
 .history-completed-at {
     font-size: 0.9rem;
-    color: #888;
     margin-top: 5px;
-}
-
-.history-box.practice {
-    background-color: #e6f7ff; /* Example color for practice items */
 }
 
 .history-quiz {
     display: inline-block;
     padding: 10px 20px;
-    background-color: #007bff; /* Blue color, adjust as needed */
-    color: #fff; /* White text color */
+    background-color: var(--accent-color); /* Blue color, adjust as needed */
+    color: var(--error-color); /* White text color */
     text-decoration: none; /* Remove underline */
-    border: 1px solid #007bff; /* Matching border */
     border-radius: 5px; /* Rounded corners */
     text-align: center; /* Center text */
-    transition: background-color 0.3s ease, color 0.3s ease; /* Smooth transition */
 }
 
 .history-quiz:hover {
-    background-color: #0056b3; /* Darker shade on hover */
-    color: #fff; /* White text color */
-}
-
-.history-quiz:focus {
-    outline: none; /* Remove default focus outline */
-    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.5); /* Custom focus outline */
+    background-color: var(--secondary-color); /* Darker shade on hover */
 }
