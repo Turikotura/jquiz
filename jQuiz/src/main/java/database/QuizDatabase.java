@@ -2,6 +2,7 @@ package database;
 
 import models.Quiz;
 import org.apache.commons.dbcp2.BasicDataSource;
+import servlets.CreateQuizServlet;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -424,6 +425,22 @@ public class QuizDatabase extends Database<Quiz>{
         return queryToList(query, (ps) -> {
             try {
                 ps.setString(1, tagName);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+            return ps;
+        });
+    }
+
+    public List<Quiz> getLatestFriendQuizzesByUserId(int userId, int k) throws SQLException, ClassNotFoundException {
+        String query = String.format(
+                "SELECT * FROM %s WHERE %s IN (SELECT %s FROM %s WHERE %s = ?) ORDER BY %s DESC LIMIT ?",
+                databaseName, AUTHOR_ID, UserDatabase.USER2_ID, FRIEND_DB, UserDatabase.USER1_ID, CREATED_AT
+        );
+        return queryToList(query, (ps) -> {
+            try {
+                ps.setInt(1, userId);
+                ps.setInt(2,k);
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }

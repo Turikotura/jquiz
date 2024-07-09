@@ -14,3 +14,15 @@ INSERT INTO achievements (name, description, image) VALUES ('Prodigious Author',
 INSERT INTO achievements (name, description, image) VALUES ('Quiz Machine', 'Took 10 quizzes.', 'https://cdn-icons-png.freepik.com/256/2450/2450980.png?semt=ais_hybrid');
 INSERT INTO achievements (name, description, image) VALUES ('I am the Greatest', 'Scored highest on a quiz.', 'https://cdn-icons-png.freepik.com/256/13145/13145875.png?semt=ais_hybrid');
 INSERT INTO achievements (name, description, image) VALUES ('Practice Makes Perfect', 'Took a quiz in practice mode.', 'https://cdn-icons-png.freepik.com/256/10822/10822455.png?semt=ais_hybrid');
+
+
+
+SELECT a.name AS name, a.description AS description, a.image AS image,
+       u.username AS friend_username, au.acquire_date
+FROM friends f
+         JOIN users u ON (f.user1_id = u.id OR f.user2_id = u.id)
+         JOIN achToUser au ON u.id = au.user_id
+         JOIN achievements a ON au.ach_id = a.id
+WHERE (f.user1_id = :user_id OR f.user2_id = 7)
+  AND u.id != :user_id
+ORDER BY u.username, au.acquire_date DESC;

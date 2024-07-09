@@ -1,6 +1,7 @@
 package database;
 
 import models.Achievement;
+import models.Quiz;
 import org.apache.commons.dbcp2.BasicDataSource;
 
 import javax.xml.crypto.Data;
@@ -74,17 +75,6 @@ public class AchievementDatabase extends Database<Achievement> {
                 rs.getString(IMAGE),
                 new Date()
         );
-    }
-
-    /**
-     * Returns every achievement in achievements table
-     * @return List of every achievement
-     * @throws SQLException
-     * @throws ClassNotFoundException
-     */
-    public List<Achievement> getAll() throws SQLException, ClassNotFoundException {
-        String query = "SELECT * FROM achievements;";
-        return queryToList(query, (ps) -> {return ps;});
     }
 
     /**
@@ -171,5 +161,21 @@ public class AchievementDatabase extends Database<Achievement> {
             return ps;
         });
         return achievements.size() > 0;
+    }
+
+    public List<Achievement> getLatestFriendAchsByUserId(int userId, int k) throws SQLException, ClassNotFoundException {
+        String query = String.format(
+                "SELECT * FROM %s WHERE %s IN (SELECT %s FROM %s WHERE %s = ?) ORDER BY %s DESC LIMIT ?",
+                databaseName, USER_ID, UserDatabase.USER2_ID, FRIEND_DB, UserDatabase.USER1_ID, ACQUIRE_DATE
+        );
+        return queryToList(query, (ps) -> {
+            try {
+                ps.setInt(1, userId);
+                ps.setInt(2,k);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+            return ps;
+        });
     }
 }

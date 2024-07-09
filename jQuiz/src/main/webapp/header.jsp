@@ -2,7 +2,7 @@
 <header>
     <% UserDatabase statisticsUserDB = getDatabase(Database.USER_DB,request);%>
     <div class="logo">
-        <img src="logo.png" alt="Website Logo">
+        <h1 id="logo-char">&#8521;</h1>
     </div>
     <nav class="main-nav">
         <ul>

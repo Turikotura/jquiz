@@ -1,11 +1,11 @@
 <%@ page import="java.util.List" %>
 <%@ page import="static listeners.ContextListener.getDatabase" %>
 <%@ page import="database.*" %>
-<%@ page import="models.Mail" %>
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="java.util.Map" %>
 <%@ page import="java.util.HashMap" %>
-<%@ page import="models.MailTypes" %><%--
+<%@ page import="models.*" %>
+<%@ page import="java.text.SimpleDateFormat" %><%--
   Created by IntelliJ IDEA.
   User: Dachi
   Date: 02.07.2024
@@ -21,6 +21,8 @@
     List<Mail> mails = (List<Mail>) request.getAttribute("mails");
     List<String> senderNames = (List<String>) request.getAttribute("senderNames");
     Map<Integer,Integer> maxGrades = (Map<Integer, Integer>) request.getAttribute("maxGrades");
+
+    List<Activity> activities = (List<Activity>) request.getAttribute("activities");
 %>
 <html>
 <head>
@@ -33,6 +35,32 @@
 <%@ include file="header.jsp" %>
 <%@ include file="mail.jsp" %>
 <main>
+    <div class="activities-panel">
+        <%
+            for(Activity activity : activities){
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                String formattedDateString = dateFormat.format(activity.getActivityTime());
+        %>
+        <div class="activity-box">
+            <h3><%=formattedDateString%></h3>
+            <h3><a href="profile.jsp?username=<%=activity.getUsername()%>"><%=activity.getUsername()%></a></h3>
+            <div class="details">
+                <p><%=activity.getText()%></p><br>
+                <%
+                    ActivityTypes type = activity.getType();
+                    String link = "";
+                    if(type == ActivityTypes.QUIZ_CREATE || type == ActivityTypes.QUIZ_WRITE) {
+                        link = "quizInfo.jsp?quizId=" + activity.getNextId();
+                    }
+                %>
+                <a href="<%=link%>"><%=activity.getNextText()%></a>
+            </div>
+        </div>
+        <%
+            }
+        %>
+    </div>
+
     <%
         if(curUser != null){
             for(User friend : friends){

@@ -57,6 +57,11 @@ h2 {
     letter-spacing: 1px;
 }
 
+#logo-char {
+    color: var(--primary-color);
+    font-size: 60px;
+}
+
 .search-box {
     position: relative;
     width: 100%;

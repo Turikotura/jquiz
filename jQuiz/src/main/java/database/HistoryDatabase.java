@@ -1,6 +1,7 @@
 package database;
 
 import models.History;
+import models.Quiz;
 import org.apache.commons.dbcp2.BasicDataSource;
 
 import java.sql.*;
@@ -390,5 +391,21 @@ public class HistoryDatabase extends Database<History> {
         ps.setInt(1,quizId);
         ps.execute();
         con.close();
+    }
+
+    public List<History> getLatestFriendHistoriesByUserId(int userId, int k) throws SQLException, ClassNotFoundException {
+        String query = String.format(
+                "SELECT * FROM %s WHERE %s IN (SELECT %s FROM %s WHERE %s = ?) ORDER BY %s DESC LIMIT ?",
+                databaseName, USER_ID, UserDatabase.USER2_ID, FRIEND_DB, UserDatabase.USER1_ID, COMPLETED_AT
+        );
+        return queryToList(query, (ps) -> {
+            try {
+                ps.setInt(1, userId);
+                ps.setInt(2,k);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+            return ps;
+        });
     }
 }

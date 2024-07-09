@@ -1,3 +1,45 @@
+.activities-panel {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    border-radius: 5px;
+    padding: 10px;
+    background-color: var(--error-color);
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    max-width: 100%;
+    margin-bottom: 20px;
+    scrollbar-width: thin;
+    scrollbar-color: var(--error-color) var(--accent-color);
+    color: var(--accent-color);
+}
+
+.activity-box {
+    flex: 0 0 auto;
+    padding: 10px;
+    border-right: 1px solid var(--secondary-color);
+    text-align: center;
+}
+
+.activity-box:last-child {
+    border-right: none;
+}
+
+.details {
+    flex: 1 1 auto;
+    padding: 10px;
+}
+.activity-box .details a{
+    background-color: var(--accent-color);
+    color: var(--error-color);
+    padding: 5px;
+    border-radius: 5px;
+}
+.activity-box .details a:hover{
+    background-color: var(--secondary-color);
+}
+
+
+
 .friend-box {
     display: flex;
     align-items: center;
