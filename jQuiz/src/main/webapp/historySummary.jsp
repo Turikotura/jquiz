@@ -41,6 +41,9 @@
 <%@ include file="mail.jsp" %>
 
 <main>
+    <h1>History</h1>
+    <hr><br>
+    <div class="history-section">
     <%
         if(curUser != null){
             for(History history : histories){
@@ -62,6 +65,7 @@
     <%
         }
     %>
+    </div>
 </main>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script> <!-- jQuery for AJAX -->

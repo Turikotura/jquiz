@@ -1,4 +1,5 @@
-main {
+.history-section {
+    width: 100%;
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); /* Adjust 250px as needed */
     gap: 20px; /* Adjust the gap between items */
