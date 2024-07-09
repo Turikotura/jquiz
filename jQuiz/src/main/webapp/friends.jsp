@@ -59,6 +59,13 @@
         <%
             }
         %>
+        <%
+            if(friends.isEmpty()){
+        %>
+        <h3>You have no friends</h3>
+        <%
+            }
+        %>
     </div>
 
     <%
