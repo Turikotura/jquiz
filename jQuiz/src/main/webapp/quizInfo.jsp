@@ -93,6 +93,9 @@
     }
     double gradeAv = Statistics.getAverage(allGrades), gradeVar = Statistics.getVariance(allGrades),
             timeAv = Statistics.getAverage(allTimes), timeVar = Statistics.getVariance(allTimes);
+
+    timeAv /= 1000.0;
+    timeVar /= 1000000.0;
 %>
 <head>
     <title><%=curQuiz.getTitle()%></title>
@@ -195,8 +198,8 @@
         } %>
 
     <h4>This quiz has been taken <%=allAttempts.size()%> times.</h4>
-    <h4>Average grade po all users on this quiz is <%=gradeAv%> with variance of <%=gradeVar%>.</h4>
-    <h4>Average time spent on all attempts of this quiz is <%=timeAv%> with variance of <%=timeVar%>.</h4>
+    <h4>Average grade for all users on this quiz is <%=Math.round(gradeAv*100)/100.0%> with variance of <%=Math.round(gradeVar*100)/100.0%>.</h4>
+    <h4>Average time spent on all attempts of this quiz is <%=Math.round(timeAv*100)/100.0%>s with variance of <%=Math.round(timeVar*100)/100.0%>s.</h4>
 
     <h3>Your previous attempts</h3>
     <hr>
@@ -254,7 +257,7 @@
                 <% for(History curTry : topOfAllTime) {
                     User topScorer = userDB.getById(curTry.getUserId());
                     String scorerName = topScorer.getUsername();%>
-                <li><a href="profile.jsp?username=<%=scorerName%>"><%=scorerName%></a> <%=": " + curTry.getGrade() + " in " + curTry.getWritingTime() + "sec"%></li>
+                <li><a href="profile.jsp?username=<%=scorerName%>"><%=scorerName%></a> <%=": " + curTry.getGrade() + " in " + curTry.getWritingTime()/1000.0 + "sec"%></li>
                 <% } %>
             </ol>
         <% }
@@ -275,7 +278,7 @@
                 <% for(History curTry : topOfLastDay) {
                     User topScorer = userDB.getById(curTry.getUserId());
                     String scorerName = topScorer.getUsername();%>
-                <li><a href="profile.jsp?username=<%=scorerName%>"><%=scorerName%></a><%=": " + curTry.getGrade() + " in " + curTry.getWritingTime() + "sec"%></li>
+                <li><a href="profile.jsp?username=<%=scorerName%>"><%=scorerName%></a><%=": " + curTry.getGrade() + " in " + curTry.getWritingTime()/1000.0 + "sec"%></li>
                 <% } %>
             </ol>
         <% }

@@ -13,11 +13,11 @@ CREATE TABLE history
     FOREIGN KEY (quiz_id) REFERENCES quizzes(id)
 );
 
-INSERT INTO history (user_id, quiz_id, grade, completed_at, writing_time) VALUES (3, 1, 10, sysdate(), 10);
-INSERT INTO history (user_id, quiz_id, grade, completed_at, writing_time) VALUES (3, 2, 10, sysdate(), 11);
-INSERT INTO history (user_id, quiz_id, grade, completed_at, writing_time) VALUES (3, 1, 10, sysdate(), 12);
-INSERT INTO history (user_id, quiz_id, grade, completed_at, writing_time) VALUES (2, 2, 20, sysdate(), 12);
-INSERT INTO history (user_id, quiz_id, grade, completed_at, writing_time) VALUES (1, 2, 20, sysdate(), 10);
+INSERT INTO history (user_id, quiz_id, grade, completed_at, writing_time) VALUES (3, 1, 10, sysdate(), 10000);
+INSERT INTO history (user_id, quiz_id, grade, completed_at, writing_time) VALUES (3, 2, 10, sysdate(), 11000);
+INSERT INTO history (user_id, quiz_id, grade, completed_at, writing_time) VALUES (3, 1, 10, sysdate(), 12000);
+INSERT INTO history (user_id, quiz_id, grade, completed_at, writing_time) VALUES (2, 2, 20, sysdate(), 12000);
+INSERT INTO history (user_id, quiz_id, grade, completed_at, writing_time) VALUES (1, 2, 20, sysdate(), 10000);
 
 Select *
 from history h

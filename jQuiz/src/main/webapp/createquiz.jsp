@@ -41,6 +41,17 @@
     <link href="style/general.css" rel="stylesheet" type="text/css">
     <link href="style/createQuiz.css" rel="stylesheet" type="text/css">
     <script>
+
+        function displayInstruction() {
+            if(document.getElementById("instructionPopup").style.display == "block"){
+                document.getElementById("toggleInstructionButton").innerText = "Show Instructions";
+                document.getElementById("instructionPopup").style.display = "none";
+            }else{
+                document.getElementById("toggleInstructionButton").innerText = "Hide Instructions";
+                document.getElementById("instructionPopup").style.display = "block";
+            }
+        }
+
         let questionCount = 1;
 
         function addQuestion(){
@@ -163,8 +174,30 @@
 <%@ include file="mail.jsp" %>
 
 <main>
+    <button id="toggleInstructionButton" onclick="displayInstruction()" style="width: 20%; float: right;">Show instructions</button>
+    <div id="instructionPopup" class="popup">
+        <div class="popup-content">
+            <span class="close" onclick="displayInstruction()">&times;</span>
+            <h2>How to Create a Quiz</h2>
+            <ul>
+                <li>Fill in the quiz details, including title, description, and questions.</li>
+                <li>Mix up questions check box is for whether or not order of questions should be randomized</li>
+                <li>If show all questions on the same page is not selected, user will not be able to return to already answered question</li>
+                <li>There are 5 types of questions: Response, Fill in the Blank, Picture, Multiple Choice and Multiple Choice with Multiple Answers</li>
+                <li>Response type has a single question and a single answer.</li>
+                <li>Fill in the Blank type only has question to input. The answers will be displayed as blank during play should be written as {answer}. For example: {George Washington} is the first president of US.</li>
+                <li>Picture question is same as response type, just adding possibility for you to add a picture.</li>
+                <li>In multiple choice questions, there can be as many choices as you need. You can add extra choices by clicking Add Choice button, or remove by Delete Last Choice button. You can select which the correct choice is by a radio button.</li>
+                <li>Multiple Choice Multiple Answer question is almost the same as last one, but there may be multiple correct choices. Correct choices can be selected with checkboxes.</li>
+                <li>In case some answer may have multiple correct variations, for example both "Washington" and "George Washington" can be correct choices, you can specify this by dividing multiple choices with slash(/).</li>
+                <li>For example, in response type question's answer field you can write out Washington/George Washington/Dollar Bill Man, or in fill in the blank you can write: {Washington/George Washington} is the first president of US.</li>
+                <li>Save your quiz and share it with others.</li>
+            </ul>
+        </div>
+    </div>
     <h1>Create Quiz</h1>
     <form action="CreateQuiz" method="post" enctype="multipart/form-data">
+        <br>
         <label for="title">Quiz Title:</label><br>
         <input type="text" id="title" name="title" maxlength="50" required><br><br>
 

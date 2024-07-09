@@ -2,17 +2,19 @@
 
 #history-panel {
     position: fixed;
-    top: 50%; /* Position at 50% from the top */
-    right: 20px; /* Adjust as needed */
-    transform: translateY(-50%); /* Center vertically */
-    width: 10%; /* Adjust width as needed */
+    top: 50%;
+    right: 20px;
+    transform: translateY(-50%);
+    width: 10%;
     background-color: var(--error-color);
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    z-index: 1000; /* Ensure it's above other content */
-    overflow-y: auto; /* Enable scrolling if content exceeds height */
+    z-index: 1000;
+    overflow-y: auto;
     height: 70%;
+    scrollbar-width: thin;
+    scrollbar-color: var(--error-color) var(--accent-color);
 }
 
 .history-card {

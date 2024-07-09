@@ -26,7 +26,7 @@ form input[type="text"],
 form input[type="number"],
 form textarea,
 form select,
-form button,
+button,
 form input[type="file"]
 form input[type="submit"]
 {
@@ -137,4 +137,39 @@ form input[type="submit"]:hover {
     display: flex;
     justify-content: space-between;
     gap: 10px;
+}
+
+.popup {
+    display: none;
+    position: fixed;
+    z-index: 15;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+.popup-content {
+    background-color: var(--primary-color);
+    margin: 15% auto;
+    padding: 50px;
+    width: 80%;
+    max-width: 1000px;
+    color: var(--accent-color);
+}
+
+.popup .close {
+    color: var(--accent-color);
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.popup .close:hover,
+.popup .close:focus {
+    color: var(--error-color);
+    text-decoration: none;
+    cursor: pointer;
 }

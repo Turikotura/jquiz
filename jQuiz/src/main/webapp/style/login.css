@@ -43,7 +43,7 @@
     padding: 10px 20px;
     border: none;
     border-radius: 4px;
-    background-color: var(--secondary-color);
+    background-color: var(--accent-color);
     color: #fff;
     font-size: 1em;
     cursor: pointer;
@@ -71,4 +71,5 @@
 
 .error-message {
     color: var(--error-color);
+    padding-bottom:20px;
 }

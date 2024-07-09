@@ -1,7 +1,8 @@
 @import url("colorPalette.css");
 
 main {
-    text-align: center;
+    text-align: left;
+    padding-left: 60px;
 }
 
 /*comment*/
