@@ -15,7 +15,7 @@ import static listeners.ContextListener.getDatabase;
 
 public class AnnouncementServlet extends HttpServlet {
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.setContentType("text/html");
         int authorId = Integer.parseInt(request.getParameter("authorId"));
         String title = request.getParameter("title"), text = request.getParameter("text");

@@ -80,7 +80,7 @@
 <main>
     <div class="announcements">
         <% if(curUser != null && userDB.isUserAdmin(curUser.getId())) { %>
-            <form action="Announcement" method="get">
+            <form action="Announcement" method="post">
                 <input type="hidden" name="authorId" value="<%=curUser.getId()%>">
                 <input type="text" placeholder="Title" name="title" id="announcement-editor-title" maxlength="50"><br>
                 <textarea placeholder="Enter your announcement here!" name="text" id="announcement-editor-body"></textarea><br>
